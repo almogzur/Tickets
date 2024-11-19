@@ -1,129 +1,251 @@
 import Head from 'next/head'
 import Link from 'next/link';
 import { useRouter } from 'next/router'
-import { useState, useEffect, useContext } from 'react'
-import { Button } from '@mui/material';
-
+import { useState, useEffect, useContext, CSSProperties } from 'react'
+import { Button, Container, Typography , Box, colors } from '@mui/material';
+import WidthContext from '../../context/WidthContext';
 import { Movie, Seats } from '../../constants/models/Movies'
-import styles from './Seats.module.scss'
+
 import MoviesContext from '../../context/MoviesContext';
 
-const Seats = () => { 
-  const { movies } = useContext(MoviesContext);
-  const router = useRouter()
-  let selectedSeats: string[] = [];
-  const { id, seats }: any = router.query
-  const movie = movies.find(mov => mov.id === parseInt(id));
-  const [seatDetails, setSeatDetails] = useState<Seats>(movie?.seats || {});
+const styles :Record<string,CSSProperties> =  {
+
+  seats: {
+    WebkitUserSelect: "none", /* Chrome/Safari */
+    MozUserSelect: "none", /* Firefox */
+    msUserSelect: "none", /* IE10+ */
+    userSelect: "none",
+    cursor: "pointer",
+    backgroundColor: "silver",
+    fontSize: "12px",
+    fontWeight: "700",
+
+    borderRadius: "3px",
+    height:"25px",
+    width:"25px",
+    display:'flex',
+    flexDirection:'column',
+    justifyContent:'center',
+    alignItems:'center',
+    
+
+  },
+  seatSelected: {
+    color: "#fff",
+    backgroundColor: "rgb(53, 212, 6)",
+  },
+  seatBlocked: {
+    cursor: "default",
+    color:"black",
+    boxShadow: "none",
+    background:"black"
+  },
+  seatBooked: {
+    backgroundColor: "brown",
+    cursor: "default",
+  },
+  paymentButton: {
+    backgroundColor: "#f84464",
+  },
+  paymentButtonContainer: {
+    position: "sticky",
+    bottom: "10px",
+  },
+  row: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    marginBottom: "5px", // spacing between rows
+    overflow:"inherit"
+  },
+  col: {
+    margin: "3px", // spacing between seats
+  },
+  rowContainer: {
+    display: "flex",
+    justifyContent:"center"
+  },
+  rowLabel: {
+    fontSize: "18px",
+    fontWeight: "bold",
+    margin:4
+    
+  },
   
-  useEffect(() => { 
+};
+
+const SeatsOri = () => {
+  const { movies } = useContext(MoviesContext);
+  const router = useRouter();
+  let selectedSeats: string[] = [];
+  const { id, seats }: any = router.query;
+  const movie = movies.find((mov) => mov.id === parseInt(id));
+  const [seatDetails, setSeatDetails] = useState<Seats>(movie?.seats || {});
+
+   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
+   
+  useEffect(() => {
     if (!seats) {
       clearSelectedSeats();
     }
-  }, [])
+  }, []);
 
   const clearSelectedSeats = () => {
-    let newMovieSeatDetails = {...seatDetails};
-    for(let key in seatDetails) {
+    let newMovieSeatDetails = { ...seatDetails };
+    for (let key in seatDetails) {
       seatDetails[key].forEach((seatValue, seatIndex) => {
         if (seatValue === 2) {
           seatDetails[key][seatIndex] = 0;
         }
-      })
+      });
     }
     setSeatDetails(newMovieSeatDetails);
-  }
+  };
 
   const onSeatClick = (seatValue: number, rowIndex: number, key: string) => {
     if (seatDetails) {
       if (seatValue === 1 || seatValue === 3) {
         return;
       } else if (seatValue === 0) {
-        seatDetails[key][rowIndex] = 2; 
+        seatDetails[key][rowIndex] = 2;
       } else {
-        seatDetails[key][rowIndex] = 0; 
+        seatDetails[key][rowIndex] = 0;
       }
     }
-    setSeatDetails({...seatDetails});
-  }
+    setSeatDetails({ ...seatDetails });
+  };
 
-  /**
-   * 0 - Not booked
-   * 1 - Booked
-   * 2 - Selected
-   * 3 - Blocked
-   */
-  const getClassNameForSeats = (seatValue: number) => {
-    let dynamicClass;
-    if (seatValue === 0) {  // Not booked
-      dynamicClass = styles.seatNotBooked;
-    }else if (seatValue === 1) {  // booked
-      dynamicClass = styles.seatBooked;
-    } else if (seatValue === 2) {  // Seat Selected
-      dynamicClass = styles.seatSelected;
-    } else { // Seat Blocked
-      dynamicClass = styles.seatBlocked;
-    }
-    return `${styles.seats} ${dynamicClass}`
-  }
+  const getSeatStyle = (seatValue: number) :any => {
+    if (seatValue === 0) return styles.seats;
+    if (seatValue === 1) return { ...styles.seats, ...styles.seatBooked };
+    if (seatValue === 2) return { ...styles.seats, ...styles.seatSelected };
+    return { ...styles.seats, ...styles.seatBlocked };
+  };
 
-  const RenderSeats = () => {
+ 
+
+  // const RenderSeats = () => {
+  //   let seatArray = [];
+  //   for (let row in seatDetails) {
+  //     let colValue = seatDetails[row].map((seatValue, rowIndex) => (
+
+  //       <div 
+  //         key={`${row}.${rowIndex}`} 
+  //          style={styles.col}>
+  //         <div
+  //           style={getSeatStyle(seatValue)}
+  //           onClick={() => onSeatClick(seatValue, rowIndex, row)}
+  //         >
+  //           {rowIndex + 1}
+  //         </div>
+  
+  //         {seatDetails && rowIndex === seatDetails[row].length - 1 && (
+  //           <>
+  //             <div style={{ height: "20px" }}></div>
+  //           </>
+  //         )}
+  //       </div>
+  //     ));
+  //     seatArray.push(
+  //       <div key={`row-${row}`} style={styles.row}>
+  //         {colValue}
+  //       </div>
+  //     );
+  //   }
+  //   return <div style={{zoom: !xs ? "33%" : "100%"}}>{seatArray}</div>;
+  // };
+
+  const Seats = () => {
     let seatArray = [];
-    for(let key in seatDetails) {
-      let colValue = seatDetails[key].map((seatValue, rowIndex) => (
-        <span key={`${key}.${rowIndex}`} className={styles.seatsHolder}>
-          {rowIndex === 0 && <span className={styles.colName}>{key}</span>}
-          <span className={getClassNameForSeats(seatValue)} onClick={() => onSeatClick(seatValue, rowIndex, key)}>
-            {rowIndex+1}
-          </span>
-          {seatDetails && rowIndex === seatDetails[key].length-1 && <><br/><br/></>}
-        </span>
-      ))
-      seatArray.push(colValue);
-    }
-    return (
-      <div className={styles.seatsLeafContainer}>{seatArray}</div>
-    ) 
-  }
+  
+    for (let row in seatDetails) {
+      let colValue = seatDetails[row].map((seatValue, rowIndex) => (
+        <div 
+          key={`${row}.${rowIndex}`} 
+          style={styles.col}
+        >
+          <div
+            style={getSeatStyle(seatValue)}
+            onClick={() => onSeatClick(seatValue, rowIndex, row)}
+          >
+            {rowIndex + 1}
+          </div>
+  
+          {seatDetails && rowIndex === seatDetails[row].length - 1 && (
+            <div style={{ height: "20px" }}></div>
+          )}
+        </div>
+      ));
+  
+      seatArray.push(
+        <div key={`row-${row}`} style={styles.rowContainer}>
+          {/* Row label */}
+          <div style={styles.rowLabel}>
+            {row}
+          </div>
 
-  const RenderPaymentButton = () => {
+          {/* Row seats */}
+          <div style={styles.row}>
+            {colValue}
+          </div>
+          
+       {/* Row label */}
+          <div style={styles.rowLabel}>
+            {row}
+          </div>
+        </div>
+      );
+    }
+  
+    return <div style={{ zoom: !xs ? "30%" : "100%" }}>{seatArray}</div>;
+  };
+
+  const PaymentButton = () => {
     selectedSeats = [];
-    for(let key in seatDetails) {
+    for (let key in seatDetails) {
       seatDetails[key].forEach((seatValue, seatIndex) => {
         if (seatValue === 2) {
-          selectedSeats.push(`${key}${seatIndex+1}`)
+          selectedSeats.push(`${key}${seatIndex + 1}`);
         }
-      })
+      });
     }
     if (selectedSeats.length) {
       return (
-        <Link href={{ pathname: '/payment', query: { movieId: movie?.id, seatDetails: JSON.stringify(seatDetails) } }}>
-          <div className={styles.paymentButtonContainer}>
-            <Button variant="contained" href="#contained-buttons" className={styles.paymentButton} >
-              Pay Rs.{selectedSeats.length*(movie?.ticketCost || 0)}
+        <Link
+          href={{
+            pathname: "/payment",
+            query: { movieId: movie?.id, seatDetails: JSON.stringify(seatDetails) },
+          }}
+        >
+          <div style={styles.paymentButtonContainer}>
+            <Button variant="contained" href="#contained-buttons" style={styles.paymentButton}>
+              Pay Rs.{selectedSeats.length * (movie?.ticketCost || 0)}
             </Button>
           </div>
         </Link>
-      )
+      );
     } else {
-      return <></>
+      return <></>;
     }
-  }
-    
-  if (!movie) return <div>loading...</div>
+  };
+
+  if (!movie) return <div>טוען...</div>;
   return (
     <>
       <Head>
-        <title>Seats</title>
+        <title>מקומות ישיבה באולם</title>
       </Head>
-      <div className={styles.seatsContainer}>
-        <h1>{movie.name}</h1>
-        {seatDetails && <RenderSeats />}
-        <RenderPaymentButton />
+      <div style={{overflow:"auto"}} >
+        <h1 style={{textAlign:"center"}} >{movie.name}</h1>
+        <h3 style={{textAlign:"center"}}  >מקומות ישיבה באולם</h3>
+        {seatDetails && <Seats />}
+        <PaymentButton />
       </div>
     </>
   );
-}
+};
+
+
 
 type MovieType = {
   movie: Movie;
@@ -131,4 +253,4 @@ type MovieType = {
   isError: boolean;
 }
  
-export default Seats;
+export default SeatsOri;

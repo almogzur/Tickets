@@ -19,24 +19,14 @@ const Details = () => {
         <Link href={`/seats/${movie?.id}`}>
           <div className={styles.paymentButtonContainer}>
             <Button variant="contained" href="#contained-buttons" className={styles.paymentButton} >
-              Book Ticket
+           הזמן כרטיס
             </Button>
           </div>
         </Link>
       )
   }
 
-  const RenderCustomizeRowsButton = () => {
-      return (
-        <Link href={`/customize/${movie?.id}`}>
-          <div className={styles.paymentButtonContainer}>
-            <Button variant="contained" href="#contained-buttons" className={styles.paymentButton} >
-              Customize Row
-            </Button>
-          </div>
-        </Link>
-      )
-  }
+
     
   if (!movie) return <div>loading...</div>
   return (
@@ -45,12 +35,11 @@ const Details = () => {
         <title>Details</title>
       </Head>
       <div className={styles.seatsContainer}>
-        <h1>{movie.name} - {movie.language}</h1>
-        <div className={styles.language}>Ticket Cost: {movie.ticketCost}</div>
+        <h1>{movie.name}</h1>
+        <div >מחיר לכרטיס  {movie.ticketCost}</div>
         <div className={styles.buttonContainer}>
           <div className={styles.buttonHolder}>
             <RenderBookTicketsButton />
-            <RenderCustomizeRowsButton />
           </div>
         </div>
       </div>

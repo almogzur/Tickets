@@ -1,11 +1,12 @@
+import { Container } from "@mui/material";
 import Navbar from "./Navbar"
 
 const Layout = ({ children }: any) => {
   return (
-    <div className="content">
+    <Container sx={{}} >
       <Navbar />
       { children }
-    </div>
+    </Container>
   );
 }
  
