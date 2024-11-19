@@ -24,10 +24,6 @@ function MyApp({ Component, pageProps }: AppProps) {
    const xs = useMediaQuery('(min-width : 489px)')
    const xxs = useMediaQuery('(min-width : 310px)')
 
-   useEffect(()=>{console.log(xxl,xl,lg,md,sm,xs,xxs);
-   },[xxl,xl,lg,md,sm,xs,xxs])
-
-
 
   return (
     <Layout>

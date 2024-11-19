@@ -1,13 +1,4 @@
 import {createContext} from "react";
 
-export default  createContext<ScreenSize  | null>(null)
+export default  createContext(null)
 
-interface ScreenSize {
-    xxl:Boolean,
-    xl:Boolean,
-    lg:Boolean,
-    md:Boolean,
-    sm:Boolean,
-    xs:Boolean,
-    xxs:Boolean
-}
