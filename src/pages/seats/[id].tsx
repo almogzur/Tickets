@@ -70,7 +70,18 @@ const styles :Record<string,CSSProperties> =  {
     fontWeight: "bold",
     margin:4
     
-  },
+   
+  "opera1-row1":{ },
+  "opera1-row2":{},
+
+
+   "opera2-row1":{},
+   "opera2-row2":{},
+   "opera2-row3":{},
+   "opera2-row4":{},
+   "opera2-row5":{},
+   "opera2-row6":{}
+
   
 };
 
