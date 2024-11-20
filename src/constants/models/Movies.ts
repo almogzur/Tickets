@@ -1,3 +1,5 @@
+import { StaticImageData } from "next/image"
+
 export type Movie = {
   id: number,
   name: string,
@@ -5,8 +7,12 @@ export type Movie = {
   adText:String,
   ticketCost?: number,
   seats?: Seats
+  sidesSeats:Seats
 }
 
 export type Seats = {
-  [key: string]: number[]
+  [key: string]: number[] 
+   
 }
+
+

@@ -1,8 +1,9 @@
 import { useState, useEffect, useContext } from 'react';
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { Button } from '@mui/material';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Button } from '@chakra-ui/react';
+import { FaArrowRight } from "react-icons/fa";
+
 import Link from 'next/link';
 
 import { Movie, Seats } from '../../constants/models/Movies'
@@ -106,7 +107,7 @@ const Tickets = () => {
   const RenderConfirmButton = () => {
     return (
       <div className={styles.paymentButtonContainer}>
-        <Button variant="contained" disabled={isTimerCompleted} className={styles.paymentButton} onClick={onConfirmButtonClick}>
+        <Button variant="solid" disabled={isTimerCompleted} className={styles.paymentButton} onClick={onConfirmButtonClick}>
          {isTimerCompleted ? 'Confirm Booking' : `Confirm Booking (${seconds})` }
         </Button>
       </div>
@@ -120,7 +121,7 @@ const Tickets = () => {
     return (
     <div className={styles.card}>
       <div className={styles.cardTitleContainer}>
-        <Link href={{ pathname: `/seats/${movie?.id}`, query: { seats: isTimerCompleted ? null : JSON.stringify(seatDetails) }}}><ArrowBackIcon /></Link>
+        <Link href={{ pathname: `/seats/${movie?.id}`, query: { seats: isTimerCompleted ? null : JSON.stringify(seatDetails) }}}><FaArrowRight /></Link>
         <div className={styles.cardTitle}>
           BOOKING SUMMARY
         </div>

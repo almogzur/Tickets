@@ -8,6 +8,7 @@ import { movies as mockMovies } from './../constants/movies';
 import '../styles/global.css'
 import { useMediaQuery } from 'usehooks-ts';
 import WidthContext from '../context/WidthContext';
+import { ChakraProvider, defaultSystem } from "@chakra-ui/react"
 
 
 
@@ -26,6 +27,8 @@ function MyApp({ Component, pageProps }: AppProps) {
 
 
   return (
+    <ChakraProvider value={defaultSystem}>
+
     <Layout>
       <MoviesContext.Provider value={{movies, setMovies}}>
       <WidthContext.Provider value={{xxl,xl,lg,md,sm,xs,xxs}}>
@@ -35,6 +38,8 @@ function MyApp({ Component, pageProps }: AppProps) {
       </MoviesContext.Provider>
    
     </Layout>
+    </ChakraProvider>
+
   )
 }
 
