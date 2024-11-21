@@ -7,7 +7,7 @@ export type Movie = {
   adText:String,
   ticketCost?: number,
   seats?: Seats
-  sidesSeats:Seats
+
 }
 
 export type Seats = {

@@ -1,12 +1,20 @@
 import Head from 'next/head'
 import Link from 'next/link';
 import { useRouter } from 'next/router'
-import { useState, useEffect, useContext, CSSProperties } from 'react'
+import { useState, useEffect, useContext, CSSProperties, useRef } from 'react'
 import { Button, Container,   Box ,Flex , Text, Heading} from '@chakra-ui/react'
 import WidthContext from '../../context/WidthContext';
 import { Movie, Seats } from '../../constants/models/Movies'
 
+import Tippy from '@tippyjs/react';
+
 import MoviesContext from '../../context/MoviesContext';
+
+const positionAtr : CSSProperties = { 
+   position:"relative",
+   width:"fit-content",
+   display:"flex"
+ }
 
 const styles :Record<string,CSSProperties> =  {
 
@@ -17,9 +25,9 @@ const styles :Record<string,CSSProperties> =  {
     backgroundColor: "silver",
     fontSize: "12px",
     fontWeight: "700",
-    borderRadius: "3px",
-    height:"25px",
-    width:"25px",
+
+    height:"27px",
+    width:"27px",
     color:"black"
 
     
@@ -40,38 +48,37 @@ const styles :Record<string,CSSProperties> =  {
   },
   paymentButton: {
     backgroundColor: "#f84464",
+    ...positionAtr,
+    top:-1300
   },
-
-  "sing1-row1":{ position:"relative", top:'-663px', left:"-75px", },
-  "sing1-row2":{ position:"relative", top:'-663px' ,left:"-78px"  },
-
-  "sing2-row1":{ position:"relative", top:"-330px" ,left:"-145px", },
-  "sing2-row2":{ position:"relative", top:"-330px" ,left:"-150px"  },
-
-  "sing3-row1":{ position:"relative", top:"-100px" ,left:"-170px", },
-  "sing3-row2":{ position:"relative", top:"-100px" ,left:"-235px"  },
-
-  "comad1-row1":{ position:"relative", top:"-663px" ,left:"1020px"  },
-  "comad1-row2":{ position:"relative", top:"-663px" ,left:"1015px"  },
-
-  "comad2-row1":{ position:"relative", top:"-328px" ,left:"950px", },
-  "comad2-row2":{ position:"relative", top:"-328px" ,left:"945px", },
-
-  "comad3-row1":{ position:"relative", top:"-100px" ,left:"880px", },
-  "comad3-row2":{ position:"relative", top:"-100px" ,left:"875px",  },
-
+  clearBtn:{...positionAtr, top:"-1250px", color:"black"},
    
-  "opera1-row1": {position:"relative", display:"flex" ,top:"50px" , left:"40px"},
-  "opera1-row2": {position:"relative", display:"flex" ,top:"90px", left:"-275px"},
+
+   "שירה-שורה1":{  top:-660, left:-40 ,  flexDirection:"column", ...positionAtr },
+   "שירה-שורה2":{  top:-825 ,left:-70 , flexDirection:"column" , ...positionAtr  ,},
+
+   "שירה2-שורה1":{  top:-600 ,left:-40, flexDirection:"column", ...positionAtr },
+
+   "שירה2-שורה2":{  top:-732 ,left:-70 ,flexDirection:"column" ,...positionAtr},
+
+   "שירה3-שורה1":{ ...positionAtr, flexDirection:"column" ,    top:0 , left:0,},
+   "שירה3-שורה2":{ position:"relative",  top:0 , left:0,},
+   "בידר1-שורה1": { position:"relative", top:0 , left:0 },
+   "בידור1-שורה2":{ position:"relative", top:0 , left:0 },
+   "בידור2-שורה1":{ position:"relative", top:0 , left:0,},
+   "בידור2-שורה2":{ position:"relative", top:0 , left:0,},
+   "בידור3-שורה1":{ position:"relative", top:0 , left:0,},
+   "בידור3-שורה2":{ position:"relative", top:0 , left:0,},
+   
+
+   "אופרה-קומה1-שורה1":{position:"relative" ,top:0 , left:0 , width:"fit-content" ,height:"fit-content"},
+   "אופרה-קומה1-שורה2": {position:"relative", display:"flex" ,top:0 , left:-0 , width:"fit-content" ,height:"fit-content"},
 
 
- 
-   "opera2-row1":{position:"relative", display:"flex" ,top:"130px" , left:""},
-   "opera2-row2":{position:"relative", display:"flex" ,top:"170px" , left:""},
-   "opera2-row3":{position:"relative", display:"flex", top:"210px" , left:"" },
-   "opera2-row4":{display:"flex" ,top:"" , left:""},
-   "opera2-row5":{display:"flex" ,top:"" , left:""},
-   "opera2-row6":{display:"flex" ,top:"" , left:""}
+   "אופרה-קומה2-שורה1": {position:"relative", display:"flex" ,top:0 , left:0, width:"fit-content" ,height:"fit-content"},
+   "אופרה-קומה2-שורה2":{position:"relative", display:"flex" ,top:0 , left:-0, width:"fit-content" ,height:"fit-content"},
+   "אופרה-קומה2-שורה3": {position:"relative", display:"flex", top:0 , left:0 , width:"fit-content" ,height:"fit-content"},
+
 
   
 };
@@ -82,10 +89,16 @@ const SeatsOri = () => {
   let selectedSeats: string[] = [];
   const { id, seats }: any = router.query;
   const movie = movies.find((mov) => mov.id === parseInt(id));
+
   const [seatDetails, setSeatDetails] = useState<Seats>(movie?.seats || {});
-  const [sidesSeats ,setSideSeats] = useState<Seats>(movie?.sidesSeats || {})
+
+  
+    
 
    const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
+
+
+
    
   useEffect(() => {
     if (!seats) {
@@ -95,27 +108,20 @@ const SeatsOri = () => {
 
   const clearSelectedSeats = () => {
     let newMovieSeatDetails = { ...seatDetails };
+
     for (let key in seatDetails) {
-      seatDetails[key].forEach((seatValue: number, seatIndex: string | number) => {
+
+      seatDetails[key].forEach((seatValue: number, seatIndex:  number) => {
+        console.log(key);
+        
         if (seatValue === 2) {
           seatDetails[key][seatIndex] = 0;
         }
       });
     }
-    setSeatDetails(newMovieSeatDetails);
-  };
+    
 
-  const onSeatClick = (seatValue: number, rowIndex: number, key: string) => {
-    if (seatDetails) {
-      if (seatValue === 1 || seatValue === 3) {
-        return;
-      } else if (seatValue === 0) {
-        seatDetails[key][rowIndex] = 2;
-      } else {
-        seatDetails[key][rowIndex] = 0;
-      }
-    }
-    setSeatDetails({ ...seatDetails });
+    setSeatDetails(newMovieSeatDetails);
   };
 
   const getSeatStyle = (seatValue: number) :any => {
@@ -125,192 +131,179 @@ const SeatsOri = () => {
     return { ...styles.seats, ...styles.seatBlocked };
   };
 
- 
+  const onSeatClick = (seatValue: number, rowIndex: number, key: string) => {
 
-  // const RenderSeats = () => {
-  //   let seatArray = [];
-  //   for (let row in seatDetails) {
-  //     let colValue = seatDetails[row].map((seatValue, rowIndex) => (
+    setSeatDetails((prevSeatDetails) => {
+      if (!prevSeatDetails) return prevSeatDetails;
+  
+      // Create a deep copy of the state to avoid direct mutation
+      const updatedSeatDetails = { ...prevSeatDetails };
 
-  //       <div 
-  //         key={`${row}.${rowIndex}`} 
-  //          style={styles.col}>
-  //         <div
-  //           style={getSeatStyle(seatValue)}
-  //           onClick={() => onSeatClick(seatValue, rowIndex, row)}
-  //         >
-  //           {rowIndex + 1}
-  //         </div>
+      const updatedRow = [...updatedSeatDetails[key]];
   
-  //         {seatDetails && rowIndex === seatDetails[row].length - 1 && (
-  //           <>
-  //             <div style={{ height: "20px" }}></div>
-  //           </>
-  //         )}
-  //       </div>
-  //     ));
-  //     seatArray.push(
-  //       <div key={`row-${row}`} style={styles.row}>
-  //         {colValue}
-  //       </div>
-  //     );
-  //   }
-  //   return <div style={{zoom: !xs ? "33%" : "100%"}}>{seatArray}</div>;
-  // };
-
-  // const Seats = () => {
-  //   let seatArray = [];
+      if (seatValue === 1 || seatValue === 3) {
+        return prevSeatDetails; // No changes if the seat is unavailable or already selected
+      }
   
-  //   for (let row in seatDetails) {
-  //     let colValue = seatDetails[row].map((seatValue: number, rowIndex: number) => (
-  //       <div 
-  //         key={`${row}.${rowIndex}`} 
-  //         style={styles.col}
-  //       >
-  //         <div
-  //           style={getSeatStyle(seatValue)}
-  //           onClick={() => onSeatClick(seatValue, rowIndex, row)}
-  //         >
-      
-  //         </div>
+      // Toggle seat state: 0 to 2 or 2 to 0
+      updatedRow[rowIndex] = seatValue === 0 ? 2 : 0;
   
-  //         {seatDetails && rowIndex === seatDetails[row].length - 1 && (
-  //           <div style={{ height: "20px" }}></div>
-  //         )}
-  //       </div>
-  //     ));
+      updatedSeatDetails[key] = updatedRow;
   
-  //     seatArray.push(
-  //       <div key={`row-${row}`} style={styles.rowContainer}>
- 
-  //          <div style={styles.row}> {colValue}</div>
-          
-  
-  //       </div>
-  //     );
-  //   }
-  
-  //   return <div style={{ zoom: !xs ? "30%" : "70%" }}>{seatArray}</div>;
-  // };
- 
+      return updatedSeatDetails; // Return the new state object
+    });
+  };
  
   const Seats = () => {
-    let seatArray = [];
-    let sideSeatArray = [];
 
+    let seatArray = [];
     // Render main seats
     for (let row in seatDetails) {
         const rowContent = seatDetails[row];
 
+
         const colValue = rowContent.map((seatValue: number, colIndex: number) => (
-  
-
-                <Flex 
-                      justifyContent={"center"} 
-                      key={`${row}.${colIndex}`}
-                      alignItems={"center"} 
-                    style={{...getSeatStyle(seatValue) , margin:4 , fontWeight:"bold"}}
-                    onClick={() => onSeatClick(seatValue, colIndex, row)}
-                    
-                >
-                  {colIndex + 1}
-                </Flex>
-                  
+          
+            //  <Tippy
+            //        content={<p>text</p>} 
+            //        key={`${row}.${colIndex}`}
+            //        hideOnClick="toggle"
     
-                
-     
-        ));
+            //        touch={["hold",1]}
+             
+            //       >
+            //        <button 
+            //             key={`${row}.${colIndex}`}
+            //             id={`${row}.${colIndex}`}
+            //             style={{...getSeatStyle(seatValue) , margin:4 , fontWeight:"bold"}}
+            //             onClick={() => onSeatClick(seatValue, colIndex, row)}
+            //       >
+            //         {/* {colIndex + 1} */}
 
+            //       </button>
+            //  </Tippy>
+      
+            //  Wraper for state to keep the seate tooltip opn 
+
+           <SeatWithTooltip
+              key={`${row}.${colIndex}`}
+              seatValue={seatValue}
+              colIndex={1}
+              row={row}
+              getSeatStyle={() => getSeatStyle(seatValue)}
+              hndler={()=>onSeatClick(seatValue, colIndex, row)}
+           />   
+
+
+         
+
+
+                 
+        )
+      );
         seatArray.push(
-             <Flex key={row} justifyContent={"center"} alignItems={"center"}  >
-                <Text fontWeight={"bold"} color={"red"} >{row}</Text>
+     
+             <Flex 
+                key={row} 
+                style={styles[`${row}`]} // target by key in css 
+                justifyContent={"center"} 
+                >
                 {colValue}
-                <Text fontWeight={"bold"} color={"red"} >{row}</Text>
             </Flex>
+         
         );
     }
 
-    // Render side seats
-    for (let sideRow in sidesSeats) {
-        const rowContent = sidesSeats[sideRow];
 
-        const colValue = rowContent.map((seatValue: number, colIndex: number) => {
-       
-                   return <Flex justifyContent={"center"}
-                            key={`${sideRow}.${colIndex}`} 
-                            style={{...getSeatStyle(seatValue), margin:"5px" , color:"black"}}
-                          >
-                           {colIndex + 1}
-                          </Flex> 
-                
-          
-              })
-        
-
-        sideSeatArray.push(
-            <div style={styles[`${sideRow}`]}  key={sideRow}>{colValue}{} </div>
-        );
-    }
   
-    
     return (
-      < Flex justifyContent={"center"}       >
-          
-          <Box borderColor={"lightblue"}   border={"solid"}  p={20} zoom={"100%"} >
-            
+      <Flex justifyContent={"center"}   
+        >
+        <Box borderColor={"lightblue"} overflow={"clip"}  h={"1100px"}  border={"solid"}  p={20} zoom={"100%"} >
+
+
             <Box bg={"blue"} h={"60px"} position={"relative"} top={"-50px"}   >זום</Box>
             <Box bg={"red"} h={"60px"} position={"relative"} top={"-20px"}  >במה</Box>
-
+         
              {/* reg row */}
               <Flex direction={"column"}>{seatArray}</Flex> 
              {/* custom row */}
-              <Flex width={1000}   >{sideSeatArray}</Flex>  
-             {/* Fixed width to prevent flex prevnt overflow */}
-
              <PaymentButton />
+            <ResetSelectedSeats/>
 
-          </Box>
+     
 
-          
-
-       </Flex>
+        </Box>
+      </Flex>
 
     );
 };
 
-// Styles
+const PaymentButton = () => {
+  selectedSeats = [];
+
+  // Loop through seatDetails
+  for (let key in seatDetails) {
+    seatDetails[key].forEach((seatValue: number, seatIndex: number) => {
+      if (seatValue === 2) {
+        selectedSeats.push(`${key}${seatIndex + 1}`);
+      }
+    });
+  }
 
 
 
+  if (selectedSeats.length ) {
+    return (
+      <Link
+        href={{
+          pathname: "/payment",
+          query: {
+            movieId: movie?.id,
+            seatDetails: JSON.stringify(seatDetails),
+ 
+          },
+        }}
+     
+      >
+  
+          <Button variant="solid" style={styles.paymentButton}>
+            סה״כ {selectedSeats.length * (movie?.ticketCost || 0) + " שח"}
+          </Button>
 
-  const PaymentButton = () => {
-    selectedSeats = [];
-    for (let key in seatDetails) {
-      seatDetails[key].forEach((seatValue: number, seatIndex: number) => {
-        if (seatValue === 2) {
-          selectedSeats.push(`${key}${seatIndex + 1}`);
-        }
-      });
-    }
-    if (selectedSeats.length) {
-      return (
-        <Link
-          href={{
-            pathname: "/payment",
-            query: { movieId: movie?.id, seatDetails: JSON.stringify(seatDetails) },
-          }}
-        >
-          <div style={styles.paymentButtonContainer}>
-            <Button variant="contained" href="#contained-buttons" style={styles.paymentButton}>
-              סה״כ  {selectedSeats.length * (movie?.ticketCost || 0) + " שח"}
-            </Button>
-          </div>
-        </Link>
-      );
-    } else {
-      return <></>;
-    }
-  };
+      </Link>
+    );
+  } else {
+    return <></>;
+  }
+};
+
+const ResetSelectedSeats =()=>{
+  selectedSeats = [];
+
+  for (let key in seatDetails) {
+    seatDetails[key].forEach((seatValue: number, seatIndex: number) => {
+      if (seatValue === 2) {
+        selectedSeats.push(`${key}${seatIndex + 1}`);
+      }
+    });
+  }
+
+  if (selectedSeats.length) {
+   return <Button 
+        style={styles.clearBtn} 
+        bg={"#fff"} 
+        size={"2xl"}
+
+     
+         variant={"solid"}
+         colorPalette={""} 
+        onClick={clearSelectedSeats} >
+        נקה בחירה
+       </Button>
+  }else{return <></>}
+}
+
 
   if (!movie) return <div>טוען...</div>;
   return (
@@ -319,12 +312,10 @@ const SeatsOri = () => {
         <title>מקומות ישיבה באולם</title>
       </Head>
 
-        <Heading textAlign={"center"} size={"5xl"} >{movie.name}</Heading>
-        <Heading p={3} as={'h3'} textAlign={"center"}  >מקומות ישיבה באולם</Heading>
+        <Heading textAlign={"center"} size={"4xl"} >{movie.name}</Heading>
+        <Heading p={0} as={'h3'} textAlign={"center"}  >מקומות ישיבה באולם</Heading>
 
-        { seatDetails && 
-                     <Seats /> 
-        }
+        { seatDetails && <Seats /> }
 
 
     </>
@@ -332,11 +323,60 @@ const SeatsOri = () => {
 };
 
 
-
-type MovieType = {
-  movie: Movie;
-  isLoading: boolean;
-  isError: boolean;
-}
  
-export default SeatsOri;
+export default SeatsOri
+
+const SeatWithTooltip = ({
+  seatValue,
+  colIndex,
+  row,
+  getSeatStyle,
+  hndler
+}:
+{
+    seatValue:number ,
+    colIndex:number ,
+    row:string,
+    getSeatStyle:Function,
+    hndler:any
+  }) => {
+  
+  const [tooltipVisible, setTooltipVisible] = useState(false);
+
+  const openTooltip = () => setTooltipVisible(true);
+  const closeTooltip = () => setTooltipVisible(false);
+
+  
+  return (
+    
+    <Tippy
+      content={<p>text</p>}
+      visible={tooltipVisible}
+      interactive
+
+    >
+      <button
+        key={`${row}.${colIndex}`}
+        style={{ ...getSeatStyle(seatValue), margin: 4, fontWeight: "bold" }}
+        onMouseEnter={()=>{openTooltip()}}
+        onMouseLeave={()=>{closeTooltip()}}
+
+        onTouchStart={()=>openTooltip()}
+ 
+        
+        onClick={(e)=>{
+   
+          hndler()
+
+        }
+        
+         
+        
+        
+        }
+      >
+        {/* {colIndex + 1} */}
+      </button>
+    </Tippy>
+  );
+};

@@ -19,17 +19,12 @@ const Tickets = () => {
   let bookingChargePerTicket = 20, ticketCost: number, bookingFee: number, totalCost: number;
   const {movieId, seatDetails}: any = router.query;
   const movie = movies.find(mov => mov.id === parseInt(movieId));
+
   if (seatDetails) {
     movieSeatDetails = JSON.parse(seatDetails);
   }
 
-  useEffect(() => {
-    if (seconds > 0) {
-      setTimeout(() => setSeconds(seconds - 1), 1000);
-    } else {
-      setIsTimerCompleted(true);
-    }
-  });
+
 
   const computeSelectedSeats = () => {
     let selectedSeats: string[] = [];
@@ -43,7 +38,7 @@ const Tickets = () => {
     return selectedSeats;
   }
 
-  const RenderSeatDetails = ({selectedSeats}: {selectedSeats: string[]}) => {
+  const SeatDetails = ({selectedSeats}: {selectedSeats: string[]}) => {
     ticketCost = selectedSeats.length*(movie?.ticketCost||0);
     return (
       <div className={styles.seatDetailsContainer}>
@@ -56,7 +51,7 @@ const Tickets = () => {
       </div>
   )}
 
-  const RenderBookingCharge = ({selectedSeats}: {selectedSeats: string[]}) => {
+  const BookingCharge = ({selectedSeats}: {selectedSeats: string[]}) => {
     bookingFee = selectedSeats.length * bookingChargePerTicket;
     return (
       <div className={styles.seatDetailsContainer}>
@@ -69,7 +64,7 @@ const Tickets = () => {
       </div>
   )}
 
-  const RenderTotalCharge = ({selectedSeats}: {selectedSeats: string[]}) => {
+  const TotalCharge = ({selectedSeats}: {selectedSeats: string[]}) => {
     totalCost = ticketCost + bookingFee;
     return (
       <div className={styles.seatDetailsContainer}>
@@ -104,7 +99,7 @@ const Tickets = () => {
     }
   }
 
-  const RenderConfirmButton = () => {
+  const ConfirmButton = () => {
     return (
       <div className={styles.paymentButtonContainer}>
         <Button variant="solid" disabled={isTimerCompleted} className={styles.paymentButton} onClick={onConfirmButtonClick}>
@@ -114,7 +109,7 @@ const Tickets = () => {
     )
   }
 
-  const RenderCard = () => {
+  const Card = () => {
     let selectedSeats: string[] = computeSelectedSeats();
     
     if (!movie) return <div>loading...</div>
@@ -123,15 +118,15 @@ const Tickets = () => {
       <div className={styles.cardTitleContainer}>
         <Link href={{ pathname: `/seats/${movie?.id}`, query: { seats: isTimerCompleted ? null : JSON.stringify(seatDetails) }}}><FaArrowRight /></Link>
         <div className={styles.cardTitle}>
-          BOOKING SUMMARY
+            סיכום הזמנה 
         </div>
       </div>
         <p className={styles.movieName}>{movie.name}</p>
-      <RenderSeatDetails selectedSeats={selectedSeats}/>
-      <RenderBookingCharge selectedSeats={selectedSeats}/>
+      <SeatDetails selectedSeats={selectedSeats}/>
+      <BookingCharge selectedSeats={selectedSeats}/>
       <hr className={styles.hrStyle}/>
-      <RenderTotalCharge selectedSeats={selectedSeats}/>
-      <RenderConfirmButton />
+      <TotalCharge selectedSeats={selectedSeats}/>
+      <ConfirmButton />
     </div>
     )
   }
@@ -139,10 +134,10 @@ const Tickets = () => {
   return (
     <>
       <Head>
-        <title>Payment Page</title>
+        <title>דף תשלום</title>
       </Head>
       <div className={styles.container}>
-        <RenderCard />
+        <Card />
       </div>
     </>
   );

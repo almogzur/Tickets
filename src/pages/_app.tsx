@@ -10,6 +10,8 @@ import { useMediaQuery } from 'usehooks-ts';
 import WidthContext from '../context/WidthContext';
 import { ChakraProvider, defaultSystem } from "@chakra-ui/react"
 
+import 'tippy.js/dist/tippy.css';
+
 
 
 function MyApp({ Component, pageProps }: AppProps) {
