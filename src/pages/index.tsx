@@ -8,12 +8,11 @@ import Link from 'next/link';
 import {useGetMovies} from '../services/movies'
 import { Movie } from '../constants/models/Movies';
 import { FcShare } from "react-icons/fc";
-
-
+import { Fragment } from 'react';
 
 export default function Home() {
-  const { movies, isLoading, isError } = useGetMovies();
 
+  const { movies, isLoading, isError } = useGetMovies();
   const MoviesList = () => {
     if (movies) {
       return movies.map((movie: Movie) => (
@@ -50,13 +49,13 @@ export default function Home() {
   }
   
   return (
-    <>
+    <  >
       <Head>
         <title>Book My Ticket | Home</title>
       </Head>
 
         <Heading as='h3' textAlign={"center"} >ההופעות שלנו</Heading>
-     <div style={{display:'flex' ,flexWrap:"wrap",  flexDirection:'row',
+        <div style={{display:'flex' ,flexWrap:"wrap",  flexDirection:'row',
   
   
      

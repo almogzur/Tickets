@@ -8,9 +8,9 @@ import { movies as mockMovies } from './../constants/movies';
 import '../styles/global.css'
 import { useMediaQuery } from 'usehooks-ts';
 import WidthContext from '../context/WidthContext';
+import SeatsPositionContext  from '../context/position-context'
 import { ChakraProvider, defaultSystem } from "@chakra-ui/react"
 
-import 'tippy.js/dist/tippy.css';
 
 
 
@@ -18,6 +18,10 @@ function MyApp({ Component, pageProps }: AppProps) {
 
 
   const [movies, setMovies] = useState<Movie[]>(mockMovies);
+
+  const [x,setX] = useState(0)  
+  const [y,setY] = useState(0)  
+  const [S,setS] = useState(0)
 
   const xxl = useMediaQuery('(min-width : 1600px)')
    const xl = useMediaQuery('(min-width : 1200px)')
@@ -29,20 +33,32 @@ function MyApp({ Component, pageProps }: AppProps) {
 
 
   return (
-    <ChakraProvider value={defaultSystem}>
+    
+    
+    <SeatsPositionContext.Provider value={{x,y,S,setX,setY,setS}}>
 
-    <Layout>
+      <ChakraProvider value={defaultSystem}>
       <MoviesContext.Provider value={{movies, setMovies}}>
       <WidthContext.Provider value={{xxl,xl,lg,md,sm,xs,xxs}}>
 
-        <Component {...pageProps} />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
         </WidthContext.Provider>
       </MoviesContext.Provider>
+      
    
-    </Layout>
     </ChakraProvider>
+    </SeatsPositionContext.Provider>
 
+    
   )
 }
 
+
+
+
 export default MyApp
+
+
+

@@ -1,214 +1,181 @@
 import Head from 'next/head'
 import Link from 'next/link';
 import { useRouter } from 'next/router'
-import { useState, useEffect, useContext, CSSProperties, useRef } from 'react'
-import { Button, Container,   Box ,Flex , Text, Heading} from '@chakra-ui/react'
-import WidthContext from '../../context/WidthContext';
-import { Movie, Seats } from '../../constants/models/Movies'
-
-import Tippy from '@tippyjs/react';
-
+import { useState, useEffect, useContext, CSSProperties, useRef, } from 'react'
+import { Button, Box ,Flex , Heading, Container} from '@chakra-ui/react'
+import { Movie } from '../../constants/models/Movies'
+import { TransformWrapper, TransformComponent, useControls, getTransformStyles } from "react-zoom-pan-pinch";
 import MoviesContext from '../../context/MoviesContext';
+import DisableZoom from '../../lib/hooks/useDisablePinchZoomEffect'
+import TooltopButton from '../../components/tooltip-btn'
+import WidthContext from '../../context/WidthContext';
+import positionContext from '../../context/position-context';
 
 const positionAtr : CSSProperties = { 
    position:"relative",
    width:"fit-content",
-   display:"flex"
+   height:"fit-content",
+   display:"flex",
+   flexDirection:"column"
  }
 
-const styles :Record<string,CSSProperties> =  {
-
-  seats: {
-
-    userSelect: "none",
-    cursor: "pointer",
-    backgroundColor: "silver",
-    fontSize: "12px",
-    fontWeight: "700",
-
-    height:"27px",
-    width:"27px",
-    color:"black"
-
-    
-
-  },
-  seatSelected: {
-    backgroundColor: "rgb(53, 212, 6)",
-  },
-  seatBlocked: {
-    cursor: "default",
-    color:"black",
- 
-
-  },
-  seatBooked: {
-    backgroundColor: "brown",
-    cursor: "default",
-  },
-  paymentButton: {
-    backgroundColor: "#f84464",
-    ...positionAtr,
-    top:-1300
-  },
-  clearBtn:{...positionAtr, top:"-1250px", color:"black"},
-   
-
-   "שירה-שורה1":{  top:-660, left:-40 ,  flexDirection:"column", ...positionAtr },
-   "שירה-שורה2":{  top:-825 ,left:-70 , flexDirection:"column" , ...positionAtr  ,},
-
-   "שירה2-שורה1":{  top:-600 ,left:-40, flexDirection:"column", ...positionAtr },
-
-   "שירה2-שורה2":{  top:-732 ,left:-70 ,flexDirection:"column" ,...positionAtr},
-
-   "שירה3-שורה1":{ ...positionAtr, flexDirection:"column" ,    top:0 , left:0,},
-   "שירה3-שורה2":{ position:"relative",  top:0 , left:0,},
-   "בידר1-שורה1": { position:"relative", top:0 , left:0 },
-   "בידור1-שורה2":{ position:"relative", top:0 , left:0 },
-   "בידור2-שורה1":{ position:"relative", top:0 , left:0,},
-   "בידור2-שורה2":{ position:"relative", top:0 , left:0,},
-   "בידור3-שורה1":{ position:"relative", top:0 , left:0,},
-   "בידור3-שורה2":{ position:"relative", top:0 , left:0,},
-   
-
-   "אופרה-קומה1-שורה1":{position:"relative" ,top:0 , left:0 , width:"fit-content" ,height:"fit-content"},
-   "אופרה-קומה1-שורה2": {position:"relative", display:"flex" ,top:0 , left:-0 , width:"fit-content" ,height:"fit-content"},
 
 
-   "אופרה-קומה2-שורה1": {position:"relative", display:"flex" ,top:0 , left:0, width:"fit-content" ,height:"fit-content"},
-   "אופרה-קומה2-שורה2":{position:"relative", display:"flex" ,top:0 , left:-0, width:"fit-content" ,height:"fit-content"},
-   "אופרה-קומה2-שורה3": {position:"relative", display:"flex", top:0 , left:0 , width:"fit-content" ,height:"fit-content"},
-
-
-  
-};
-
-const SeatsOri = () => {
+const MovePage = () => {
   const { movies } = useContext(MoviesContext);
   const router = useRouter();
-  let selectedSeats: string[] = [];
   const { id, seats }: any = router.query;
   const movie = movies.find((mov) => mov.id === parseInt(id));
-
-  const [seatDetails, setSeatDetails] = useState<Seats>(movie?.seats || {});
-
+  const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
+  const  [selectedSeats,setSlectedSeats ]= useState ([])
+  const [seatDetails,setSeatDetails]= useState(movie?.seats || []);
   
-    
-
-   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
-
-
-
+  const styles :Record<string,CSSProperties> =  {
+    seats: {
+      backgroundColor: "silver",
+      height:"4px",
+      width:"4px",
+      color:"black",
+      margin:2 ,
+      fontWeight:"bold",
+      borderRadius:"45%",
+      
+    },
+  
+    seatSelected: {backgroundColor: "rgb(53, 212, 6)",},
+    seatBlocked: {color:"black"},
+    seatBooked: {backgroundColor: "brown",cursor: "not-allowed"},
    
-  useEffect(() => {
-    if (!seats) {
-      clearSelectedSeats();
-    }
-  }, []);
-
-  const clearSelectedSeats = () => {
-    let newMovieSeatDetails = { ...seatDetails };
-
-    for (let key in seatDetails) {
-
-      seatDetails[key].forEach((seatValue: number, seatIndex:  number) => {
-        console.log(key);
-        
-        if (seatValue === 2) {
-          seatDetails[key][seatIndex] = 0;
-        }
-      });
-    }
-    
-
-    setSeatDetails(newMovieSeatDetails);
-  };
-
-  const getSeatStyle = (seatValue: number) :any => {
-    if (seatValue === 0) return styles.seats;
-    if (seatValue === 1) return { ...styles.seats, ...styles.seatBooked };
-    if (seatValue === 2) return { ...styles.seats, ...styles.seatSelected };
-    return { ...styles.seats, ...styles.seatBlocked };
-  };
-
-  const onSeatClick = (seatValue: number, rowIndex: number, key: string) => {
-
-    setSeatDetails((prevSeatDetails) => {
-      if (!prevSeatDetails) return prevSeatDetails;
+    stage:{          
+     height:40 ,
+      margin:20,
+       background:"silver",
+        color:"red",
+        width:"50%",
+        borderBottomLeftRadius: "45%",
+         borderBottomRightRadius:"45%" ,
+         display:'flex',
+         flexDirection:'row',
+         justifyContent:'center',
+         alignItems:'center',
+         alignContent:'center',
+         },
   
-      // Create a deep copy of the state to avoid direct mutation
-      const updatedSeatDetails = { ...prevSeatDetails };
-
-      const updatedRow = [...updatedSeatDetails[key]];
+    paymentButton: {},
+    clearBtn:{   ...positionAtr,    color:"black"},
+    "שירה-שורה1": {top:-0, left:100 ,   ...positionAtr },  
+    "שירה-שורה2": {top:-0 ,left:30 ,   ...positionAtr  ,},
   
-      if (seatValue === 1 || seatValue === 3) {
-        return prevSeatDetails; // No changes if the seat is unavailable or already selected
+    "שירה2-שורה1": {top:-0 ,left:100, ...positionAtr},
+    "שירה2-שורה2": {top:-1838 ,left:30 ,...positionAtr},
+  
+    "שירה3-שורה1":{top:-1540 , left:100, ...positionAtr},
+    "שירה3-שורה2":{  top:-1850 , left:30, ...positionAtr},
+  
+     
+    "בידר1-שורה1": {  top:-3543 , left:3060 , ...positionAtr },
+    "בידור1-שורה2":{  top:-3925 , left:3155, ...positionAtr },
+  
+    "בידור2-שורה1":{  top:-1560 , left:1265 ,...positionAtr},
+    "בידור2-שורה2":{  top:-1699 , left:1295 ,...positionAtr},
+  
+    "בידור3-שורה1":{ top:-1570 , left:1265, ...positionAtr},
+    "בידור3-שורה2":{  top:-1710 , left:1295, ... positionAtr},
+  
+    "אופרה-קומה1-שורה1":{top:-1800 , left:475 , ...positionAtr,flexDirection:"row"},
+    "אופרה-קומה1-שורה2": {top:-1800 , left:475 ,...positionAtr,flexDirection:"row"},
+  
+    "אופרה-קומה2-שורה1":{ top:-1775 , left:485, ...positionAtr,flexDirection:"row"},
+    "אופרה-קומה2-שורה2":{ top:-1775 , left:455, ...positionAtr,flexDirection:"row"},
+    "אופרה-קומה2-שורה3":{ top:-1775 , left:485, ...positionAtr,flexDirection:"row"},
+      
+   };  
+   const getSeatStyle = (seatValue: number) :any => {
+  
+  // console.log("geting style" , seatValue);
+  
+  
+  if (seatValue === 0) return styles.seats;
+  if (seatValue === 1) return { ...styles.seats, ...styles.seatBooked };
+  if (seatValue === 2) return { ...styles.seats, ...styles.seatSelected };
+  return { ...styles.seats, ...styles.seatBlocked };
+   }
+  const hendler = (seatValue: number, seatNumber: number, row: string) => {
+  setSeatDetails((prevSeatDetails) => {
+    if (!prevSeatDetails) return prevSeatDetails;
+
+    // Create a deep copy of the current seat details
+    const updatedSeatDetails = { ...prevSeatDetails };
+    const updatedRow = [...updatedSeatDetails[row]];
+
+    // No changes for unavailable or already selected seats
+    if (seatValue === 1 || seatValue === 3) {
+      return prevSeatDetails; // No update
+    }
+
+    // Toggle seat state: 0 to 2 or 2 to 0
+    const newSeatValue = seatValue === 0 ? 2 : 0;
+    if (updatedRow[seatNumber] === newSeatValue) {
+      return prevSeatDetails; // Avoid unnecessary state updates
+    }
+
+    updatedRow[seatNumber] = newSeatValue;
+    updatedSeatDetails[row] = updatedRow;
+
+    // Update the selected seats array
+    setSlectedSeats((prevSelectedSeats) => {
+      const seatKey = `${row}-${seatNumber}`;
+      const isAlreadySelected = prevSelectedSeats.includes(seatKey);
+
+      if (isAlreadySelected) {
+        // Remove the seat if already selected
+        return prevSelectedSeats.filter((seat) => seat !== seatKey);
       }
-  
-      // Toggle seat state: 0 to 2 or 2 to 0
-      updatedRow[rowIndex] = seatValue === 0 ? 2 : 0;
-  
-      updatedSeatDetails[key] = updatedRow;
-  
-      return updatedSeatDetails; // Return the new state object
+
+      // Add the seat if not already selected
+      return [...prevSelectedSeats, seatKey];
     });
-  };
- 
+
+    return updatedSeatDetails; // Return updated state
+  });
+};
   const Seats = () => {
 
     let seatArray = [];
-    // Render main seats
+
     for (let row in seatDetails) {
-        const rowContent = seatDetails[row];
-
-
-        const colValue = rowContent.map((seatValue: number, colIndex: number) => (
-          
-            //  <Tippy
-            //        content={<p>text</p>} 
-            //        key={`${row}.${colIndex}`}
-            //        hideOnClick="toggle"
-    
-            //        touch={["hold",1]}
-             
-            //       >
-            //        <button 
-            //             key={`${row}.${colIndex}`}
-            //             id={`${row}.${colIndex}`}
-            //             style={{...getSeatStyle(seatValue) , margin:4 , fontWeight:"bold"}}
-            //             onClick={() => onSeatClick(seatValue, colIndex, row)}
-            //       >
-            //         {/* {colIndex + 1} */}
-
-            //       </button>
-            //  </Tippy>
       
-            //  Wraper for state to keep the seate tooltip opn 
+       const rowContent = seatDetails[row];   
 
-           <SeatWithTooltip
-              key={`${row}.${colIndex}`}
-              seatValue={seatValue}
-              colIndex={1}
+       const colValue = rowContent.map((seatValue:number,i:number) => {
+       const textset = "מושב"
+       const textrow= "שורה"
+           
+
+     return <TooltopButton
+              key={`${row}.${i}`}
               row={row}
-              getSeatStyle={() => getSeatStyle(seatValue)}
-              hndler={()=>onSeatClick(seatValue, colIndex, row)}
-           />   
+              seatnumber={i}
+              initValue={seatValue}
+              hendler={hendler}
+              title={` ${row.includes(textrow) ? "" : textrow} ${row} ${textset}:${[i]}`}
+              Style={getSeatStyle(seatValue)}          
+              i={i}           
+               />  
+       }
+     );  
 
 
-         
-
-
-                 
-        )
-      );
         seatArray.push(
      
-             <Flex 
+             <Flex
                 key={row} 
                 style={styles[`${row}`]} // target by key in css 
                 justifyContent={"center"} 
                 >
+                  
                 {colValue}
+         
             </Flex>
          
         );
@@ -217,77 +184,29 @@ const SeatsOri = () => {
 
   
     return (
-      <Flex justifyContent={"center"}   
-        >
-        <Box borderColor={"lightblue"} overflow={"clip"}  h={"1100px"}  border={"solid"}  p={20} zoom={"100%"} >
+
+        
+            <Container      direction={"column"} border={"solid"}>
+                 <TranspormComponenr>
+                   <Flex  direction={"column"} border={"solid"} p={10}  height={!xs? 400 : 600} w={"inherit"} overflow={"clip"} >
+      
+                      <Flex justifyContent={"center"}> 
+                        <Stage style={styles.stage} />
+                     </Flex > 
+                      {seatArray}           
+                  </Flex> 
+                </TranspormComponenr>
+            </Container>
 
 
-            <Box bg={"blue"} h={"60px"} position={"relative"} top={"-50px"}   >זום</Box>
-            <Box bg={"red"} h={"60px"} position={"relative"} top={"-20px"}  >במה</Box>
-         
-             {/* reg row */}
-              <Flex direction={"column"}>{seatArray}</Flex> 
-             {/* custom row */}
-             <PaymentButton />
-            <ResetSelectedSeats/>
 
-     
-
-        </Box>
-      </Flex>
 
     );
 };
 
-const PaymentButton = () => {
-  selectedSeats = [];
-
-  // Loop through seatDetails
-  for (let key in seatDetails) {
-    seatDetails[key].forEach((seatValue: number, seatIndex: number) => {
-      if (seatValue === 2) {
-        selectedSeats.push(`${key}${seatIndex + 1}`);
-      }
-    });
-  }
+  const ResetSelectedSeats =()=>{
 
 
-
-  if (selectedSeats.length ) {
-    return (
-      <Link
-        href={{
-          pathname: "/payment",
-          query: {
-            movieId: movie?.id,
-            seatDetails: JSON.stringify(seatDetails),
- 
-          },
-        }}
-     
-      >
-  
-          <Button variant="solid" style={styles.paymentButton}>
-            סה״כ {selectedSeats.length * (movie?.ticketCost || 0) + " שח"}
-          </Button>
-
-      </Link>
-    );
-  } else {
-    return <></>;
-  }
-};
-
-const ResetSelectedSeats =()=>{
-  selectedSeats = [];
-
-  for (let key in seatDetails) {
-    seatDetails[key].forEach((seatValue: number, seatIndex: number) => {
-      if (seatValue === 2) {
-        selectedSeats.push(`${key}${seatIndex + 1}`);
-      }
-    });
-  }
 
   if (selectedSeats.length) {
    return <Button 
@@ -298,85 +217,165 @@ const ResetSelectedSeats =()=>{
      
          variant={"solid"}
          colorPalette={""} 
-        onClick={clearSelectedSeats} >
+         onClick={clearSelectedSeats} >
         נקה בחירה
        </Button>
   }else{return <></>}
 }
+  const clearSelectedSeats = () => {
+    let newMovieSeatDetails = { ...refedSeatDetails };
 
+    for (let key in refedSeatDetails.current) {
 
-  if (!movie) return <div>טוען...</div>;
-  return (
+      refedSeatDetails.current[key].forEach((seatValue: number, seatIndex:  number) => {
+        
+        if (seatValue === 2) {
+          refedSeatDetails.current[key][seatIndex] = 0;
+        }
+      });
+    }
+    
+
+    refedSeatDetails.current = newMovieSeatDetails;
+};
+
+if (!movie) return <div>טוען...</div>;
+   return (
     <>
       <Head>
         <title>מקומות ישיבה באולם</title>
+        <meta name="viewport" content="width=device-width, user-scalable=no"/>
+
       </Head>
 
-        <Heading textAlign={"center"} size={"4xl"} >{movie.name}</Heading>
+        <Heading textAlign={"center"} size={"2xl"} >{movie.name}</Heading>
         <Heading p={0} as={'h3'} textAlign={"center"}  >מקומות ישיבה באולם</Heading>
-
-        { seatDetails && <Seats /> }
-
-
+        
+         <Seats /> 
+        
+        { selectedSeats && 
+        <PaymentButton Selected={selectedSeats}  style={styles.paymentButton} movie={movie} />}
+        <ResetSelectedSeats/>
+        <Box w={"inherit"} h={"300px"} bg={"green"} ></Box>
+ 
     </>
   );
 };
 
 
- 
-export default SeatsOri
 
-const SeatWithTooltip = ({
-  seatValue,
-  colIndex,
-  row,
-  getSeatStyle,
-  hndler
-}:
-{
-    seatValue:number ,
-    colIndex:number ,
-    row:string,
-    getSeatStyle:Function,
-    hndler:any
-  }) => {
+
+
+
+
+const TranspormComponenr = ({children}) => {
   
-  const [tooltipVisible, setTooltipVisible] = useState(false);
+  const {x,y,S, setS , setY , setX } =useContext(positionContext)
+  const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
 
-  const openTooltip = () => setTooltipVisible(true);
-  const closeTooltip = () => setTooltipVisible(false);
-
-  
   return (
+    <TransformWrapper
+      initialScale={S||1}
+      initialPositionX={x||0}
+      initialPositionY={y||0}
+      smooth
+     p
     
-    <Tippy
-      content={<p>text</p>}
-      visible={tooltipVisible}
-      interactive
+      
 
-    >
-      <button
-        key={`${row}.${colIndex}`}
-        style={{ ...getSeatStyle(seatValue), margin: 4, fontWeight: "bold" }}
-        onMouseEnter={()=>{openTooltip()}}
-        onMouseLeave={()=>{closeTooltip()}}
-
-        onTouchStart={()=>openTooltip()}
- 
-        
-        onClick={(e)=>{
+      onPanningStop={(e)=>{
+        setY(e.state.positionY)
+        setX(e.state.positionX)
+        setS(e.state.scale)
+      }}
    
-          hndler()
+       onTransformed={(e)=>{
+        //console.log(e.state)
 
-        }
-        
-         
-        
-        
-        }
-      >
-        {/* {colIndex + 1} */}
-      </button>
-    </Tippy>
+        ;
+       }}
+ 
+       
+    
+      
+    >
+      {({ zoomIn, zoomOut, resetTransform, ...rest }) =>  {
+                 
+              
+              
+        return   (
+          <div>
+          <Controls/>
+          
+           
+             <TransformComponent 
+                  wrapperStyle={{border:"red solid" , width:"inherit"}}  
+                  
+                >
+               {children }
+             </TransformComponent>
+             </div>
+          
+   
+      )
+}
+
+      }
+    </TransformWrapper>
   );
 };
+
+
+const Controls = () => {
+  const { zoomIn, zoomOut, resetTransform } = useControls();
+
+  return (
+    <Flex justifyContent={"center"} >
+      <Button  height={70} onClick={(e) => {zoomIn()}}>+</Button>
+      <Button    height={70} onClick={(e) =>{zoomOut() }}>-</Button>
+      <Button   height={70} onClick={(e) =>{resetTransform() }}>x</Button>
+    </Flex>
+  );
+};
+
+
+const PaymentButton = ({Selected , movie,style})  =>  {
+   return (  
+      <Link
+        href={{
+          pathname: "/payment",
+          query: {
+            movieId: movie?.id,
+            seatDetails: JSON.stringify(Selected),
+          },
+        }}
+      >
+        <Button variant="solid" style={style}>
+          סה״כ {Selected.length * (movie?.ticketCost || 0) + " שח"}
+        </Button>
+      </Link>
+    )
+ 
+};
+
+
+const Stage = ({ style })=>{
+
+  return   <div style={style} > 
+             <Heading fontSize={"21l"}>במה</Heading> 
+           </div>
+} 
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+export default MovePage

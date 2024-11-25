@@ -6,13 +6,10 @@ export type Movie = {
   cover: StaticImageData,
   adText:String,
   ticketCost?: number,
-  seats?: Seats
+  seats?: any
 
 }
 
-export type Seats = {
-  [key: string]: number[] 
-   
-}
+
 
 
