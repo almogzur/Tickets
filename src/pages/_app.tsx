@@ -35,21 +35,17 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     
     
-    <SeatsPositionContext.Provider value={{x,y,S,setX,setY,setS}}>
-
       <ChakraProvider value={defaultSystem}>
-      <MoviesContext.Provider value={{movies, setMovies}}>
-      <WidthContext.Provider value={{xxl,xl,lg,md,sm,xs,xxs}}>
-
+        <SeatsPositionContext.Provider value={{x,y,S,setX,setY,setS}}>
+        <MoviesContext.Provider value={{movies, setMovies}}>
+        <WidthContext.Provider value={{xxl,xl,lg,md,sm,xs,xxs}}>
         <Layout>
           <Component {...pageProps} />
         </Layout>
         </WidthContext.Provider>
-      </MoviesContext.Provider>
-      
-   
+        </MoviesContext.Provider>
+        </SeatsPositionContext.Provider>
     </ChakraProvider>
-    </SeatsPositionContext.Provider>
 
     
   )
