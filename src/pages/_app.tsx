@@ -9,8 +9,6 @@ import '../styles/global.css'
 import { useMediaQuery } from 'usehooks-ts';
 import WidthContext from '../context/WidthContext';
 import SeatsPositionContext  from '../context/map-position-context'
-import { ChakraProvider, defaultSystem } from "@chakra-ui/react"
-
 
 
 
@@ -35,17 +33,20 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     
     
-      <ChakraProvider value={defaultSystem}>
+
         <SeatsPositionContext.Provider value={{x,y,S,setX,setY,setS}}>
         <MoviesContext.Provider value={{movies, setMovies}}>
         <WidthContext.Provider value={{xxl,xl,lg,md,sm,xs,xxs}}>
+   
         <Layout>
+     
           <Component {...pageProps} />
+        
         </Layout>
         </WidthContext.Provider>
         </MoviesContext.Provider>
         </SeatsPositionContext.Provider>
-    </ChakraProvider>
+
 
     
   )

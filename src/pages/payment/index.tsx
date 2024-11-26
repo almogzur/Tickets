@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { Button } from '@chakra-ui/react';
+import { Button } from '@mui/material'
 import { FaArrowRight } from "react-icons/fa";
 
 import Link from 'next/link';
@@ -102,7 +102,7 @@ const Tickets = () => {
   const ConfirmButton = () => {
     return (
       <div className={styles.paymentButtonContainer}>
-        <Button variant="solid" disabled={isTimerCompleted} className={styles.paymentButton} onClick={onConfirmButtonClick}>
+        <Button  disabled={isTimerCompleted} className={styles.paymentButton} onClick={onConfirmButtonClick}>
          {isTimerCompleted ? 'Confirm Booking' : `Confirm Booking (${seconds})` }
         </Button>
       </div>
