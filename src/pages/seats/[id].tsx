@@ -9,7 +9,11 @@ import MoviesContext from '../../context/MoviesContext';
 import DisableZoom from '../../lib/hooks/useDisablePinchZoomEffect'
 import TooltopButton from '../../components/tooltip-btn'
 import WidthContext from '../../context/WidthContext';
-import positionContext from '../../context/position-context';
+import positionContext from '../../context/map-position-context';
+import { motion ,AnimatePresence } from "framer-motion"
+import { FaPlus } from "react-icons/fa6";
+import { FaMinus } from "react-icons/fa";
+import { FcRefresh } from "react-icons/fc";
 
 const positionAtr : CSSProperties = { 
    position:"relative",
@@ -27,25 +31,12 @@ const MovePage = () => {
   const { id, seats }: any = router.query;
   const movie = movies.find((mov) => mov.id === parseInt(id));
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
-  const  [selectedSeats,setSlectedSeats ]= useState ([])
+  const [selectedSeats,setSlectedSeats ]= useState ([])
   const [seatDetails,setSeatDetails]= useState(movie?.seats || []);
-  
-  const styles :Record<string,CSSProperties> =  {
-    seats: {
-      backgroundColor: "silver",
-      height:"4px",
-      width:"4px",
-      color:"black",
-      margin:2 ,
-      fontWeight:"bold",
-      borderRadius:"45%",
-      
-    },
-  
-    seatSelected: {backgroundColor: "rgb(53, 212, 6)",},
-    seatBlocked: {color:"black"},
-    seatBooked: {backgroundColor: "brown",cursor: "not-allowed"},
-   
+  const [ tipX, setTipX]=useState(null)
+  const [ tipY, setTipY]= useState(null)
+  const [tipTitel,setTipTitel] = useState<string>("")
+  const styles :Record<string,CSSProperties> =  { 
     stage:{          
      height:40 ,
       margin:20,
@@ -63,45 +54,40 @@ const MovePage = () => {
   
     paymentButton: {},
     clearBtn:{   ...positionAtr,    color:"black"},
-    "שירה-שורה1": {top:-0, left:100 ,   ...positionAtr },  
-    "שירה-שורה2": {top:-0 ,left:30 ,   ...positionAtr  ,},
+    "שירה-שורה1": {top:-160, left:-20 ,   ...positionAtr },  
+    "שירה-שורה2": {top:-200 ,left:-30 ,   ...positionAtr  },
   
-    "שירה2-שורה1": {top:-0 ,left:100, ...positionAtr},
-    "שירה2-שורה2": {top:-1838 ,left:30 ,...positionAtr},
+    "שירה2-שורה1": {top:-160 ,left:-20, ...positionAtr},
+    "שירה2-שורה2": {top:-192 ,left:-30 ,...positionAtr},
   
-    "שירה3-שורה1":{top:-1540 , left:100, ...positionAtr},
-    "שירה3-שורה2":{  top:-1850 , left:30, ...positionAtr},
+    "שירה3-שורה1":{top:-160 , left:-20, ...positionAtr},
+    "שירה3-שורה2":{  top:-192 , left:-30, ...positionAtr},
   
      
-    "בידר1-שורה1": {  top:-3543 , left:3060 , ...positionAtr },
-    "בידור1-שורה2":{  top:-3925 , left:3155, ...positionAtr },
+    "בידר1-שורה1": {  top:-368 , left:300 , ...positionAtr },
+    "בידור1-שורה2":{  top:-408 , left:310, ...positionAtr },
   
-    "בידור2-שורה1":{  top:-1560 , left:1265 ,...positionAtr},
-    "בידור2-שורה2":{  top:-1699 , left:1295 ,...positionAtr},
+    "בידור2-שורה1":{  top:-368 , left:300 ,...positionAtr},
+    "בידור2-שורה2":{  top:-400 , left:310 ,...positionAtr},
   
-    "בידור3-שורה1":{ top:-1570 , left:1265, ...positionAtr},
-    "בידור3-שורה2":{  top:-1710 , left:1295, ... positionAtr},
+    "בידור3-שורה1":{ top:-368 , left:300, ...positionAtr},
+    "בידור3-שורה2":{  top:-400 , left:310, ... positionAtr},
   
-    "אופרה-קומה1-שורה1":{top:-1800 , left:475 , ...positionAtr,flexDirection:"row"},
-    "אופרה-קומה1-שורה2": {top:-1800 , left:475 ,...positionAtr,flexDirection:"row"},
+    "אופרה-קומה1-שורה1":{top:-400 , left:109 , ...positionAtr,flexDirection:"row"},
+    "אופרה-קומה1-שורה2": {top:-400 , left:109 ,...positionAtr,flexDirection:"row"},
   
-    "אופרה-קומה2-שורה1":{ top:-1775 , left:485, ...positionAtr,flexDirection:"row"},
-    "אופרה-קומה2-שורה2":{ top:-1775 , left:455, ...positionAtr,flexDirection:"row"},
-    "אופרה-קומה2-שורה3":{ top:-1775 , left:485, ...positionAtr,flexDirection:"row"},
+    "אופרה-קומה2-שורה1":{ top:-385 , left:112, ...positionAtr,flexDirection:"row",},
+    "אופרה-קומה2-שורה2":{ top:-385 , left:105, ...positionAtr,flexDirection:"row"},
+    "אופרה-קומה2-שורה3":{ top:-385 , left:112, ...positionAtr,flexDirection:"row"},
       
    };  
-   const getSeatStyle = (seatValue: number) :any => {
-  
-  // console.log("geting style" , seatValue);
-  
-  
-  if (seatValue === 0) return styles.seats;
-  if (seatValue === 1) return { ...styles.seats, ...styles.seatBooked };
-  if (seatValue === 2) return { ...styles.seats, ...styles.seatSelected };
-  return { ...styles.seats, ...styles.seatBlocked };
-   }
+
+
   const hendler = (seatValue: number, seatNumber: number, row: string) => {
-  setSeatDetails((prevSeatDetails) => {
+
+    console.log("hdler inv");
+    
+       setSeatDetails((prevSeatDetails: any) => {
     if (!prevSeatDetails) return prevSeatDetails;
 
     // Create a deep copy of the current seat details
@@ -138,69 +124,89 @@ const MovePage = () => {
 
     return updatedSeatDetails; // Return updated state
   });
-};
+   };
+
+
   const Seats = () => {
-
-    let seatArray = [];
-
-    for (let row in seatDetails) {
-      
-       const rowContent = seatDetails[row];   
-
-       const colValue = rowContent.map((seatValue:number,i:number) => {
-       const textset = "מושב"
-       const textrow= "שורה"
-           
-
-     return <TooltopButton
-              key={`${row}.${i}`}
-              row={row}
-              seatnumber={i}
-              initValue={seatValue}
-              hendler={hendler}
-              title={` ${row.includes(textrow) ? "" : textrow} ${row} ${textset}:${[i]}`}
-              Style={getSeatStyle(seatValue)}          
-              i={i}           
-               />  
-       }
-     );  
-
-
-        seatArray.push(
-     
-             <Flex
-                key={row} 
-                style={styles[`${row}`]} // target by key in css 
-                justifyContent={"center"} 
-                >
-                  
-                {colValue}
-         
-            </Flex>
-         
+ 
+    const seatArray  = Object.entries(seatDetails).map(([row, rowContent]) => {
+      const colValue  = rowContent.map((seatValue: number, i: number) => {
+        const textset = "מושב";
+        const textrow = "שורה";
+    
+        return (
+          <TooltopButton
+            key={`${row}.${i}`}
+            row={row}
+            seatnumber={i}
+            initValue={seatValue}
+            hendler={hendler}
+            setTipX={setTipX}
+            setTipY={setTipY}
+            setTipTitel={setTipTitel}
+          />
         );
-    }
-
+      });
+    
+      return (
+        <Flex
+          key={row}
+          style={styles[`${row}`]} // target by key in CSS
+          justifyContent="center"
+        >
+          {colValue}
+        </Flex>
+      );
+    });
+    
 
   
     return (
+     <>
+        <AnimatePresence>
+     {tipX && tipY  && (
+      <motion.h1
+        style={{
+            background: "#fff",
+            color: "black",
+            borderRadius: "4px",
+            height:"fin-content",
+            width:"fin-content",
+            position:'absolute',
+            zIndex:99,
+            top:`${tipY-40 }px`,
+            left:`${tipX-60}px`,
+            fontSize:15,
+            padding:10,
+            textAlign:"end"
+            
+         }}
 
-        
-            <Container      direction={"column"} border={"solid"}>
+        initial={{ opacity: 0, y: -15 }}
+        animate={{ opacity: 1, y:-23,   transition: { duration: 0.5 } }}
+        exit={{ opacity: 0, transition: { duration: 0.5 } }}
+  >
+    {tipTitel}
+</motion.h1>
+        )}
+       </AnimatePresence> 
+       <Flex justifyContent={"center"} bg={'gray'} borderRadius={10}>
+        <Container   direction={"column"}    m={4} borderRadius={15} bg={'black'} p={0} >
                  <TranspormComponenr>
-                   <Flex  direction={"column"} border={"solid"} p={10}  height={!xs? 400 : 600} w={"inherit"} overflow={"clip"} >
+                   <Flex  direction={"column"}  p={10}  height={ !xs? 400  : 600} w={"inherit"} >
       
                       <Flex justifyContent={"center"}> 
                         <Stage style={styles.stage} />
                      </Flex > 
-                      {seatArray}           
+                 
+                          {seatArray}          
+             
                   </Flex> 
+              
                 </TranspormComponenr>
-            </Container>
-
-
-
-
+       </Container>
+       </Flex>
+      </>
     );
 };
 
@@ -279,20 +285,23 @@ const TranspormComponenr = ({children}) => {
       initialPositionX={x||0}
       initialPositionY={y||0}
       smooth
-     p
+      maxScale={30}
+      
+     
     
       
 
       onPanningStop={(e)=>{
+  
         setY(e.state.positionY)
         setX(e.state.positionX)
         setS(e.state.scale)
       }}
    
        onTransformed={(e)=>{
-        //console.log(e.state)
+          
 
-        ;
+        
        }}
  
        
@@ -304,17 +313,12 @@ const TranspormComponenr = ({children}) => {
               
               
         return   (
-          <div>
-          <Controls/>
-          
-           
-             <TransformComponent 
-                  wrapperStyle={{border:"red solid" , width:"inherit"}}  
-                  
-                >
-               {children }
+          <>
+             <Controls/>
+             <TransformComponent wrapperStyle={{ width:"inherit"}} >
+               {children }               
              </TransformComponent>
-             </div>
+          </>
           
    
       )
@@ -327,13 +331,25 @@ const TranspormComponenr = ({children}) => {
 
 
 const Controls = () => {
+  const {x,y,S, setS , setY , setX } =useContext(positionContext)
+  const resetContext =()=>{
+     console.log("reset");
+     setS(1)
+     setX(0)
+     setY(0)
+     
+  }
   const { zoomIn, zoomOut, resetTransform } = useControls();
 
   return (
-    <Flex justifyContent={"center"} >
-      <Button  height={70} onClick={(e) => {zoomIn()}}>+</Button>
-      <Button    height={70} onClick={(e) =>{zoomOut() }}>-</Button>
-      <Button   height={70} onClick={(e) =>{resetTransform() }}>x</Button>
+    <Flex justifyContent={"space-between"} p={2} >
+
+      <Button height={'inherit'}  onClick={(e) => {zoomIn()}}>
+        <FaPlus  color='green'  />
+      </Button>
+
+      <Button    height={70} onClick={(e) =>{zoomOut() }}><FaMinus color='red'/></Button>
+      <Button   height={70} onClick={(e) =>{resetTransform() ; resetContext()   }}><FcRefresh/></Button>
     </Flex>
   );
 };

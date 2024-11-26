@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-function DisableZoom() {
+function DisableZoomEffect() {
   useEffect(() => {
     // Prevent zoom with the wheel
     const handleWheel = (e: WheelEvent) => {
@@ -37,9 +37,9 @@ function DisableZoom() {
 
     // Add event listeners
     window.addEventListener('wheel', handleWheel, { passive: false });
-    //window.addEventListener('keydown', handleKeyDown);
-   // window.addEventListener('touchmove', handleTouchMove, { passive: false });
-    //window.addEventListener('touchstart', handleTouchStart, { passive: false });
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+    window.addEventListener('touchstart', handleTouchStart, { passive: false });
 
     // Clean up event listeners
     return () => {
@@ -53,4 +53,4 @@ function DisableZoom() {
   return null;
 }
 
-export default DisableZoom;
+export default DisableZoomEffect;

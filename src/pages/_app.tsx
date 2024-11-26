@@ -8,7 +8,7 @@ import { movies as mockMovies } from './../constants/movies';
 import '../styles/global.css'
 import { useMediaQuery } from 'usehooks-ts';
 import WidthContext from '../context/WidthContext';
-import SeatsPositionContext  from '../context/position-context'
+import SeatsPositionContext  from '../context/map-position-context'
 import { ChakraProvider, defaultSystem } from "@chakra-ui/react"
 
 

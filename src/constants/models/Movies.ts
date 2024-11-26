@@ -6,10 +6,15 @@ export type Movie = {
   cover: StaticImageData,
   adText:String,
   ticketCost?: number,
-  seats?: any
+  seats?: Seats
+  citizenTicketCost:number
 
 }
 
 
 
 
+
+export type Seats = {
+  [key: string]: number[]
+}
