@@ -32,7 +32,7 @@ const DetailsPage = () => {
       </Flex>
       
          <SeatWrapper/>
-     <Map/> 
+     {/* <Map/>  */}
     </>
   );
 }

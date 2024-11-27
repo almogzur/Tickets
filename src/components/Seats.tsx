@@ -1,4 +1,4 @@
-import {Box , Stack as Flex , Typography as Heading , Button, Container} from '@mui/material'
+import {Box , Stack as Flex , Typography as Heading , Button, Container, Typography} from '@mui/material'
 import TooltopButton from './tooltip-btn'
 import { motion ,AnimatePresence } from "framer-motion"
 import { useState, useEffect, useContext, CSSProperties, useRef, } from 'react'
@@ -55,33 +55,50 @@ const SeatWrapper = () => {
     
       paymentButton: {},
       clearBtn:{   ...positionAtr,    color:"black"},
-      "שירה-שורה1": {top:-160, left:-20 ,   ...positionAtr },  
-      "שירה-שורה2": {top:-200 ,left:-30 ,   ...positionAtr  },
+      "שירה-שורה1": {top:-160, left:-30 ,   ...positionAtr },  
+      "שירה-שורה2": {top:-200 ,left:-60 ,   ...positionAtr  },
     
-      "שירה2-שורה1": {top:-160 ,left:-20, ...positionAtr},
-      "שירה2-שורה2": {top:-192 ,left:-30 ,...positionAtr},
+      "שירה2-שורה1": {top:-160 ,left:-30, ...positionAtr},
+      "שירה2-שורה2": {top:-192 ,left:-60 ,...positionAtr},
     
-      "שירה3-שורה1":{top:-160 , left:-20, ...positionAtr},
-      "שירה3-שורה2":{  top:-192 , left:-30, ...positionAtr},
+      "שירה3-שורה1":{top:-160 , left:-30, ...positionAtr},
+      "שירה3-שורה2":{  top:-192 , left:-60, ...positionAtr},
     
        
       "בידר1-שורה1": {  top:-368 , left:300 , ...positionAtr },
-      "בידור1-שורה2":{  top:-408 , left:310, ...positionAtr },
+      "בידור1-שורה2":{  top:-408 , left:330, ...positionAtr },
     
       "בידור2-שורה1":{  top:-368 , left:300 ,...positionAtr},
-      "בידור2-שורה2":{  top:-400 , left:310 ,...positionAtr},
+      "בידור2-שורה2":{  top:-400 , left:330 ,...positionAtr},
     
       "בידור3-שורה1":{ top:-368 , left:300, ...positionAtr},
-      "בידור3-שורה2":{  top:-400 , left:310, ... positionAtr},
+      "בידור3-שורה2":{  top:-400 , left:330, ... positionAtr},
     
-      "אופרה-קומה1-שורה1":{top:-400 , left:109 , ...positionAtr,flexDirection:"row"},
-      "אופרה-קומה1-שורה2": {top:-400 , left:109 ,...positionAtr,flexDirection:"row"},
-    
-      "אופרה-קומה2-שורה1":{ top:-385 , left:112, ...positionAtr,flexDirection:"row",},
-      "אופרה-קומה2-שורה2":{ top:-385 , left:105, ...positionAtr,flexDirection:"row"},
-      "אופרה-קומה2-שורה3":{ top:-385 , left:112, ...positionAtr,flexDirection:"row"},
-        
+
+      "אופרה1-שורה1-קומה1":{top:-380 , left:70 , ...positionAtr,flexDirection:"row" , },
+      "אופרה1-שורה2-קומה1":{top:-375 , left:75 , ...positionAtr,flexDirection:"row" ,},
+      "אופרה2-שורה1-קומה1": {top:-396 , left:170 , ...positionAtr,flexDirection:"row"  },
+      "אופרה2-שורה2-קומה1":{top:-391 , left:175 , ...positionAtr,flexDirection:"row" ,  },
+
+
+
+      "אופרה1-שורה1-קומה2": {top:-350 , left:70 , ...positionAtr,flexDirection:"row" ,},
+      "אופרה1-שורה2-קומה2":{top:-348 , left:75 , ...positionAtr,flexDirection:"row" , },
+      "אופרה1-שורה3-קומה2": {top:-345 , left:70 , ...positionAtr,flexDirection:"row" ,},
+
+
+      "אופרה2-שורה1-קומה2": {top:-374 , left:170 , ...positionAtr,flexDirection:"row" ,},
+      "אופרה2-שורה2-קומה2":{top:-371 , left:175 , ...positionAtr,flexDirection:"row" , },
+      "אופרה2-שורה3-קומה2": {top:-369 , left:170 , ...positionAtr,flexDirection:"row" ,},
+
+
      };  
+
+      // reset tip 
+     useEffect(()=>{
+      setTipY(0)
+      setTipX(0)
+    },[])
 
   const hendler = (seatValue: number, seatNumber: number, row: string) => {
   
@@ -140,7 +157,10 @@ const SeatWrapper = () => {
   
     // useEffect(()=>{ clearSelectedSeats() },[])
   const Seats = () => {
-      const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
+
+    const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
+    
+   
 
       const seatArray  = Object.entries({...movie.seats}).map(([row, rowContent]) => {
         const colValue  = rowContent.map((seatValue: number, i: number) => {
@@ -209,20 +229,47 @@ const SeatWrapper = () => {
   
   
           <Container   sx={{boxShadow:' 3px 3px 3px 2px #fff', marginBottom:3}} >
+
                    <Transporm  >
-  
-                       <Flex  direction={"column"}    height={!xs? 350 : 600}  width={'inherit'}   >
-        
-                        <Flex direction={'row'}  justifyContent={'center'}> 
+
+                  
+                    <Flex  direction={"column"}    height={!xs? 350 : 600}    >
+
+                      <Typography  style={{ position:"relative", top:50 , left:-58 ,color:Colors.b }}  height={0} > שירה</Typography>
+
+                      <Typography fontSize={7} height={0} style={{position:"relative", top:225 , left:-155 , transform: 'rotate(90deg)',color:Colors.b }}> שירה קומה 1</Typography>  
+                      <Typography fontSize={7}  height={0}  style={{position:"relative", top:225 , left:-205 , transform: 'rotate(90deg)',color:Colors.b}} >שירה קומה 2</Typography>
+                          
+
+                      <Typography   style={{position:"relative" ,top:50 , left:305 , color:Colors.b  }}  height={0}  > קומי </Typography>
+
+
+                      <Typography style={{position:"relative", transform: 'rotate(90deg)', top:225 , left:155, color:Colors.b    }}  height={0} fontSize={7} >  קומי קומה 1 </Typography>
+                      <Typography style={{position:"relative", transform: 'rotate(90deg)' , top:225 , left:205 , color:Colors.b  }}  height={0} fontSize={7}>  קומי קומה 2</Typography>  
+
+
+                      <Typography style={{position:"relative", top:279 , left:120 }} fontSize={11} color={Colors.b}   height={0} >  אופרה 1</Typography>
+                      <Typography style={{position:"relative", top:345,  left:120  }} fontSize={11} color={Colors.b}   height={0}  >  אופרה 2</Typography>
+
+                      
+                      <Typography style={{position:"relative", top:335,left:40}} fontSize={7} color={Colors.b}  height={0} > קומה 1</Typography>  
+
+                      <Typography style={{position:"relative", top:360, left:40}} fontSize={7} color={Colors.b}  height={0} > קומה 2</Typography> 
+
+                 
+
+                      <Flex direction={'row'}  justifyContent={'center'}> 
                           <Stage style={styles.stage} />
-                       </Flex > 
+                    
+                      </Flex>
+
+                        {seatArray}
+
+                        </Flex> 
                    
-                            {seatArray}          
-               
-                      </Flex> 
-                     
+                   
                 
-                  </Transporm>
+                    </Transporm>
              
          </Container>
   
@@ -337,7 +384,7 @@ export default SeatWrapper
 const Stage = ({ style })=>{
 
   return   <div style={style} > 
-             <Heading fontSize={"21l"}>במה</Heading> 
+             <Typography variant='h4' color={Colors.b}>במה</Typography> 
            </div>
 } 
 
