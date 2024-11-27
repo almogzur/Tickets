@@ -16,11 +16,11 @@ const Transporm = ({children, }) => {
     return (
        <TransformWrapper 
         
-        initialScale={S||1}
+        initialScale={S||0.5}
         initialPositionX={x||0}
         initialPositionY={y||0}
         limitToBounds={false}
-
+        minScale={0.7}
    
         smooth
         maxScale={100}
@@ -68,8 +68,8 @@ const Transporm = ({children, }) => {
     const resetContext =()=>{
 
        console.log("reset");
-       setS(1)
-       setX(27)
+       setS(0.7)
+       setX(50)
        setY(0)
        setTipY(0)
        setTipX(0)
@@ -80,7 +80,7 @@ const Transporm = ({children, }) => {
     const { zoomIn, zoomOut, resetTransform } = useControls();
   
     return (
-      <Flex direction={'row'} justifyContent={"space-between"} p={2}  >
+      <Flex direction={'row'} justifyContent={"space-between"} p={2} sx={{borderBottom:'solid 0.5px'}} >
   
         <Button sx={{height:'60px' , background:'#fff'}}  onClick={(e) => {zoomIn()}}>
           <FaPlus  color='green' size={"2em"} />

@@ -22,7 +22,7 @@ const styles :Record<string,CSSProperties> =  {
  };  
 
 
-const TooltipButton = ({ initValue, seatnumber, row ,hendler , setTipY, setTipX  ,setTipTitel , tiketCost,cizCost }) => {
+const TooltipButton = ({ initValue, seatnumber, row ,hendler , setTipY, setTipX  ,setTipTitel , tiketCost, cizCost }) => {
 
     const tiohndler = (x: number,y: number)=>{
       
@@ -30,7 +30,6 @@ const TooltipButton = ({ initValue, seatnumber, row ,hendler , setTipY, setTipX 
       setTipY(y)
     }
        const textset = "מושב";
-        const textrow = "שורה";
         const coat = 'מחיר רגיל'
         const citConst = 'מחיר תושב'
   return (
@@ -39,9 +38,7 @@ const TooltipButton = ({ initValue, seatnumber, row ,hendler , setTipY, setTipX 
        onClick={(e)=> { 
             hendler(initValue,seatnumber,row) ;
             tiohndler(e.nativeEvent.pageX,e.nativeEvent.pageY ) 
-            setTipTitel(`${  row.includes(textrow) ? "" : textrow} ${row} -  ` 
-            +
-            ` ${textset} : ${[seatnumber+1]} ${coat}:${tiketCost} ${citConst}:${cizCost} `)
+            setTipTitel(` ${row} -  ${textset} : ${[seatnumber+1]} ${coat}:${tiketCost} ${citConst}:${cizCost} `)
 
           //   console.log( 
               

@@ -55,41 +55,41 @@ const SeatWrapper = () => {
     
       paymentButton: {},
       clearBtn:{   ...positionAtr,    color:"black"},
-      "שירה-שורה1": {top:-160, left:-30 ,   ...positionAtr },  
-      "שירה-שורה2": {top:-200 ,left:-60 ,   ...positionAtr  },
+      "שירה 1 - קומה 1": {top:-160, left:-30 ,   ...positionAtr },  
+      "שירה 1 - קומה 2": {top:-200 ,left:-60 ,   ...positionAtr  },
     
-      "שירה2-שורה1": {top:-160 ,left:-30, ...positionAtr},
-      "שירה2-שורה2": {top:-192 ,left:-60 ,...positionAtr},
+      "שירה 2 - קומה 1": {top:-160 ,left:-30, ...positionAtr},
+      "שירה 2 - קומה 2": {top:-192 ,left:-60 ,...positionAtr},
     
-      "שירה3-שורה1":{top:-160 , left:-30, ...positionAtr},
-      "שירה3-שורה2":{  top:-192 , left:-60, ...positionAtr},
+      "שירה 3 - קומה 1":{top:-160 , left:-30, ...positionAtr},
+      "שירה 3 - קומה 2":{  top:-192 , left:-60, ...positionAtr},
     
        
-      "בידר1-שורה1": {  top:-368 , left:300 , ...positionAtr },
-      "בידור1-שורה2":{  top:-408 , left:330, ...positionAtr },
+      "בידר 1 - קומה 1": {  top:-368 , left:300 , ...positionAtr },
+      "בידור 1 - קומה 2":{  top:-408 , left:330, ...positionAtr },
     
-      "בידור2-שורה1":{  top:-368 , left:300 ,...positionAtr},
-      "בידור2-שורה2":{  top:-400 , left:330 ,...positionAtr},
+      "בידור 2 - קומה 1":{  top:-368 , left:300 ,...positionAtr},
+      "בידור 2 - קומה 2":{  top:-400 , left:330 ,...positionAtr},
     
-      "בידור3-שורה1":{ top:-368 , left:300, ...positionAtr},
-      "בידור3-שורה2":{  top:-400 , left:330, ... positionAtr},
+      "בידור 3 - קומה 1":{ top:-368 , left:300, ...positionAtr},
+      "בידור 3 - קומה 2":{  top:-400 , left:330, ... positionAtr},
     
 
-      "אופרה1-שורה1-קומה1":{top:-380 , left:70 , ...positionAtr,flexDirection:"row" , },
-      "אופרה1-שורה2-קומה1":{top:-375 , left:75 , ...positionAtr,flexDirection:"row" ,},
-      "אופרה2-שורה1-קומה1": {top:-396 , left:170 , ...positionAtr,flexDirection:"row"  },
-      "אופרה2-שורה2-קומה1":{top:-391 , left:175 , ...positionAtr,flexDirection:"row" ,  },
+      "אופרה 1 - שורה 1 - קומה 1":{top:-380 , left:70 , ...positionAtr,flexDirection:"row" , },
+      "אופרה 1 - שורה 2 - קומה 1":{top:-375 , left:75 , ...positionAtr,flexDirection:"row" ,},
+      "אופרה 2 - שורה 1 - קומה 1": {top:-396 , left:170 , ...positionAtr,flexDirection:"row"  },
+      "אופרה 2 - שורה 2 - קומה 1":{top:-391 , left:175 , ...positionAtr,flexDirection:"row" ,  },
 
 
 
-      "אופרה1-שורה1-קומה2": {top:-350 , left:70 , ...positionAtr,flexDirection:"row" ,},
-      "אופרה1-שורה2-קומה2":{top:-348 , left:75 , ...positionAtr,flexDirection:"row" , },
-      "אופרה1-שורה3-קומה2": {top:-345 , left:70 , ...positionAtr,flexDirection:"row" ,},
+      "אופרה 1 - שורה 1 - קומה2": {top:-350 , left:70 , ...positionAtr,flexDirection:"row" ,},
+      "אופרה 1 - שורה 2 - קומה2":{top:-348 , left:75 , ...positionAtr,flexDirection:"row" , },
+      "אופרה 1 - שורה3  - קומה2": {top:-345 , left:70 , ...positionAtr,flexDirection:"row" ,},
 
 
-      "אופרה2-שורה1-קומה2": {top:-374 , left:170 , ...positionAtr,flexDirection:"row" ,},
-      "אופרה2-שורה2-קומה2":{top:-371 , left:175 , ...positionAtr,flexDirection:"row" , },
-      "אופרה2-שורה3-קומה2": {top:-369 , left:170 , ...positionAtr,flexDirection:"row" ,},
+      "אופרה 2 - שורה 1 - קומה 2": {top:-374 , left:170 , ...positionAtr,flexDirection:"row" ,},
+      "אופרה 2 - שורה 2 - קומה 2":{top:-371 , left:175 , ...positionAtr,flexDirection:"row" , },
+      "אופרה 2 - שורה 3 - קומה 2": {top:-369 , left:170 , ...positionAtr,flexDirection:"row" ,},
 
 
      };  
@@ -176,8 +176,10 @@ const SeatWrapper = () => {
               hendler={hendler}
               setTipX={setTipX}
               setTipY={setTipY}
-              setTipTitel={setTipTitel} tiketCost={undefined} 
-              cizCost={1}          
+              setTipTitel={setTipTitel}
+               tiketCost={movie.ticketCost} 
+              cizCost={1} 
+
                 />
           );
         });
@@ -198,9 +200,9 @@ const SeatWrapper = () => {
       return (
        <>
           <AnimatePresence>
-       {tipX && tipY  && (
-        <motion.h1
-          style={{
+           {tipX && tipY  && (
+          <motion.h1
+           style={{
               background: "#fff",
               color: "black",
               borderRadius: "4px",
@@ -220,43 +222,28 @@ const SeatWrapper = () => {
   
           initial={{ opacity: 0, y: -15 }}
           animate={{ opacity: 1, y:-23,   transition: { duration: 0.5 } }}
-          exit={{ opacity: 0, transition: { duration: 0.5 } }}
-    >
-      {tipTitel}
+           exit={{ opacity: 0, transition: { duration: 0.5 } }}
+          >
+           {tipTitel}
          </motion.h1>
           )}
          </AnimatePresence> 
   
   
           <Container   sx={{boxShadow:' 3px 3px 3px 2px #fff', marginBottom:3}} >
+            <Transporm  >              
+               <Flex  direction={"column"}    height={!xs? 350 : 600}    >
 
-                   <Transporm  >
-
-                  
-                    <Flex  direction={"column"}    height={!xs? 350 : 600}    >
-
-                      <Typography  style={{ position:"relative", top:50 , left:-58 ,color:Colors.b }}  height={0} > שירה</Typography>
-
-                      <Typography fontSize={7} height={0} style={{position:"relative", top:225 , left:-155 , transform: 'rotate(90deg)',color:Colors.b }}> שירה קומה 1</Typography>  
-                      <Typography fontSize={7}  height={0}  style={{position:"relative", top:225 , left:-205 , transform: 'rotate(90deg)',color:Colors.b}} >שירה קומה 2</Typography>
-                          
-
-                      <Typography   style={{position:"relative" ,top:50 , left:305 , color:Colors.b  }}  height={0}  > קומי </Typography>
-
-
-                      <Typography style={{position:"relative", transform: 'rotate(90deg)', top:225 , left:155, color:Colors.b    }}  height={0} fontSize={7} >  קומי קומה 1 </Typography>
-                      <Typography style={{position:"relative", transform: 'rotate(90deg)' , top:225 , left:205 , color:Colors.b  }}  height={0} fontSize={7}>  קומי קומה 2</Typography>  
-
-
-                      <Typography style={{position:"relative", top:279 , left:120 }} fontSize={11} color={Colors.b}   height={0} >  אופרה 1</Typography>
-                      <Typography style={{position:"relative", top:345,  left:120  }} fontSize={11} color={Colors.b}   height={0}  >  אופרה 2</Typography>
-
-                      
-                      <Typography style={{position:"relative", top:335,left:40}} fontSize={7} color={Colors.b}  height={0} > קומה 1</Typography>  
-
+                      <Typography style={{position:"relative", top:50 , left:-58 , color:Colors.b }}  height={0} > שירה</Typography>
+                      <Typography style={{position:"relative", top:225, left:-155 , transform: 'rotate(90deg)',color:Colors.b }} fontSize={7} height={0} >  קומה 1</Typography>  
+                      <Typography style={{position:"relative", top:225, left:-205 , transform: 'rotate(90deg)',color:Colors.b}} fontSize={7}  height={0} > קומה 2</Typography>
+                      <Typography style={{position:"relative", top:50,  left:305 , color:Colors.b  }}  height={0}  > קומי </Typography>
+                      <Typography style={{position:"relative", top:225, left:155 ,  transform: 'rotate(90deg)',   color:Colors.b    }}  height={0} fontSize={7} >   קומה 1 </Typography>
+                      <Typography style={{position:"relative", top:225, left:205 , transform: 'rotate(90deg)' , color:Colors.b  }}  height={0} fontSize={7}>   קומה 2</Typography>  
+                      <Typography style={{position:"relative", top:279, left:120 }} fontSize={11} color={Colors.b}   height={0} >  אופרה 1</Typography>
+                      <Typography style={{position:"relative", top:345, left:120  }} fontSize={11} color={Colors.b}   height={0}  >  אופרה 2</Typography>
+                      <Typography style={{position:"relative", top:335, left:40}}  fontSize={7} color={Colors.b}  height={0} > קומה 1</Typography>  
                       <Typography style={{position:"relative", top:360, left:40}} fontSize={7} color={Colors.b}  height={0} > קומה 2</Typography> 
-
-                 
 
                       <Flex direction={'row'}  justifyContent={'center'}> 
                           <Stage style={styles.stage} />
@@ -265,14 +252,9 @@ const SeatWrapper = () => {
 
                         {seatArray}
 
-                        </Flex> 
-                   
-                   
-                
-                    </Transporm>
-             
-         </Container>
-  
+               </Flex>      
+            </Transporm>         
+          </Container>
         </>
       );
     };
@@ -292,8 +274,9 @@ const SeatWrapper = () => {
               },
             }}
           >
-            <Button  sx={{background:Colors.b , color:"#fff" , height:60}} >
-             מעבר לתשלום   סה״כ {selectedSeats.length * (movie?.ticketCost || 0) + " שח"}
+            <Button  sx={{background:Colors.b , color:"#fff" , height:60 ,fontSize:!xs?20:30, letterSpacing:1 ,lineHeight:1.2 , }} >
+              מעבר לתשלום    <br/>
+              סה״כ {selectedSeats.length * (movie?.ticketCost || 0) + " שח"}
             </Button>
           </Link>
         )
@@ -304,8 +287,9 @@ const SeatWrapper = () => {
   
     if (selectedSeats.length) {
      return <Button 
-              sx={{background:"#fff"  }} 
+              sx={{background:"#fff" , color:Colors.b ,fontWeight:"bold", fontSize:20 }} 
               onClick={()=>{clearSelectedSeats()}}
+
              > 
               נקה בחירה
              </Button>
