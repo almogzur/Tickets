@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useContext, CSSProperties, MouseEvent, } from 'react'
 
 const styles :Record<string,CSSProperties> =  {
@@ -22,7 +21,7 @@ const styles :Record<string,CSSProperties> =  {
  };  
 
 
-const TooltipButton = ({ initValue, seatnumber, row ,hendler , setTipY, setTipX  ,setTipTitel}) => {
+const TooltipButton = ({ initValue, seatnumber, row ,hendler , setTipY, setTipX  ,setTipTitel , tiketCost,cizCost }) => {
 
     const tiohndler = (x: number,y: number)=>{
       
@@ -31,16 +30,18 @@ const TooltipButton = ({ initValue, seatnumber, row ,hendler , setTipY, setTipX 
     }
        const textset = "מושב";
         const textrow = "שורה";
+        const coat = 'מחיר רגיל'
+        const citConst = 'מחיר תושב'
   return (
 
    <div
        onClick={(e)=> { 
             hendler(initValue,seatnumber,row) ;
             tiohndler(e.nativeEvent.pageX,e.nativeEvent.pageY ) 
-            setTipTitel(`${  row.includes(textrow) ? "" : textrow}
-             ${row} ${textset}:
-             ${[seatnumber]}`
-            )
+            setTipTitel(`${  row.includes(textrow) ? "" : textrow} ${row} -  ` 
+            +
+            ` ${textset} : ${[seatnumber+1]} ${coat}:${tiketCost} ${citConst}:${cizCost} `)
+
           //   console.log( 
               
           //     "x",e.clientX,
@@ -59,7 +60,9 @@ const TooltipButton = ({ initValue, seatnumber, row ,hendler , setTipY, setTipX 
        }}
 
        style={ initValue ===1 ? { ...styles.seats, ...styles.seatBooked }: initValue === 2? { ...styles.seats, ...styles.seatSelected } :  styles.seats }
+        
       >
+        
     </div>
 
 
