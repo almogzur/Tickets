@@ -1,4 +1,4 @@
-import {Box , Stack as Flex , Typography as Heading , Button} from '@mui/material'
+import {Box , Stack as Flex , Typography as Heading , Button, Container} from '@mui/material'
 import TooltopButton from './tooltip-btn'
 import { motion ,AnimatePresence } from "framer-motion"
 import { useState, useEffect, useContext, CSSProperties, useRef, } from 'react'
@@ -7,6 +7,15 @@ import Transporm from './Transporm';
 import { useRouter } from 'next/router'
 import WidthContext from '@/context/WidthContext';
 import Link from 'next/link';
+import {Colors} from '../lib/colors'
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Checkbox from '@mui/material/Checkbox';
+import IconButton from '@mui/material/IconButton';
+import { FaCommentAlt } from "react-icons/fa";
 
 
 const SeatWrapper = () => {
@@ -141,10 +150,10 @@ const SeatWrapper = () => {
          </AnimatePresence> 
   
   
-          <Box  bgcolor={'black'}  p={0} m={0} sx={{boxShadow:' 3px 3px 3px 2px #fff'}} >
-                   <Transporm>
+          <Container   sx={{boxShadow:' 3px 3px 3px 2px #fff', marginBottom:3}} >
+                   <Transporm  >
   
-                     <Flex  direction={"column"}  height={ !xs? 400  : 600}   >
+                       <Flex  direction={"column"}    height={!xs? 400 : 600}  width={'inherit'}   >
         
                         <Flex direction={'row'}  justifyContent={'center'}> 
                           <Stage style={styles.stage} />
@@ -152,16 +161,16 @@ const SeatWrapper = () => {
                    
                             {seatArray}          
                
-                       </Flex> 
+                      </Flex> 
                 
                   </Transporm>
-         </Box>
+         </Container>
   
         </>
       );
-     };
+    };
   
-     const PaymentButton = ({ movie,style})  =>  {
+    const PaymentButton = ({ movie,style})  =>  {
   
       if( selectedSeats.length === 0  ){
         return
@@ -182,8 +191,7 @@ const SeatWrapper = () => {
           </Link>
         )
      
-    };
-  
+  };
    
     const hendler = (seatValue: number, seatNumber: number, row: string) => {
   
@@ -238,8 +246,7 @@ const SeatWrapper = () => {
         });
   
   
-     };
-  
+  };
   
     const ResetSelectedSeats =()=>{
   
@@ -278,18 +285,13 @@ const SeatWrapper = () => {
            <Seats /> 
           
            { selectedSeats && 
-           <PaymentButton  style={styles.paymentButton} movie={movie} />
-          } 
+             <TikitList selectedSeats={selectedSeats}  />
+           } 
           <ResetSelectedSeats/>
       </>
   
     );
   };
-
-
-
-
-
 
 export default SeatWrapper
 
@@ -300,5 +302,66 @@ const Stage = ({ style })=>{
              <Heading fontSize={"21l"}>במה</Heading> 
            </div>
 } 
+
+ const TikitList = ({selectedSeats})=>{
+  const [checked, setChecked] = useState([0]);
+
+
+  const handleToggle = (value) => () => {
+    const currentIndex = checked.indexOf(value);
+    const newChecked = [...checked];
+
+    if (currentIndex === -1) {
+      newChecked.push(value);
+    } else {
+      newChecked.splice(currentIndex, 1);
+    }
+
+    setChecked(newChecked);
+  };
+   return (
+      <Container sx={{boxShadow:' 3px 3px 3px 2px #fff'}}  >  
+          <List 
+            sx={{ direction:"ltr "  , bgcolor: 'blue.primary' }}  
+            
+          >
+                {selectedSeats.map((value) => {
+              const labelId = `checkbox-list-label-${value}`;
+
+        return (
+          <ListItem
+           sx={{    marginTop:2  , boxShadow : `0 6px 2px -2px  ${Colors.a} `   }  }
+            key={value}
+             
+            secondaryAction={
+              <IconButton edge="end"  aria-label="comments">
+                <FaCommentAlt color={Colors.b}  />
+              </IconButton>
+            }
+            disablePadding
+          >
+            <ListItemButton role={undefined} onClick={handleToggle(value)} dense>
+
+              <ListItemIcon>
+                <Checkbox
+                  edge="start"
+                  checked={checked.includes(value)}
+                  tabIndex={-1}
+                  disableRipple
+                  inputProps={{ 'aria-labelledby': labelId }}
+                />
+              </ListItemIcon>
+
+              <ListItemText sx={{textAlign:"end"}}  id={labelId} primary={` ${value }`} />
+            </ListItemButton>
+
+          </ListItem>
+        );
+      })}
+    </List>
+
+     </Container>
+   )
+ }
 
 

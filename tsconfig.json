@@ -24,7 +24,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "src/components/tom-map.js"  ],
   "exclude": [
     "node_modules"
   ]

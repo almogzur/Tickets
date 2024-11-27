@@ -6,18 +6,21 @@ import { FaPlus } from "react-icons/fa6";
 import { FaMinus } from "react-icons/fa";
 import { FcRefresh } from "react-icons/fc";
 
-const Transporm = ({children }) => {
+const Transporm = ({children, }) => {
   
     const {x,y,S, setS , setY , setX } =useContext(positionContext)
   
     return (
-      <TransformWrapper 
+       <TransformWrapper 
         
         initialScale={S||1}
         initialPositionX={x||0}
         initialPositionY={y||0}
+        limitToBounds={false}
+
+   
         smooth
-        maxScale={30}
+        maxScale={100}
         onPanningStop={(e)=>{
           setY(e.state.positionY)
           setX(e.state.positionX)
@@ -31,8 +34,11 @@ const Transporm = ({children }) => {
         {({ zoomIn, zoomOut, resetTransform, ...rest }) =>  {
           return   (
             <>
-               <Controls/>
-               <TransformComponent wrapperStyle={{ width:"inherit"}} >
+               <Controls   />
+                <TransformComponent
+                  wrapperStyle={{ width:"100%",}}
+               
+                 >
                  {children}               
                </TransformComponent>
             </>
@@ -47,11 +53,16 @@ const Transporm = ({children }) => {
 
   const Controls = () => {
     const {x,y,S, setS , setY , setX } =useContext(positionContext)
+
     const resetContext =()=>{
+
        console.log("reset");
        setS(1)
        setX(27)
        setY(0)
+   
+     
+       
        
     }
     const { zoomIn, zoomOut, resetTransform } = useControls();

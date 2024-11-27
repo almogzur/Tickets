@@ -9,10 +9,15 @@ import '../styles/global.css'
 import { useMediaQuery } from 'usehooks-ts';
 import WidthContext from '../context/WidthContext';
 import SeatsPositionContext  from '../context/map-position-context'
+import { SessionProvider } from "next-auth/react"
+
+import '@tomtom-international/web-sdk-maps/dist/maps.css'
 
 
-
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ 
+  Component,
+  pageProps: { session, ...pageProps },
+  }: AppProps) {
 
 
   const [movies, setMovies] = useState<Movie[]>(mockMovies);
@@ -33,7 +38,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     
     
-
+      <SessionProvider>
         <SeatsPositionContext.Provider value={{x,y,S,setX,setY,setS}}>
         <MoviesContext.Provider value={{movies, setMovies}}>
         <WidthContext.Provider value={{xxl,xl,lg,md,sm,xs,xxs}}>
@@ -46,6 +51,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         </WidthContext.Provider>
         </MoviesContext.Provider>
         </SeatsPositionContext.Provider>
+        </SessionProvider>
 
 
     

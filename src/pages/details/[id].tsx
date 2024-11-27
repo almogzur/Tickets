@@ -9,8 +9,7 @@ import DisableZoom from '../../lib/hooks/useDisablePinchZoomEffect'
 import WidthContext from '@/context/WidthContext';
 import SeatWrapper  from '../../components/Seats'
 import { Container , Typography as Heading , Stack as Flex  , Button } from '@mui/material';
-
-
+import Map from '../../components/tom-map'
 
 const DetailsPage = () => {  
 
@@ -18,6 +17,7 @@ const DetailsPage = () => {
   const { movies ,setMovies } = useContext(MoviesContext);
   const { id } : any = router.query
   const movie = movies.find(mov => mov.id === parseInt(id));
+
 
   if (!movie) return <div>loading...</div>
   return (
@@ -30,9 +30,9 @@ const DetailsPage = () => {
       <Flex direction={"column"}>
         <ShowCover imageSrc={movie.cover} name = {movie.name} />
       </Flex>
-
+      
       <SeatWrapper/>
-  
+       <Map/> 
     </>
   );
 }
