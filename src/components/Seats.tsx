@@ -15,8 +15,8 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
-import { FaCommentAlt } from "react-icons/fa";
-
+import TipContext from '@/context/Tip-context';
+import { IoTicketSharp } from "react-icons/io5";
 
 const SeatWrapper = () => {
     const { movies ,setMovies} = useContext(MoviesContext);
@@ -24,19 +24,19 @@ const SeatWrapper = () => {
     const { id, seats }: any = router.query;
     const movie = movies.find((mov) => mov.id === parseInt(id));
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
-    const positionAtr : CSSProperties = { 
-        position:"relative",
-        width:"fit-content",
-        height:"fit-content",
-        display:"flex",
-        flexDirection:"column"
-    }
-
     const [selectedSeats,setSlectedSeats ]= useState ([])
-    const [ tipX, setTipX]=useState(null)
-    const [ tipY, setTipY]= useState(null)
+    const { tipX, setTipX , tipY, setTipY}=useContext(TipContext)
+     
+
     const [tipTitel,setTipTitel] = useState<string>("")
-  
+    const positionAtr : CSSProperties = { 
+      position:"relative",
+      width:"fit-content",
+      height:"fit-content",
+      display:"flex",
+      flexDirection:"column"
+  }
+
     const styles :Record<string,CSSProperties> =  { 
       stage:{          
        height:40 ,
@@ -82,118 +82,8 @@ const SeatWrapper = () => {
       "אופרה-קומה2-שורה3":{ top:-385 , left:112, ...positionAtr,flexDirection:"row"},
         
      };  
-  
-    // useEffect(()=>{ clearSelectedSeats() },[])
-     const Seats = () => {
-   
-      const seatArray  = Object.entries({...movie.seats}).map(([row, rowContent]) => {
-        const colValue  = rowContent.map((seatValue: number, i: number) => {
-          const textset = "מושב";
-          const textrow = "שורה";
-      
-          return (
-            <TooltopButton
-              key={`${row}.${i}`}
-              row={row}
-              seatnumber={i}
-              initValue={seatValue}
-              hendler={hendler}
-              setTipX={setTipX}
-              setTipY={setTipY}
-              setTipTitel={setTipTitel} tiketCost={undefined} 
-              cizCost={1}          
-                />
-          );
-        });
-      
-        return (
-          <Flex
-  
-            key={row}
-            style={styles[`${row}`]} // target by key in CSS
-            justifyContent="center"
-            direction={'row'}
-          >
-            {colValue}
-          </Flex>
-        );
-      });
-        
-      return (
-       <>
-          <AnimatePresence>
-       {tipX && tipY  && (
-        <motion.h1
-          style={{
-              background: "#fff",
-              color: "black",
-              borderRadius: "4px",
-              height:"fin-content",
-              width:"fin-content",
-              position:'absolute',
-              zIndex:99,
-              top:`${tipY-40 }px`,
-              left:`${tipX-60}px`,
-              fontSize:15,
-              padding:10,
-              textAlign:"end"
-              
-           }}
-  
-          initial={{ opacity: 0, y: -15 }}
-          animate={{ opacity: 1, y:-23,   transition: { duration: 0.5 } }}
-          exit={{ opacity: 0, transition: { duration: 0.5 } }}
-    >
-      {tipTitel}
-         </motion.h1>
-          )}
-         </AnimatePresence> 
-  
-  
-          <Container   sx={{boxShadow:' 3px 3px 3px 2px #fff', marginBottom:3}} >
-                   <Transporm  >
-  
-                       <Flex  direction={"column"}    height={!xs? 400 : 600}  width={'inherit'}   >
-        
-                        <Flex direction={'row'}  justifyContent={'center'}> 
-                          <Stage style={styles.stage} />
-                       </Flex > 
-                   
-                            {seatArray}          
-               
-                      </Flex> 
-                
-                  </Transporm>
-         </Container>
-  
-        </>
-      );
-    };
-  
-    const PaymentButton = ({ movie,style})  =>  {
-  
-      if( selectedSeats.length === 0  ){
-        return
-      }
-       return (
-          <Link
-            href={{
-              pathname: "/payment",
-              query: {
-                movieId: movie?.id,
-                selectedSeatsQuery: JSON.stringify(selectedSeats),
-              },
-            }}
-          >
-            <Button style={style}>
-              סה״כ {selectedSeats.length * (movie?.ticketCost || 0) + " שח"}
-            </Button>
-          </Link>
-        )
-     
-  };
-   
-    const hendler = (seatValue: number, seatNumber: number, row: string) => {
+
+  const hendler = (seatValue: number, seatNumber: number, row: string) => {
   
     
       setMovies((prevMovies) => {
@@ -248,46 +138,194 @@ const SeatWrapper = () => {
   
   };
   
+    // useEffect(()=>{ clearSelectedSeats() },[])
+  const Seats = () => {
+      const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
+
+      const seatArray  = Object.entries({...movie.seats}).map(([row, rowContent]) => {
+        const colValue  = rowContent.map((seatValue: number, i: number) => {
+          const textset = "מושב";
+          const textrow = "שורה";
+      
+          return (
+            <TooltopButton
+              key={`${row}.${i}`}
+              row={row}
+              seatnumber={i}
+              initValue={seatValue}
+              hendler={hendler}
+              setTipX={setTipX}
+              setTipY={setTipY}
+              setTipTitel={setTipTitel} tiketCost={undefined} 
+              cizCost={1}          
+                />
+          );
+        });
+      
+        return (
+          <Flex
+  
+            key={row}
+            style={styles[`${row}`]} // target by key in CSS
+            justifyContent="center"
+            direction={'row'}
+          >
+            {colValue}
+          </Flex>
+        );
+      });
+        
+      return (
+       <>
+          <AnimatePresence>
+       {tipX && tipY  && (
+        <motion.h1
+          style={{
+              background: "#fff",
+              color: "black",
+              borderRadius: "4px",
+              height:"fin-content",
+              width:"fin-content",
+              position:'absolute',
+              zIndex:99,
+              top:`${tipY-40 }px`,
+              left:`${tipX-60}px`,
+              fontSize:!xs? 12 : 15,
+              padding:10,
+              textAlign:"end",
+              fontWeight:"bold"
+              
+              
+           }}
+  
+          initial={{ opacity: 0, y: -15 }}
+          animate={{ opacity: 1, y:-23,   transition: { duration: 0.5 } }}
+          exit={{ opacity: 0, transition: { duration: 0.5 } }}
+    >
+      {tipTitel}
+         </motion.h1>
+          )}
+         </AnimatePresence> 
+  
+  
+          <Container   sx={{boxShadow:' 3px 3px 3px 2px #fff', marginBottom:3}} >
+                   <Transporm  >
+  
+                       <Flex  direction={"column"}    height={!xs? 350 : 600}  width={'inherit'}   >
+        
+                        <Flex direction={'row'}  justifyContent={'center'}> 
+                          <Stage style={styles.stage} />
+                       </Flex > 
+                   
+                            {seatArray}          
+               
+                      </Flex> 
+                     
+                
+                  </Transporm>
+             
+         </Container>
+  
+        </>
+      );
+    };
+  
+  const PaymentButton = ()  =>  {
+  
+      if( selectedSeats.length === 0  ){
+        return
+      }
+       return (
+          <Link
+            href={{
+                pathname: "/payment",
+                query: {
+                movieId: movie?.id,
+                selectedSeatsQuery: JSON.stringify(selectedSeats),
+              },
+            }}
+          >
+            <Button  sx={{background:Colors.b , color:"#fff" , height:60}} >
+             מעבר לתשלום   סה״כ {selectedSeats.length * (movie?.ticketCost || 0) + " שח"}
+            </Button>
+          </Link>
+        )
+     
+  };
+   
     const ResetSelectedSeats =()=>{
   
     if (selectedSeats.length) {
      return <Button 
-          style={styles.clearBtn} 
-          sx={{background:"#fff"}}    
-           onClick={()=>{}} >
-          נקה בחירה
-         </Button>
-    }else{return <></>}
+              sx={{background:"#fff"  }} 
+              onClick={()=>{clearSelectedSeats()}}
+             > 
+              נקה בחירה
+             </Button>
+    }else
+    {return <></>}
   }
-  //   const clearSelectedSeats = () => {
-  //   setTipX(0)
-  //   setTipY(0)
-  //   setSeatDetails((prevSeatDetails) => {
-  //     // Create a deep copy of the state to avoid mutating the original object
-  //     const newMovieSeatDetails = { ...prevSeatDetails };
+
+    const clearSelectedSeats = () => {
+    setTipX(0);
+    setTipY(0);
   
-  //     for (let key in newMovieSeatDetails) {
-  //       newMovieSeatDetails[key] = newMovieSeatDetails[key].map((seatValue: number) =>
-  //         seatValue === 2 ? 0 : seatValue
-  //       );
-  //     }
+    setMovies((prevMovies) => {
+      // Find the movie object to update
+      const movie = prevMovies.find((mov) => mov.id === parseInt(id));
+      if (!movie) {
+        return prevMovies; // If the movie is not found, return the previous state
+      }
   
-  //     return newMovieSeatDetails;
-  //   });
+      // Create a deep copy of the movie object and its seat details
+      const updatedMovie = { ...movie };
+      const updatedSeatDetails = { ...updatedMovie.seats };
   
-  //   setSlectedSeats([])
-  // };
+      // Reset all selected seats (value `2` to `0`) in each row
+      for (let key in updatedSeatDetails) {
+        updatedSeatDetails[key] = updatedSeatDetails[key].map((seatValue: number) =>
+          seatValue === 2 ? 0 : seatValue
+        );
+      }
   
-     return (
+      // Assign the updated seat details back to the movie object
+      updatedMovie.seats = updatedSeatDetails;
+  
+      // Replace the movie in the movies array
+      const updatedMovies = prevMovies.map((mov) =>
+        mov.id === updatedMovie.id ? updatedMovie : mov
+      );
+  
+      return updatedMovies; // Return the updated movies array
+    });
+  
+    // Clear the selected seats array
+    setSlectedSeats([]);
+  };
+  
+  return (
       <>
-          <Heading p={2} variant='h4'  textAlign={"center"}  >מקומות ישיבה באולם</Heading>
-          
-           <Seats /> 
-          
-           { selectedSeats && 
-             <TikitList selectedSeats={selectedSeats}  />
+       <Heading p={2} variant='h4'  textAlign={"center"}  >מקומות ישיבה באולם</Heading>        
+       <Seats />   
+        {selectedSeats.length ?  <>
+           <TikitList selectedSeats={selectedSeats}  />
+            <Flex 
+                direction={"row"} 
+                justifyContent={"space-around"} 
+                position={'fixed'} 
+                bottom={0}
+                bgcolor={Colors.a}
+                height={60}
+                width={'100%'}
+                zIndex={1000} 
+                 >
+             <ResetSelectedSeats/>
+             <PaymentButton/>
+           </Flex>
+           </>
+           :null
            } 
-          <ResetSelectedSeats/>
+         
       </>
   
     );
@@ -319,10 +357,11 @@ const Stage = ({ style })=>{
 
     setChecked(newChecked);
   };
-   return (
-      <Container sx={{boxShadow:' 3px 3px 3px 2px #fff'}}  >  
-          <List 
-            sx={{ direction:"ltr "  , bgcolor: 'blue.primary' }}  
+  if(selectedSeats.length)
+   return (  
+      <Container sx={{boxShadow:' 3px 3px 3px 2px #fff', marginBottom:20}}   >  
+           <List 
+            sx={{ padding:2,   }}  
             
           >
                 {selectedSeats.map((value) => {
@@ -334,8 +373,8 @@ const Stage = ({ style })=>{
             key={value}
              
             secondaryAction={
-              <IconButton edge="end"  aria-label="comments">
-                <FaCommentAlt color={Colors.b}  />
+              <IconButton   edge="end"  aria-label="comments">
+                <IoTicketSharp color={Colors.b} size={"1.5em"}  />
               </IconButton>
             }
             disablePadding
@@ -358,7 +397,7 @@ const Stage = ({ style })=>{
           </ListItem>
         );
       })}
-    </List>
+          </List>
 
      </Container>
    )

@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext, CSSProperties, MouseEvent, } from 'react'
 
+import {Colors} from '../lib/colors'
 const styles :Record<string,CSSProperties> =  {
   seats: {
     backgroundColor: "silver",
@@ -13,7 +14,7 @@ const styles :Record<string,CSSProperties> =  {
     
   },
 
-  seatSelected: {backgroundColor: "rgb(53, 212, 6)",},
+  seatSelected: {backgroundColor: Colors.b,},
   seatBlocked: {color:"black"},
   seatBooked: {backgroundColor: "brown",cursor: "not-allowed"},
  

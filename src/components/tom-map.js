@@ -1,7 +1,5 @@
 import {useEffect,useState , useRef, useContext} from 'react'
 import { Container, Typography } from '@mui/material'; '@mui/material'
-import "@tomtom-international/web-sdk-maps/dist/maps.css";
-import * as tt from "@tomtom-international/web-sdk-maps";
 
 import WidthContext from '../context/WidthContext';
 
@@ -32,28 +30,39 @@ const Map = () =>{
           map.setZoom(mapZoom);
         };
 
-         useEffect(() => {
-           let map = tt.map({
-             /* 
-             This key will API key only works on this Stackblitz. To use this code in your own project,
-             sign up for an API key on the TomTom Developer Portal.
-             */
-             key: "kqMqDGlrzLK57Hu5kYYsApjXyAXmIyuU",
-             container: mapElement.current,
-             center: [mapLongitude, mapLatitude],
-             zoom: mapZoom
-           });
-     
-           setMap(map);
-           return () => map.remove();
-         }, []);
+        useEffect(() => {
+          const buildMap = (tt) => {
+            let map = tt.map({
+              key: 'kqMqDGlrzLK57Hu5kYYsApjXyAXmIyuU',
+              container: mapElement.current,
+              center: [mapLongitude, mapLatitude],
+              zoom: 17,
+              stylesVisibility: {
+                trafficIncidents: true,
+                trafficFlow: true,
+              },
+            });
+            setMap(map);
+            console.log('mapLangage:', map.getLanguage());
+          };
+      
+          const initTomTom = async () => {
+            const tt = await import('@tomtom-international/web-sdk-maps');
+            buildMap(tt);
+          };
+      
+          initTomTom();
+      
+    
+        }, []);
+      
 
         return (
  
         
-            <Container sx={{  boxShadow:' 3px 3px 3px 2px #fff',   marginTop:5 , marginBottom:10}} >
+            <Container sx={{ height:!xs? 460:  620 ,  boxShadow:' 3px 3px 3px 2px #fff',   marginTop:5 , marginBottom:10}} >
                 <Typography textAlign={"center"} variant='h2' > דרכי הגעה </Typography>
-               <div style={{height: !xs? 400:  600}} ref={mapElement} className="mapDiv" />
+               <div style={{height: !xs? 360:  500 , marginBottom:2}} ref={mapElement} className="mapDiv" />
             </Container>
    
         );

@@ -9,6 +9,7 @@ import '../styles/global.css'
 import { useMediaQuery } from 'usehooks-ts';
 import WidthContext from '../context/WidthContext';
 import SeatsPositionContext  from '../context/map-position-context'
+import TipContext from '@/context/Tip-context';
 import { SessionProvider } from "next-auth/react"
 
 import '@tomtom-international/web-sdk-maps/dist/maps.css'
@@ -25,6 +26,9 @@ function MyApp({
   const [x,setX] = useState(0)  
   const [y,setY] = useState(0)  
   const [S,setS] = useState(0)
+  const [ tipX, setTipX]=useState(null)
+  const [ tipY, setTipY]= useState(null)
+
 
   const xxl = useMediaQuery('(min-width : 1600px)')
    const xl = useMediaQuery('(min-width : 1200px)')
@@ -39,6 +43,7 @@ function MyApp({
     
     
       <SessionProvider>
+        <TipContext.Provider value={{tipX, tipY ,setTipX,setTipY}}>
         <SeatsPositionContext.Provider value={{x,y,S,setX,setY,setS}}>
         <MoviesContext.Provider value={{movies, setMovies}}>
         <WidthContext.Provider value={{xxl,xl,lg,md,sm,xs,xxs}}>
@@ -51,7 +56,8 @@ function MyApp({
         </WidthContext.Provider>
         </MoviesContext.Provider>
         </SeatsPositionContext.Provider>
-        </SessionProvider>
+        </TipContext.Provider>
+      </SessionProvider>
 
 
     

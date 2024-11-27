@@ -1,15 +1,18 @@
 import { TransformWrapper, TransformComponent, useControls, getTransformStyles } from "react-zoom-pan-pinch";
 import { useState, useEffect, useContext, } from 'react'
 import positionContext from '../context/map-position-context';
-import { Stack as Flex , Typography as Heading , Button} from '@mui/material'
+import { Stack as Flex , Typography as Heading , Button, Avatar} from '@mui/material'
 import { FaPlus } from "react-icons/fa6";
 import { FaMinus } from "react-icons/fa";
 import { FcRefresh } from "react-icons/fc";
+import { deepOrange, deepPurple, grey, red } from "@mui/material/colors";
+import TipContext from '@/context/Tip-context';
+import { Colors } from "@/lib/colors";
 
 const Transporm = ({children, }) => {
   
     const {x,y,S, setS , setY , setX } =useContext(positionContext)
-  
+
     return (
        <TransformWrapper 
         
@@ -27,9 +30,7 @@ const Transporm = ({children, }) => {
           setS(e.state.scale)
         }}
      
-         onTransformed={(e)=>{
-  
-         }}  
+         onTransformed={(e)=>{}}  
       >
         {({ zoomIn, zoomOut, resetTransform, ...rest }) =>  {
           return   (
@@ -39,8 +40,17 @@ const Transporm = ({children, }) => {
                   wrapperStyle={{ width:"100%",}}
                
                  >
-                 {children}               
+                 {children}     
+                 
                </TransformComponent>
+               <Flex direction={'row'}  height={80}  justifyContent={"center"} borderTop={'solid'} 
+                 >
+                 <Avatar  sx={{ bgcolor: grey[500], margin:2 , padding:.5 }} variant={'square'} >זמין</Avatar>
+                 <Avatar sx={{ bgcolor: Colors.b , margin:2,padding:.5 }} variant={'square'} >נבחר</Avatar>
+                 <Avatar sx={{ bgcolor: red[800] , margin:2 , padding:.5 }} variant={'square'} >תפוס</Avatar>
+
+                 
+                </Flex>          
             </>
         )
   }
@@ -53,6 +63,7 @@ const Transporm = ({children, }) => {
 
   const Controls = () => {
     const {x,y,S, setS , setY , setX } =useContext(positionContext)
+    const { tipX, setTipX , tipY, setTipY}=useContext(TipContext)
 
     const resetContext =()=>{
 
@@ -60,7 +71,8 @@ const Transporm = ({children, }) => {
        setS(1)
        setX(27)
        setY(0)
-   
+       setTipY(0)
+       setTipX(0)
      
        
        

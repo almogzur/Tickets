@@ -13,7 +13,7 @@
     "@fontsource/roboto": "^5.1.0",
     "@mui/material": "^6.1.8",
     "@mui/styled-engine-sc": "^6.1.8",
-    "@tomtom-international/web-sdk-maps": "^6.25.0",
+    "@tomtom-international/web-sdk-maps": "6.23.0",
     "axios": "^1.7.7",
     "motion": "^11.11.17",
     "next": "^13.5.7",

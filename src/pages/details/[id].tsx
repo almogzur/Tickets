@@ -31,8 +31,8 @@ const DetailsPage = () => {
         <ShowCover imageSrc={movie.cover} name = {movie.name} />
       </Flex>
       
-      <SeatWrapper/>
-       <Map/> 
+         <SeatWrapper/>
+     <Map/> 
     </>
   );
 }
