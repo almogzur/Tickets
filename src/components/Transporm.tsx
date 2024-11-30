@@ -8,6 +8,7 @@ import { FcRefresh } from "react-icons/fc";
 import { deepOrange, deepPurple, grey, red } from "@mui/material/colors";
 import TipContext from '@/context/Tip-context';
 import { Colors } from "@/lib/colors";
+import { LuRefreshCcw } from "react-icons/lu";
 
 const Transporm = ({children, }) => {
   
@@ -82,12 +83,12 @@ const Transporm = ({children, }) => {
     return (
       <Flex direction={'row'} justifyContent={"space-between"} p={2} sx={{borderBottom:'solid 0.5px'}} >
   
-        <Button sx={{height:'60px' , background:'#fff'}}  onClick={(e) => {zoomIn()}}>
-          <FaPlus  color='green' size={"2em"} />
+        <Button sx={{height:'60px' , background:Colors.b}}  onClick={(e) => {zoomIn()}}>
+          <FaPlus  color={Colors.a} size={"2em"} />
         </Button>
   
-        <Button    sx={{height:'60px' , background:'#fff'}}  onClick={(e) =>{zoomOut() }}><FaMinus color='red' size={"2em"}/></Button>
-        <Button sx={{height:'60px' , background:'#fff'}}  onClick={(e) =>{resetTransform() ; resetContext()   }}><FcRefresh size={"2em"}/></Button>
+        <Button    sx={{height:'60px' , background:Colors.b}}  onClick={(e) =>{zoomOut() }}><FaMinus color={Colors.a} size={"2em"}/></Button>
+        <Button sx={{height:'60px' , background:Colors.b  }}  onClick={(e) =>{resetTransform() ; resetContext()   }}><LuRefreshCcw color={Colors.a} size={"2em"}/></Button>
       </Flex>
     );
   };

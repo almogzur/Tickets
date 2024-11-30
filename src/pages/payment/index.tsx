@@ -11,6 +11,7 @@ import { Movie, Seats } from '../../constants/models/Movies'
 import styles from './Payment.module.scss'
 
 import MoviesContext from '../../context/MoviesContext';
+import ClientLayout from '../../Layouts/client-layout';
 
 const Tickets = () => {
   const { movies, setMovies } = useContext(MoviesContext);
@@ -114,9 +115,11 @@ useEffect(()=>{
       <Head>
         <title>דף תשלום</title>
       </Head>
+      <ClientLayout>
       <div className={styles.container}>
         <Card />
       </div>
+      </ClientLayout>
     </>
   );
 }

@@ -22,7 +22,7 @@ const styles :Record<string,CSSProperties> =  {
  };  
 
 
-const TooltipButton = ({ initValue, seatnumber, row ,hendler , setTipY, setTipX  ,setTipTitel , tiketCost, cizCost }) => {
+const TooltipButton = ({ seatValue, seatnumber, row ,hendler , setTipY, setTipX  ,setTipTitel , tiketCost, cizCost }) => {
 
     const tiohndler = (x: number,y: number)=>{
       
@@ -36,7 +36,7 @@ const TooltipButton = ({ initValue, seatnumber, row ,hendler , setTipY, setTipX 
 
    <div
        onClick={(e)=> { 
-            hendler(initValue,seatnumber,row) ;
+            hendler(seatValue,seatnumber,row) ;
             tiohndler(e.nativeEvent.pageX,e.nativeEvent.pageY ) 
             setTipTitel(` ${row} -  ${textset} : ${[seatnumber+1]} ${coat}:${tiketCost} ${citConst}:${cizCost} `)
 
@@ -57,7 +57,7 @@ const TooltipButton = ({ initValue, seatnumber, row ,hendler , setTipY, setTipX 
           //     );
        }}
 
-       style={ initValue ===1 ? { ...styles.seats, ...styles.seatBooked }: initValue === 2? { ...styles.seats, ...styles.seatSelected } :  styles.seats }
+       style={ seatValue ===1 ? { ...styles.seats, ...styles.seatBooked }: seatValue === 2? { ...styles.seats, ...styles.seatSelected } :  styles.seats }
         
       >
         

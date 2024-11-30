@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 
 import {useGetMovies} from '../services/movies'
 import { Movie } from '../constants/models/Movies';
+import ClientLayout from '../Layouts/client-layout';
 
 export default function Home() {
 
@@ -60,11 +61,12 @@ export default function Home() {
         <title>Book My Ticket | Home</title>
       </Head>
 
+      <ClientLayout>
         <Heading variant='h3' textAlign={"center"} >ההופעות שלנו</Heading>
-        <Flex direction={'row'} flexWrap={'wrap'}  >
+         <Flex direction={'row'} flexWrap={'wrap'}  >
           <MoviesList/>
-       </Flex>
-
+        </Flex>
+      </ClientLayout>
     </>
   )
 }

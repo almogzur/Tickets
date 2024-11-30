@@ -1,4 +1,4 @@
-import {Box , Stack as Flex , Typography as Heading , Button, Container, Typography} from '@mui/material'
+import {Box , Stack as Flex , Typography as Heading , Button, Container, Typography, FormHelperText, FormLabel} from '@mui/material'
 import TooltopButton from './tooltip-btn'
 import { motion ,AnimatePresence } from "framer-motion"
 import { useState, useEffect, useContext, CSSProperties, useRef, } from 'react'
@@ -17,6 +17,15 @@ import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import TipContext from '@/context/Tip-context';
 import { IoTicketSharp } from "react-icons/io5";
+import { FaTrashAlt } from "react-icons/fa";
+
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import { red } from '@mui/material/colors';
+
+
 
 const SeatWrapper = () => {
     const { movies ,setMovies} = useContext(MoviesContext);
@@ -26,10 +35,9 @@ const SeatWrapper = () => {
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
     const [selectedSeats,setSlectedSeats ]= useState ([])
     const { tipX, setTipX , tipY, setTipY}=useContext(TipContext)
-     
-
     const [tipTitel,setTipTitel] = useState<string>("")
-    const positionAtr : CSSProperties = { 
+
+  const positionAtr : CSSProperties = { 
       position:"relative",
       width:"fit-content",
       height:"fit-content",
@@ -37,7 +45,7 @@ const SeatWrapper = () => {
       flexDirection:"column"
   }
 
-    const styles :Record<string,CSSProperties> =  { 
+  const styles :Record<string,CSSProperties> =  { 
       stage:{          
        height:40 ,
         margin:20,
@@ -55,41 +63,38 @@ const SeatWrapper = () => {
     
       paymentButton: {},
       clearBtn:{   ...positionAtr,    color:"black"},
-      "שירה 1 - קומה 1": {top:-160, left:-30 ,   ...positionAtr },  
-      "שירה 1 - קומה 2": {top:-200 ,left:-60 ,   ...positionAtr  },
-    
-      "שירה 2 - קומה 1": {top:-160 ,left:-30, ...positionAtr},
-      "שירה 2 - קומה 2": {top:-192 ,left:-60 ,...positionAtr},
-    
-      "שירה 3 - קומה 1":{top:-160 , left:-30, ...positionAtr},
-      "שירה 3 - קומה 2":{  top:-192 , left:-60, ...positionAtr},
-    
-       
-      "בידר 1 - קומה 1": {  top:-368 , left:300 , ...positionAtr },
-      "בידור 1 - קומה 2":{  top:-408 , left:330, ...positionAtr },
-    
-      "בידור 2 - קומה 1":{  top:-368 , left:300 ,...positionAtr},
-      "בידור 2 - קומה 2":{  top:-400 , left:330 ,...positionAtr},
-    
-      "בידור 3 - קומה 1":{ top:-368 , left:300, ...positionAtr},
-      "בידור 3 - קומה 2":{  top:-400 , left:330, ... positionAtr},
-    
 
-      "אופרה 1 - שורה 1 - קומה 1":{top:-380 , left:70 , ...positionAtr,flexDirection:"row" , },
-      "אופרה 1 - שורה 2 - קומה 1":{top:-375 , left:75 , ...positionAtr,flexDirection:"row" ,},
-      "אופרה 2 - שורה 1 - קומה 1": {top:-396 , left:170 , ...positionAtr,flexDirection:"row"  },
-      "אופרה 2 - שורה 2 - קומה 1":{top:-391 , left:175 , ...positionAtr,flexDirection:"row" ,  },
+      "שירה 1 קומה 1": {top:-160, left:-30 ,   ...positionAtr },  
+      "שירה 1 קומה 2": {top:-200 ,left:-60 ,   ...positionAtr  },
 
+      "שירה 2 קומה 1": {top:-160 ,left:-30, ...positionAtr},
+      "2 שירה 2 קומה": {top:-192 ,left:-60 ,...positionAtr},
 
+      "שירה 3 קומה 1":{top:-160 , left:-30, ...positionAtr},
+      "שירה 3 קומה 2":{  top:-192 , left:-60, ...positionAtr},
 
-      "אופרה 1 - שורה 1 - קומה2": {top:-350 , left:70 , ...positionAtr,flexDirection:"row" ,},
-      "אופרה 1 - שורה 2 - קומה2":{top:-348 , left:75 , ...positionAtr,flexDirection:"row" , },
-      "אופרה 1 - שורה3  - קומה2": {top:-345 , left:70 , ...positionAtr,flexDirection:"row" ,},
+      "קומי 1 קומה 1":{  top:-368 , left:300 , ...positionAtr },
+      "קומי 1 קומה 2":{  top:-408 , left:330, ...positionAtr },
 
+      "קומי 2 קומה 1":{  top:-368 , left:300 ,...positionAtr},
+      "קומי 2 קומה 2":{  top:-400 , left:330 ,...positionAtr},
 
-      "אופרה 2 - שורה 1 - קומה 2": {top:-374 , left:170 , ...positionAtr,flexDirection:"row" ,},
-      "אופרה 2 - שורה 2 - קומה 2":{top:-371 , left:175 , ...positionAtr,flexDirection:"row" , },
-      "אופרה 2 - שורה 3 - קומה 2": {top:-369 , left:170 , ...positionAtr,flexDirection:"row" ,},
+      "קומי 3 קומה 1":{ top:-368 , left:300, ...positionAtr},
+      "קומי 3 קומה 2":{  top:-400 , left:330, ... positionAtr},
+      
+      "אופרה 1א שורה 1 קומה 1":{top:-380 , left:70 , ...positionAtr,flexDirection:"row" , },
+      "אופרה 1א שורה 2 קומה 1":{top:-375 , left:75 , ...positionAtr,flexDirection:"row" ,},
+
+      "אופרה 1ב שורה 1 קומה 1": {top:-396 , left:170 , ...positionAtr,flexDirection:"row"  },
+      "אופרה 1ב שורה 2 קומה 2":{top:-391 , left:175 , ...positionAtr,flexDirection:"row" ,  },
+
+      "אופרה 2א שורה 1 קומה 1": {top:-350 , left:70 , ...positionAtr,flexDirection:"row" ,},
+      "אופרה 2א שורה 2 קומה 1":{top:-348 , left:75 , ...positionAtr,flexDirection:"row" , },
+      "אופרה 2א שורה 3 קומה 2": {top:-345 , left:70 , ...positionAtr,flexDirection:"row" ,},
+
+      "אופרה 2ב שורה 1 קומה 1": {top:-374 , left:170 , ...positionAtr,flexDirection:"row" ,},
+      "אופרה 2ב שורה 2 קומה 1":{top:-371 , left:175 , ...positionAtr,flexDirection:"row" , },
+      "אופרה 2ב שורה 3 קומה 2": {top:-369 , left:170 , ...positionAtr,flexDirection:"row" ,},
 
 
      };  
@@ -103,7 +108,7 @@ const SeatWrapper = () => {
   const hendler = (seatValue: number, seatNumber: number, row: string) => {
   
     
-      setMovies((prevMovies) => {
+      setMovies( prevMovies => {
         // Find the movie object reference
         const movie = prevMovies.find((mov) => mov.id === parseInt(id));
         if (!movie) {
@@ -116,7 +121,7 @@ const SeatWrapper = () => {
         const updatedRow = [...updatedSeatDetails[row]];
       
         // Skip updates for unavailable or already selected seats
-        if (updatedRow[seatNumber] === 1 || updatedRow[seatNumber] === 3) {
+        if (updatedRow[seatNumber] === 1 ) {
           return prevMovies; // No update
         }
       
@@ -141,21 +146,60 @@ const SeatWrapper = () => {
       });
                    
       // Update the selected seats array
-       setSlectedSeats((prevSelectedSeats) => {
-         const seatKey = `${row}-${seatNumber}`;
+         setSlectedSeats( prevSelectedSeats => {
+         const seatKey = `${row}:${seatNumber}`;
          const isAlreadySelected = prevSelectedSeats.includes(seatKey);
-         if (isAlreadySelected) {
+          if(  seatValue === 1   ){
+            return  prevSelectedSeats
+          }  
+              if (isAlreadySelected) {
            // Remove the seat if already selected
            return prevSelectedSeats.filter((seat) => seat !== seatKey);
-         }
-         // Add the seat if not already selected
-         return [...prevSelectedSeats, seatKey];
+              }
+             // Add the seat if not already selected
+             return [...prevSelectedSeats, seatKey];
         });
   
   
   };
+
+  const clearSelectedSeats = () => {
+    setTipX(0);
+    setTipY(0);
   
-    // useEffect(()=>{ clearSelectedSeats() },[])
+    setMovies((prevMovies) => {
+      // Find the movie object to update
+      const movie = prevMovies.find((mov) => mov.id === parseInt(id));
+      if (!movie) {
+        return prevMovies; // If the movie is not found, return the previous state
+      }
+  
+      // Create a deep copy of the movie object and its seat details
+      const updatedMovie = { ...movie };
+      const updatedSeatDetails = { ...updatedMovie.seats };
+  
+      // Reset all selected seats (value `2` to `0`) in each row
+      for (let key in updatedSeatDetails) {
+        updatedSeatDetails[key] = updatedSeatDetails[key].map((seatValue: number) =>
+          seatValue === 2 ? 0 : seatValue
+        );
+      }
+  
+      // Assign the updated seat details back to the movie object
+      updatedMovie.seats = updatedSeatDetails;
+  
+      // Replace the movie in the movies array
+      const updatedMovies = prevMovies.map((mov) =>
+        mov.id === updatedMovie.id ? updatedMovie : mov
+      );
+  
+      return updatedMovies; // Return the updated movies array
+    });
+  
+    // Clear the selected seats array
+    setSlectedSeats([]);
+  };
+
   const Seats = () => {
 
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
@@ -172,13 +216,13 @@ const SeatWrapper = () => {
               key={`${row}.${i}`}
               row={row}
               seatnumber={i}
-              initValue={seatValue}
+              seatValue={seatValue}
               hendler={hendler}
               setTipX={setTipX}
               setTipY={setTipY}
               setTipTitel={setTipTitel}
                tiketCost={movie.ticketCost} 
-              cizCost={1} 
+               cizCost={1} 
 
                 />
           );
@@ -244,6 +288,9 @@ const SeatWrapper = () => {
                       <Typography style={{position:"relative", top:345, left:120  }} fontSize={11} color={Colors.b}   height={0}  >  אופרה 2</Typography>
                       <Typography style={{position:"relative", top:335, left:40}}  fontSize={7} color={Colors.b}  height={0} > קומה 1</Typography>  
                       <Typography style={{position:"relative", top:360, left:40}} fontSize={7} color={Colors.b}  height={0} > קומה 2</Typography> 
+                      <Typography style={{position:"relative", top:260, left:90}} fontSize={10} color={Colors.b}  height={0} > א</Typography> 
+                      <Typography style={{position:"relative", top:260, left:190}} fontSize={10} color={Colors.b}  height={0} > ב</Typography> 
+
 
                       <Flex direction={'row'}  justifyContent={'center'}> 
                           <Stage style={styles.stage} />
@@ -257,7 +304,7 @@ const SeatWrapper = () => {
           </Container>
         </>
       );
-    };
+  };
   
   const PaymentButton = ()  =>  {
   
@@ -283,7 +330,7 @@ const SeatWrapper = () => {
      
   };
    
-    const ResetSelectedSeats =()=>{
+  const ResetSelectedSeatsButton =()=>{
   
     if (selectedSeats.length) {
      return <Button 
@@ -297,42 +344,35 @@ const SeatWrapper = () => {
     {return <></>}
   }
 
-    const clearSelectedSeats = () => {
-    setTipX(0);
-    setTipY(0);
+  const TikitList = ({selectedSeats})=>{
+    const [checked, setChecked] = useState([0]);
+
   
-    setMovies((prevMovies) => {
-      // Find the movie object to update
-      const movie = prevMovies.find((mov) => mov.id === parseInt(id));
-      if (!movie) {
-        return prevMovies; // If the movie is not found, return the previous state
-      }
+    if(selectedSeats.length){
+
+
+     return (  
+        <Container sx={{boxShadow:' 3px 3px 3px 2px #fff', marginBottom:20 ,padding:1}}   >  
+                <Typography variant='h3' textAlign={"center"}  > כרטיסים נבחרים</Typography>
+             <List   sx={{  }} >
+                  {selectedSeats.map((value) => {
+                      return (  <Item value={value} key={value} hendler={hendler}  /> );
+
+                    })}
+            </List>
   
-      // Create a deep copy of the movie object and its seat details
-      const updatedMovie = { ...movie };
-      const updatedSeatDetails = { ...updatedMovie.seats };
-  
-      // Reset all selected seats (value `2` to `0`) in each row
-      for (let key in updatedSeatDetails) {
-        updatedSeatDetails[key] = updatedSeatDetails[key].map((seatValue: number) =>
-          seatValue === 2 ? 0 : seatValue
-        );
-      }
-  
-      // Assign the updated seat details back to the movie object
-      updatedMovie.seats = updatedSeatDetails;
-  
-      // Replace the movie in the movies array
-      const updatedMovies = prevMovies.map((mov) =>
-        mov.id === updatedMovie.id ? updatedMovie : mov
-      );
-  
-      return updatedMovies; // Return the updated movies array
-    });
-  
-    // Clear the selected seats array
-    setSlectedSeats([]);
-  };
+       </Container>
+     )
+    }
+  }
+
+ const Stage = ({ style })=>{
+
+  return   <div style={style} > 
+             <Typography variant='h4' color={Colors.b}>במה</Typography> 
+           </div>
+  }   
+
   
   return (
       <>
@@ -350,7 +390,7 @@ const SeatWrapper = () => {
                 width={'100%'}
                 zIndex={1000} 
                  >
-             <ResetSelectedSeats/>
+             <ResetSelectedSeatsButton/>
              <PaymentButton/>
            </Flex>
            </>
@@ -362,76 +402,82 @@ const SeatWrapper = () => {
     );
   };
 
-export default SeatWrapper
 
 
-const Stage = ({ style })=>{
 
-  return   <div style={style} > 
-             <Typography variant='h4' color={Colors.b}>במה</Typography> 
-           </div>
-} 
+ export default SeatWrapper
 
- const TikitList = ({selectedSeats})=>{
-  const [checked, setChecked] = useState([0]);
+ const Item =({value ,hendler } )=>{
 
+  const [age, setAge] = useState('');
 
-  const handleToggle = (value) => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
-
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-
-    setChecked(newChecked);
+  const handleChange = (event) => {
+    setAge(event.target.value);
   };
-  if(selectedSeats.length)
-   return (  
-      <Container sx={{boxShadow:' 3px 3px 3px 2px #fff', marginBottom:20}}   >  
-           <List 
-            sx={{ padding:2,   }}  
-            
-          >
-                {selectedSeats.map((value) => {
-              const labelId = `checkbox-list-label-${value}`;
+  
 
-        return (
-          <ListItem
-           sx={{    marginTop:2  , boxShadow : `0 6px 2px -2px  ${Colors.a} `   }  }
-            key={value}
-             
-            secondaryAction={
-              <IconButton   edge="end"  aria-label="comments">
-                <IoTicketSharp color={Colors.b} size={"1.5em"}  />
-              </IconButton>
-            }
-            disablePadding
-          >
-            <ListItemButton role={undefined} onClick={handleToggle(value)} dense>
+  const toArr = value.split(":")
+  const row = toArr[0]
+  const seatnumber = toArr[1]
 
-              <ListItemIcon>
-                <Checkbox
-                  edge="start"
-                  checked={checked.includes(value)}
-                  tabIndex={-1}
-                  disableRipple
-                  inputProps={{ 'aria-labelledby': labelId }}
-                />
-              </ListItemIcon>
 
-              <ListItemText sx={{textAlign:"end"}}  id={labelId} primary={` ${value }`} />
-            </ListItemButton>
+  const displayRow = row.split(" ").reverse()
+  const diplaySeatNumer = parseInt(seatnumber)+1
 
-          </ListItem>
-        );
-      })}
-          </List>
 
-     </Container>
-   )
+
+   useEffect(()=>{
+    console.log( displayRow);
+
+    
+   },[displayRow])
+
+
+
+  
+   return(
+    
+
+      <ListItem alignItems='center'  sx={{ justifyContent:"space-between"  ,    marginTop:2  , boxShadow : `0 6px 2px -2px  ${Colors.a} `, padding:1,  }   }  key={value}  >
+
+                  
+            <Flex  direction={"row"} width={"40%"}  justifyContent={"space-between"} alignItems={"center"}    >
+
+              
+              <FaTrashAlt  color={Colors.a} size={"1.5em"} style={{border:`solid ${Colors.a}`, padding:7 ,  } } onClick={(e)=>{  hendler( 2 ,seatnumber,row)}}  />
+  
+     
+               <FormControl sx={{color:"#fff" ,   }}   >
+                 <InputLabel sx={{color:"#fff"}}  >סוג</InputLabel>
+                  <Select
+                     value={age}
+                     label="Age"
+                     onChange={handleChange}
+                     sx={{color:"#fff", }}
+                     size='small'
+                     fullWidth
+                     
+         
+                   >
+           
+                     <MenuItem value={20}>תושב</MenuItem>
+                     <MenuItem value={30}>רגיל</MenuItem>
+                 </Select>
+              </FormControl>
+
+             </Flex>
+
+
+
+            <Flex direction={"row"} width={"60%"} alignItems={"center"}   >
+              
+              <Typography variant='subtitle2' width={"100%"} textAlign={"center"} >{ ` מושב ${diplaySeatNumer} :  ${row} `} </Typography>
+
+              <IoTicketSharp color={Colors.b} size={"2em"} style={{border:`solid ${Colors.b}` , padding:3 }}  />
+
+           </Flex>
+
+      </ListItem>
+
+      )
  }
-
-

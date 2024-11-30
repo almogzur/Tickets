@@ -10,6 +10,7 @@ import WidthContext from '@/context/WidthContext';
 import SeatWrapper  from '../../components/Seats'
 import { Container , Typography as Heading , Stack as Flex  , Button } from '@mui/material';
 import Map from '../../components/tom-map'
+import ClientLayout from '../../Layouts/client-layout';
 
 const DetailsPage = () => {  
 
@@ -26,13 +27,14 @@ const DetailsPage = () => {
         <title>פרטים</title>
         <meta name="viewport" content="width=device-width, user-scalable=no"/>
       </Head>
-
-      <Flex direction={"column"}>
-        <ShowCover imageSrc={movie.cover} name = {movie.name} />
-      </Flex>
+      <ClientLayout> 
+          <Flex direction={"column"}>
+            <ShowCover imageSrc={movie.cover} name = {movie.name} />
+            </Flex>
       
          <SeatWrapper/>
      {/* <Map/>  */}
+      </ClientLayout>
     </>
   );
 }

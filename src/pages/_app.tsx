@@ -1,6 +1,6 @@
 import type { AppProps } from 'next/app'
 
-import Layout from '../components/Layout'
+
 import MoviesContext from '../context/MoviesContext'
 import { useEffect, useState } from 'react';
 import { Movie } from '../constants/models/Movies';
@@ -11,6 +11,7 @@ import WidthContext from '../context/WidthContext';
 import SeatsPositionContext  from '../context/map-position-context'
 import TipContext from '@/context/Tip-context';
 import { SessionProvider } from "next-auth/react"
+import AdmindDawerContext from '../context/AdmindDawerContext'
 
 import '@tomtom-international/web-sdk-maps/dist/maps.css'
 
@@ -28,6 +29,7 @@ function MyApp({
   const [S,setS] = useState(0)
   const [ tipX, setTipX]=useState(null)
   const [ tipY, setTipY]= useState(null)
+  const [DawerIsOpen , setdDawerIsOpen] = useState(false)
 
 
   const xxl = useMediaQuery('(min-width : 1600px)')
@@ -43,20 +45,17 @@ function MyApp({
     
     
       <SessionProvider>
+        <AdmindDawerContext.Provider value={{DawerIsOpen,setdDawerIsOpen}}>
         <TipContext.Provider value={{tipX, tipY ,setTipX,setTipY}}>
         <SeatsPositionContext.Provider value={{x,y,S,setX,setY,setS}}>
         <MoviesContext.Provider value={{movies, setMovies}}>
         <WidthContext.Provider value={{xxl,xl,lg,md,sm,xs,xxs}}>
-   
-        <Layout>
-     
           <Component {...pageProps} />
-        
-        </Layout>
         </WidthContext.Provider>
         </MoviesContext.Provider>
         </SeatsPositionContext.Provider>
         </TipContext.Provider>
+        </AdmindDawerContext.Provider>
       </SessionProvider>
 
 
