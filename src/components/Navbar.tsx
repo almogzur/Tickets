@@ -1,26 +1,41 @@
 import Link from 'next/link';
 import Image from 'next/image'
 
-import { Stack as Flex , Typography } from '@mui/material'
+import { Button, Container, Stack as Flex , Typography } from '@mui/material'
 import { useSession } from 'next-auth/react';
+import { Colors } from '@/lib/colors';
+import { signIn } from "next-auth/react"
 
 const Navbar = () => {
   const { data: session, status } = useSession()
-  return (
-    <Flex style={{
-      height:60 ,
-       display:'flex',
-       alignItems:"center",
-       boxShadow: '3px  red inset ,  5px blue ,  5px pink ,  5px gray inset',  
-       } } >
-      <Link href="/" style={{textDecoration:'none'}} > 
-        <Flex direction={'row'} alignItems={"center"} sx={{}} >
-          <Image src="/logo.png" alt="site logo" width={40} height={30} />
-          <Typography variant="h6" >הזמנת כרטיסים  דף הבית </Typography>
-        </Flex>
-      </Link>
-      <Link href={"/admin"} >{"התחברות למערכת "} </Link>
 
+  const linkStyle = {textDecoration:'none'   } 
+
+  return (
+    <Flex direction={"row"} justifyContent={"center"} >
+    <Container sx={{p:0,m:0, direction:"rtl" }} >
+    <Flex direction={'row'} justifyContent={"space-between"} mb={3} boxShadow={' 0px 4px  0.2em #fff'} height={80} alignItems={"center"} >
+
+      <Link href="/" style={linkStyle} > 
+        <Button variant='contained'   sx={{  height:50, m:2 , bgcolor:Colors.b}}  >
+
+          <Image src="/logo.png" alt="site logo" width={50} height={30} />
+          <Typography variant='subtitle2' >הזמנת כרטיסים  דף הבית </Typography>
+
+        </Button>
+      </Link>
+
+
+
+        <Link href={"/auth/singin"}  style={linkStyle} >
+          <Button variant='contained'  sx={{ height:50 ,m:2,bgcolor:Colors.b}} > {"התחברות למערכת "} 
+
+          </Button>
+        </Link>
+        
+
+    </Flex>
+    </Container>
     </Flex>
 );
 }

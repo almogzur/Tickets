@@ -1,20 +1,15 @@
-import  { useContext, useState , Fragment ,  } from 'react';
+import  {  useState   } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import {Box , Stack as Flex } from '@mui/material';
 import List from '@mui/material/List';
-import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
-
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-import {Button} from '@mui/material'
-
-import AdmindDawerContext from '../context/AdmindDawerContext';
+import { Button } from '@mui/material'
+import { signOut } from 'next-auth/react'
 import { RiArchiveDrawerFill } from "react-icons/ri";
 import { FcPuzzle } from "react-icons/fc";
 import { FcHome } from "react-icons/fc";
@@ -28,12 +23,10 @@ const DRAWER_OPEN_WIDTH = 160;
 
 const links  = [
   {text:'ראשי' , Icon:<FcHome size={"2em"} /> , link:"/admin" },
-
   {text:'צור אירוע' , Icon:<FcPuzzle size={"2em"} /> , link:"/admin/new-event" },
   {text:'ניהול אירועים ' , Icon:<FcBusinessman size={"2em"} /> , link:"/admin/manage-events" }
 
 ]
-
 const subLinks = [
   {text:"" , Icon:"" , link:"" },
 
@@ -43,8 +36,8 @@ const subLinks = [
 
 
 export default function TemporaryDrawer() {
-  const [open, setOpen] = useState(false);
-  const theme =useTheme()
+  const [ open, setOpen ] = useState(false);
+  const theme = useTheme()
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
   };
@@ -65,13 +58,19 @@ export default function TemporaryDrawer() {
   );
 
   return (
-    <Flex direction={'row'} justifyContent={"end"}  sx={{background:theme.palette.background.paper}}  >
-      <Button onClick={toggleDrawer(true)}><RiArchiveDrawerFill size={'2em'}/></Button>
+    < >
+      <Button 
+          sx={{background:theme.palette.background.paper , position:"absolute" , right:10 , top:10}} 
+           onClick={toggleDrawer(true)}
+           >
+            <RiArchiveDrawerFill size={'2em'}/>
+      </Button>
+
       <Drawer open={open} onClose={toggleDrawer(false)} anchor='right' >
         {DrawerList}
 
         <ListItem sx={{background:"gray"}}>
-          <ListItemButton  sx={{minHeight: 48}}>
+          <ListItemButton  sx={{minHeight: 48}} onClick={()=>signOut({callbackUrl:"/"})}>
             <ListItemIcon
                  sx={{ } }
               >
@@ -86,7 +85,7 @@ export default function TemporaryDrawer() {
        </ListItem>
 
       </Drawer>
-    </Flex>
+    </>
   );
 }
 
