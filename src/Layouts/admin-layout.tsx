@@ -1,10 +1,6 @@
-import { useContext, useEffect } from 'react';
+import {  useEffect } from 'react';
 import MiniDrawer from '../components/Drawer'
-import {Stack as Flex, Paper , Box, Container } from '@mui/material'
-import { styled, useTheme } from '@mui/material/styles';
-
-
-import AdmindDawerContext from '../context/AdmindDawerContext';
+import {Stack as Flex, Container } from '@mui/material'
 import { useSession } from 'next-auth/react';
 import router from 'next/router';
 
@@ -20,17 +16,21 @@ useEffect(()=>{
 
 
   return (
-    < Container>
-      
+
+      <>
       <MiniDrawer  />
-        <Flex 
+
+        <Flex direction={"row"}
           sx={{
-            direction:"rtl",
+  
+            background:"gray"
      }}
             >
-          { children }
+          <Container  >
+            {children}
+          </Container>
         </Flex>
-    </Container>
+      </>
   );
 }
  

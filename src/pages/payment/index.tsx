@@ -6,7 +6,7 @@ import { FaArrowRight } from "react-icons/fa";
 
 import Link from 'next/link';
 
-import { Movie, Seats } from '../../constants/models/Movies'
+import { Movie, Seats } from '../../constants/models/Events'
 
 import styles from './Payment.module.scss'
 

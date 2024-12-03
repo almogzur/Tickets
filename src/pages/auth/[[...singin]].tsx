@@ -21,12 +21,7 @@ const SingInPage=()=>{
     Default: "שגיאה במערכת נסה שנית ",
   };
 
-  useEffect(()=>{
-  if(status === 'authenticated'){
-    router.push("/admin")
-  }    
-  },[error])
-
+ 
   const [ formData ,setFormData ] = useState({
     name:"",
     password:""
@@ -83,9 +78,12 @@ return (
 
              <Flex>
                <TextField 
-               name='name'
+                name='name'
                 placeholder='שם משתמש'
                  variant='outlined' 
+                 
+                 
+              
                  value={formData.name}
                  onChange={handleChange}
                   required={true}

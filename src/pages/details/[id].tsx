@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router'
 import { useState, useEffect, useContext, CSSProperties, useRef, } from 'react'
-import { Movie } from '../../constants/models/Movies'
+import { Event } from '../../constants/models/Events'
 import MoviesContext from '../../context/MoviesContext';
 import DisableZoom from '../../lib/hooks/useDisablePinchZoomEffect'
 import WidthContext from '@/context/WidthContext';
@@ -15,12 +15,12 @@ import ClientLayout from '../../Layouts/client-layout';
 const DetailsPage = () => {  
 
   const router = useRouter()
-  const { movies ,setMovies } = useContext(MoviesContext);
+  const { events ,setEvents } = useContext(MoviesContext);
   const { id } : any = router.query
-  const movie = movies.find(mov => mov.id === parseInt(id));
+  const event = events.find(ev => ev.id === parseInt(id));
 
 
-  if (!movie) return <div>loading...</div>
+  if (!event) return <div>loading...</div>
   return (
     <>
       <Head>
@@ -29,7 +29,7 @@ const DetailsPage = () => {
       </Head>
       <ClientLayout> 
           <Flex direction={"column"}>
-            <ShowCover imageSrc={movie.cover} name = {movie.name} />
+            <ShowCover imageSrc={event.cover} name = {event.name} />
             </Flex>
       
          <SeatWrapper/>

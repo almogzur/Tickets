@@ -1,19 +1,18 @@
-import { useState, useEffect, useContext, CSSProperties, MouseEvent, } from 'react'
+import {  CSSProperties } from 'react'
 
 import {Colors} from '../lib/colors'
+
 const styles :Record<string,CSSProperties> =  {
   seats: {
-    backgroundColor: "silver",
+    backgroundColor: "#fff",
     height:"4px",
     width:"4px",
     color:"black",
     margin:2 ,
     fontWeight:"bold",
-
     zIndex:22
     
   },
-
   seatSelected: {backgroundColor: Colors.b,},
   seatBlocked: {color:"black"},
   seatBooked: {backgroundColor: "brown",cursor: "not-allowed"},
@@ -21,8 +20,7 @@ const styles :Record<string,CSSProperties> =  {
 
  };  
 
-
-const TooltipButton = ({ seatValue, seatnumber, row ,hendler , setTipY, setTipX  ,setTipTitel , tiketCost, cizCost }) => {
+const TooltipButton = ({ seatValue, seatnumber, row ,hendler , setTipY, setTipX  ,setTipTitel , tiketCost=0 /**typing */, cizCost }) => {
 
     const tiohndler = (x: number,y: number)=>{
       
@@ -57,7 +55,13 @@ const TooltipButton = ({ seatValue, seatnumber, row ,hendler , setTipY, setTipX 
           //     );
        }}
 
-       style={ seatValue ===1 ? { ...styles.seats, ...styles.seatBooked }: seatValue === 2? { ...styles.seats, ...styles.seatSelected } :  styles.seats }
+       style={ 
+        seatValue ===1 ? { ...styles.seats, ...styles.seatBooked }
+        :
+        seatValue === 2? { ...styles.seats, ...styles.seatSelected } 
+        :
+         styles.seats 
+        }
         
       >
         

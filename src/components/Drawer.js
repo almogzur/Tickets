@@ -36,7 +36,9 @@ const subLinks = [
 
 
 export default function TemporaryDrawer() {
+
   const [ open, setOpen ] = useState(false);
+
   const theme = useTheme()
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
@@ -58,15 +60,20 @@ export default function TemporaryDrawer() {
   );
 
   return (
-    < >
+    <>
       <Button 
-          sx={{background:theme.palette.background.paper , position:"absolute" , right:10 , top:10}} 
+          sx={{background:theme.palette.background.paper, position:'absolute', right:10, top:10 } } 
            onClick={toggleDrawer(true)}
            >
             <RiArchiveDrawerFill size={'2em'}/>
       </Button>
 
-      <Drawer open={open} onClose={toggleDrawer(false)} anchor='right' >
+      <Drawer
+       open={open}
+        onClose={toggleDrawer(false)} 
+        anchor='right'
+        SlideProps={{ direction:"left" }}
+         >
         {DrawerList}
 
         <ListItem sx={{background:"gray"}}>
@@ -85,7 +92,7 @@ export default function TemporaryDrawer() {
        </ListItem>
 
       </Drawer>
-    </>
+      </>
   );
 }
 

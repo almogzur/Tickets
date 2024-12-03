@@ -34,15 +34,23 @@ export const authOptions = {
           let DbUser  = await collection.findOne({ "name"  : credential.name })
            
           if(!DbUser){ 
+            console.log("auth return null from find user");  
             return null 
           }
 
            if(credential.password === DbUser.password){
             const user = { id:DbUser._id.toString(), name:DbUser.name  }
+            console.log("auth return user session ", user);
+            
             return user
            }
-
+           console.log("auth return bad cerdential");
+           
+           client.close()
+          
+           
           return null  
+          
       }
     })
   ],

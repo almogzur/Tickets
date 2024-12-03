@@ -1,10 +1,10 @@
 import React from "react";
-import { Movie } from "../constants/models/Movies";
-import { movies } from "../constants/movies";
+import { Event } from "../constants/models/Events";
+import { events} from "../constants/event";
 
-export default React.createContext<MovieContextModal>({ movies: movies });
+export default React.createContext<MovieContextModal>({ events: events });
 
 interface MovieContextModal {
-  movies: Movie[],
-  setMovies?: Function
+  events: Event[],
+  setEvents?: Function
 }

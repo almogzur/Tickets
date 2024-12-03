@@ -1,6 +1,6 @@
 import { StaticImageData } from "next/image"
 
-export type Movie = {
+export type Event = {
   id: number,
   name: string,
   cover: StaticImageData,
@@ -8,13 +8,15 @@ export type Movie = {
   ticketCost?: number,
   seats?: Seats
   citizenTicketCost:number
-
+  textposions?:TextPosition
 }
-
-
-
 
 
 export type Seats = {
   [key: string]: number[]
+}
+
+
+export type TextPosition = { 
+  [key:string] : { top: number;left: number} 
 }

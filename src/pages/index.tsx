@@ -9,17 +9,17 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 
-import {useGetMovies} from '../services/movies'
-import { Movie } from '../constants/models/Movies';
+import {useGetEvents} from '../services/events'
+import { Event } from '../constants/models/Events';
 import ClientLayout from '../Layouts/client-layout';
 
 export default function Home() {
 
-  const { movies, isLoading, isError } = useGetMovies();
+  const { events, isLoading, isError } = useGetEvents();
 
   const MoviesList = () => {
-    if (movies) {
-      return movies.map((movie: Movie) => (
+    if (events) {
+      return events.map((movie: Event) => (
      
           <Link href={`/details/${movie.id}`} key={movie.id} >
      

@@ -10,11 +10,7 @@ import Link from 'next/link';
 import {Colors} from '../lib/colors'
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
+
 import TipContext from '@/context/Tip-context';
 import { IoTicketSharp } from "react-icons/io5";
 import { FaTrashAlt } from "react-icons/fa";
@@ -23,15 +19,15 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { red } from '@mui/material/colors';
+import { Seats } from '@/constants/models/Events';
 
 
 
 const SeatWrapper = () => {
-    const { movies ,setMovies} = useContext(MoviesContext);
+    const { events ,setEvents} = useContext(MoviesContext);
     const router = useRouter();
     const { id, seats }: any = router.query;
-    const movie = movies.find((mov) => mov.id === parseInt(id));
+    const event = events.find((mov) => mov.id === parseInt(id));
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
     const [selectedSeats,setSlectedSeats ]= useState ([])
     const { tipX, setTipX , tipY, setTipY}=useContext(TipContext)
@@ -108,7 +104,7 @@ const SeatWrapper = () => {
   const hendler = (seatValue: number, seatNumber: number, row: string) => {
   
     
-      setMovies( prevMovies => {
+    setEvents( prevMovies => {
         // Find the movie object reference
         const movie = prevMovies.find((mov) => mov.id === parseInt(id));
         if (!movie) {
@@ -167,7 +163,7 @@ const SeatWrapper = () => {
     setTipX(0);
     setTipY(0);
   
-    setMovies((prevMovies) => {
+    setEvents((prevMovies) => {
       // Find the movie object to update
       const movie = prevMovies.find((mov) => mov.id === parseInt(id));
       if (!movie) {
@@ -200,13 +196,13 @@ const SeatWrapper = () => {
     setSlectedSeats([]);
   };
 
-  const Seats = () => {
+  const Seats = ({seatArrayProps}:{seatArrayProps:Seats} ) => {
 
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
     
    
 
-      const seatArray  = Object.entries({...movie.seats}).map(([row, rowContent]) => {
+      const seatArray  = Object.entries(seatArrayProps).map(([row, rowContent]) => {
         const colValue  = rowContent.map((seatValue: number, i: number) => {
           const textset = "מושב";
           const textrow = "שורה";
@@ -221,7 +217,7 @@ const SeatWrapper = () => {
               setTipX={setTipX}
               setTipY={setTipY}
               setTipTitel={setTipTitel}
-               tiketCost={movie.ticketCost} 
+               tiketCost={event.ticketCost} 
                cizCost={1} 
 
                 />
@@ -230,11 +226,12 @@ const SeatWrapper = () => {
       
         return (
           <Flex
-  
+            
             key={row}
             style={styles[`${row}`]} // target by key in CSS
             justifyContent="center"
             direction={'row'}
+            sx={{direction:"ltr"}}
           >
             {colValue}
           </Flex>
@@ -276,7 +273,7 @@ const SeatWrapper = () => {
   
           <Container   sx={{boxShadow:' 3px 3px 3px 2px #fff', marginBottom:3}} >
             <Transporm  >              
-               <Flex  direction={"column"}    height={!xs? 350 : 600}    >
+               <Flex  direction={"column"}    height={!xs? 350 : 600}      sx={{direction:"ltr"}}  >
 
                       <Typography style={{position:"relative", top:50 , left:-58 , color:Colors.b }}  height={0} > שירה</Typography>
                       <Typography style={{position:"relative", top:225, left:-155 , transform: 'rotate(90deg)',color:Colors.b }} fontSize={7} height={0} >  קומה 1</Typography>  
@@ -316,14 +313,14 @@ const SeatWrapper = () => {
             href={{
                 pathname: "/payment",
                 query: {
-                movieId: movie?.id,
+                movieId: event?.id,
                 selectedSeatsQuery: JSON.stringify(selectedSeats),
               },
             }}
           >
             <Button  sx={{background:Colors.b , color:"#fff" , height:60 ,fontSize:!xs?20:30, letterSpacing:1 ,lineHeight:1.2 , }} >
               מעבר לתשלום    <br/>
-              סה״כ {selectedSeats.length * (movie?.ticketCost || 0) + " שח"}
+              סה״כ {selectedSeats.length * (event?.ticketCost || 0) + " שח"}
             </Button>
           </Link>
         )
@@ -377,7 +374,7 @@ const SeatWrapper = () => {
   return (
       <>
        <Heading p={2} variant='h4'  textAlign={"center"}  >מקומות ישיבה באולם</Heading>        
-       <Seats />   
+       <Seats seatArrayProps={event.seats}  />   
         {selectedSeats.length ?  <>
            <TikitList selectedSeats={selectedSeats}  />
             <Flex 
@@ -401,8 +398,6 @@ const SeatWrapper = () => {
   
     );
   };
-
-
 
 
  export default SeatWrapper
