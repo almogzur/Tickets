@@ -1,4 +1,5 @@
 import { StaticImageData } from "next/image"
+import { CSSProperties, ReactNode } from "react"
 
 export type Event = {
   id: number,
@@ -6,17 +7,16 @@ export type Event = {
   cover: StaticImageData,
   adText:String,
   ticketCost?: number,
-  seats?: Seats
   citizenTicketCost:number
-  textposions?:TextPosition
+  mainSeats?: Seats
+  surroundSeats?:Seats,
+  surroundSeatsStyles?:SeatStyles
+  surroundTextStyles?:SeatStyles,
+
 }
 
+export interface Seats {[key: string]: number[]}
 
-export type Seats = {
-  [key: string]: number[]
-}
+export interface SeatStyles   {[key:string]: CSSProperties  }
 
 
-export type TextPosition = { 
-  [key:string] : { top: number;left: number} 
-}

@@ -17,14 +17,18 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "paths": {
-      "@/*": ["./src/*"]
-    }
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "module": "esnext"
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx"
-, "src/components/tom-map.js"  ],
+    "**/*.tsx",
+    "src/components/tom-map.js"
+  ],
   "exclude": [
     "node_modules"
   ]

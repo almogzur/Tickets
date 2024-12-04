@@ -23,7 +23,7 @@ import { Seats } from '@/constants/models/Events';
 
 
 
-const SeatWrapper = () => {
+const ClinetSideSeates = () => {
     const { events ,setEvents} = useContext(MoviesContext);
     const router = useRouter();
     const { id, seats }: any = router.query;
@@ -374,7 +374,7 @@ const SeatWrapper = () => {
   return (
       <>
        <Heading p={2} variant='h4'  textAlign={"center"}  >מקומות ישיבה באולם</Heading>        
-       <Seats seatArrayProps={event.seats}  />   
+       <Seats seatArrayProps={event.mainSeats}  />   
         {selectedSeats.length ?  <>
            <TikitList selectedSeats={selectedSeats}  />
             <Flex 
@@ -398,9 +398,6 @@ const SeatWrapper = () => {
   
     );
   };
-
-
- export default SeatWrapper
 
  const Item =({value ,hendler } )=>{
 
@@ -476,3 +473,5 @@ const SeatWrapper = () => {
 
       )
  }
+
+ export default ClinetSideSeates

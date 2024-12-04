@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import AdminLayout from '@/Layouts/admin-layout'
 import {  Typography , OutlinedInput , Stack as Flex} from '@mui/material'
 
-import { mainSeats ,surroundSeats ,theatherSurroundSeatsMobileTextPositons , theatherSurroundSeatsTextPositions} from '../../../constants/theathers/eilat_1'
+import { mainSeats ,surroundSeats ,  surroundSeatsStyles ,surroundTextStyles } from '../../../constants/theathers/eilat_1'
 
 
 import WidthContext from '@/context/WidthContext'
@@ -17,6 +17,7 @@ const NewEventPage=()=>{
   const router = useRouter()
   const { data: session ,status ,update} = useSession()
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
+  const [newEventState , setNewEventState ]= useState()
 
   useEffect(()=>{  })
 
@@ -49,7 +50,12 @@ return (
 
      
         <DatesList/>
-        <SeatsControl mainSeats={{...mainSeats}} textpositions={theatherSurroundSeatsMobileTextPositons} mobTextPosiotions={theatherSurroundSeatsTextPositions} surroundSeats={surroundSeats} />
+        <SeatsControl  
+            mainSeats={mainSeats} 
+            surroundSeats={surroundSeats} 
+            surroundSeatsStyles={surroundSeatsStyles} 
+            surroundTextStyles={surroundTextStyles}
+             />
 
     </AdminLayout>
 ) 

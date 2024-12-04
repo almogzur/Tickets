@@ -6,12 +6,12 @@ import poriat from '../../data/covers/poriat.jpeg'
 import noa from '../../data/covers/noa.jpeg'
 
 
-import {mainSeats ,
-   theatherSurroundSeatsMobileTextPositons ,
-    theatherSurroundSeatsTextPositions ,
-    surroundSeats
-  } from '../constants/theathers/eilat_1'
-
+import {
+  mainSeats as Eilat1_MainSeats,
+  surroundSeats  as Eilat1_surroundSeats,
+  surroundSeatsStyles as Eilat_1SurroundSeatsPositions, 
+  surroundTextStyles as Eilat1_surroundSeatsTextPositions 
+} from '../constants/theathers/eilat_1'
 
 
 
@@ -46,9 +46,10 @@ export const events: Event[] = [
     ticketCost: 200,
     citizenTicketCost :1,
     cover:arzi,
-    seats:mainSeats,
-    textposions:theatherSurroundSeatsMobileTextPositons
-
+    mainSeats:Eilat1_MainSeats,
+    surroundSeats:Eilat1_surroundSeats,
+    surroundSeatsStyles:Eilat_1SurroundSeatsPositions,
+    surroundTextStyles:Eilat1_surroundSeatsTextPositions,
   },
   {
    id: 2,
@@ -56,7 +57,7 @@ export const events: Event[] = [
    adText :" מופע של פעם בחיים באו להתרגש איתנו  ",
    cover:eden,
    ticketCost: 200,
-   seats: theather2,
+   mainSeats: theather2,
    citizenTicketCost:1
   
   //  
@@ -101,5 +102,5 @@ export const events: Event[] = [
   //      F: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   //      G: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
   //    }
-    }
+  }
 ]

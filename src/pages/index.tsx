@@ -58,7 +58,7 @@ export default function Home() {
   return (
     <  >
       <Head>
-        <title>Book My Ticket | Home</title>
+        <title>הזמנות כרטיסים  | בית</title>
       </Head>
 
       <ClientLayout>
