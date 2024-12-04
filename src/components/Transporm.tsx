@@ -1,16 +1,25 @@
 import { TransformWrapper, TransformComponent, useControls, getTransformStyles } from "react-zoom-pan-pinch";
-import { useState, useEffect, useContext, } from 'react'
+import { useState, useEffect, useContext, ReactNode, } from 'react'
 import positionContext from '../context/map-position-context';
 import { Stack as Flex , Typography as Heading , Button, Avatar} from '@mui/material'
 import { FaPlus } from "react-icons/fa6";
 import { FaMinus } from "react-icons/fa";
 import { FcRefresh } from "react-icons/fc";
-import { deepOrange, deepPurple, grey, red } from "@mui/material/colors";
+import { blue, deepOrange, deepPurple, grey, red } from "@mui/material/colors";
 import TipContext from '@/context/Tip-context';
 import { Colors } from "@/lib/colors";
 import { LuRefreshCcw } from "react-icons/lu";
 
-const Transporm = ({children, }) => {
+import SeatColorsIndex from "./seats-color-index";
+
+
+interface TranspormProps {
+   children? : ReactNode,
+  isMultiSelect? : boolean,
+  setIsMultiSelect?:React.Dispatch<React.SetStateAction<Boolean>>
+}
+
+const Transporm = ({children, isMultiSelect,setIsMultiSelect }:TranspormProps) => {
   
     const {x,y,S, setS , setY , setX } =useContext(positionContext)
 
@@ -44,14 +53,12 @@ const Transporm = ({children, }) => {
                  {children}     
                  
                </TransformComponent>
-               <Flex direction={'row'}  height={80}  justifyContent={"center"} borderTop={'solid'} 
-                 >
-                 <Avatar  sx={{ bgcolor: grey[500], margin:2 , padding:.5 }} variant={'square'} >זמין</Avatar>
-                 <Avatar sx={{ bgcolor: Colors.b , margin:2,padding:.5 }} variant={'square'} >נבחר</Avatar>
-                 <Avatar sx={{ bgcolor: red[800] , margin:2 , padding:.5 }} variant={'square'} >תפוס</Avatar>
 
-                 
-                </Flex>          
+
+
+               <SeatColorsIndex isMuiltiSelct={isMultiSelect} setIsMultiSelect={setIsMultiSelect}  />
+
+
             </>
         )
   }

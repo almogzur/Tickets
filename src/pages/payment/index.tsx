@@ -6,7 +6,7 @@ import { FaArrowRight } from "react-icons/fa";
 
 import Link from 'next/link';
 
-import { Movie, Seats } from '../../constants/models/Events'
+import { Event, Seats } from '../../constants/models/Events'
 
 import styles from './Payment.module.scss'
 
@@ -14,20 +14,20 @@ import MoviesContext from '../../context/MoviesContext';
 import ClientLayout from '../../Layouts/client-layout';
 
 const Tickets = () => {
-  const { movies, setMovies } = useContext(MoviesContext);
+  const { events, setEvents } = useContext(MoviesContext);
 
   const router = useRouter();
 
   const {movieId,selectedSeatsQuery}: any = router.query;
 
-  const movie = movies.find((mov) => mov.id === parseInt(movieId));
+  const event = events.find((mov) => mov.id === parseInt(movieId));
 
-  const [movieSeatDetails,setMovieSeatDetails]= useState(movie?.seats );
+  const [movieSeatDetails,setMovieSeatDetails]= useState(event?.mainSeats );
 
   const selectedSeats = selectedSeatsQuery ?  JSON.parse(selectedSeatsQuery) : null
 
 useEffect(()=>{
-   console.log(movie);
+   console.log(event);
 },[])
 
   const SeatDetails = ({selectedSeats}: {selectedSeats: string[]}) => {
@@ -92,16 +92,16 @@ useEffect(()=>{
   const Card = () => {
    
     
-    if (!movie) return <div>loading...</div>
+    if (!event) return <div>loading...</div>
     return (
     <div className={styles.card}>
       <div className={styles.cardTitleContainer}>
-        <Link href={{ pathname: `/details/${movie?.id}`, query: { seats:  JSON.stringify(selectedSeats) }}}><FaArrowRight /></Link>
+        <Link href={{ pathname: `/details/${event?.id}`, query: { seats:  JSON.stringify(selectedSeats) }}}><FaArrowRight /></Link>
         <div className={styles.cardTitle}>
             סיכום הזמנה 
         </div>
       </div>
-        <p className={styles.movieName}>{movie.name}</p>
+        <p className={styles.movieName}>{event.name}</p>
       <SeatDetails selectedSeats={selectedSeats}/>
       <hr className={styles.hrStyle}/>
       <TotalCharge selectedSeats={selectedSeats}/>

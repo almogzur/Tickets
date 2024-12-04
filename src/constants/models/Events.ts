@@ -9,9 +9,9 @@ export type Event = {
   ticketCost?: number,
   citizenTicketCost:number
   mainSeats?: Seats
-  surroundSeats?:Seats,
-  surroundSeatsStyles?:SeatStyles
-  surroundTextStyles?:SeatStyles,
+  sideSeats?:Seats,
+  sideeatsStyles?:SeatStyles
+  sideTextStyles?:SeatStyles,
 
 }
 

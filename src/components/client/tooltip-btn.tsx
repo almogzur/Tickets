@@ -1,6 +1,6 @@
 import {  CSSProperties } from 'react'
 
-import {Colors} from '../lib/colors'
+import {Colors} from '@/lib/colors'
 
 const styles :Record<string,CSSProperties> =  {
   seats: {

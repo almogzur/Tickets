@@ -32,7 +32,7 @@ export const mainSeats : Seats = {
                                    "שורה 19" : [ 0, 0, 0, 0, 0, 0, 0, ],
                                    "שורה 20" : [ 0, 0, 0 ,0, 0, 0, 0, ],
 } 
-export const surroundSeats : Seats = {
+export const sideSeats : Seats = {
  "שירה 1 קומה 1":[0,0,0,0,0],
  "שירה 1 קומה 2":[0,0,0,0,0],
  "שירה 2 קומה 1":[0,0,0,0],
@@ -59,7 +59,7 @@ export const surroundSeats : Seats = {
  "אופרה 2ב שורה 2 קומה 2": [0,0,0,0],
  "אופרה 2ב שורה 3 קומה 3": [0,0,0,0,0],
 }
-export const surroundSeatsStyles : SeatStyles = {
+export const sideSeatsStyles : SeatStyles = {
 
    "שירה 1 קומה 1": {top:-160, left:-30 , ...positionAtr , },  
    "שירה 1 קומה 2": {top:-200 ,left:-70 , ...positionAtr  },
@@ -97,7 +97,7 @@ export const surroundSeatsStyles : SeatStyles = {
 
    "אופרה 2ב שורה 3 קומה 3": {top:-399 , left:170 , ...positionAtr,flexDirection:"row" , },
 }
-export const surroundTextStyles : SeatStyles={
+export const sideSeateTextStyles : SeatStyles={
 "שירה 1 קומה 1":{position:"relative", top:-170 , left:-45 , color:'black'  , fontSize:6   , fontWeight:700  },
 "שירה 1 קומה 2":{position:"relative", top:-170 , left:-87 , color:'black' ,  fontSize:6 , fontWeight:700  },
 

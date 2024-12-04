@@ -7,9 +7,9 @@ import { Event } from '../../constants/models/Events'
 import MoviesContext from '../../context/MoviesContext';
 import DisableZoom from '../../lib/hooks/useDisablePinchZoomEffect'
 import WidthContext from '@/context/WidthContext';
-import ClinetSideSeates  from '../../components/client-side-seats'
+import ClinetSideSeates  from '../../components/client/client-side-seats'
 import { Container , Typography as Heading , Stack as Flex  , Button } from '@mui/material';
-import Map from '../../components/tom-map'
+import Map from '../../components/client/tom-map'
 import ClientLayout from '../../Layouts/client-layout';
 
 const DetailsPage = () => {  

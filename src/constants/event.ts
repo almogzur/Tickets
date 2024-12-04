@@ -8,9 +8,9 @@ import noa from '../../data/covers/noa.jpeg'
 
 import {
   mainSeats as Eilat1_MainSeats,
-  surroundSeats  as Eilat1_surroundSeats,
-  surroundSeatsStyles as Eilat_1SurroundSeatsPositions, 
-  surroundTextStyles as Eilat1_surroundSeatsTextPositions 
+  sideSeats  as Eilat1_sidendSeats,
+  sideSeatsStyles as Eilat_1SideSeatsStyles,
+  sideSeateTextStyles as Eilat1_SideSeateTextStyles
 } from '../constants/theathers/eilat_1'
 
 
@@ -47,9 +47,9 @@ export const events: Event[] = [
     citizenTicketCost :1,
     cover:arzi,
     mainSeats:Eilat1_MainSeats,
-    surroundSeats:Eilat1_surroundSeats,
-    surroundSeatsStyles:Eilat_1SurroundSeatsPositions,
-    surroundTextStyles:Eilat1_surroundSeatsTextPositions,
+    sideSeats:Eilat1_sidendSeats,
+    sideeatsStyles:Eilat_1SideSeatsStyles,
+    sideTextStyles:Eilat1_SideSeateTextStyles,
   },
   {
    id: 2,

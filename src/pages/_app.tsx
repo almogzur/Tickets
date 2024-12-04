@@ -38,6 +38,7 @@ import '@tomtom-international/web-sdk-maps/dist/maps.css'
 
 
 const theme = createTheme({ 
+    direction:"rtl",
     palette:{
       mode:"dark",
       primary:{main:purple[700]  },
@@ -67,6 +68,24 @@ const theme = createTheme({
           }
         }
        },
+       MuiSelect:{
+        defaultProps:{'aria-label': 'Without label'},
+        styleOverrides:{
+          root:{
+            direction:"rtl",
+            
+          }
+        }
+       },
+       MuiMenuItem:{
+         defaultProps:{},
+        styleOverrides:{
+          root:{
+            direction:"rtl"
+          }
+        },
+
+       }
        
     },
    },

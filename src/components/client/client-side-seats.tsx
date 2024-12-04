@@ -2,12 +2,12 @@ import {Box , Stack as Flex , Typography as Heading , Button, Container, Typogra
 import TooltopButton from './tooltip-btn'
 import { motion ,AnimatePresence } from "framer-motion"
 import { useState, useEffect, useContext, CSSProperties, useRef, } from 'react'
-import MoviesContext from '../context/MoviesContext';
-import Transporm from './Transporm';
+import MoviesContext from '../../context/MoviesContext';
+import Transporm from '../Transporm';
 import { useRouter } from 'next/router'
 import WidthContext from '@/context/WidthContext';
 import Link from 'next/link';
-import {Colors} from '../lib/colors'
+import {Colors} from '../../lib/colors'
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 
