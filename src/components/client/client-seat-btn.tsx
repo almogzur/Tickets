@@ -32,7 +32,7 @@ const TooltipButton = ({ seatValue, seatnumber, row ,hendler , setTipY, setTipX 
         const citConst = 'מחיר תושב'
   return (
 
-   <div
+     <div
        onClick={(e)=> { 
             hendler(seatValue,seatnumber,row) ;
             tiohndler(e.nativeEvent.pageX,e.nativeEvent.pageY ) 
@@ -66,6 +66,7 @@ const TooltipButton = ({ seatValue, seatnumber, row ,hendler , setTipY, setTipX 
       >
         
     </div>
+    
 
 
      

@@ -2,7 +2,7 @@ import { useSession } from 'next-auth/react'
 import {useContext, useEffect,useState} from 'react'
 import { useRouter } from 'next/router'
 import AdminLayout from '@/Layouts/admin-layout'
-import {  Typography , OutlinedInput , Stack as Flex, TextField, Select , MenuItem, InputLabel, SelectChangeEvent, Box, FormControl, Theme} from '@mui/material'
+import {  Typography , OutlinedInput , Stack as Flex, TextField, Select , MenuItem, InputLabel, SelectChangeEvent, Box, FormControl, Theme, useTheme} from '@mui/material'
 
 import { mainSeats ,sideSeats ,sideSeateTextStyles ,sideSeatsStyles } from '../../../constants/theathers/eilat_1'
 
@@ -13,13 +13,14 @@ import DatesList from '@/components/admin/date-list'
 import SeatsControl from '@/components/admin/SeatsControl'
 
 import { Seats } from '@/constants/models/Events'
-
+import Head from 'next/head'
 const NewEventPage=()=>{
 
   const router = useRouter()
   const { data: session ,status ,update} = useSession()
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
   const [newEventState , setNewEventState ]= useState()
+  const theme = useTheme()
 
    // send to save new event api
   const [mainSeatsState, setMainSeatsState]= useState<Seats>({...mainSeats})
@@ -41,12 +42,18 @@ const NewEventPage=()=>{
 }
 
 return (
+  <>
+  <Head>
+
+  <meta name="viewport" content="width=device-width, user-scalable=no"/>
+</Head>
     <AdminLayout>
-      <Typography variant='h3' textAlign={"center"} > אירוע חדש</Typography>
+      <Typography variant='h3' textAlign={"center"} color='primary' > אירוע חדש</Typography>
      
+      <DatesList/>
 
 
-         <Flex direction={ md? "row" :'column'} gap={2}   justifyContent={"center"} alignItems={'baseline'}  >
+         <Flex direction={ md? "row" :'column'} gap={2}   justifyContent={"center"} alignItems={'baseline'} boxShadow={` 3px 3px 3px 2px ${theme.palette.primary.main}`}  >
 
                 <Flex width={md? '40%':"100%"} >
 
@@ -64,10 +71,9 @@ return (
          </Flex>   
 
      
-        <DatesList/>
+      
 
-
-        <Typography variant='h3' textAlign={"center"} >סימון מושבים</Typography> 
+        <Typography variant='h3' textAlign={"center"} color='primary' >סימון מושבים</Typography> 
 
         <TheaterSelect theaterLIst ={[]} />
          <SeatsControl  
@@ -81,6 +87,7 @@ return (
 
 
     </AdminLayout>
+    </>
 ) 
 }
 
@@ -103,7 +110,7 @@ const TheaterSelect =({theaterLIst})=> {
    
       <FormControl  sx={{  minWidth:200 }} >
 
-<Select
+      <Select
           displayEmpty
           value={""}
           input={<OutlinedInput />}

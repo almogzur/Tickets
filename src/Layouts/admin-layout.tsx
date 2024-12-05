@@ -18,13 +18,9 @@ useEffect(()=>{
   return (
 
       <>
-      <MiniDrawer  />
-
-        <Flex direction={"row"}
-          sx={{
-  
-            background:"gray"
-     }}
+         <MiniDrawer  />
+         <Flex direction={"row"} 
+          sx={{   }}
             >
           <Container  >
             {children}

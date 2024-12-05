@@ -14,11 +14,13 @@ import { MdDelete } from "react-icons/md";
 import { renderTimeViewClock } from '@mui/x-date-pickers'
 import { Colors } from '@/lib/colors'
 
+import { useTheme } from '@mui/material/styles';
 const DatesList = ()=>{
 
     const [Dates, setDates] = useState([])
     const [selectedDate , setsSlectedDate] =useState("")    
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
+    const theme = useTheme()
 
  const hndler = (e) => {
 
@@ -48,15 +50,19 @@ const DatesList = ()=>{
          return  ( 
         <>
           <ListItem   >
-           <ListItemAvatar >
-              <Button onClick={()=>removeDate(date)}>
-              <Avatar>
+           <ListItemAvatar  >
+              <Button color='error' onClick={()=>removeDate(date)}>
+                <Avatar sx={{background:theme.palette.error.light}} >
                 <MdDelete   />
               </Avatar>
               </Button>
            </ListItemAvatar>
  
-         <ListItemText primary={date.toLocaleDateString("he-IL",options)} secondary={ "שעה : "  + date.toLocaleTimeString("he-IL")} />
+         <ListItemText 
+             sx={{color:theme.palette.primary.main}} 
+             primary={date.toLocaleDateString("he-IL",options)} 
+             secondary={ "שעה : " + date.toLocaleTimeString("he-IL")  }  
+             secondaryTypographyProps={{style:{color:theme.palette.secondary.main}}} />
         </ListItem>
         <Divider variant='middle'  sx={{borderWidth:1}} />
  
@@ -72,25 +78,26 @@ const DatesList = ()=>{
     mt={3} 
     alignItems={ !md?'' :'center'} 
     sx={{}} 
-    gap={!md?0:10} 
+
     border={!md?"":`solid 1px #ddd`} 
     mb={2} 
+    boxShadow={` 3px 3px 3px 2px ${theme.palette.primary.main}`}
 
     
     >   
     {/* piker */}
-   <Flex p={1}    >
-      <Typography variant='h4' textAlign={'center'}  >הוסף תאריכים</Typography>
-      {md? <Divider sx={{borderWidth:3 , background:Colors.b}} /> :null}
+   <Flex p={1}  flexGrow={2}   >
+      <Typography variant='h4' textAlign={'center'} color={theme.palette.primary.main}  >הוסף תאריכים</Typography>
+      {md? <Divider sx={{borderWidth:3 , background:theme.palette.primary.main }} /> :null}
 
       <DateTimePicker
         desktopModeMediaQuery='@media (min-width: 600px)'
          
-       slotProps={{
+         slotProps={{
      
          openPickerIcon: {  color: 'primary',},
       
-         textField:{ placeholder:"בחר תאריך" , style:{height: !md? 60 : 200, }  }
+         textField:{ placeholder:"בחר תאריך" , style:{height: !md? 60 : 200}  }
          
        }}
 
@@ -107,8 +114,8 @@ const DatesList = ()=>{
 
      {/* list */}
     <Box flexGrow={4} >
-         <Typography variant='h4' textAlign={'center'}  >תאריכים נבחרים </Typography>
-         <Divider variant='middle' sx={{ background:Colors.b, borderWidth:3 }}  />
+         <Typography variant='h4' textAlign={'center'} color='primary'  >תאריכים נבחרים </Typography>
+         <Divider variant='middle' sx={{ background:theme.palette.primary.main, borderWidth:3 }}  />
 
           <Flex height={200}  overflow={'auto'}    >  
          

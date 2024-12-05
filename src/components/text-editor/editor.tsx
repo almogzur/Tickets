@@ -15,6 +15,7 @@ import EditorMenuControls from "./menu-controls";
 import useExtensions from "./useExtensions";
 import { Colors } from "@/lib/colors";
 import WidthContext from "@/context/WidthContext";
+import { blue } from "@mui/material/colors";
 
 
 function fileListToImageFiles(fileList: FileList): File[] {
@@ -136,17 +137,17 @@ export default function Editor() {
           
             "& .MuiTiptap-RichTextContent-root":{
                 minHeight: xl? 70 : lg?  40 :  md? 35 : 0,
+                color:'black',
               "& p.is-editor-empty:first-child::before":{ 
                 display:"flex" ,
                 width:"100%" , 
-                color:Colors.b, 
                 fontWeight:"700",
                 fontSize:20
                 }
              },
-            "& .MuiTiptap-RichTextField-content":{   background:'gray' , },
+            "& .MuiTiptap-RichTextField-content":{     },
             "& .MuiTiptap-RichTextContent-editable":{ },
-            "& .MuiSvgIcon-root":{color:Colors.b ,scale:1.3},
+            "& .MuiSvgIcon-root":{color:blue[900], scale:1.3},
             "& .ProseMirror": {
               "& h1, & h2, & h3, & h4, & h5, & h6": {
               scrollMarginTop: showMenuBar ? 50 : 0,

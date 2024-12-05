@@ -1,6 +1,17 @@
 import { Colors } from "@/lib/colors";
 import { Avatar , Button, Stack as Flex  } from "@mui/material";
-import { blue, grey, red } from "@mui/material/colors";
+import { blue, green, grey, red } from "@mui/material/colors";
+
+
+/*
+INDEX !!!!!
+0:init : blue[700] primary
+1:taaken : red
+2:selected :porpole
+3:block : black
+4:Discount : green[800]
+
+*/
 
 interface SeatColorsIndexProps  { 
     isMuiltiSelct? :boolean ,
@@ -20,9 +31,9 @@ const AdminSeatColorsIndex =({isMuiltiSelct,setIsMultiSelect}:SeatColorsIndexPro
         </Flex>
 
         <Flex direction={'row'} >
-          <Avatar  sx={{ bgcolor: grey[300], margin:1 , padding:.5 }} variant={'square'} >רגיל</Avatar>
-          <Avatar sx={{ bgcolor: blue[800] , margin:1 , padding:.5 }} variant={'square'} > מוזל</Avatar>
+          <Avatar  sx={{ bgcolor: blue[800] , margin:1 , padding:.5 }} variant={'square'} >רגיל</Avatar>
           <Avatar sx={{ bgcolor: "black" , margin:1 , padding:.5 , color:"#ddd" }} variant={'square'} > חסום</Avatar>
+          <Avatar sx={{ bgcolor: green[800] , margin:1 , padding:.5 }} variant={'square'} > מוזל</Avatar>
          </Flex>
         
         </Flex>

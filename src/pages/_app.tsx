@@ -1,6 +1,7 @@
 import type { AppProps } from 'next/app'
 
 
+
 // 
 import { useMediaQuery } from 'usehooks-ts';
 import { useEffect, useState } from 'react';
@@ -19,7 +20,7 @@ import { SessionProvider } from "next-auth/react"
 
 //MUI 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { purple , yellow } from '@mui/material/colors';
+import { blue, purple , yellow } from '@mui/material/colors';
 
 //Mui LOC
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -34,15 +35,25 @@ import { heIL as coreHeb } from '@mui/material/locale';
 
 //Map
 import '@tomtom-international/web-sdk-maps/dist/maps.css'
+import { colors } from '@mui/material';
 
+
+export interface TipinfoType {
+  initValue:number,
+  row:string,
+  seatNumber:number
+} 
 
 
 const theme = createTheme({ 
+    
     direction:"rtl",
     palette:{
-      mode:"dark",
-      primary:{main:purple[700]  },
-      secondary:yellow
+ 
+      primary:{main:blue[700]},
+      secondary:{main:"#7E1891"},
+      
+      
     },
     components: {
        MuiOutlinedInput:{
@@ -53,11 +64,15 @@ const theme = createTheme({
             padding:"0",
             margin:3,
             "&.Mui-focused": {},
-            "&:hover": {}
+            "&:hover": {},
+            "& .MuiOutlinedInput-notchedOutline": {},
+            "&.Mui-focused .MuiOutlinedInput-notchedOutline": { },
+            "& input::placeholder": {},
            },    
            input:{
             padding:15,
-           "&:hover":{  }
+            "&:hover":{  },
+            '&::placeholder':{color:blue[700],fontSize:20, fontWeight:700 , opacity:.7  } 
            }
          }
        },
@@ -81,19 +96,16 @@ const theme = createTheme({
          defaultProps:{},
         styleOverrides:{
           root:{
-            direction:"rtl"
+            direction:"rtl",
           }
         },
 
        }
        
     },
-   },
-   
+   },  
    coreHeb,
    datePikerHeb
-
-
 )
 
 function MyApp({ 
@@ -104,12 +116,21 @@ function MyApp({
 
   const [events, setEvents] = useState<Event[]>(eventData);
 
-  const [x,setX] = useState(0)  
-  const [y,setY] = useState(0)  
-  const [S,setS] = useState(0)
-  const [ tipX, setTipX]=useState(null)
-  const [ tipY, setTipY]= useState(null)
-  const xxl = useMediaQuery('(min-width : 1600px)')
+
+
+  // Transfomer State 
+  const [x,setX] = useState<number>(0)  
+  const [y,setY] = useState<number>(0)  
+  const [S,setS] = useState<number>(0)
+
+  // tipState 
+  const [ tipX, setTipX]=useState<number>(0)
+  const [ tipY, setTipY]= useState<number>(0)
+  const [ seatTipInfo , setSeatTipInfo ] = useState<TipinfoType>({ initValue :null , row:null, seatNumber:null })
+  const resetTip :Function = ()=> { setTipX(0) ; setTipY(0); setSeatTipInfo({initValue:null, row:null , seatNumber:null}) }
+
+  // media qurys
+   const xxl = useMediaQuery('(min-width : 1600px)')
    const xl = useMediaQuery('(min-width : 1200px)')
    const lg = useMediaQuery('(min-width: 992px)')
    const md = useMediaQuery('(min-width: 768px)')
@@ -124,7 +145,7 @@ function MyApp({
       <SessionProvider>
         <ThemeProvider theme={theme}>
           <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='he'  >
-          <TipContext.Provider value={{tipX, tipY ,setTipX,setTipY}}>
+          <TipContext.Provider value={{tipX, tipY ,setTipX,setTipY , seatTipInfo, setSeatTipInfo , resetTip }}>
           <SeatsPositionContext.Provider value={{x,y,S,setX,setY,setS}}>
           <MoviesContext.Provider value={{events, setEvents}}>
           <WidthContext.Provider value={{xxl,xl,lg,md,sm,xs,xxs}}>
