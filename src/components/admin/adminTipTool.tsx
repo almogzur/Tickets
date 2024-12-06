@@ -9,14 +9,16 @@ import {  grey } from "@mui/material/colors"
 import { Seats } from "@/constants/models/Events"
  
 interface AdminMapTipTool {
-   setSideSeatsState:React.Dispatch<React.SetStateAction<Seats>>,
-   setMainSeatsState:React.Dispatch<React.SetStateAction<Seats>>,
+   setSideSeatsState:React.Dispatch<React.SetStateAction<Seats>>
+   setMainSeatsState:React.Dispatch<React.SetStateAction<Seats>>
    mainSeats:Seats
    sideSeats:Seats
+   isMultiSelect?:boolean
+
 }
 
 
-const AdminMapTipTool= ({setSideSeatsState,setMainSeatsState , mainSeats ,sideSeats}:AdminMapTipTool)=>{
+const AdminMapTipTool= ({setSideSeatsState,setMainSeatsState , mainSeats ,sideSeats ,isMultiSelect}:AdminMapTipTool)=>{
    const theme= useTheme()
 
     const { tipX, setTipX , tipY, setTipY ,seatTipInfo, setSeatTipInfo,resetTip }=useContext(TipContext)
@@ -33,7 +35,6 @@ const AdminMapTipTool= ({setSideSeatsState,setMainSeatsState , mainSeats ,sideSe
          const inSide = sideSeats.hasOwnProperty(row)
          const initVlaue = seatTipInfo.initValue
          const seatNumber = seatTipInfo.seatNumber
-         console.log(inMain);
          
          if(inMain){
             setMainSeatsState( prevMovies => {
@@ -72,30 +73,19 @@ const AdminMapTipTool= ({setSideSeatsState,setMainSeatsState , mainSeats ,sideSe
    
          }
          resetTip()
-
-
-       
-         
-
-
-    
-     
-
     };
-
-
-
 
    const comonAtt : CSSProperties = { width:"100%", padding:1, margin:0.5 }
     
     return  ( < AnimatePresence >
 
-      
-             {tipX && tipY  && (
+             
+             { 
+               tipX && tipY  && (
           
                 <motion.div 
 
-    
+
                  style={{
                
                     width:100,
@@ -104,9 +94,11 @@ const AdminMapTipTool= ({setSideSeatsState,setMainSeatsState , mainSeats ,sideSe
                     left:`${tipX-60}px`,
                     textAlign:"end",
                     zIndex:4,
-                    background:grey[300],
+                    background:grey['A400'],
                     borderRadius:10,
                     padding:10,
+                    boxShadow:theme.shadows[19],
+                    
                     }}
   
                  initial={{ opacity: 0, y: -15 }}
@@ -168,8 +160,10 @@ const AdminMapTipTool= ({setSideSeatsState,setMainSeatsState , mainSeats ,sideSe
                </motion.div>
       
        
-          )}
-       
+              )
+      
+            }
+            
          </AnimatePresence> 
 
          )

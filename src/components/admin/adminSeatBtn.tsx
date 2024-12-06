@@ -19,14 +19,16 @@ INDEX !!!!!
 */
 
 interface AdminSeatBtnProps {
-    seatValue:number,
-    seatnumber:number,
-    row:string,
+    seatValue:number
+    seatnumber:number
+    row:string
+    isMultiSelect?:boolean
+
 
 }
 
 
-const AdminSeatBtn = ({ seatValue, seatnumber, row }:AdminSeatBtnProps) => {
+const AdminSeatBtn = ({ seatValue, seatnumber, row , isMultiSelect }:AdminSeatBtnProps) => {
 
     const { tipX, tipY, seatTipInfo, setTipY ,setTipX, setSeatTipInfo ,resetTip }=useContext(TipContext)
 
@@ -53,8 +55,16 @@ const theme = useTheme()
        
       
  };  
+ const multiSelectHndler = (seatNArg:number,row:string,)=>{
 
-    const tiphndler = (xArg: number,yArg: number ,initValueArg:number, rowArg:string, seatNumberArg:number  )=>{
+        
+    // create the multi select hndler 
+
+
+    
+ }
+
+ const openTip = (xArg: number,yArg: number ,initValueArg:number, rowArg:string, seatNumberArg:number  )=>{
 
         resetTip()   
         // retriger the animation 
@@ -74,8 +84,10 @@ const theme = useTheme()
      <div
 
        onClick={(e)=> { 
-            tiphndler(e.nativeEvent.pageX,e.nativeEvent.pageY , seatValue , row ,seatnumber  ) 
-
+            !isMultiSelect?
+                openTip(e.nativeEvent.pageX,e.nativeEvent.pageY , seatValue , row ,seatnumber  ) 
+                :
+                multiSelectHndler(seatnumber,row)
           //   console.log( 
               
           //     "x",e.clientX,

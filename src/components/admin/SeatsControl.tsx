@@ -21,10 +21,16 @@ interface SeatsControlProps  {
      }
 
 const SeatsControl = ({mainSeats, sideSeats , sideSeatsStyles , sideSeateTextStyles , setMainSeatsState, setSideSeatsState   }:SeatsControlProps ) => {
+
+    // for adminIndex btn need work 
+    const resetSeats:Function=():void=>{
+       // setMainSeatsState()
+       // setSideSeatsState()
+    }
     
 
-     //  tip x, y vales init to 0 , get set on seatClick get the positions from mouse event 
-    const { tipX, tipY, seatTipInfo, setTipY ,setTipX, setSeatTipInfo }=useContext(TipContext)
+  
+  
     
 
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
@@ -33,12 +39,9 @@ const SeatsControl = ({mainSeats, sideSeats , sideSeatsStyles , sideSeateTextSty
 
 
     /* state for handling Muliti seat  passed to transport component */
-    const [isMultiSelect , setIsMultiSelect]=useState<boolean>(false)
-    
-    // enabele isMultiSelect to add rules in the Seters
-    const multiSelectHndler=()=>{
+      const [isMultiSelect , setIsMultiSelect]=useState<boolean>(false)
+      const [amountOfSeatsSelcted , setAmountOfSeatsSelcted] = useState<number>(0)
 
-      }
 
 
     // seate hendlers 
@@ -107,9 +110,6 @@ const SeatsControl = ({mainSeats, sideSeats , sideSeatsStyles , sideSeateTextSty
       
       };
 
-      const tipHndler = (seatValue: number, seatNumber: number, row: string ,updatedSeatValue:number )  => {
-
-       }
 
       const sideSeatsStylesObject = sideSeatsStyles &&  Object.fromEntries(
         Object.entries(sideSeatsStyles).map(([row, positions]) => [row, positions])
@@ -128,6 +128,7 @@ const SeatsControl = ({mainSeats, sideSeats , sideSeatsStyles , sideSeateTextSty
               seatValue={seatValue}
               seatnumber={i}
               row={row}
+              isMultiSelect={isMultiSelect}
               />
           );
         });
@@ -148,8 +149,7 @@ const SeatsControl = ({mainSeats, sideSeats , sideSeatsStyles , sideSeateTextSty
 
       const SideSeats = sideSeats &&  Object.entries(sideSeats).map(([row, rowContent])=>{
         const colValue  = rowContent.map((seatValue: number, i: number) => {
-            const textset = "מושב";
-            const textrow = "שורה";
+         
         
             return (
               <AdminSeatBtn
@@ -157,9 +157,8 @@ const SeatsControl = ({mainSeats, sideSeats , sideSeatsStyles , sideSeateTextSty
                 seatValue={seatValue}
                 seatnumber={i}
                 row={row}
-             
-               
-  
+                isMultiSelect={isMultiSelect}
+
                   />
             );
           });
@@ -185,9 +184,15 @@ const SeatsControl = ({mainSeats, sideSeats , sideSeatsStyles , sideSeateTextSty
     return (
 
       <>
-       <AdminMapTipTool  setMainSeatsState={setMainSeatsState} setSideSeatsState={setSideSeatsState} mainSeats={mainSeats} sideSeats={sideSeats}    />   
+       <AdminMapTipTool 
+         setMainSeatsState={setMainSeatsState} 
+         setSideSeatsState={setSideSeatsState} 
+         mainSeats={mainSeats} 
+         sideSeats={sideSeats}  
+         isMultiSelect={isMultiSelect}
+           />   
        <Container   sx={{boxShadow:` 3px 3px 3px 2px ${theme.palette.primary.main}`, marginBottom:3}} >
-        <Transporm isMultiSelect={isMultiSelect}  setIsMultiSelect={setIsMultiSelect}   >
+        <Transporm isMultiSelect={isMultiSelect}  setIsMultiSelect={setIsMultiSelect} multiSelectBadgeInfo={amountOfSeatsSelcted}    >
           <Flex direction={"column"}    height={!xs? 350 : 600}      sx={{direction:"ltr"}}  >
              <Stage  />
              {MainSeatS}

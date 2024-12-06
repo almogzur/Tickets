@@ -10,7 +10,7 @@ import { Event, Seats } from '../../constants/models/Events'
 
 import styles from './Payment.module.scss'
 
-import MoviesContext from '../../context/MoviesContext';
+import MoviesContext from '../../context/Events';
 import ClientLayout from '../../Layouts/client-layout';
 
 const Tickets = () => {

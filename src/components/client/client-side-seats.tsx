@@ -2,7 +2,7 @@ import {Box , Stack as Flex , Typography as Heading , Button, Container, Typogra
 import TooltopButton from './client-seat-btn'
 import { motion ,AnimatePresence } from "framer-motion"
 import { useState, useEffect, useContext, CSSProperties, useRef, } from 'react'
-import MoviesContext from '../../context/MoviesContext';
+import MoviesContext from '../../context/Events';
 import Transporm from '../Transporm';
 import { useRouter } from 'next/router'
 import WidthContext from '@/context/WidthContext';

@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router'
 import { useState, useEffect, useContext, CSSProperties, useRef, } from 'react'
 import { Event } from '../../constants/models/Events'
-import MoviesContext from '../../context/MoviesContext';
+import MoviesContext from '../../context/Events';
 import DisableZoom from '../../lib/hooks/useDisablePinchZoomEffect'
 import WidthContext from '@/context/WidthContext';
 import ClinetSideSeates  from '../../components/client/client-side-seats'
@@ -16,10 +16,11 @@ const DetailsPage = () => {
 
   const router = useRouter()
   const { events ,setEvents } = useContext(MoviesContext);
-  const { id } : any = router.query
-  const event = events.find(ev => ev.id === parseInt(id));
+  const {id}  = router.query
 
+  const event = typeof id ==='string' && events.find(ev => ev.id === parseInt(id));
 
+ 
   if (!event) return <div>loading...</div>
   return (
     <>

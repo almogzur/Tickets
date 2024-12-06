@@ -1,4 +1,14 @@
 import {createContext} from "react";
 
-export default  createContext<any>(null)
+interface WidthContext {  
+     xxl:boolean
+    xl:boolean
+    lg:boolean
+    md:boolean
+    sm:boolean
+    xs:boolean
+    xxs:boolean
+  }
+
+export default  createContext<WidthContext>(null)
 

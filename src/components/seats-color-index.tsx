@@ -1,6 +1,8 @@
+import TipContext from "@/context/Tip-context";
 import { Colors } from "@/lib/colors";
-import { Avatar , Button, Stack as Flex  } from "@mui/material";
+import { Avatar , Badge, Button, Divider, Stack as Flex, useTheme  } from "@mui/material";
 import { blue, green, grey, red } from "@mui/material/colors";
+import { useContext } from "react";
 
 
 /*
@@ -16,21 +18,57 @@ INDEX !!!!!
 interface SeatColorsIndexProps  { 
     isMuiltiSelct? :boolean ,
     setIsMultiSelect:React.Dispatch<React.SetStateAction<Boolean>>
+    multiSelectBadgeInfo:number
+    
 
  }
 
-const AdminSeatColorsIndex =({isMuiltiSelct,setIsMultiSelect}:SeatColorsIndexProps)=> {
+const AdminSeatColorsIndex =({isMuiltiSelct,setIsMultiSelect,multiSelectBadgeInfo}:SeatColorsIndexProps)=> {
+    const { tipX, tipY, seatTipInfo, setTipY ,setTipX, setSeatTipInfo ,resetTip }=useContext(TipContext)
+
+    const theme = useTheme()
 
     return (  
         <>
-     
-        <Flex direction={'row'} flexWrap={'wrap'}    justifyContent={"center"} borderTop={'solid'} >
+        <Divider sx={{borderWidth:3 , background:theme.palette.primary.dark}} />
+        <Flex direction={'row'} flexWrap={'wrap'}  sx={{borderWidth:3}}  color={theme.palette.primary.dark}   justifyContent={"center"}  >
 
-        <Flex direction={'row'} justifyContent={'center'}  width={'100%'} p={1} >
-            <Button onClick={()=>{setIsMultiSelect(!isMuiltiSelct)}} sx={{alignSelf:"center" , background:isMuiltiSelct? "red": "" }} variant='contained' >בחר רצף מושבים  </Button>
+        <Flex direction={'row'} justifyContent={'space-around'}  width={'100%'} p={1}  >
+            
+        <Badge
+         badgeContent={multiSelectBadgeInfo} 
+         color="success"
+         invisible={!isMuiltiSelct}
+         showZero={true}
+         anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
+         
+         >
+
+            <Button onClick={(e)=>{
+                        setIsMultiSelect(!isMuiltiSelct);
+                        resetTip()
+                } }
+                 sx={{alignSelf:"center" , background:isMuiltiSelct? "red": "" }} 
+                 variant='contained' >
+                    בחר רצף מושבים  
+                    </Button>
+
+        </Badge>
+
+
+            <Button 
+               sx={{alignSelf:"center"  }} 
+                variant='contained' 
+                onClick={()=>{}}
+                >נקה הכול
+                </Button>
+
         </Flex>
 
-        <Flex direction={'row'} >
+         <Flex direction={'row'}  >
           <Avatar  sx={{ bgcolor: blue[800] , margin:1 , padding:.5 }} variant={'square'} >רגיל</Avatar>
           <Avatar sx={{ bgcolor: "black" , margin:1 , padding:.5 , color:"#ddd" }} variant={'square'} > חסום</Avatar>
           <Avatar sx={{ bgcolor: green[800] , margin:1 , padding:.5 }} variant={'square'} > מוזל</Avatar>

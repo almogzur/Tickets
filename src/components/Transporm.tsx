@@ -1,7 +1,7 @@
 import { TransformWrapper, TransformComponent, useControls, getTransformStyles } from "react-zoom-pan-pinch";
 import { useState, useEffect, useContext, ReactNode, } from 'react'
 import positionContext from '../context/map-position-context';
-import { Stack as Flex , Typography as Heading , Button, Avatar , useTheme} from '@mui/material'
+import { Stack as Flex , Typography as Heading , Button, Avatar , useTheme, Divider} from '@mui/material'
 import { FaPlus } from "react-icons/fa6";
 import { FaMinus } from "react-icons/fa";
 import { FcRefresh } from "react-icons/fc";
@@ -14,11 +14,12 @@ import SeatColorsIndex from "./seats-color-index";
 
 interface TranspormProps {
    children? : ReactNode,
-  isMultiSelect? : boolean,
-  setIsMultiSelect?:React.Dispatch<React.SetStateAction<Boolean>>
+   isMultiSelect? : boolean,
+   setIsMultiSelect?:React.Dispatch<React.SetStateAction<Boolean>>
+   multiSelectBadgeInfo:number
 }
 
-const Transporm = ({children, isMultiSelect,setIsMultiSelect }:TranspormProps) => {
+const Transporm = ({children, isMultiSelect,setIsMultiSelect ,multiSelectBadgeInfo }:TranspormProps) => {
   
     const {x,y,S, setS , setY , setX } =useContext(positionContext)
     const { tipX, tipY, seatTipInfo, setTipY ,setTipX, setSeatTipInfo ,resetTip }=useContext(TipContext)
@@ -49,19 +50,17 @@ const Transporm = ({children, isMultiSelect,setIsMultiSelect }:TranspormProps) =
         {({ zoomIn, zoomOut, resetTransform, ...rest }) =>  {
           return   (
             <>
-               <Controls   />
+                <Controls   />
+
                 <TransformComponent
                   wrapperStyle={{ width:"100%",}}
                
                  >
                  {children}     
                  
-               </TransformComponent>
+                </TransformComponent>
 
-
-
-               <SeatColorsIndex isMuiltiSelct={isMultiSelect} setIsMultiSelect={setIsMultiSelect}  />
-
+                <SeatColorsIndex isMuiltiSelct={isMultiSelect} setIsMultiSelect={setIsMultiSelect} multiSelectBadgeInfo={multiSelectBadgeInfo}   />
 
             </>
         )
@@ -74,8 +73,8 @@ const Transporm = ({children, isMultiSelect,setIsMultiSelect }:TranspormProps) =
 
 
   const Controls = () => {
-    const {x,y,S, setS , setY , setX } =useContext(positionContext)
-    const { tipX, setTipX , tipY, setTipY}=useContext(TipContext)
+    const {x,y,S, setS , setY , setX  } =useContext(positionContext)
+    const { tipX, setTipX , tipY, setTipY , resetTip}=useContext(TipContext)
 
     const theme = useTheme()
 
@@ -85,8 +84,7 @@ const Transporm = ({children, isMultiSelect,setIsMultiSelect }:TranspormProps) =
        setS(0.7)
        setX(50)
        setY(0)
-       setTipY(0)
-       setTipX(0)
+
      
        
        
@@ -94,15 +92,22 @@ const Transporm = ({children, isMultiSelect,setIsMultiSelect }:TranspormProps) =
     const { zoomIn, zoomOut, resetTransform } = useControls();
   
     return (
-      <Flex direction={'row'} justifyContent={"space-between"} p={2} sx={{borderBottom:'solid 0.5px' , color:theme.palette.primary.main}} >
+        <>
+      <Flex direction={'row'} justifyContent={"space-between"} p={2} sx={{  color:theme.palette.primary.main}} >
   
         <Button sx={{height:'60px' }} color='primary' variant='contained'  onClick={(e) => {zoomIn()}}>
           <FaPlus  color={theme.palette.secondary.main} size={"2em"} />
         </Button>
   
-        <Button    sx={{height:'60px'}} color='primary' variant='contained'  onClick={(e) =>{zoomOut() }}><FaMinus color={theme.palette.secondary.main} size={"2em"}/></Button>
-        <Button sx={{height:'60px'  }} color='primary'  variant='contained'  onClick={(e) =>{resetTransform() ; resetContext()   }}><LuRefreshCcw color={theme.palette.secondary.main} size={"2em"}/></Button>
+        <Button    sx={{height:'60px'}} color='primary' variant='contained'  onClick={(e) =>{zoomOut() }}>
+          <FaMinus color={theme.palette.secondary.main} size={"2em"}/>
+        </Button>
+        <Button sx={{height:'60px'  }} color='primary'  variant='contained'  onClick={(e) =>{resetTransform() ; resetTip() ; resetContext()   }}>
+          <LuRefreshCcw color={theme.palette.secondary.main} size={"2em"}/>
+          </Button>
       </Flex>
+      <Divider sx={{borderWidth:3 , background:theme.palette.primary.dark}} />
+      </>
     );
   };
   

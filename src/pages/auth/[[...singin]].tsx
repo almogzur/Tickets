@@ -8,14 +8,23 @@ import { Colors } from '@/lib/colors'
 import { useTheme } from '@mui/material/styles';
 import { MdOutlineCancelPresentation } from "react-icons/md";
 
+
+interface errorMessagesType{
+
+  Callback:string
+  CredentialsSignin:string
+  Default:string
+}
+
 const SingInPage=()=>{
 
   const router = useRouter()
   const { data: session ,status ,update } = useSession()
   const theme = useTheme()
-  const {error} =  router.query;
 
-  const errorMessages = {
+  const {error} =  router.query
+
+  const errorMessages :errorMessagesType  = {
     Callback: "Error in the OAuth callback handler route.",
     CredentialsSignin: "שם משתמש או סמסמה לא קיימים במערכת ",
     Default: "שגיאה במערכת נסה שנית ",
@@ -37,11 +46,11 @@ const SingInPage=()=>{
 
   const handleChange = (e) => {
     
-    const {name, value } = e.target;
-    setFormData((prevFormData) => ({
+     const {name, value } = e.target;
+      setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
-    }));
+      }));
   };
 
     if (status === 'loading') {
@@ -124,8 +133,8 @@ return (
 
          </form>
      </Box>
-
-     { error && <Alert sx={{direction:"rtl"}} severity="error">{errorMessages[`${error}`]  }</Alert>}
+                {/*  change the quary system to context  */}
+     { errorMessages.hasOwnProperty(error as string) &&  <Alert sx={{direction:"rtl"}} severity="error">{errorMessages[error] }</Alert>}
 
     </Paper>
 

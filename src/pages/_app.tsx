@@ -4,13 +4,13 @@ import type { AppProps } from 'next/app'
 
 // 
 import { useMediaQuery } from 'usehooks-ts';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Event } from '../constants/models/Events';
 import '../styles/global.css'
 
 //Context
 import { events as eventData } from '../constants/event';
-import MoviesContext from '../context/MoviesContext'
+import MoviesContext from '../context/Events'
 import WidthContext from '../context/WidthContext';
 import SeatsPositionContext  from '../context/map-position-context'
 import TipContext from '@/context/Tip-context';
@@ -18,24 +18,24 @@ import TipContext from '@/context/Tip-context';
 //Auth 
 import { SessionProvider } from "next-auth/react"
 
-//MUI 
+//MUI ------
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { blue, purple , yellow } from '@mui/material/colors';
+import { blue } from '@mui/material/colors';
 
 //Mui LOC
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-    //Day JS
+
+//Day JS
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import 'dayjs/locale/he';
 import { heIL as datePikerHeb } from '@mui/x-date-pickers/locales';
 
-    // Mui Componet
+// Mui Componet
 import { heIL as coreHeb } from '@mui/material/locale';
-
+//---------
 
 //Map
 import '@tomtom-international/web-sdk-maps/dist/maps.css'
-import { colors } from '@mui/material';
 
 
 export interface TipinfoType {
@@ -45,7 +45,7 @@ export interface TipinfoType {
 } 
 
 
-const theme = createTheme({ 
+const theme  = createTheme({ 
     
     direction:"rtl",
     palette:{
@@ -124,10 +124,11 @@ function MyApp({
   const [S,setS] = useState<number>(0)
 
   // tipState 
+   // tip x y init to 0 seatClick update ther positions from mouse event 
   const [ tipX, setTipX]=useState<number>(0)
   const [ tipY, setTipY]= useState<number>(0)
   const [ seatTipInfo , setSeatTipInfo ] = useState<TipinfoType>({ initValue :null , row:null, seatNumber:null })
-  const resetTip :Function = ()=> { setTipX(0) ; setTipY(0); setSeatTipInfo({initValue:null, row:null , seatNumber:null}) }
+  const resetTip :Function = () :void=> { setTipX(0) ; setTipY(0); setSeatTipInfo({initValue:null, row:null , seatNumber:null}) }
 
   // media qurys
    const xxl = useMediaQuery('(min-width : 1600px)')
