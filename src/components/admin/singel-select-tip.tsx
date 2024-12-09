@@ -1,5 +1,5 @@
 
-import TipContext from "@/context/Tip-context"
+import SingleTipContext from "@/context/single-tip-context"
 import WidthContext from "@/context/WidthContext"
 import { motion ,AnimatePresence } from "framer-motion"
 import { CSSProperties, Dispatch, MouseEventHandler, useContext, useEffect, useState } from "react"
@@ -8,7 +8,7 @@ import {  Button, Stack as Flex, Typography, useTheme } from "@mui/material"
 import {  grey } from "@mui/material/colors"
 import { Seats } from "@/constants/models/Events"
  
-interface AdminMapTipTool {
+interface AdminMapTipToolPropsType {
    setSideSeatsState:React.Dispatch<React.SetStateAction<Seats>>
    setMainSeatsState:React.Dispatch<React.SetStateAction<Seats>>
    mainSeats:Seats
@@ -18,10 +18,10 @@ interface AdminMapTipTool {
 }
 
 
-const AdminMapTipTool= ({setSideSeatsState,setMainSeatsState , mainSeats ,sideSeats ,isMultiSelect}:AdminMapTipTool)=>{
+const SingleSelectTip= ({setSideSeatsState,setMainSeatsState , mainSeats ,sideSeats }:AdminMapTipToolPropsType)=>{
    const theme= useTheme()
 
-    const { tipX, setTipX , tipY, setTipY ,seatTipInfo, setSeatTipInfo,resetTip }=useContext(TipContext)
+    const { setSingleTipPositions,singleTipPositions , seatTipInfo, setSeatTipInfo,resetSingleTip }=useContext(SingleTipContext)
     
    // useEffect(()=>{ console.log(seatTipInfo) },[seatTipInfo])
 
@@ -41,11 +41,8 @@ const AdminMapTipTool= ({setSideSeatsState,setMainSeatsState , mainSeats ,sideSe
                       // Find the movie object reference
               const updatedMovies = {...prevMovies};
               const updatedRow = [...updatedMovies[row]]; // Clone the specific row
-                    // Skip updates for unavailable or already selected seats
-                  if (updatedRow[seatNumber] === 1) {
-                        return prevMovies; // No update
-                   }
-                   // Toggle seat state: 0 to 2 or 2 to 0
+
+                   // new seat state: newSeatValueArg
                    updatedRow[seatNumber] = newSeatValueArg
                   // Assign the updated row back to the seat details
                   updatedMovies[row] = updatedRow;
@@ -58,40 +55,34 @@ const AdminMapTipTool= ({setSideSeatsState,setMainSeatsState , mainSeats ,sideSe
                // Find the movie object reference
                 const updatedMovies = {...prevMovies};
                 const updatedRow = [...updatedMovies[row]]; // Clone the specific row
-               // Skip updates for unavailable or already selected seats
-           if (updatedRow[seatNumber] === 1) {
-                 return prevMovies; // No update
-            }
-            // Toggle seat state: 0 to 2 or 2 to 0
-            updatedRow[seatNumber] = newSeatValueArg
-           // Assign the updated row back to the seat details
-           updatedMovies[row] = updatedRow;
+                     
+               // new seat state: newSeatValueArg
+
+              updatedRow[seatNumber] = newSeatValueArg
+             // Assign the updated row back to the seat details
+             updatedMovies[row] = updatedRow;
            // Assign the updated seat details back to the movie
            return updatedMovies; // Return the updated state
                   });
    
    
          }
-         resetTip()
+         resetSingleTip()
     };
 
    const comonAtt : CSSProperties = { width:"100%", padding:1, margin:0.5 }
     
     return  ( < AnimatePresence >
 
-             
-             { 
-               tipX && tipY  && (
+                 { singleTipPositions.x && singleTipPositions.y  && (
           
                 <motion.div 
-
-
                  style={{
                
                     width:100,
                     position:'absolute',   
-                    top:`${tipY-90 }px`,
-                    left:`${tipX-60}px`,
+                    top:`${singleTipPositions.y-90 }px`,
+                    left:`${singleTipPositions.x-60}px`,
                     textAlign:"end",
                     zIndex:4,
                     background:grey['A400'],
@@ -106,8 +97,8 @@ const AdminMapTipTool= ({setSideSeatsState,setMainSeatsState , mainSeats ,sideSe
                  exit={{ opacity: 0, transition: { duration: 0.5 } }}
                 >
                    <Typography 
-                        textAlign={"center"} fontWeight={700} variant='subtitle2'  
-                        sx={{color:theme.palette.primary.main }} >מושב :{seatTipInfo.seatNumber+1} {seatTipInfo.row}</Typography>
+                        textAlign={"center"} fontWeight={700} variant='inherit'  
+                        sx={{color:theme.palette.primary.main  }} >מושב :{seatTipInfo.seatNumber+1} {seatTipInfo.row}</Typography>
                 
                     <Flex alignItems={"center"} justifyContent={"center"} >
 
@@ -146,7 +137,7 @@ const AdminMapTipTool= ({setSideSeatsState,setMainSeatsState , mainSeats ,sideSe
                   variant='contained' 
                   color='error'
                   sx={{borderRadius:0,width:"100%"}} 
-                  onClick={()=>resetTip()} >
+                  onClick={()=>resetSingleTip()} >
                   סגור
                 </Button>
               
@@ -169,9 +160,9 @@ const AdminMapTipTool= ({setSideSeatsState,setMainSeatsState , mainSeats ,sideSe
          )
 }
 
-export default AdminMapTipTool
+export default SingleSelectTip
 
-/*
+/* Movment function 
   onDrag={(e:MouseEvent, d) => { 
 
                const movingObjectWidth :number = 50

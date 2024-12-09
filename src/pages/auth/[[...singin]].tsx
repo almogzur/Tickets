@@ -1,5 +1,5 @@
 import { signIn, useSession } from 'next-auth/react'
-import {FormEvent, useEffect,useState} from 'react'
+import {ChangeEventHandler, FormEvent, useEffect,useState} from 'react'
 import { useRouter } from 'next/router'
 import { Stack as Flex , Box, Typography, FormControl, InputLabel , TextField, Paper, Button, Container, Alert } from '@mui/material'
 import Image from 'next/image'
@@ -37,16 +37,16 @@ const SingInPage=()=>{
   })
 
 
-  const submit = (e: FormEvent<HTMLFormElement>)=>{
+  const submit = (e: FormEvent<HTMLFormElement> )=>{
     e.preventDefault();
     console.log(e);
     
 
     signIn('credentials' ,{ name: formData.name, password: formData.password ,callbackUrl:"/admin" }  )}
 
-  const handleChange = (e) => {
+  const handleChange = (e:FormEvent<HTMLInputElement | HTMLTextAreaElement> ) => {
     
-     const {name, value } = e.target;
+     const {name, value } = e.currentTarget
       setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,

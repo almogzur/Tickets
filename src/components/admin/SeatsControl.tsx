@@ -1,14 +1,13 @@
-import {  CSSProperties, useContext, useState } from 'react'
+import {  CSSProperties, SetStateAction, useContext, useState } from 'react'
 import { Seats , SeatStyles } from '@/constants/models/Events';
 import {  Stack as Flex ,  Container, Typography, useTheme, } from '@mui/material'
-import TooltopButton from '../client/client-seat-btn'
 import WidthContext from '@/context/WidthContext';
-import TipContext from '@/context/Tip-context';
 import { Colors } from '@/lib/colors';
-import Transporm from '../Transporm'
-import AdminMapTipTool from './adminTipTool';
+import Transporm from './admin-new-event-theather-map'
+import SingleSelectTip from './singel-select-tip';
 import AdminSeatBtn from '../admin/adminSeatBtn'
-
+import MuliSelectTip from '@/components/admin/multi-select-tip'
+import AdminNewEventTheatherMap from './admin-new-event-theather-map';
 
 
 interface SeatsControlProps  { 
@@ -21,31 +20,16 @@ interface SeatsControlProps  {
      }
 
 const SeatsControl = ({mainSeats, sideSeats , sideSeatsStyles , sideSeateTextStyles , setMainSeatsState, setSideSeatsState   }:SeatsControlProps ) => {
-
-    // for adminIndex btn need work 
-    const resetSeats:Function=():void=>{
-       // setMainSeatsState()
-       // setSideSeatsState()
-    }
     
-
-  
-  
+      const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
+      const theme = useTheme()
     
-
-    const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
-    const theme = useTheme()
-    // passed 3 lev down throu props its in the same brantch 
-
-
     /* state for handling Muliti seat  passed to transport component */
-      const [isMultiSelect , setIsMultiSelect]=useState<boolean>(false)
-      const [amountOfSeatsSelcted , setAmountOfSeatsSelcted] = useState<number>(0)
+       const [isMultiSelect , setIsMultiSelect]=useState<boolean>(false)
+       const [amountOfSeatsSelcted , setAmountOfSeatsSelcted] = useState<number>(0)
 
 
-
-    // seate hendlers 
-      const mainHendler = (seatValue: number, seatNumber: number, row: string , updatedValue:number) => {
+       const mainHendler = (seatValue: number, seatNumber: number, row: string , updatedValue:number) => {
   
     
         setMainSeatsState( prevMovies => {
@@ -77,7 +61,7 @@ const SeatsControl = ({mainSeats, sideSeats , sideSeatsStyles , sideSeateTextSty
       
       
       };
-      const sideHendler = (seatValue: number, seatNumber: number, row: string) => {
+       const sideHendler = (seatValue: number, seatNumber: number, row: string) => {
   
     
         setSideSeatsState( prevMovies => {
@@ -110,14 +94,13 @@ const SeatsControl = ({mainSeats, sideSeats , sideSeatsStyles , sideSeateTextSty
       
       };
 
-
-      const sideSeatsStylesObject = sideSeatsStyles &&  Object.fromEntries(
+       const sideSeatsStylesObject = sideSeatsStyles &&  Object.fromEntries(
         Object.entries(sideSeatsStyles).map(([row, positions]) => [row, positions])
       );
-      const sideTextStylesObject = sideSeateTextStyles &&  Object.fromEntries(
+       const sideTextStylesObject = sideSeateTextStyles &&  Object.fromEntries(
         Object.entries(sideSeateTextStyles).map(([row, positions]) => [row, positions])
       );
-      const MainSeatS  = Object.entries(mainSeats).map(([row, rowContent]) => {
+       const MainSeatS  = Object.entries(mainSeats).map(([row, rowContent]) => {
         const colValue  = rowContent.map((seatValue: number, i: number) => {
           const textset = "מושב";
           const textrow = "שורה";
@@ -128,26 +111,28 @@ const SeatsControl = ({mainSeats, sideSeats , sideSeatsStyles , sideSeateTextSty
               seatValue={seatValue}
               seatnumber={i}
               row={row}
-              isMultiSelect={isMultiSelect}
+              isMultiSelect={isMultiSelect} 
+               
               />
           );
         });
       
         return (
-          <Flex
-  
+          <Flex 
             key={row}
-          
             justifyContent="center"
             direction={'row'}
             sx={{direction:"ltr"}}
+            alignItems={'baseline'}
           >
-            {colValue}
+            <Typography variant='subtitle2' height={0} fontWeight={800} fontSize={6} sx={{color:"black"}}  >{ !xs ? row.slice(5) :  row  }</Typography>
+              {colValue}
+              <Typography variant='subtitle2' height={0} fontWeight={800} fontSize={6} sx={{color:"black"}}  >{ !xs? row.slice(5) :  row  }</Typography>
+            
           </Flex>
         );
       });
-
-      const SideSeats = sideSeats &&  Object.entries(sideSeats).map(([row, rowContent])=>{
+       const SideSeats = sideSeats &&  Object.entries(sideSeats).map(([row, rowContent])=>{
         const colValue  = rowContent.map((seatValue: number, i: number) => {
          
         
@@ -157,8 +142,8 @@ const SeatsControl = ({mainSeats, sideSeats , sideSeatsStyles , sideSeateTextSty
                 seatValue={seatValue}
                 seatnumber={i}
                 row={row}
-                isMultiSelect={isMultiSelect}
-
+                isMultiSelect={isMultiSelect} 
+              
                   />
             );
           });
@@ -177,29 +162,37 @@ const SeatsControl = ({mainSeats, sideSeats , sideSeatsStyles , sideSeateTextSty
           );
       })
        const Text = sideSeateTextStyles &&  Object.entries(sideSeats).map(([row, rowContent])=>{
-           return <Typography key={row}  height={0} style={sideTextStylesObject[row]} >{row}</Typography>
+           return <Typography key={row}  color='textPrimary' height={0} style={sideTextStylesObject[row]} >{row}</Typography>
       })
+
+
 
 
     return (
 
       <>
-       <AdminMapTipTool 
+       <SingleSelectTip 
          setMainSeatsState={setMainSeatsState} 
          setSideSeatsState={setSideSeatsState} 
          mainSeats={mainSeats} 
          sideSeats={sideSeats}  
          isMultiSelect={isMultiSelect}
-           />   
+           /> 
+
+        <MuliSelectTip 
+            isMultiSelect={isMultiSelect}
+          />
+
+
        <Container   sx={{boxShadow:` 3px 3px 3px 2px ${theme.palette.primary.main}`, marginBottom:3}} >
-        <Transporm isMultiSelect={isMultiSelect}  setIsMultiSelect={setIsMultiSelect} multiSelectBadgeInfo={amountOfSeatsSelcted}    >
-          <Flex direction={"column"}    height={!xs? 350 : 600}      sx={{direction:"ltr"}}  >
+        <AdminNewEventTheatherMap isMultiSelect={isMultiSelect}  setIsMultiSelect={setIsMultiSelect} multiSelectBadgeInfo={amountOfSeatsSelcted}  admin   >
+          <Flex direction={"column"}    height={!xs? 320 : 600}      sx={{direction:"ltr"}}  >
              <Stage  />
              {MainSeatS}
              {Text}
              {SideSeats}
           </Flex>      
-        </Transporm>      
+        </AdminNewEventTheatherMap>      
       </Container>
       </>
       );
@@ -229,3 +222,4 @@ const SeatsControl = ({mainSeats, sideSeats , sideSeatsStyles , sideSeateTextSty
              </Flex >
     }   
   export default SeatsControl
+

@@ -1,11 +1,13 @@
-import {  CSSProperties, useContext } from 'react'
+import {  CSSProperties, useContext, useEffect, useState } from 'react'
 
-import {Colors} from '@/lib/colors'
+import 
 
-import { useTheme } from '@mui/material';
+ { useTheme } from '@mui/material';
 import { green } from '@mui/material/colors';
-import {TipinfoType} from '../../pages/_app'
-import TipContext from '@/context/Tip-context';
+import SingleTipontext from '@/context/single-tip-context';
+import MultiSelectContext from '@/context/multi-select-context';
+import React from 'react';
+import { first } from '@tiptap/core/dist/commands';
 
 
 /*
@@ -23,16 +25,16 @@ interface AdminSeatBtnProps {
     seatnumber:number
     row:string
     isMultiSelect?:boolean
-
-
 }
 
 
 const AdminSeatBtn = ({ seatValue, seatnumber, row , isMultiSelect }:AdminSeatBtnProps) => {
 
-    const { tipX, tipY, seatTipInfo, setTipY ,setTipX, setSeatTipInfo ,resetTip }=useContext(TipContext)
+     const {singleTipPositions , setSingleTipPositions, setSeatTipInfo  ,resetSingleTip }=useContext(SingleTipontext)
+     const {multiTipPositions , setMutiTipPositions ,resetMultiTip  , multiTipInfo ,setMultiTipInfo ,resetErr }= useContext(MultiSelectContext)
+     const theme = useTheme()
+    // const [errCliks,setErrClicks]= useState(0)
 
-const theme = useTheme()
 
 
     const styles :Record<string,CSSProperties> =  {
@@ -55,39 +57,119 @@ const theme = useTheme()
        
       
  };  
- const multiSelectHndler = (seatNArg:number,row:string,)=>{
 
+
+
+
+ const openTip = (xArg: number,yArg: number ,initValueArg:number, rowArg:string, seatNumberArg:number  )=>{
+  resetMultiTip()
+  resetSingleTip()   
+  // retriger the animation 
+
+  
+  setTimeout(()=>{
         
-    // create the multi select hndler 
+        setSingleTipPositions({x:xArg,y:yArg})
+        setSeatTipInfo( {initValue:initValueArg,row:rowArg,seatNumber:seatNumberArg})
+  },200)
 
+
+}
+
+
+ const multiSelectHndler = (seatNArg:number,rowArg:string, xArg: number, yArg: number)=>{
+
+        // set first and open tip     
+ 
+          if(!multiTipInfo.rowSelect && !multiTipInfo.first){
+            console.log("seting firs  First");
+           setMutiTipPositions({x:xArg ,y:yArg})
+           setMultiTipInfo(prev=>({...prev,first:seatNArg, rowSelect:rowArg}))
+
+          }
+          else if( rowArg === multiTipInfo.rowSelect && seatNArg !== multiTipInfo.first ){
+
+            const SelectingFromRight = multiTipInfo.first > seatNArg 
+            const SelectingFromLeft = multiTipInfo.first < seatNArg
+
+              let total :number
+              if( SelectingFromRight){
+                //right to left 
+                total = multiTipInfo.first - seatNArg +1
+            //    console.log(t,"right");
+                
+               
+              }else if(SelectingFromLeft){
+                // left to right
+                total = seatNArg - multiTipInfo.first  +1 
+       
+              //  console.log(t,"left");
+                
+              }
+  
+
+           
+              
+            
+            resetErr()
+            setMultiTipInfo(p=>({...p,second:seatNArg, totalselected:total }))        
+         
+          }
+          else{
+            // err
+        //  console.log("err");      
+          // sets err
+          setMultiTipInfo(p=>({...p,err:"נא לבחור מושב מאותה שורה"}))
+           // reset secend for tip diveider and data integraty
+          setMultiTipInfo(p=>({...p,second:null , totalselected:0 }))     
+     
+    
+          
+
+         }
+
+
+  
+
+  
+
+  //resetMultiTip() // for retregaring animation and fata inegraty
+
+  setTimeout(()=>{},200)
 
     
  }
 
- const openTip = (xArg: number,yArg: number ,initValueArg:number, rowArg:string, seatNumberArg:number  )=>{
-
-        resetTip()   
-        // retriger the animation 
-        
-        setTimeout(()=>{
-              
-              setTipX(xArg)
-              setTipY(yArg)
-              setSeatTipInfo( {initValue:initValueArg,row:rowArg,seatNumber:seatNumberArg})
-        },200)
-      
-
-    }
       
   return (
 
      <div
-
        onClick={(e)=> { 
-            !isMultiSelect?
-                openTip(e.nativeEvent.pageX,e.nativeEvent.pageY , seatValue , row ,seatnumber  ) 
-                :
-                multiSelectHndler(seatnumber,row)
+         !isMultiSelect?
+           openTip(e.nativeEvent.pageX,e.nativeEvent.pageY , seatValue , row ,seatnumber  ) 
+           :
+           multiSelectHndler(seatnumber, row , e.nativeEvent.pageX , e.nativeEvent.pageY )
+       }}
+
+      style={ 
+        seatValue === 1 ? { ...styles.seats, ...styles.seatBooked }
+        :
+        seatValue === 2? { ...styles.seats, ...styles.seatSelected } 
+        :
+        seatValue === 3? { ...styles.seats, ...styles.seatBlocked } 
+        :
+        seatValue === 4? { ...styles.seats, ...styles.seatDiscounted } 
+        :
+         styles.seats 
+        }
+      />   
+  );
+};
+
+
+export default AdminSeatBtn
+
+    //Event posions 
           //   console.log( 
               
           //     "x",e.clientX,
@@ -103,31 +185,4 @@ const theme = useTheme()
           //     "enpy",e.nativeEvent.pageY,
           //    "ency",e.nativeEvent.clientY
           //     );
-       }}
-
-       style={ 
-        
-        seatValue === 1 ? { ...styles.seats, ...styles.seatBooked }
-        :
-        seatValue === 2? { ...styles.seats, ...styles.seatSelected } 
-        :
-        seatValue === 3? { ...styles.seats, ...styles.seatBlocked } 
-        :
-        seatValue === 4? { ...styles.seats, ...styles.seatDiscounted } 
-        :
-         styles.seats 
-        }
-        
-      >
-        
-    </div>
-    
-
-
-     
-  );
-};
-
-
-export default AdminSeatBtn
   

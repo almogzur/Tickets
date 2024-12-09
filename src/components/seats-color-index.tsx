@@ -1,4 +1,5 @@
-import TipContext from "@/context/Tip-context";
+import SingleTipContext from "@/context/single-tip-context";
+import MultiSelectContext from "@/context/multi-select-context";
 import { Colors } from "@/lib/colors";
 import { Avatar , Badge, Button, Divider, Stack as Flex, useTheme  } from "@mui/material";
 import { blue, green, grey, red } from "@mui/material/colors";
@@ -24,8 +25,9 @@ interface SeatColorsIndexProps  {
  }
 
 const AdminSeatColorsIndex =({isMuiltiSelct,setIsMultiSelect,multiSelectBadgeInfo}:SeatColorsIndexProps)=> {
-    const { tipX, tipY, seatTipInfo, setTipY ,setTipX, setSeatTipInfo ,resetTip }=useContext(TipContext)
 
+    const {resetSingleTip }=useContext(SingleTipContext)
+    const {resetMultiTip,resetErr , multiTipInfo} =useContext(MultiSelectContext)
     const theme = useTheme()
 
     return (  
@@ -36,8 +38,8 @@ const AdminSeatColorsIndex =({isMuiltiSelct,setIsMultiSelect,multiSelectBadgeInf
         <Flex direction={'row'} justifyContent={'space-around'}  width={'100%'} p={1}  >
             
         <Badge
-         badgeContent={multiSelectBadgeInfo} 
-         color="success"
+         badgeContent={multiTipInfo.totalselected} 
+         color='primary'
          invisible={!isMuiltiSelct}
          showZero={true}
          anchorOrigin={{
@@ -49,11 +51,14 @@ const AdminSeatColorsIndex =({isMuiltiSelct,setIsMultiSelect,multiSelectBadgeInf
 
             <Button onClick={(e)=>{
                         setIsMultiSelect(!isMuiltiSelct);
-                        resetTip()
+                        resetSingleTip();
+                        resetMultiTip()
+                        
+                        
                 } }
-                 sx={{alignSelf:"center" , background:isMuiltiSelct? "red": "" }} 
+                 sx={{alignSelf:"center" , background:isMuiltiSelct? green['700']: "" }} 
                  variant='contained' >
-                    בחר רצף מושבים  
+                    סמן רצף מושבים  
                     </Button>
 
         </Badge>
@@ -64,7 +69,7 @@ const AdminSeatColorsIndex =({isMuiltiSelct,setIsMultiSelect,multiSelectBadgeInf
                 variant='contained' 
                 onClick={()=>{}}
                 >נקה הכול
-                </Button>
+          </Button>
 
         </Flex>
 
@@ -81,13 +86,12 @@ const AdminSeatColorsIndex =({isMuiltiSelct,setIsMultiSelect,multiSelectBadgeInf
 
 export default AdminSeatColorsIndex;
 
-export const ClinetSeatColorsIndex = ({}:SeatColorsIndexProps)=>{
-    <Flex direction={'row'} height={80}  justifyContent={"center"} borderTop={'solid'} >
-
-    <Avatar  sx={{ bgcolor: grey[300], margin:1 , padding:.5 }} variant={'square'} >זמין</Avatar>
-         
-    <Avatar sx={{ bgcolor: Colors.b , margin:1,padding:.5 }} variant={'square'} >נבחר</Avatar>
-    <Avatar sx={{ bgcolor: red[800] , margin:1 , padding:.5 }} variant={'square'} >תפוס</Avatar>
-    <Avatar sx={{ bgcolor: blue[800] , margin:1 , padding:.5 }} variant={'square'} > מוזל</Avatar>
+export const ClinetSeatColorsIndex = ()=>{
+  return  <Flex direction={'row'} height={80}  justifyContent={"center"} borderTop={'solid'} >
+      <Avatar  sx={{ bgcolor: grey[300], margin:1 , padding:.5 }} variant={'square'} >זמין</Avatar>        
+      <Avatar sx={{ bgcolor: Colors.b , margin:1,padding:.5 }} variant={'square'} >נבחר</Avatar>
+      <Avatar sx={{ bgcolor: red[800] , margin:1 , padding:.5 }} variant={'square'} >תפוס</Avatar>
+      <Avatar sx={{ bgcolor: blue[800] , margin:1 , padding:.5 }} variant={'square'} > מוזל</Avatar>
+      <Avatar variant='square' sx={{bgcolor:"black"}} >חסום</Avatar>
     </Flex>     
 }

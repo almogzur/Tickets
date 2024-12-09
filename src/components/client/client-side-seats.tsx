@@ -3,7 +3,7 @@ import TooltopButton from './client-seat-btn'
 import { motion ,AnimatePresence } from "framer-motion"
 import { useState, useEffect, useContext, CSSProperties, useRef, } from 'react'
 import MoviesContext from '../../context/Events';
-import Transporm from '../Transporm';
+
 import { useRouter } from 'next/router'
 import WidthContext from '@/context/WidthContext';
 import Link from 'next/link';
@@ -11,7 +11,7 @@ import {Colors} from '../../lib/colors'
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 
-import TipContext from '@/context/Tip-context';
+import ClientTipContext from '@/context/client-tip-context'
 import { IoTicketSharp } from "react-icons/io5";
 import { FaTrashAlt } from "react-icons/fa";
 
@@ -19,7 +19,17 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { Seats } from '@/constants/models/Events';
+import { Seats, SeatStyles } from '@/constants/models/Events';
+import TooltipButton from './client-seat-btn';
+
+import {
+  mainSeats as EilatMain ,
+   sideSeats as EilatSide ,
+    sideSeateTextStyles as EilatSideText ,
+     sideSeatsStyles as EilatSideStyels
+    } from '../../constants/theathers/eilat_1'
+import ClientTheaterMap from './Client-theater-map';
+import { purple } from '@mui/material/colors';
 
 
 
@@ -27,11 +37,13 @@ const ClinetSideSeates = () => {
     const { events ,setEvents} = useContext(MoviesContext);
     const router = useRouter();
     const { id, seats }: any = router.query;
-    const event = events.find((mov) => mov.id === parseInt(id));
+    
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
+
     const [selectedSeats,setSlectedSeats ]= useState ([])
-    const { tipX, setTipX , tipY, setTipY}=useContext(TipContext)
-    const [tipTitel,setTipTitel] = useState<string>("")
+
+    const {clientTipPosition,clinetTipInfo, setClientTipPosition  ,setClinetTipInfo, resetClinetTip }=useContext(ClientTipContext)
+    
 
   const positionAtr : CSSProperties = { 
       position:"relative",
@@ -60,46 +72,12 @@ const ClinetSideSeates = () => {
       paymentButton: {},
       clearBtn:{   ...positionAtr,    color:"black"},
 
-      "שירה 1 קומה 1": {top:-160, left:-30 ,   ...positionAtr },  
-      "שירה 1 קומה 2": {top:-200 ,left:-60 ,   ...positionAtr  },
-
-      "שירה 2 קומה 1": {top:-160 ,left:-30, ...positionAtr},
-      "2 שירה 2 קומה": {top:-192 ,left:-60 ,...positionAtr},
-
-      "שירה 3 קומה 1":{top:-160 , left:-30, ...positionAtr},
-      "שירה 3 קומה 2":{  top:-192 , left:-60, ...positionAtr},
-
-      "קומי 1 קומה 1":{  top:-368 , left:300 , ...positionAtr },
-      "קומי 1 קומה 2":{  top:-408 , left:330, ...positionAtr },
-
-      "קומי 2 קומה 1":{  top:-368 , left:300 ,...positionAtr},
-      "קומי 2 קומה 2":{  top:-400 , left:330 ,...positionAtr},
-
-      "קומי 3 קומה 1":{ top:-368 , left:300, ...positionAtr},
-      "קומי 3 קומה 2":{  top:-400 , left:330, ... positionAtr},
-      
-      "אופרה 1א שורה 1 קומה 1":{top:-380 , left:70 , ...positionAtr,flexDirection:"row" , },
-      "אופרה 1א שורה 2 קומה 1":{top:-375 , left:75 , ...positionAtr,flexDirection:"row" ,},
-
-      "אופרה 1ב שורה 1 קומה 1": {top:-396 , left:170 , ...positionAtr,flexDirection:"row"  },
-      "אופרה 1ב שורה 2 קומה 2":{top:-391 , left:175 , ...positionAtr,flexDirection:"row" ,  },
-
-      "אופרה 2א שורה 1 קומה 1": {top:-350 , left:70 , ...positionAtr,flexDirection:"row" ,},
-      "אופרה 2א שורה 2 קומה 1":{top:-348 , left:75 , ...positionAtr,flexDirection:"row" , },
-      "אופרה 2א שורה 3 קומה 2": {top:-345 , left:70 , ...positionAtr,flexDirection:"row" ,},
-
-      "אופרה 2ב שורה 1 קומה 1": {top:-374 , left:170 , ...positionAtr,flexDirection:"row" ,},
-      "אופרה 2ב שורה 2 קומה 1":{top:-371 , left:175 , ...positionAtr,flexDirection:"row" , },
-      "אופרה 2ב שורה 3 קומה 2": {top:-369 , left:170 , ...positionAtr,flexDirection:"row" ,},
+   
 
 
      };  
 
-      // reset tip 
-     useEffect(()=>{
-      setTipY(0)
-      setTipX(0)
-    },[])
+      
 
   const hendler = (seatValue: number, seatNumber: number, row: string) => {
   
@@ -196,39 +174,68 @@ const ClinetSideSeates = () => {
     setSlectedSeats([]);
   };
 
-  const Seats = ({seatArrayProps}:{seatArrayProps:Seats} ) => {
+  const Seats = ({mainSeats, sideSeats , sideText, sideStyles   }:{mainSeats:Seats, sideSeats:Seats , sideText:SeatStyles ,sideStyles:SeatStyles } ) => {
 
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
-    
-   
 
-      const seatArray  = Object.entries(seatArrayProps).map(([row, rowContent]) => {
-        const colValue  = rowContent.map((seatValue: number, i: number) => {
-          const textset = "מושב";
-          const textrow = "שורה";
+    const sideSeatsStylesObject = sideStyles &&  Object.fromEntries(
+      Object.entries(sideStyles).map(([row, positions]) => [row, positions])
+    );
+     const sideTextStylesObject = sideText &&  Object.fromEntries(
+      Object.entries(sideText).map(([row, positions]) => [row, positions])
+    );
+     const MainSeatS  = Object.entries(mainSeats).map(([row, rowContent]) => {
+      const colValue  = rowContent.map((seatValue: number, i: number) => {
+        const textset = "מושב";
+        const textrow = "שורה";
+    
+        return (
+          <TooltipButton // uses Context
+            key={`${row}.${i}`}
+            seatValue={seatValue}
+            seatnumber={i}
+            row={row} 
+            hendler={undefined}             
+            />
+        );
+      });
+    
+      return (
+        <Flex 
+          key={row}
+          justifyContent="center"
+          direction={'row'}
+          sx={{direction:"ltr"}}
+          alignItems={'baseline'}
+        >
+
+          <Typography  height={0} fontWeight={800} fontSize={6} color='secondary'  >{ !xs ? row.slice(5) :  row  }</Typography>
+            {colValue}
+          <Typography height={0} fontSize={6}  fontWeight={800} color='secondary'    >{ !xs ? row.slice(5) :  row  }</Typography>
+          
+        </Flex>
+      );
+    });
+     const SideSeats = sideSeats &&  Object.entries(sideSeats).map(([row, rowContent])=>{
+      const colValue  = rowContent.map((seatValue: number, i: number) => {
+       
       
           return (
-            <TooltopButton
+            <TooltipButton
               key={`${row}.${i}`}
-              row={row}
-              seatnumber={i}
               seatValue={seatValue}
-              hendler={hendler}
-              setTipX={setTipX}
-              setTipY={setTipY}
-              setTipTitel={setTipTitel}
-               tiketCost={event.ticketCost} 
-               cizCost={1} 
-
+              seatnumber={i}
+              row={row} 
+              hendler={undefined}            
                 />
           );
         });
       
         return (
           <Flex
-            
+  
             key={row}
-            style={styles[`${row}`]} // target by key in CSS
+            style={sideSeatsStylesObject[row]} // target by key in CSS
             justifyContent="center"
             direction={'row'}
             sx={{direction:"ltr"}}
@@ -236,23 +243,30 @@ const ClinetSideSeates = () => {
             {colValue}
           </Flex>
         );
-      });
+    })
+
+     const Text = sideStyles &&  Object.entries(sideSeats).map(([row, rowContent])=>{
+      return <Typography key={row}  color='secondary' height={0} style={sideTextStylesObject[row]} >{row}</Typography>
+ })
+    
+   
+
         
       return (
        <>
           <AnimatePresence>
-           {tipX && tipY  && (
+           {clientTipPosition.x && clientTipPosition.y  && (
           <motion.h1
            style={{
               background: "#fff",
-              color: "black",
+             
               borderRadius: "4px",
               height:"fin-content",
               width:"fin-content",
               position:'absolute',
               zIndex:99,
-              top:`${tipY-40 }px`,
-              left:`${tipX-60}px`,
+              top:`${clientTipPosition.y-40 }px`,
+              left:`${clientTipPosition.x-60}px`,
               fontSize:!xs? 12 : 15,
               padding:10,
               textAlign:"end",
@@ -265,39 +279,21 @@ const ClinetSideSeates = () => {
           animate={{ opacity: 1, y:-23,   transition: { duration: 0.5 } }}
            exit={{ opacity: 0, transition: { duration: 0.5 } }}
           >
-           {tipTitel}
+           {clinetTipInfo.row}:{clinetTipInfo.seatNumber}
          </motion.h1>
           )}
          </AnimatePresence> 
   
   
-          <Container   sx={{boxShadow:' 3px 3px 3px 2px #fff', marginBottom:3}} >
-            <Transporm  >              
-               <Flex  direction={"column"}    height={!xs? 350 : 600}      sx={{direction:"ltr"}}  >
-
-                      <Typography style={{position:"relative", top:50 , left:-58 , color:Colors.b }}  height={0} > שירה</Typography>
-                      <Typography style={{position:"relative", top:225, left:-155 , transform: 'rotate(90deg)',color:Colors.b }} fontSize={7} height={0} >  קומה 1</Typography>  
-                      <Typography style={{position:"relative", top:225, left:-205 , transform: 'rotate(90deg)',color:Colors.b}} fontSize={7}  height={0} > קומה 2</Typography>
-                      <Typography style={{position:"relative", top:50,  left:305 , color:Colors.b  }}  height={0}  > קומי </Typography>
-                      <Typography style={{position:"relative", top:225, left:155 ,  transform: 'rotate(90deg)',   color:Colors.b    }}  height={0} fontSize={7} >   קומה 1 </Typography>
-                      <Typography style={{position:"relative", top:225, left:205 , transform: 'rotate(90deg)' , color:Colors.b  }}  height={0} fontSize={7}>   קומה 2</Typography>  
-                      <Typography style={{position:"relative", top:279, left:120 }} fontSize={11} color={Colors.b}   height={0} >  אופרה 1</Typography>
-                      <Typography style={{position:"relative", top:345, left:120  }} fontSize={11} color={Colors.b}   height={0}  >  אופרה 2</Typography>
-                      <Typography style={{position:"relative", top:335, left:40}}  fontSize={7} color={Colors.b}  height={0} > קומה 1</Typography>  
-                      <Typography style={{position:"relative", top:360, left:40}} fontSize={7} color={Colors.b}  height={0} > קומה 2</Typography> 
-                      <Typography style={{position:"relative", top:260, left:90}} fontSize={10} color={Colors.b}  height={0} > א</Typography> 
-                      <Typography style={{position:"relative", top:260, left:190}} fontSize={10} color={Colors.b}  height={0} > ב</Typography> 
-
-
-                      <Flex direction={'row'}  justifyContent={'center'}> 
-                          <Stage style={styles.stage} />
-                    
-                      </Flex>
-
-                        {seatArray}
-
-               </Flex>      
-            </Transporm>         
+          <Container   sx={{boxShadow:' 3px 3px 3px 2px #fff', marginBottom:3 }} >
+            <ClientTheaterMap   key={"Clinetside"} >              
+            <Flex direction={"column"}    height={!xs? 300 : 600}      sx={{direction:"ltr"}} >
+             <Stage />
+             {MainSeatS}
+             {Text}
+             {SideSeats}
+          </Flex>      
+            </ClientTheaterMap>         
           </Container>
         </>
       );
@@ -363,18 +359,37 @@ const ClinetSideSeates = () => {
     }
   }
 
- const Stage = ({ style })=>{
 
-  return   <div style={style} > 
-             <Typography variant='h4' color={Colors.b}>במה</Typography> 
-           </div>
-  }   
+  const Stage = ()=>{
+
+    const Styles :CSSProperties =  {          
+        height:40 ,
+        margin:20,
+         background:"silver",
+           color:"red",
+           width:"100%",
+           borderBottomLeftRadius: "45%",
+            borderBottomRightRadius:"45%" ,
+            display:'flex',
+            flexDirection:'row',
+            justifyContent:'center',
+            alignItems:'center',
+            alignContent:'center',
+            }
+
+    return    <Flex direction={'row'}  justifyContent={'center'}> 
+                <div style={Styles} > 
+                  <Typography variant='h6' color={Colors.b}>במה</Typography> 
+               </div>
+             </Flex >
+    }   
 
   
   return (
       <>
        <Heading p={2} variant='h4'  textAlign={"center"}  >מקומות ישיבה באולם</Heading>        
-       <Seats seatArrayProps={event.mainSeats}  />   
+       <Seats mainSeats={{ ...EilatMain }} sideSeats={{ ...EilatSide }} sideText={{...EilatSideText}} sideStyles={{...EilatSideStyels}} />   
+
         {selectedSeats.length ?  <>
            <TikitList selectedSeats={selectedSeats}  />
             <Flex 

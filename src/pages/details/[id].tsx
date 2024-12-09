@@ -28,6 +28,7 @@ const DetailsPage = () => {
         <title>פרטים</title>
         <meta name="viewport" content="width=device-width, user-scalable=no"/>
       </Head>
+      
       <ClientLayout> 
           <Flex direction={"column"}>
             <ShowCover imageSrc={event.cover} name = {event.name} />

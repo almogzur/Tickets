@@ -1,7 +1,5 @@
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import {  Typography  , Stack as Flex, Button , Box, Divider } from '@mui/material'
-
 import {useContext, useEffect,useState} from 'react'
 import WidthContext from '@/context/WidthContext';
 import List from '@mui/material/List';
@@ -9,37 +7,31 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
-import { MdOutlineDateRange } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
-import { renderTimeViewClock } from '@mui/x-date-pickers'
-import { Colors } from '@/lib/colors'
+import { DateTimeValidationError, PickerChangeHandlerContext, renderTimeViewClock } from '@mui/x-date-pickers'
+
+
 
 import { useTheme } from '@mui/material/styles';
-const DatesList = ()=>{
+import dayjs from 'dayjs';
+interface DatePikerPropsType { date:Date}
 
-    const [Dates, setDates] = useState([])
-    const [selectedDate , setsSlectedDate] =useState("")    
+
+interface DatesListPropsType { 
+  Dates:Date[]
+  addDataHndler :(e:any, context: PickerChangeHandlerContext<DateTimeValidationError>) => void
+  removeDateHndler:(dateToRemove: Date) => void
+ }
+
+const DatesList = ({addDataHndler,removeDateHndler,Dates}:DatesListPropsType)=>{
+
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
     const theme = useTheme()
 
- const hndler = (e) => {
 
-         const newDate = new Date(e.$y , e.$M ,e.$D,e.$H , e.$m) 
 
-         
-         
-
-         if (e && e.$y && e.$M && e.$D && e.$H && e.$m ) {
-             setDates((prev) => [...prev, newDate ]);
-         }
-        //  error henler
-     };
- const removeDate = (dateToRemove) => {
-         setDates((prev) => prev.filter((date) => date !== dateToRemove));
-       };
-
- const Item = ({date})=>{
-         const options = {
+ const Item = ({date}:DatePikerPropsType)=>{
+         const options :Intl.DateTimeFormatOptions = {
                  weekday: 'long',
                  year: 'numeric',
                  month: 'long',
@@ -51,7 +43,7 @@ const DatesList = ()=>{
         <>
           <ListItem   >
            <ListItemAvatar  >
-              <Button color='error' onClick={()=>removeDate(date)}>
+              <Button color='error' onClick={()=>removeDateHndler(date)}>
                 <Avatar sx={{background:theme.palette.error.light}} >
                 <MdDelete   />
               </Avatar>
@@ -72,8 +64,8 @@ const DatesList = ()=>{
          }
 
 
- return (
-   <Flex 
+  return (
+    <Flex 
     direction={ md?  'row' : 'column'}  
     mt={3} 
     alignItems={ !md?'' :'center'} 
@@ -107,7 +99,8 @@ const DatesList = ()=>{
           minutes: renderTimeViewClock,
           seconds: renderTimeViewClock,
          }}
-        onAccept={hndler}
+        onAccept={addDataHndler}
+        
        />
        
    </Flex>
@@ -122,14 +115,14 @@ const DatesList = ()=>{
 
             <List  >
              {Dates.map((date,i)=>{
-                return <Item key={date} date={date}  ></Item>
+                return <Item key={date.toString()} date={date}  ></Item>
                  })}
            </List>
 
           </Flex> 
    </Box>
 
-  </Flex>
+    </Flex>
  )
 }
 

@@ -15,7 +15,7 @@ export type Event = {
 
 }
 
-export interface Seats {[key: string]: number[]}
+export interface Seats { [key:string] :number[]  }
 
 export interface SeatStyles   {[key:string]: CSSProperties  }
 

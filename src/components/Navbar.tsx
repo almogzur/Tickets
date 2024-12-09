@@ -12,7 +12,7 @@ const Navbar = () => {
   const linkStyle = {textDecoration:'none'   } 
 
   return (
-    <Flex direction={"row"} justifyContent={"center"} >
+    <Flex direction={"row"} justifyContent={"center"} bgcolor={"black"} >
     <Container sx={{p:0,m:0, direction:"rtl" }} >
     <Flex direction={'row'} justifyContent={"space-between"} mb={3} boxShadow={' 0px 4px  0.2em #fff'} height={80} alignItems={"center"} >
 

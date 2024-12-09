@@ -1,51 +1,48 @@
 import { TransformWrapper, TransformComponent, useControls, getTransformStyles } from "react-zoom-pan-pinch";
 import { useState, useEffect, useContext, ReactNode, } from 'react'
-import positionContext from '../context/map-position-context';
+import AdminMapPositionsContext from '../../context/admin-map-positions-context';
 import { Stack as Flex , Typography as Heading , Button, Avatar , useTheme, Divider} from '@mui/material'
 import { FaPlus } from "react-icons/fa6";
 import { FaMinus } from "react-icons/fa";
-import { FcRefresh } from "react-icons/fc";
-import { blue, deepOrange, deepPurple, grey, red } from "@mui/material/colors";
-import TipContext from '@/context/Tip-context';
-import { Colors } from "@/lib/colors";
+import TipContext from '@/context/single-tip-context';
 import { LuRefreshCcw } from "react-icons/lu";
-import SeatColorsIndex from "./seats-color-index";
+import SeatColorsIndex from "../seats-color-index";
+import WidthContext from "@/context/WidthContext";
 
 
-interface TranspormProps {
+interface AdminTheaterMapPropsTypes {
    children? : ReactNode,
    isMultiSelect? : boolean,
    setIsMultiSelect?:React.Dispatch<React.SetStateAction<Boolean>>
-   multiSelectBadgeInfo:number
+   multiSelectBadgeInfo?:number
+   admin?:boolean
 }
 
-const Transporm = ({children, isMultiSelect,setIsMultiSelect ,multiSelectBadgeInfo }:TranspormProps) => {
+const AdminNewEventTheatherMap = ({children, isMultiSelect,setIsMultiSelect ,multiSelectBadgeInfo ,admin }:AdminTheaterMapPropsTypes) => {
   
-    const {x,y,S, setS , setY , setX } =useContext(positionContext)
-    const { tipX, tipY, seatTipInfo, setTipY ,setTipX, setSeatTipInfo ,resetTip }=useContext(TipContext)
+    const {AdminMapPositions,setAdminMapPositions} =useContext(AdminMapPositionsContext)
+    
+    const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
 
-
+  // new Transform Context for client 
+  // see if need a new component or just add condition
 
     return (
        <TransformWrapper 
         
-        initialScale={S||0.5}
-        initialPositionX={x||0}
-        initialPositionY={y||0}
+        initialScale={AdminMapPositions.Scale|| !sm? 0.45 : !md? 1.3 :  2  }
+        initialPositionX={ AdminMapPositions.x|| !sm? 95:  !md? -200:  -550}
+        initialPositionY={  AdminMapPositions.y|| !sm? 50: 0 }
         limitToBounds={false}
-        minScale={0.7}
-   
+        minScale={ !md? 0.45 :!md? 1.3 :  2}
         smooth
         maxScale={100}
         onPanningStop={(e)=>{
-          setY(e.state.positionY)
-          setX(e.state.positionX)
-          setS(e.state.scale)
+          
+          setAdminMapPositions(prev=>({x:e.state.positionX,y:e.state.positionY,Scale:e.state.scale}))
         }}
-        onPanningStart={()=>{ if(tipX||tipY){resetTip()}}}
-        
-     
-         onTransformed={(e)=>{}}  
+        onPanningStart={()=>{}}
+        onTransformed={(e)=>{}}  
       >
         {({ zoomIn, zoomOut, resetTransform, ...rest }) =>  {
           return   (
@@ -53,14 +50,17 @@ const Transporm = ({children, isMultiSelect,setIsMultiSelect ,multiSelectBadgeIn
                 <Controls   />
 
                 <TransformComponent
-                  wrapperStyle={{ width:"100%",}}
+                  wrapperStyle={{ width:"100%" }}
                
                  >
                  {children}     
                  
                 </TransformComponent>
 
-                <SeatColorsIndex isMuiltiSelct={isMultiSelect} setIsMultiSelect={setIsMultiSelect} multiSelectBadgeInfo={multiSelectBadgeInfo}   />
+               <SeatColorsIndex isMuiltiSelct={isMultiSelect} setIsMultiSelect={setIsMultiSelect} multiSelectBadgeInfo={multiSelectBadgeInfo}   />
+           
+             
+              
 
             </>
         )
@@ -73,20 +73,19 @@ const Transporm = ({children, isMultiSelect,setIsMultiSelect ,multiSelectBadgeIn
 
 
   const Controls = () => {
-    const {x,y,S, setS , setY , setX  } =useContext(positionContext)
-    const { tipX, setTipX , tipY, setTipY , resetTip}=useContext(TipContext)
+    const {AdminMapPositions,setAdminMapPositions} =useContext(AdminMapPositionsContext)
+    const { resetSingleTip}=useContext(TipContext)
 
     const theme = useTheme()
 
     const resetContext =()=>{
 
        console.log("reset");
-       setS(0.7)
-       setX(50)
-       setY(0)
+       
+       setAdminMapPositions({Scale:0.7,x:50 , y:0})
 
      
-       
+
        
     }
     const { zoomIn, zoomOut, resetTransform } = useControls();
@@ -102,7 +101,7 @@ const Transporm = ({children, isMultiSelect,setIsMultiSelect ,multiSelectBadgeIn
         <Button    sx={{height:'60px'}} color='primary' variant='contained'  onClick={(e) =>{zoomOut() }}>
           <FaMinus color={theme.palette.secondary.main} size={"2em"}/>
         </Button>
-        <Button sx={{height:'60px'  }} color='primary'  variant='contained'  onClick={(e) =>{resetTransform() ; resetTip() ; resetContext()   }}>
+        <Button sx={{height:'60px'  }} color='primary'  variant='contained'  onClick={(e) =>{resetTransform() ; resetSingleTip() ; resetContext()   }}>
           <LuRefreshCcw color={theme.palette.secondary.main} size={"2em"}/>
           </Button>
       </Flex>
@@ -111,4 +110,4 @@ const Transporm = ({children, isMultiSelect,setIsMultiSelect ,multiSelectBadgeIn
     );
   };
   
-  export default Transporm
+  export default AdminNewEventTheatherMap

@@ -1,4 +1,4 @@
-import {  CSSProperties } from 'react'
+import {  CSSProperties, useContext } from 'react'
 
 import {Colors} from '@/lib/colors'
 
@@ -19,13 +19,24 @@ const styles :Record<string,CSSProperties> =  {
  
 
  };  
+ interface ToolTipButtonType{ 
+  seatValue:number
+  seatnumber:number
+  row:string
+  hendler:any
+  
+ }
 
-const TooltipButton = ({ seatValue, seatnumber, row ,hendler , setTipY, setTipX  ,setTipTitel , tiketCost=0 /**typing */, cizCost }) => {
+ import ClientTipContext from '@/context/client-map-positions-context';
 
-    const tiohndler = (x: number,y: number)=>{
+const TooltipButton = ({ seatValue, seatnumber, row ,hendler }:ToolTipButtonType) => {
+  const {clientTipPosition, setClientTipPosition ,clinetTipInfo ,setClinetTipInfo, resetClinetTip }=useContext(ClientTipContext)
+
+
+
+    const tiohndler = (xArg: number,yArg: number)=>{
+      setClientTipPosition({x:xArg,y:yArg})
       
-      setTipX(x)
-      setTipY(y)
     }
        const textset = "מושב";
         const coat = 'מחיר רגיל'
@@ -36,7 +47,7 @@ const TooltipButton = ({ seatValue, seatnumber, row ,hendler , setTipY, setTipX 
        onClick={(e)=> { 
             hendler(seatValue,seatnumber,row) ;
             tiohndler(e.nativeEvent.pageX,e.nativeEvent.pageY ) 
-            setTipTitel(` ${row} -  ${textset} : ${[seatnumber+1]} ${coat}:${tiketCost} ${citConst}:${cizCost} `)
+            setClinetTipInfo({row:row,initValue:seatValue,seatNumber:seatnumber} )
 
           //   console.log( 
               
