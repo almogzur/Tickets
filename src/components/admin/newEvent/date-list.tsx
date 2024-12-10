@@ -9,7 +9,7 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import { MdDelete } from "react-icons/md";
 import { DateTimeValidationError, PickerChangeHandlerContext, renderTimeViewClock } from '@mui/x-date-pickers'
-
+import { grey } from "@mui/material/colors"
 
 
 import { useTheme } from '@mui/material/styles';
@@ -40,8 +40,8 @@ const DatesList = ({addDataHndler,removeDateHndler,Dates}:DatesListPropsType)=>{
                
  
          return  ( 
-        <>
-          <ListItem   >
+        
+          <ListItem  sx={{background:grey[100] , border:"solid .5px black", borderRadius:2 , m:1}}   >
            <ListItemAvatar  >
               <Button color='error' onClick={()=>removeDateHndler(date)}>
                 <Avatar sx={{background:theme.palette.error.light}} >
@@ -56,9 +56,9 @@ const DatesList = ({addDataHndler,removeDateHndler,Dates}:DatesListPropsType)=>{
              secondary={ "שעה : " + date.toLocaleTimeString("he-IL")  }  
              secondaryTypographyProps={{style:{color:theme.palette.secondary.main}}} />
         </ListItem>
-        <Divider variant='middle'  sx={{borderWidth:1}} />
+
  
-        </>
+        
       
  )
          }
@@ -66,21 +66,18 @@ const DatesList = ({addDataHndler,removeDateHndler,Dates}:DatesListPropsType)=>{
 
   return (
     <Flex 
-    direction={ md?  'row' : 'column'}  
-    mt={3} 
-    alignItems={ !md?'' :'center'} 
-    sx={{}} 
+      direction={ !md? "column":'row'}  
+      mt={3} 
 
-    border={!md?"":`solid 1px #ddd`} 
-    mb={2} 
-    boxShadow={` 3px 3px 3px 2px ${theme.palette.primary.main}`}
-
-    
+      sx={{}} 
+ 
+      mb={2} 
+      boxShadow={` 3px 3px 3px 2px ${theme.palette.primary.main}`}
     >   
+
     {/* piker */}
-   <Flex p={1}  flexGrow={2}   >
-      <Typography variant='h4' textAlign={'center'} color={theme.palette.primary.main}  >הוסף תאריכים</Typography>
-      {md? <Divider sx={{borderWidth:3 , background:theme.palette.primary.main }} /> :null}
+     <Flex p={1}     >
+   
 
       <DateTimePicker
         desktopModeMediaQuery='@media (min-width: 600px)'
@@ -89,7 +86,7 @@ const DatesList = ({addDataHndler,removeDateHndler,Dates}:DatesListPropsType)=>{
      
          openPickerIcon: {  color: 'primary',},
       
-         textField:{ placeholder:"בחר תאריך" , style:{height: !md? 60 : 200}  }
+         textField:{ placeholder:"בחר תאריך" ,   }
          
        }}
 
@@ -103,24 +100,24 @@ const DatesList = ({addDataHndler,removeDateHndler,Dates}:DatesListPropsType)=>{
         
        />
        
-   </Flex>
+     </Flex>
 
      {/* list */}
-    <Box flexGrow={4} >
-         <Typography variant='h4' textAlign={'center'} color='primary'  >תאריכים נבחרים </Typography>
-         <Divider variant='middle' sx={{ background:theme.palette.primary.main, borderWidth:3 }}  />
+    
+     <Divider sx={{borderWidth:3}} ></Divider>
+     
+      <Box   height={200}  >
+        
 
-          <Flex height={200}  overflow={'auto'}    >  
-         
-
+      <Typography variant='h4' textAlign={'center'} color='primary'  >תאריכים נבחרים </Typography>
             <List  >
              {Dates.map((date,i)=>{
                 return <Item key={date.toString()} date={date}  ></Item>
                  })}
            </List>
 
-          </Flex> 
-   </Box>
+     </Box>
+
 
     </Flex>
  )

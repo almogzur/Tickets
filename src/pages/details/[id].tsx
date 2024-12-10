@@ -12,7 +12,22 @@ import { Container , Typography as Heading , Stack as Flex  , Button } from '@mu
 import Map from '../../components/client/tom-map'
 import ClientLayout from '../../Layouts/client-layout';
 
-const DetailsPage = () => {  
+
+
+import {
+  mainSeats as EilatMain ,
+   sideSeats as EilatSide ,
+    sideSeateTextStyles as EilatSideText ,
+     sideSeatsStyles as EilatSideStyels
+    } from '../../constants/theathers/eilat_1'
+
+
+
+
+
+
+
+const DetailsPage = ({}) => {  
 
   const router = useRouter()
   const { events ,setEvents } = useContext(MoviesContext);
@@ -34,7 +49,7 @@ const DetailsPage = () => {
             <ShowCover imageSrc={event.cover} name = {event.name} />
             </Flex>
       
-         <ClinetSideSeates/>
+         <ClinetSideSeates mainSeats={EilatMain} sideSeats={EilatSide} sideText={EilatSideText} sideStyles={EilatSideStyels}/>
      {/* <Map/>  */}
       </ClientLayout>
     </>

@@ -37,10 +37,10 @@ const subLinks = [
 
 export default function TemporaryDrawer() {
 
-  const [ open, setOpen ] = useState(false);
+  const [ open, setOpen ] = useState<boolean>(false);
 
   const theme = useTheme()
-  const toggleDrawer = (newOpen) => () => {
+  const toggleDrawer = (newOpen:boolean) => () => {
     setOpen(newOpen);
   };
 

@@ -3,7 +3,7 @@ import {  CSSProperties, useContext, useEffect, useState } from 'react'
 import 
 
  { useTheme } from '@mui/material';
-import { green } from '@mui/material/colors';
+import { green, orange, pink } from '@mui/material/colors';
 import SingleTipontext from '@/context/single-tip-context';
 import MultiSelectContext from '@/context/multi-select-context';
 import React from 'react';
@@ -33,7 +33,7 @@ const AdminSeatBtn = ({ seatValue, seatnumber, row , isMultiSelect }:AdminSeatBt
      const {singleTipPositions , setSingleTipPositions, setSeatTipInfo  ,resetSingleTip }=useContext(SingleTipontext)
      const {multiTipPositions , setMutiTipPositions ,resetMultiTip  , multiTipInfo ,setMultiTipInfo ,resetErr }= useContext(MultiSelectContext)
      const theme = useTheme()
-    // const [errCliks,setErrClicks]= useState(0)
+     const [errCliks,setErrClicks]= useState(0)
 
 
 
@@ -41,8 +41,8 @@ const AdminSeatBtn = ({ seatValue, seatnumber, row , isMultiSelect }:AdminSeatBt
         seats: {
             
           backgroundColor: theme.palette.primary.main,
-          height:"4px",
-          width:"4px",
+          height:"7px",
+          width:"7px",
           color:"black",
           margin:2 ,
           fontWeight:"bold",
@@ -54,6 +54,8 @@ const AdminSeatBtn = ({ seatValue, seatnumber, row , isMultiSelect }:AdminSeatBt
         seatSelected: {backgroundColor: theme.palette.secondary.main,},
         seatBlocked: {backgroundColor:"black"},
         seatDiscounted:{backgroundColor:green[800]},
+        seatAccsesble:{backgroundColor:orange[600]},
+        seatDisAcsses:{backgroundColor:pink[600]},
        
       
  };  
@@ -79,15 +81,15 @@ const AdminSeatBtn = ({ seatValue, seatnumber, row , isMultiSelect }:AdminSeatBt
 
  const multiSelectHndler = (seatNArg:number,rowArg:string, xArg: number, yArg: number)=>{
 
-        // set first and open tip     
- 
-          if(!multiTipInfo.rowSelect && !multiTipInfo.first){
-            console.log("seting firs  First");
-           setMutiTipPositions({x:xArg ,y:yArg})
-           setMultiTipInfo(prev=>({...prev,first:seatNArg, rowSelect:rowArg}))
-
+        
+  console.log(multiTipInfo.row);
+  
+          if(!multiTipInfo.row   ){
+         
+            setMutiTipPositions({x:xArg ,y:yArg})
+            setMultiTipInfo(prev=>({...prev,first:seatNArg, row:rowArg}))
           }
-          else if( rowArg === multiTipInfo.rowSelect && seatNArg !== multiTipInfo.first ){
+          else if( rowArg === multiTipInfo.row && seatNArg !== multiTipInfo.first ){
 
             const SelectingFromRight = multiTipInfo.first > seatNArg 
             const SelectingFromLeft = multiTipInfo.first < seatNArg
@@ -96,23 +98,22 @@ const AdminSeatBtn = ({ seatValue, seatnumber, row , isMultiSelect }:AdminSeatBt
               if( SelectingFromRight){
                 //right to left 
                 total = multiTipInfo.first - seatNArg +1
-            //    console.log(t,"right");
-                
+                setMultiTipInfo(p=>({...p,selectdir:"R"}))
+               setMutiTipPositions({x:xArg ,y:yArg})
+               console.log("right");
+
                
               }else if(SelectingFromLeft){
                 // left to right
                 total = seatNArg - multiTipInfo.first  +1 
-       
-              //  console.log(t,"left");
+                setMultiTipInfo(p=>({...p,selectdir:"L"}))
+                 console.log("left");
                 
               }
-  
 
-           
-              
-            
             resetErr()
-            setMultiTipInfo(p=>({...p,second:seatNArg, totalselected:total }))        
+            setMultiTipInfo(p=>({...p,second:seatNArg, totalselected:total , positionsSelected:[multiTipInfo.first,seatNArg] }))     
+
          
           }
           else{
@@ -122,6 +123,8 @@ const AdminSeatBtn = ({ seatValue, seatnumber, row , isMultiSelect }:AdminSeatBt
           setMultiTipInfo(p=>({...p,err:"נא לבחור מושב מאותה שורה"}))
            // reset secend for tip diveider and data integraty
           setMultiTipInfo(p=>({...p,second:null , totalselected:0 }))     
+          setErrClicks(p=>(p+1))
+          errCliks === 2?  resetMultiTip() : null
      
     
           
@@ -159,6 +162,10 @@ const AdminSeatBtn = ({ seatValue, seatnumber, row , isMultiSelect }:AdminSeatBt
         seatValue === 3? { ...styles.seats, ...styles.seatBlocked } 
         :
         seatValue === 4? { ...styles.seats, ...styles.seatDiscounted } 
+        :
+        seatValue === 5? { ...styles.seats, ...styles.seatAccsesble } 
+        :
+        seatValue === 6? { ...styles.seats, ...styles.seatDisAcsses } 
         :
          styles.seats 
         }

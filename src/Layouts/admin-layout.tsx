@@ -1,10 +1,10 @@
-import {  useEffect } from 'react';
+import {  ReactNode, useEffect } from 'react';
 import MiniDrawer from '../components/Drawer'
 import {Stack as Flex, Container } from '@mui/material'
 import { useSession } from 'next-auth/react';
 import router from 'next/router';
 
-const AdminLayout = ({ children }: any) => {
+const AdminLayout = ({ children }: {children?:ReactNode}) => {
   const { data: session ,status ,update} = useSession()
 
 useEffect(()=>{

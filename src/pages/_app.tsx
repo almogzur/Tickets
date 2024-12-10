@@ -3,7 +3,7 @@ import type { AppProps } from 'next/app'
 // 
 import { useMediaQuery } from 'usehooks-ts';
 import { useState } from 'react';
-import { Event } from '../constants/models/Events';
+import { Event, Seats, SeatStyles } from '../constants/models/Events';
 import '../styles/global.css'
 
 //Context
@@ -17,13 +17,14 @@ import ClineTransformContext from '@/context/client-map-positions-context'
 import SingleTipContext from '@/context/single-tip-context';
 import multiSelectContext from '@/context/multi-select-context';
 ///////
-import ClientSideTIpContext from '@/context/client-tip-context'
+import ClientTipContext from '@/context/client-tip-context'
 //Auth 
 import { SessionProvider } from "next-auth/react"
 
 //MUI ------
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Color, createTheme, ThemeProvider } from '@mui/material/styles';
 import { blue } from '@mui/material/colors';
+
 
 
 //Day JS
@@ -41,35 +42,39 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 //Map
 import '@tomtom-international/web-sdk-maps/dist/maps.css'
 
-export interface Positions {x:number ,y:number , Scale?:number}
+export interface Positions {x:number ,y:number , Scale?:number , disabled? :boolean}
 export interface TipinfoType {
   initValue:number,
   row:string,
   seatNumber:number
 } 
 export interface MultiTipeInfoType  {
+  seatNumber: any;
+  row: string;
   first:number
   second:number
   totalselected:number
   positionsSelected:number[]
-  rowSelect:string
   err:string
+  selectdir:"R"|"L"
 }
+export interface TheaterType {mainSeats:Seats , sideSeats:Seats , testsStyle:SeatStyles , styles:SeatStyles ,ThaeaterName:string}
 
 
-const theme  = createTheme({ 
-    
+
+
+const theme  = createTheme({    
     direction:"rtl",
     palette:{
- 
       primary:{main:blue[700]},
       secondary:{main:"#7E1891"},
-      
-      
-    },
+   
+    }
+    ,
+
     components: {
         MuiInputBase:{
-          defaultProps:{},
+          defaultProps:{  },
           styleOverrides:{}
         },
         // when in form-control
@@ -139,15 +144,26 @@ const theme  = createTheme({
         },
 
        },
+       MuiButton:{
+        defaultProps:{ variant:'contained'},
+        styleOverrides:{
+          root:{
+            fontSize:"1em",
+            fontWeight:700,
+            
+            
+          }
+        }
+       }
        
        
     },
+  
    },  
    coreHeb,
-   datePikerHeb
+   datePikerHeb,
+
 )
-
-
 
 function MyApp({  Component,  pageProps: { session, ...pageProps }}: AppProps) {
 
@@ -156,7 +172,7 @@ function MyApp({  Component,  pageProps: { session, ...pageProps }}: AppProps) {
   // Admin Side
 
   // admin map State 
-  const [AdminMapPositions , setAdminMapPositions] = useState<Positions>({x:0,y:0,Scale:0})
+  const [AdminMapPositions , setAdminMapPositions] = useState<Positions>({x:0,y:0,Scale:0,disabled:false})
  
   // AdminSingleTipState 
   const [ singleTipPositions, setSingleTipPositions]=useState<Positions>({x:0,y:0})
@@ -164,9 +180,9 @@ function MyApp({  Component,  pageProps: { session, ...pageProps }}: AppProps) {
   const resetSingleTip  = () :void=> { setSingleTipPositions({x:0,y:0}) ; setSeatTipInfo({initValue:null, row:null , seatNumber:null}) }
 
   //AdminMiltiTipState
-  const [multiTipInfo, setMultiTipInfo]=useState<MultiTipeInfoType>({first:null, second:null,totalselected:null ,positionsSelected:[], rowSelect:null ,err:null })
+  const [multiTipInfo, setMultiTipInfo]=useState<MultiTipeInfoType>({first:null, second:null,totalselected:0 ,positionsSelected:null, row:null ,err:null ,seatNumber:null  , selectdir:null })
   const [ multiTipPositions , setMutiTipPositions ]= useState<{x:number ,y:number}>({x:0,y:0})
-  const resetMultiTip = ():void=>{ setMutiTipPositions({x:null,y:null}) ; setMultiTipInfo(p=>({ ...p ,first:null, second:null, rowSelect:null ,err:null, totalselected:0})  ) }
+  const resetMultiTip = ():void=>{ setMutiTipPositions({x:null,y:null}) ; setMultiTipInfo(p=>({first:null, second:null,totalselected:0 ,positionsSelected:null, row:null ,err:null ,seatNumber:null  , selectdir:null})  ) }
   const resetErr = () : void=>{ setMultiTipInfo(p=>({...p,err:null}))}
 
 
@@ -198,13 +214,13 @@ return (
   <SingleTipContext.Provider value={{ singleTipPositions, setSingleTipPositions, seatTipInfo, setSeatTipInfo , resetSingleTip }}>
   <ClineTransformContext.Provider value={{ClientMapPositions ,setClientMapPositions}}>
   <AdminTransformContext.Provider value={{AdminMapPositions,setAdminMapPositions}}>
-  <ClientSideTIpContext.Provider value={{ clientTipPosition,setClientTipPosition, clinetTipInfo ,setClinetTipInfo,resetClinetTip }} >
+  <ClientTipContext.Provider value={{ clientTipPosition,setClientTipPosition, clinetTipInfo ,setClinetTipInfo,resetClinetTip }} >
   <MoviesContext.Provider value={{events, setEvents}}>
   <WidthContext.Provider value={{xxl,xl,lg,md,sm,xs,xxs}}>
      <Component {...pageProps} />
   </WidthContext.Provider>
   </MoviesContext.Provider>
-  </ClientSideTIpContext.Provider>
+  </ClientTipContext.Provider>
   </AdminTransformContext.Provider>
   </ClineTransformContext.Provider>
   </SingleTipContext.Provider>

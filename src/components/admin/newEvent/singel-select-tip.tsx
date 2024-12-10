@@ -2,23 +2,23 @@
 import SingleTipContext from "@/context/single-tip-context"
 import WidthContext from "@/context/WidthContext"
 import { motion ,AnimatePresence } from "framer-motion"
-import { CSSProperties, Dispatch, MouseEventHandler, useContext, useEffect, useState } from "react"
+import { CSSProperties, Dispatch, MouseEventHandler, SetStateAction, useContext, useEffect, useState } from "react"
 import {  Button, Stack as Flex, Typography, useTheme } from "@mui/material"
 
-import {  grey } from "@mui/material/colors"
+import {  grey, orange, pink } from "@mui/material/colors"
 import { Seats } from "@/constants/models/Events"
+import { TheaterType } from "@/pages/_app"
+import { wrap } from "module"
  
-interface AdminMapTipToolPropsType {
-   setSideSeatsState:React.Dispatch<React.SetStateAction<Seats>>
-   setMainSeatsState:React.Dispatch<React.SetStateAction<Seats>>
-   mainSeats:Seats
-   sideSeats:Seats
-   isMultiSelect?:boolean
-
-}
 
 
-const SingleSelectTip= ({setSideSeatsState,setMainSeatsState , mainSeats ,sideSeats }:AdminMapTipToolPropsType)=>{
+interface SingleSelectTipPropsType  { 
+  theraer:TheaterType ,
+   isMultiSelect:boolean ,
+   setTheater:Dispatch<SetStateAction<TheaterType>>
+  }
+
+const SingleSelectTip= ({theraer,isMultiSelect ,setTheater }:SingleSelectTipPropsType)=>{
    const theme= useTheme()
 
     const { setSingleTipPositions,singleTipPositions , seatTipInfo, setSeatTipInfo,resetSingleTip }=useContext(SingleTipContext)
@@ -31,38 +31,51 @@ const SingleSelectTip= ({setSideSeatsState,setMainSeatsState , mainSeats ,sideSe
 
               
          const row : string = seatTipInfo.row
-         const inMain = mainSeats.hasOwnProperty(row)
-         const inSide = sideSeats.hasOwnProperty(row)
+         const inMain = theraer.mainSeats.hasOwnProperty(row)
+         const inSide = theraer.sideSeats.hasOwnProperty(row)
          const initVlaue = seatTipInfo.initValue
          const seatNumber = seatTipInfo.seatNumber
          
          if(inMain){
-            setMainSeatsState( prevMovies => {
+          setTheater( (p) => {
                       // Find the movie object reference
-              const updatedMovies = {...prevMovies};
-              const updatedRow = [...updatedMovies[row]]; // Clone the specific row
+              const newEventState = {...p};
+              const newEventMainSeats = {...newEventState.mainSeats}
 
+              const updatedRow = [...newEventMainSeats[row]]; // Clone the specific row
+ 
                    // new seat state: newSeatValueArg
                    updatedRow[seatNumber] = newSeatValueArg
                   // Assign the updated row back to the seat details
-                  updatedMovies[row] = updatedRow;
+                 newEventMainSeats[row] = updatedRow;
+                   
+
+                 newEventState.mainSeats = newEventMainSeats;
+
                   // Assign the updated seat details back to the movie
-                  return updatedMovies; // Return the updated state
+                 
+                  return newEventState; // Return the updated state
              });
          }
          else if(inSide){
-            setSideSeatsState( prevMovies => {
+          setTheater( p => {
                // Find the movie object reference
-                const updatedMovies = {...prevMovies};
-                const updatedRow = [...updatedMovies[row]]; // Clone the specific row
+                const newEventState = {...p}
+                const newEventMainSeats = {...newEventState.sideSeats};
+                const updatedRow = [...newEventMainSeats[row]]; // Clone the specific row
                      
-               // new seat state: newSeatValueArg
+ 
+                // new seat state: newSeatValueArg
+                updatedRow[seatNumber] = newSeatValueArg
+               // Assign the updated row back to the seat details
+              newEventMainSeats[row] = updatedRow;
+                
 
-              updatedRow[seatNumber] = newSeatValueArg
-             // Assign the updated row back to the seat details
-             updatedMovies[row] = updatedRow;
-           // Assign the updated seat details back to the movie
-           return updatedMovies; // Return the updated state
+              newEventState.sideSeats = newEventMainSeats;
+
+               // Assign the updated seat details back to the movie
+              
+               return newEventState; // Return the updated state
                   });
    
    
@@ -70,7 +83,7 @@ const SingleSelectTip= ({setSideSeatsState,setMainSeatsState , mainSeats ,sideSe
          resetSingleTip()
     };
 
-   const comonAtt : CSSProperties = { width:"100%", padding:1, margin:0.5 }
+    const comonAtt : CSSProperties = {  padding:0.3, margin:0.2 ,  }
     
     return  ( < AnimatePresence >
 
@@ -79,7 +92,7 @@ const SingleSelectTip= ({setSideSeatsState,setMainSeatsState , mainSeats ,sideSe
                 <motion.div 
                  style={{
                
-                    width:100,
+                    width:140,
                     position:'absolute',   
                     top:`${singleTipPositions.y-90 }px`,
                     left:`${singleTipPositions.x-60}px`,
@@ -87,8 +100,11 @@ const SingleSelectTip= ({setSideSeatsState,setMainSeatsState , mainSeats ,sideSe
                     zIndex:4,
                     background:grey['A400'],
                     borderRadius:10,
-                    padding:10,
+                    padding:5,
                     boxShadow:theme.shadows[19],
+                    display:"flex",
+                    flexDirection:"column",
+                    alignItems:"center"
                     
                     }}
   
@@ -97,17 +113,17 @@ const SingleSelectTip= ({setSideSeatsState,setMainSeatsState , mainSeats ,sideSe
                  exit={{ opacity: 0, transition: { duration: 0.5 } }}
                 >
                    <Typography 
-                        textAlign={"center"} fontWeight={700} variant='inherit'  
+                        textAlign={"center"} fontWeight={900} variant='h6' 
                         sx={{color:theme.palette.primary.main  }} >מושב :{seatTipInfo.seatNumber+1} {seatTipInfo.row}</Typography>
                 
-                    <Flex alignItems={"center"} justifyContent={"center"} >
+                    <Flex alignItems={"center"} justifyContent={"center"} direction={'row'} flexWrap={'wrap'}  >
 
 
                         {/*discount  */}
                         <Button 
                           variant='contained' 
                           color='success' 
-                          sx={comonAtt} 
+                          sx={{...comonAtt}} 
                           onClick={(e)=>{ upateSeateValue(4) }}
                            >
                          מוזל
@@ -116,7 +132,7 @@ const SingleSelectTip= ({setSideSeatsState,setMainSeatsState , mainSeats ,sideSe
                         {/* Bloacked */}
                         <Button
                          variant='contained' 
-                         sx={{ background:theme.palette.common.black, ...comonAtt}}  
+                         sx={{...comonAtt  , bgcolor:"black"}}  
                          onClick={()=>{upateSeateValue(3)}}
                          >
                          חסום
@@ -125,25 +141,29 @@ const SingleSelectTip= ({setSideSeatsState,setMainSeatsState , mainSeats ,sideSe
                         {/* normal */}
                          <Button    
                            variant='contained' 
-                            sx={comonAtt} 
+                            sx={{...comonAtt}} 
                             onClick={()=>{upateSeateValue(0)}}
                             >רגיל 
-                            </Button>
+                         </Button>
 
+                        <Button
+                           sx={{...comonAtt , bgcolor:orange[600]}} 
+                           onClick={()=>{upateSeateValue(5)}}
+                         >נגיש</Button>
+                        <Button 
+                          sx={{...comonAtt ,bgcolor: pink[600]}} 
+                          onClick={()=>{upateSeateValue(6)}}
+                        >נגיש מוזל </Button>
+   
+                    </Flex>
 
- 
-
-                <Button 
+                    <Button 
                   variant='contained' 
                   color='error'
-                  sx={{borderRadius:0,width:"100%"}} 
+                  sx={{borderRadius:1 , width:"60%", mt:1}} 
                   onClick={()=>resetSingleTip()} >
                   סגור
                 </Button>
-              
-  
-   
-                    </Flex>
            
            
         

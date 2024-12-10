@@ -27,7 +27,7 @@ const styles :Record<string,CSSProperties> =  {
   
  }
 
- import ClientTipContext from '@/context/client-map-positions-context';
+ import ClientTipContext from '@/context/client-tip-context';
 
 const TooltipButton = ({ seatValue, seatnumber, row ,hendler }:ToolTipButtonType) => {
   const {clientTipPosition, setClientTipPosition ,clinetTipInfo ,setClinetTipInfo, resetClinetTip }=useContext(ClientTipContext)

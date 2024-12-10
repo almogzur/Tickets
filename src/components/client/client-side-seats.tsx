@@ -21,26 +21,19 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { Seats, SeatStyles } from '@/constants/models/Events';
 import TooltipButton from './client-seat-btn';
-
-import {
-  mainSeats as EilatMain ,
-   sideSeats as EilatSide ,
-    sideSeateTextStyles as EilatSideText ,
-     sideSeatsStyles as EilatSideStyels
-    } from '../../constants/theathers/eilat_1'
-import ClientTheaterMap from './Client-theater-map';
-import { purple } from '@mui/material/colors';
+import ClientTheaterMap from './client-theater-map';
 
 
 
-const ClinetSideSeates = () => {
+
+const ClinetSideSeates = ({mainSeats,sideSeats,sideText,sideStyles}:{mainSeats:Seats , sideSeats:Seats , sideText:SeatStyles ,sideStyles:SeatStyles }) => {
     const { events ,setEvents} = useContext(MoviesContext);
     const router = useRouter();
     const { id, seats }: any = router.query;
     
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
 
-    const [selectedSeats,setSlectedSeats ]= useState ([])
+    const [selectedSeats,setSlectedSeats ]= useState<string[]> ([])
 
     const {clientTipPosition,clinetTipInfo, setClientTipPosition  ,setClinetTipInfo, resetClinetTip }=useContext(ClientTipContext)
     
@@ -76,49 +69,13 @@ const ClinetSideSeates = () => {
 
 
      };  
-
-      
+ 
 
   const hendler = (seatValue: number, seatNumber: number, row: string) => {
   
     
-    setEvents( prevMovies => {
-        // Find the movie object reference
-        const movie = prevMovies.find((mov) => mov.id === parseInt(id));
-        if (!movie) {
-          return prevMovies; // If the movie is not found, return the previous state
-        }
-      
-        // Create a deep copy of the movie object and its seat details
-        const updatedMovie = { ...movie };
-        const updatedSeatDetails = { ...updatedMovie.seats };
-        const updatedRow = [...updatedSeatDetails[row]];
-      
-        // Skip updates for unavailable or already selected seats
-        if (updatedRow[seatNumber] === 1 ) {
-          return prevMovies; // No update
-        }
-      
-        // Toggle seat state: 0 to 2 or 2 to 0
-        const newSeatValue = updatedRow[seatNumber] === 0 ? 2 : 0;
-      
-        // Update the seat value
-        updatedRow[seatNumber] = newSeatValue;
-      
-        // Assign the updated row back to the seat details
-        updatedSeatDetails[row] = updatedRow;
-      
-        // Assign the updated seat details back to the movie object
-        updatedMovie.seats = updatedSeatDetails;
-      
-        // Replace the old movie object with the updated one in the movies array
-        const updatedMovies = prevMovies.map((mov) =>
-          mov.id === updatedMovie.id ? updatedMovie : mov
-        );
-      
-        return updatedMovies; // Return the updated movies array
-      });
-                   
+
+
       // Update the selected seats array
          setSlectedSeats( prevSelectedSeats => {
          const seatKey = `${row}:${seatNumber}`;
@@ -138,8 +95,8 @@ const ClinetSideSeates = () => {
   };
 
   const clearSelectedSeats = () => {
-    setTipX(0);
-    setTipY(0);
+
+    
   
     setEvents((prevMovies) => {
       // Find the movie object to update
@@ -150,7 +107,7 @@ const ClinetSideSeates = () => {
   
       // Create a deep copy of the movie object and its seat details
       const updatedMovie = { ...movie };
-      const updatedSeatDetails = { ...updatedMovie.seats };
+      const updatedSeatDetails = { ...updatedMovie.mainSeats };
   
       // Reset all selected seats (value `2` to `0`) in each row
       for (let key in updatedSeatDetails) {
@@ -160,7 +117,7 @@ const ClinetSideSeates = () => {
       }
   
       // Assign the updated seat details back to the movie object
-      updatedMovie.seats = updatedSeatDetails;
+      updatedMovie.mainSeats = updatedSeatDetails;
   
       // Replace the movie in the movies array
       const updatedMovies = prevMovies.map((mov) =>
@@ -174,7 +131,7 @@ const ClinetSideSeates = () => {
     setSlectedSeats([]);
   };
 
-  const Seats = ({mainSeats, sideSeats , sideText, sideStyles   }:{mainSeats:Seats, sideSeats:Seats , sideText:SeatStyles ,sideStyles:SeatStyles } ) => {
+  const Seats = ( ) => {
 
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
 
@@ -336,8 +293,8 @@ const ClinetSideSeates = () => {
     }else
     {return <></>}
   }
-
-  const TikitList = ({selectedSeats})=>{
+;
+  const TikitList = ({selectedSeats}:{selectedSeats:string[]})=>{
     const [checked, setChecked] = useState([0]);
 
   
@@ -388,7 +345,7 @@ const ClinetSideSeates = () => {
   return (
       <>
        <Heading p={2} variant='h4'  textAlign={"center"}  >מקומות ישיבה באולם</Heading>        
-       <Seats mainSeats={{ ...EilatMain }} sideSeats={{ ...EilatSide }} sideText={{...EilatSideText}} sideStyles={{...EilatSideStyels}} />   
+       <Seats />   
 
         {selectedSeats.length ?  <>
            <TikitList selectedSeats={selectedSeats}  />
@@ -414,11 +371,11 @@ const ClinetSideSeates = () => {
     );
   };
 
- const Item =({value ,hendler } )=>{
+ const Item =({value ,hendler }:{value:any,hendler:any} )=>{
 
   const [age, setAge] = useState('');
 
-  const handleChange = (event) => {
+  const handleChange = (event:any) => {
     setAge(event.target.value);
   };
   

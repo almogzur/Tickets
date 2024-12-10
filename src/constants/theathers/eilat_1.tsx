@@ -1,6 +1,7 @@
 import { CSSProperties } from "react"
 import {Seats, SeatStyles} from '@/constants/models/Events'
 import { Colors } from "@/lib/colors"
+import { TheaterType } from "@/pages/_app"
 
 
 const positionAtr : CSSProperties = { 
@@ -10,7 +11,7 @@ const positionAtr : CSSProperties = {
    display:"flex",
    flexDirection:"column"
 }
-export const mainSeats : Seats = {
+ const Eilat1_mainSeats : Seats = {
     "שורה 1" : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     "שורה 2" : [0,0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     "שורה 3" : [0,0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -32,11 +33,11 @@ export const mainSeats : Seats = {
                                    "שורה 19" : [ 0, 0, 0, 0, 0, 0, 0, ],
                                    "שורה 20" : [ 0, 0, 0 ,0, 0, 0, 0, ],
 } 
-export const sideSeats : Seats = {
+ const Eilat1_sideSeats : Seats = {
  "שירה 1 קומה 1":[0,0,0,0,0],
  "שירה 1 קומה 2":[0,0,0,0,0],
  "שירה 2 קומה 1":[0,0,0,0],
- "2 שירה 2 קומה":[0,0,0,0],
+ "שירה 2 קומה 2":[0,0,0,0],
  "שירה 3 קומה 1":[0,0,0,0],
  "שירה 3 קומה 2":[0,0,0,0],
  "קומי 1 קומה 1":[0,0,0,0,0],
@@ -59,85 +60,92 @@ export const sideSeats : Seats = {
  "אופרה 2ב שורה 2 קומה 2": [0,0,0,0],
  "אופרה 2ב שורה 3 קומה 3": [0,0,0,0,0],
 }
-export const sideSeatsStyles : SeatStyles = {
+ const Eilat1_sideStyles : SeatStyles = {
 
-   "שירה 1 קומה 1": {top:-160, left:-30 , ...positionAtr , },  
-   "שירה 1 קומה 2": {top:-200 ,left:-70 , ...positionAtr  },
+   "שירה 1 קומה 1": {top:-220, left:-20 , ...positionAtr , },  
+   "שירה 1 קומה 2": {top:-275 ,left:-50 , ...positionAtr  },
 
-   "שירה 2 קומה 1": {top:-160 ,left:-30, ...positionAtr},
-   "2 שירה 2 קומה": {top:-192 ,left:-70 ,...positionAtr},
+   "שירה 2 קומה 1": {top:-220 ,left:-20, ...positionAtr},
+   "שירה 2 קומה 2": {top:-264 ,left:-50 ,...positionAtr},
 
-   "שירה 3 קומה 1":{top:-160 , left:-30, ...positionAtr},
-   "שירה 3 קומה 2":{top:-192 , left:-70, ...positionAtr},
+   "שירה 3 קומה 1":{top:-220 , left:-20, ...positionAtr},
+   "שירה 3 קומה 2":{top:-265 , left:-50, ...positionAtr},
 
-   "קומי 1 קומה 1":{top:-368 , left:355 , ...positionAtr },
-   "קומי 1 קומה 2":{top:-408 , left:395, ...positionAtr },
+   "קומי 1 קומה 1":{top:-506 , left:450 , ...positionAtr },
+   "קומי 1 קומה 2":{top:-561 , left:480, ...positionAtr },
 
-   "קומי 2 קומה 1":{top:-368 , left:355 ,...positionAtr},
-   "קומי 2 קומה 2":{top:-400 , left:395 ,...positionAtr},
+   "קומי 2 קומה 1":{top:-505 , left:450 ,...positionAtr},
+   "קומי 2 קומה 2":{top:-549 , left:480 ,...positionAtr},
 
-   "קומי 3 קומה 1":{top:-368 , left:355, ...positionAtr},
-   "קומי 3 קומה 2":{top:-400 , left:395, ... positionAtr},
+   "קומי 3 קומה 1":{top:-506 , left:450, ...positionAtr},
+   "קומי 3 קומה 2":{top:-549 , left:480, ... positionAtr},
 
-   "אופרה 1א שורה 1 קומה 1":{top:-400 , left:70 , ...positionAtr,flexDirection:"row" , },
-   "אופרה 1א שורה 2 קומה 1":{top:-395 , left:75 , ...positionAtr,flexDirection:"row" ,},
+   "אופרה 1א שורה 1 קומה 1":{top:-550 , left:135 , ...positionAtr,flexDirection:"row" , },
+   "אופרה 1א שורה 2 קומה 1":{top:-545 , left:135 , ...positionAtr,flexDirection:"row" ,},
 
-   "אופרה 1ב שורה 1 קומה 1": {top:-416 , left:170 , ...positionAtr,flexDirection:"row"  },
-   "אופרה 1ב שורה 2 קומה 1": {top:-411 , left:175 , ...positionAtr,flexDirection:"row" ,  },
-
-
-   "אופרה 2א שורה 1 קומה 2": {top:-385 , left:70 , ...positionAtr,flexDirection:"row" ,},
-   "אופרה 2א שורה 2 קומה 2": {top:-380 , left:75 , ...positionAtr,flexDirection:"row" , },
-
-   "אופרה 2א שורה 3 קומה 3": {top:-375 , left:70 , ...positionAtr,flexDirection:"row" ,},
+   "אופרה 1ב שורה 1 קומה 1": {top:-572 , left:247 , ...positionAtr,flexDirection:"row"  },
+   "אופרה 1ב שורה 2 קומה 1": {top:-567 , left:258 , ...positionAtr,flexDirection:"row" ,  },
 
 
-   "אופרה 2ב שורה 1 קומה 2": {top:-409 , left:170 , ...positionAtr,flexDirection:"row" ,},
-   "אופרה 2ב שורה 2 קומה 2": {top:-404 , left:175 , ...positionAtr,flexDirection:"row",  },
+   "אופרה 2א שורה 1 קומה 2": {top:-545 , left:135 , ...positionAtr,flexDirection:"row" ,},
+   "אופרה 2א שורה 2 קומה 2": {top:-540 , left:135 , ...positionAtr,flexDirection:"row" , },
 
-   "אופרה 2ב שורה 3 קומה 3": {top:-399 , left:170 , ...positionAtr,flexDirection:"row" , },
+   "אופרה 2א שורה 3 קומה 3": {top:-535 , left:135 , ...positionAtr,flexDirection:"row" ,},
+
+
+   "אופרה 2ב שורה 1 קומה 2": {top:-579 , left:247 , ...positionAtr,flexDirection:"row" ,},
+   "אופרה 2ב שורה 2 קומה 2": {top:-574 , left:258 , ...positionAtr,flexDirection:"row",  },
+
+   "אופרה 2ב שורה 3 קומה 3": {top:-570 , left:247 , ...positionAtr,flexDirection:"row" , },
 }
-export const sideSeateTextStyles : SeatStyles={
-"שירה 1 קומה 1":{position:"relative", top:-170 , left:-45   , fontSize:6   , fontWeight:700  },
-"שירה 1 קומה 2":{position:"relative", top:-170 , left:-87  ,  fontSize:6 , fontWeight:700  },
+ const Eilat1_sideTextStyles : SeatStyles={
+   "שירה 1 קומה 1":{position:"relative", top:-240 , left:-25   , fontSize:6   , fontWeight:700 ,  width:20 },
+   "שירה 1 קומה 2":{position:"relative", top:-240 , left:-54  ,  fontSize:6 , fontWeight:700 , width:20  },
 
-"שירה 2 קומה 1":{position:"relative", top:-90 , left:-45  , fontSize:6 , fontWeight:700  },
-"2 שירה 2 קומה":{position:"relative", top:-90 , left:-87 ,  fontSize:6 , fontWeight:700  },
+   "שירה 2 קומה 1":{position:"relative", top:-132 , left:-25  , fontSize:6 , fontWeight:700 , width:20  },
+   "שירה 2 קומה 2":{position:"relative", top:-132 , left:-54 ,  fontSize:6 , fontWeight:700 , width:20 },
 
-"שירה 3 קומה 1":{position:"relative", top:-27 , left:-45 ,   fontSize:6 , fontWeight:700  },
-"שירה 3 קומה 2":{position:"relative", top:-27 , left:-87 ,   fontSize:6 , fontWeight:700  },
+   "שירה 3 קומה 1":{position:"relative", top:-45 , left:-25 ,   fontSize:6 , fontWeight:700 , width:20 },
+   "שירה 3 קומה 2":{position:"relative", top:-45 , left:-54 ,   fontSize:6 , fontWeight:700  ,width:20},
 
-"קומי 1 קומה 1":{position:"relative", top:-170 , left:335 ,  fontSize:6 , fontWeight:700  },
-"קומי 1 קומה 2":{position:"relative", top:-170 , left:385 ,   fontSize:6 , fontWeight:700  },
+   "קומי 1 קומה 1":{position:"relative", top:-240 , left:445 ,  fontSize:6 , fontWeight:700  ,width:20},
+   "קומי 1 קומה 2":{position:"relative", top:-240 , left:480 ,   fontSize:6 , fontWeight:700  ,width:20},
 
-"קומי 2 קומה 1":{position:"relative", top:-90 , left:335 ,   fontSize:6 , fontWeight:700  },
-"קומי 2 קומה 2":{position:"relative", top:-90 , left:385 ,  fontSize:6 , fontWeight:700  },
+   "קומי 2 קומה 1":{position:"relative", top:-130 , left:445 ,   fontSize:6 , fontWeight:700  ,width:20},
+   "קומי 2 קומה 2":{position:"relative", top:-130 , left:480 ,  fontSize:6 , fontWeight:700  ,width:20},
 
-"קומי 3 קומה 1":{position:"relative", top:-27 , left:335 ,  fontSize:6 , fontWeight:700  },
-"קומי 3 קומה 2":{position:"relative", top:-27 , left:385 ,   fontSize:6 , fontWeight:700  },
-
-
-"אופרה 1א שורה 1 קומה 1":{position:"relative", top:15 , left:0   , fontSize:6 , fontWeight:700 },
-
-"אופרה 1א שורה 2 קומה 1":{position:"relative", top:30 , left:0 , fontSize:6 , fontWeight:700 },
-
-"אופרה 1ב שורה 1 קומה 1":{position:"relative", top:15 , left:215   , fontSize:6 , fontWeight:700 },
-"אופרה 1ב שורה 2 קומה 1":{position:"relative", top:30 , left:215   , fontSize:6 , fontWeight:700 },
+   "קומי 3 קומה 1":{position:"relative", top:-45 , left:445 ,  fontSize:6 , fontWeight:700  ,width:20},
+   "קומי 3 קומה 2":{position:"relative", top:-45 , left:480 ,   fontSize:6 , fontWeight:700  ,width:20},
 
 
+   "אופרה 1א שורה 1 קומה 1":{position:"relative", top:22 , left:80   , fontSize:7 , fontWeight:700 ,width:55, textAlign:'center' , lineHeight:1 },
 
-"אופרה 2א שורה 1 קומה 2": {position:"relative", top:61 , left:0   , fontSize:6 , fontWeight:700 },
-"אופרה 2א שורה 2 קומה 2" :{position:"relative", top:75 , left:0  , fontSize:6 , fontWeight:700 },
+   "אופרה 1א שורה 2 קומה 1":{position:"relative", top:38 , left:80 , fontSize:7 , fontWeight:700, width:55 ,textAlign:'center',lineHeight:1   },
 
-"אופרה 2א שורה 3 קומה 3": {position:"relative", top:88 , left:0   , fontSize:6 , fontWeight:700 },
+   "אופרה 1ב שורה 1 קומה 1":{position:"relative", top:23 , left:305   , fontSize:7 , fontWeight:700, width:55  ,textAlign:'center' ,lineHeight:1  },
+   "אופרה 1ב שורה 2 קומה 1":{position:"relative", top:38 , left:305   , fontSize:7 , fontWeight:700 , width:55  ,textAlign:'center' ,lineHeight:1 },
 
 
 
-"אופרה 2ב שורה 1 קומה 2": {position:"relative", top:61 , left:215   , fontSize:6 , fontWeight:700 },
-"אופרה 2ב שורה 2 קומה 2": {position:"relative", top:75 , left:215   , fontSize:6 , fontWeight:700 },
-"אופרה 2ב שורה 3 קומה 3": {position:"relative", top:88 , left:215   , fontSize:6 , fontWeight:700 },
+   "אופרה 2א שורה 1 קומה 2": {position:"relative", top:70 , left:50   , fontSize:7, fontWeight:700  },
+   "אופרה 2א שורה 2 קומה 2" :{position:"relative", top:86 , left:50  , fontSize:7, fontWeight:700 },
+
+   "אופרה 2א שורה 3 קומה 3": {position:"relative", top:105 , left:50  , fontSize:7 , fontWeight:700 },
+
+
+
+   "אופרה 2ב שורה 1 קומה 2": {position:"relative", top:70 , left:315   , fontSize:7 , fontWeight:700 },
+   "אופרה 2ב שורה 2 קומה 2": {position:"relative", top:86 , left:315   , fontSize:7 , fontWeight:700 },
+   "אופרה 2ב שורה 3 קומה 3": {position:"relative", top:103 , left:315   , fontSize:7 , fontWeight:700 },
+
+
 
 }
+const ThaeaterName="תיאטראות אילת"
+
+const Eilat_1 :  TheaterType ={ mainSeats: Eilat1_mainSeats , sideSeats: Eilat1_sideSeats, testsStyle: Eilat1_sideTextStyles ,styles:  Eilat1_sideStyles, ThaeaterName}
+
+export default   Eilat_1
 
 // export const theatherSurroundSeatsMobileTextPositons={
 // "שירה 1 קומה 1":{top:0,left:0},

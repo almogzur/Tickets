@@ -32,8 +32,8 @@ type HTMLInputTypes =
 interface OutLineInputWrapType {
     stateName:string // the name of the state to update in the event 
     label:string  
-    value:string
-    onChangeHndler:ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
+    value?:string
+    onChangeHndler?:ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
     textColorStateFocused?:CSSProperties['color']
     textColorStateFilled?:CSSProperties['color']    
     inputType?: HTMLInputTypes

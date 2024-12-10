@@ -1,22 +1,22 @@
 import { useSession } from 'next-auth/react'
-import {ChangeEvent, ChangeEventHandler, FormEvent, Key, useContext, useEffect,useState} from 'react'
+import {ChangeEvent, ChangeEventHandler, Dispatch, FormEvent, Key, SetStateAction, useContext, useEffect,useState} from 'react'
 import { useRouter } from 'next/router'
 import AdminLayout from '@/Layouts/admin-layout'
-import {  Typography , OutlinedInput , Stack as Flex, TextField, Select , MenuItem, InputLabel, SelectChangeEvent, Box, FormControl, Theme, useTheme} from '@mui/material'
-
-import { mainSeats ,sideSeats ,sideSeateTextStyles ,sideSeatsStyles } from '../../../constants/theathers/eilat_1'
-import OutLineInputWrap from '@/components/admin/input-wrap'
-
+import {Typography , OutlinedInput , Stack as Flex, Select , MenuItem, SelectChangeEvent, FormControl, useTheme, InputLabel} from '@mui/material'
+import  Eilat_1 from '../../../constants/theathers/eilat_1'
+import  Eilat_2 from '@/constants/theathers/eilat_2'
 import WidthContext from '@/context/WidthContext'
-import Editor from '@/components/text-editor/editor'
-import DatesList from '@/components/admin/date-list'
-import SeatsControl from '@/components/admin/SeatsControl'
-import PicerForm from '@/components/admin/price-form'
-
-import { Seats } from '@/constants/models/Events'
+import DatesList from '@/components/admin/newEvent/date-list'
+import TheaterControls from '@/components/admin/newEvent/theater-controls'
+import TikitForm from '@/components/admin/newEvent/tikit-form-form'
+import { Seats, SeatStyles } from '@/constants/models/Events'
 import Head from 'next/head'
 import { DateTimeValidationError, PickerChangeHandlerContext } from '@mui/x-date-pickers'
-import dayjs from 'dayjs'
+import { TheaterType } from '@/pages/_app'
+import InfoForm from '@/components/admin/newEvent/info-form'
+import TheaterSelect from '@/components/admin/newEvent/theater-select'
+
+
 const NewEventPage=()=>{
 
   const router = useRouter()
@@ -24,11 +24,10 @@ const NewEventPage=()=>{
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
   const theme = useTheme()
 
-
-
-  // Theater 
-  const [mainSeatsState, setMainSeatsState]= useState<Seats>({...mainSeats})
-  const [sideSeatsState , setSideSeatsState] = useState<Seats>({...sideSeats})
+  //Theater 
+  const TheaterList :TheaterType[] = [ Eilat_1, Eilat_2]
+  const [theater,setTheater] = useState<TheaterType>({mainSeats:null,sideSeats:null,styles:null,testsStyle:null,ThaeaterName:""})
+  //const resetTheater= ()=>{ setMainSeatsState({...mainSeats}) ; setSideSeatsState({...sideSeats}) }
 
   // Info
   const [info,setInfo]=useState({name:"",loction:"",cat:"",tag:""})
@@ -71,38 +70,33 @@ const NewEventPage=()=>{
     
     setPrices(prev=>({...prev,[name]:tryTransformToNumber(value)}))  
   }
-   
+  // ad Text 
+  const [adText,setAdText ]= useState()
+
+ 
 
   useEffect(()=>{  })
 
-    if (status === 'loading') {
+if (status === 'loading') {
      return <h1 style={{textAlign:'center'}}>Loading...</h1>
 }
 
 return (
   <>
   <Head>
-
-  <meta name="viewport" content="width=device-width, user-scalable=no"/>
+   <meta name="viewport" content="width=device-width, user-scalable=no"/>
   </Head>
-    <AdminLayout>
+     <AdminLayout>
       <Typography variant='h3' textAlign={"center"} color='primary' > אירוע חדש</Typography>
      
-       <InfoForm InfoKeys={info} Hndler={InfoHndler}/>
+       <InfoForm InfoKeys={info} Hndler={InfoHndler} />
        <DatesList Dates={Dates} addDataHndler={ addDate } removeDateHndler={ removeDate} />
-       <PicerForm normalPrice={Prices.normalPrice} dicountPrice={Prices.discountPricel} PriceHndler={PricesHndler}  />
+      {Dates.length && <TikitForm normalPrice={Prices.normalPrice} dicountPrice={Prices.discountPricel} PriceHndler={PricesHndler} Dates={Dates}  />}
+       <TheaterSelect theaters={TheaterList} seter={setTheater} />
+       { theater.mainSeats && <TheaterControls theater={theater} setTheater={setTheater} />}
+      
 
-       <TheaterSelect />
-       
-       <SeatsControl  
-            mainSeats={mainSeatsState} 
-            sideSeats={sideSeatsState} 
-            sideSeateTextStyles={sideSeateTextStyles} 
-            sideSeatsStyles={sideSeatsStyles}
-            setMainSeatsState={setMainSeatsState}
-            setSideSeatsState={setSideSeatsState}
-             />
-    </AdminLayout>
+     </AdminLayout>
     </>
 ) 
 }
@@ -111,85 +105,8 @@ export default NewEventPage
 
 
 
-interface InfoFormType { InfoKeys:{name:string,loction:string,cat:string,tag:string ,  } ,Hndler : ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>}
-
-const InfoForm =({InfoKeys,Hndler}:InfoFormType)=>{
-
-  const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
-  const theme = useTheme()
-
-   return(
-    <Flex direction={ md? "row" :'column'} gap={2}   justifyContent={"center"} alignItems={'baseline'} boxShadow={` 3px 3px 3px 2px ${theme.palette.primary.main}`}  >
-
-    <Flex width={md? '40%':"100%"} > 
-      {Object.entries(InfoKeys).map(([name,value],i)=>{
-
-          let Locolize = (name: Key)  =>{
-
-            let LocLabel = ""
-            
-
-             switch(name){
-              case "name": LocLabel += "שם";
-              break;
-              case "loction": LocLabel += "מיקום";
-              break;
-              case "cat": LocLabel += "קטגוריה";
-              break;
-              case "tag": LocLabel += "תגית";
-              break;
-              default : LocLabel += name
-            }
-
-            return LocLabel
-          }
-        
-          return <OutLineInputWrap key={name} stateName={name} label={Locolize(name)} value={value} onChangeHndler={Hndler } />
-
-      })}
-   </Flex>
-
-    <Flex width={ md? "60%": "100%"} >
-      <Editor/>
-    </Flex>
 
 
-</Flex>   
-
-   )
-
-}
-
-
-
-const TheaterSelect =({})=> { 
-
-  const [age, setAge] = useState('');
-
-  const handleChange = (event: SelectChangeEvent) => {
-    setAge(event.target.value as string);
-  };
-
-  return (
-      <>
-       <Typography variant='h3' textAlign={"center"} color='primary' >סימון מושבים</Typography> 
-       <FormControl  sx={{  minWidth:200 }} >
-
-      <Select
-          displayEmpty
-          value={""}
-          input={<OutlinedInput />}
-     
-        >
-          <MenuItem disabled value="">
-            <em>בחר אולם</em>
-          </MenuItem>
-
-        </Select>
-       </FormControl>
-      </>
-  );
-}
 
 
 
