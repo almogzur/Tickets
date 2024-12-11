@@ -118,6 +118,7 @@ import AdminMapPositionsContext from '@/context/admin-map-positions-context';
             setTheater={setTheater}
           /> 
 
+      <Typography variant='h4' textAlign='start' sx={{color:"black"}} >מושבים</Typography> 
 
        <Container   sx={{boxShadow:` 3px 3px 3px 2px ${theme.palette.primary.main}`, marginBottom:3}} >
          <AdminNewEventTheatherMap isMultiSelect={isMultiSelect}  setIsMultiSelect={setIsMultiSelect} multiSelectBadgeInfo={amountOfSeatsSelcted}    >

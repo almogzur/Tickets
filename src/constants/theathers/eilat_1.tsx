@@ -68,7 +68,7 @@ const positionAtr : CSSProperties = {
    "שירה 2 קומה 1": {top:-220 ,left:-20, ...positionAtr},
    "שירה 2 קומה 2": {top:-264 ,left:-50 ,...positionAtr},
 
-   "שירה 3 קומה 1":{top:-220 , left:-20, ...positionAtr},
+   "שירה 3 קומה 1":{top:-221 , left:-20, ...positionAtr},
    "שירה 3 קומה 2":{top:-265 , left:-50, ...positionAtr},
 
    "קומי 1 קומה 1":{top:-506 , left:450 , ...positionAtr },
@@ -78,7 +78,7 @@ const positionAtr : CSSProperties = {
    "קומי 2 קומה 2":{top:-549 , left:480 ,...positionAtr},
 
    "קומי 3 קומה 1":{top:-506 , left:450, ...positionAtr},
-   "קומי 3 קומה 2":{top:-549 , left:480, ... positionAtr},
+   "קומי 3 קומה 2":{top:-550 , left:480, ... positionAtr},
 
    "אופרה 1א שורה 1 קומה 1":{top:-550 , left:135 , ...positionAtr,flexDirection:"row" , },
    "אופרה 1א שורה 2 קומה 1":{top:-545 , left:135 , ...positionAtr,flexDirection:"row" ,},
@@ -136,7 +136,7 @@ const positionAtr : CSSProperties = {
 
    "אופרה 2ב שורה 1 קומה 2": {position:"relative", top:70 , left:315   , fontSize:7 , fontWeight:700 },
    "אופרה 2ב שורה 2 קומה 2": {position:"relative", top:86 , left:315   , fontSize:7 , fontWeight:700 },
-   "אופרה 2ב שורה 3 קומה 3": {position:"relative", top:103 , left:315   , fontSize:7 , fontWeight:700 },
+   "אופרה 2ב שורה 3 קומה 3": {position:"relative", top:104 , left:315   , fontSize:7 , fontWeight:700 },
 
 
 

@@ -1,6 +1,6 @@
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import {  Typography  , Stack as Flex, Button , Box, Divider } from '@mui/material'
-import {useContext, useEffect,useState} from 'react'
+import {  Typography  , Stack as Flex, Button , Box, Divider, FormControl } from '@mui/material'
+import {Dispatch, SetStateAction, useContext, useEffect,useState} from 'react'
 import WidthContext from '@/context/WidthContext';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -8,13 +8,13 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import { MdDelete } from "react-icons/md";
-import { DateTimeValidationError, PickerChangeHandlerContext, renderTimeViewClock } from '@mui/x-date-pickers'
+import { DateTimeValidationError, MobileDateTimePicker, PickerChangeHandlerContext, renderTimeViewClock } from '@mui/x-date-pickers'
 import { grey } from "@mui/material/colors"
 
 
 import { useTheme } from '@mui/material/styles';
-import dayjs from 'dayjs';
-interface DatePikerPropsType { date:Date}
+
+interface DatePikerItemPropsType { date:Date , hendler:Dispatch<SetStateAction<Date>>}
 
 
 interface DatesListPropsType { 
@@ -30,97 +30,82 @@ const DatesList = ({addDataHndler,removeDateHndler,Dates}:DatesListPropsType)=>{
 
 
 
- const Item = ({date}:DatePikerPropsType)=>{
-         const options :Intl.DateTimeFormatOptions = {
-                 weekday: 'long',
-                 year: 'numeric',
-                 month: 'long',
-                 day: 'numeric',
-               };
-               
- 
-         return  ( 
-        
-          <ListItem  sx={{background:grey[100] , border:"solid .5px black", borderRadius:2 , m:1}}   >
-           <ListItemAvatar  >
-              <Button color='error' onClick={()=>removeDateHndler(date)}>
-                <Avatar sx={{background:theme.palette.error.light}} >
-                <MdDelete   />
-              </Avatar>
-              </Button>
-           </ListItemAvatar>
- 
-         <ListItemText 
-             sx={{color:theme.palette.primary.main}} 
-             primary={date.toLocaleDateString("he-IL",options)} 
-             secondary={ "שעה : " + date.toLocaleTimeString("he-IL")  }  
-             secondaryTypographyProps={{style:{color:theme.palette.secondary.main}}} />
-        </ListItem>
-
- 
-        
-      
- )
-         }
-
 
   return (
-    <Flex 
-      direction={ !md? "column":'row'}  
-      mt={3} 
+    <>
 
-      sx={{}} 
- 
-      mb={2} 
-      boxShadow={` 3px 3px 3px 2px ${theme.palette.primary.main}`}
-    >   
+     <Flex  direction={  "column"} alignItems={!md? "center":"baceline"}   >   
 
     {/* piker */}
-     <Flex p={1}     >
-   
-
-      <DateTimePicker
-        desktopModeMediaQuery='@media (min-width: 600px)'
-         
-         slotProps={{
-     
-         openPickerIcon: {  color: 'primary',},
-      
-         textField:{ placeholder:"בחר תאריך" ,   }
-         
-       }}
-
-
+    <FormControl sx={{background:grey[400] , position:'sticky' , top:40 , zIndex:2 , }} >
+      <MobileDateTimePicker    
+        slotProps={{
+             textField:{ placeholder:"בחר תאריך" ,   }
+          }}
+        sx={{m:1 ,  }}
         viewRenderers={{
           hours: renderTimeViewClock,
           minutes: renderTimeViewClock,
           seconds: renderTimeViewClock,
          }}
-        onAccept={addDataHndler}
+          onAccept={addDataHndler}
         
        />
+       </FormControl>
        
-     </Flex>
-
      {/* list */}
-    
-     <Divider sx={{borderWidth:3}} ></Divider>
-     
-      <Box   height={200}  >
-        
-
-      <Typography variant='h4' textAlign={'center'} color='primary'  >תאריכים נבחרים </Typography>
-            <List  >
+      <Box  width={"100%"}  >
+         <List   >
              {Dates.map((date,i)=>{
-                return <Item key={date.toString()} date={date}  ></Item>
+                return <Item key={date.toString()} date={date} hendler={ removeDateHndler}  ></Item>
                  })}
-           </List>
+         </List>
 
      </Box>
 
 
     </Flex>
+    </>
  )
 }
 
 export default DatesList
+
+
+
+const Item = ({date ,hendler }:DatePikerItemPropsType)=>{
+  const theme = useTheme()
+
+  const options :Intl.DateTimeFormatOptions = {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        };
+        
+
+  return  ( 
+ 
+   <ListItem  sx={{background:grey[200] , borderRadius:2 , width:"inherit" , m:2 , boxShadow:"0.5px 0.5px 0.1em black"}}   >
+    <ListItemAvatar  >
+       <Button color='error' onClick={()=>hendler(date)}>
+         <Avatar sx={{background:theme.palette.error.light}} >
+         <MdDelete   />
+       </Avatar>
+       </Button>
+    </ListItemAvatar>
+
+  <ListItemText 
+      primaryTypographyProps={{fontSize:18}}
+      
+      sx={{color:theme.palette.primary.main  }} 
+      primary={date.toLocaleDateString("he-IL",options)} 
+      secondary={ "שעה : " + date.toLocaleTimeString("he-IL")  }  
+      secondaryTypographyProps={{style:{color:theme.palette.error.main, fontSize:15}}} />
+ </ListItem>
+
+
+ 
+
+)
+  }

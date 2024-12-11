@@ -22,7 +22,7 @@ useEffect(()=>{
          <Flex direction={"row"} 
           sx={{   }}
             >
-          <Container  >
+          <Container  sx={{}} >
             {children}
           </Container>
         </Flex>

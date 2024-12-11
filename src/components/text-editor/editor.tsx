@@ -15,7 +15,7 @@ import EditorMenuControls from "./menu-controls";
 import useExtensions from "./useExtensions";
 import { Colors } from "@/lib/colors";
 import WidthContext from "@/context/WidthContext";
-import { blue } from "@mui/material/colors";
+import { blue, grey } from "@mui/material/colors";
 
 
 function fileListToImageFiles(fileList: FileList): File[] {
@@ -136,21 +136,24 @@ export default function Editor() {
           // bar on your site).
           
             "& .MuiTiptap-RichTextContent-root":{
-                minHeight: xl? 70 : lg?  40 :  md? 35 : 0,
                 color:'black',
+                
               "& p.is-editor-empty:first-child::before":{ 
                 display:"flex" ,
                 width:"100%" , 
+                
                 fontWeight:"700",
                 fontSize:20
                 }
              },
-            "& .MuiTiptap-RichTextField-content":{     },
+            "& .MuiTiptap-RichTextField-content":{  },
             "& .MuiTiptap-RichTextContent-editable":{ },
+            
             "& .MuiSvgIcon-root":{color:blue[900], scale:1.3},
             "& .ProseMirror": {
               "& h1, & h2, & h3, & h4, & h5, & h6": {
               scrollMarginTop: showMenuBar ? 50 : 0,
+              
            },
     
           },
@@ -167,13 +170,13 @@ export default function Editor() {
             handleDrop: handleDrop,
             handlePaste: handlePaste,
           }}
-          renderControls={() => <Box sx={{}}><EditorMenuControls  /> </Box> }
+          renderControls={() => <Box sx={{ background:grey[400], p:2 ,borderRadius:1, border:"solid 0.5px black" }}><EditorMenuControls  /> </Box> }
           RichTextFieldProps={{
             // The "outlined" variant is the default (shown here only as
             // example), but can be changed to "standard" to remove the outlined
             // field border from the editor
             variant: 'outlined',
-            
+          
             
             MenuBarProps: {
               hide: !showMenuBar,

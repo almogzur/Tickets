@@ -1,5 +1,4 @@
 import {Box , Stack as Flex , Typography as Heading , Button, Container, Typography, FormHelperText, FormLabel} from '@mui/material'
-import TooltopButton from './client-seat-btn'
 import { motion ,AnimatePresence } from "framer-motion"
 import { useState, useEffect, useContext, CSSProperties, useRef, } from 'react'
 import MoviesContext from '../../context/Events';
@@ -256,6 +255,13 @@ const ClinetSideSeates = ({mainSeats,sideSeats,sideText,sideStyles}:{mainSeats:S
         </>
       );
   };
+
+
+
+
+
+
+  
   
   const PaymentButton = ()  =>  {
   

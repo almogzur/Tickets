@@ -23,7 +23,7 @@ import { SessionProvider } from "next-auth/react"
 
 //MUI ------
 import { Color, createTheme, ThemeProvider } from '@mui/material/styles';
-import { blue } from '@mui/material/colors';
+import { blue, grey } from '@mui/material/colors';
 
 
 
@@ -84,12 +84,12 @@ const theme  = createTheme({
             root:{
               direction:"ltr"  ,
                width:"100%" , 
-               textAlign:"end",
-               fontSize:20,
+               textAlign:"center",
+               fontSize:18,
               // position is set global color in component wraper 
               // "&.MuiFormLabel-root:not(.MuiFormLabel-filled):not(.Mui-focused)":{color:'pink'},
-               "&.Mui-focused":{ left:30 , top:-10 ,  }, // them color
-               "&.MuiFormLabel-filled:not(.Mui-focused)":{left:30, top:-6, }, // filed
+               "&.Mui-focused":{  top:-5 ,  }, // them color
+               "&.MuiFormLabel-filled:not(.Mui-focused)":{ top:-5 }, // filed
                 },
           }
         },
@@ -103,8 +103,7 @@ const theme  = createTheme({
          styleOverrides:{
            root:{  
             direction:"rtl",
-            padding:"0",
-            margin:0.3,
+            background:grey[100],
             "&.Mui-focused": {},
             "&:hover": {},
             "& .MuiOutlinedInput-notchedOutline": {},
@@ -113,7 +112,7 @@ const theme  = createTheme({
            },    
            input:{
             direction:"rtl",
-            padding:15,
+            padding:13,
             "&:hover":{  },
             '&::placeholder':{color:blue[700],fontSize:20, fontWeight:700 , opacity:.7  } 
            }
@@ -127,7 +126,7 @@ const theme  = createTheme({
         }
        },
        MuiSelect:{
-        defaultProps:{'aria-label': 'Without label'},
+        defaultProps:{},
         styleOverrides:{
           root:{
             direction:"rtl",
