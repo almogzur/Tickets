@@ -1,7 +1,7 @@
 import {  CSSProperties, useContext } from 'react'
 
 import {Colors} from '@/lib/colors'
-import ClientTipContext from '../../context/client-tip-context'
+import ClientTipContext from '@/context/client-tip-context'
 
 const styles :Record<string,CSSProperties> =  {
   seats: {
@@ -30,11 +30,12 @@ const styles :Record<string,CSSProperties> =  {
 
 
 const TooltipButton = ({ seatValue, seatnumber, row ,hendler }:ToolTipButtonType) => {
+
   const {clientTipPosition, setClientTipPosition ,clinetTipInfo ,setClinetTipInfo, resetClinetTip }=useContext(ClientTipContext)
 
 
 
-    const tiohndler = (xArg: number,yArg: number)=>{
+    const tiphndler = (xArg: number,yArg: number)=>{
       setClientTipPosition({x:xArg,y:yArg})
       
     }
@@ -46,7 +47,7 @@ const TooltipButton = ({ seatValue, seatnumber, row ,hendler }:ToolTipButtonType
      <div
        onClick={(e)=> { 
             hendler(seatValue,seatnumber,row) ;
-            tiohndler(e.nativeEvent.pageX,e.nativeEvent.pageY ) 
+            tiphndler(e.nativeEvent.pageX,e.nativeEvent.pageY ) 
             setClinetTipInfo({row:row,initValue:seatValue,seatNumber:seatnumber} )
        }}
 

@@ -11,4 +11,4 @@ interface ClinetTipContenxtType {
      resetClinetTip:()=> void
 }
 
-export default createContext<ClinetTipContenxtType|null>(null)
+export default createContext<ClinetTipContenxtType>(null)
