@@ -17,7 +17,7 @@ import ClineTransformContext from '@/context/client-map-positions-context'
 import SingleTipContext from '@/context/single-tip-context';
 import multiSelectContext from '@/context/multi-select-context';
 ///////
-import ClientTipContext from '@/context/client-tip-context'
+import ClientTipContext from '@/context/c-tip-context'
 //Auth 
 import { SessionProvider } from "next-auth/react"
 
