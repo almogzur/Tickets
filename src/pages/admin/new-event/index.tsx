@@ -16,7 +16,6 @@ import { TheaterType } from '@/pages/_app'
 import InfoForm from '@/components/admin/newEvent/info-form'
 import TheaterSelect from '@/components/admin/newEvent/theater-select'
 
-
 const NewEventPage=()=>{
 
   const router = useRouter()

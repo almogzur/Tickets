@@ -1,6 +1,7 @@
 import {  CSSProperties, useContext } from 'react'
 
 import {Colors} from '@/lib/colors'
+import ClientTipContext from '@/context/client-tip-context';
 
 const styles :Record<string,CSSProperties> =  {
   seats: {
@@ -27,7 +28,6 @@ const styles :Record<string,CSSProperties> =  {
   
  }
 
- import ClientTipContext from '@/context/client-tip-context';
 
 const TooltipButton = ({ seatValue, seatnumber, row ,hendler }:ToolTipButtonType) => {
   const {clientTipPosition, setClientTipPosition ,clinetTipInfo ,setClinetTipInfo, resetClinetTip }=useContext(ClientTipContext)
@@ -48,22 +48,6 @@ const TooltipButton = ({ seatValue, seatnumber, row ,hendler }:ToolTipButtonType
             hendler(seatValue,seatnumber,row) ;
             tiohndler(e.nativeEvent.pageX,e.nativeEvent.pageY ) 
             setClinetTipInfo({row:row,initValue:seatValue,seatNumber:seatnumber} )
-
-          //   console.log( 
-              
-          //     "x",e.clientX,
-          //     "x",e.pageX,
-          //     "Ex",e.nativeEvent.pageX,
-          //     "enpx",e.nativeEvent.pageX,
-          //     "enlx",e.nativeEvent.layerX,
-
-          //      "ecy",e.clientY,
-          //     "epy",e.pageY,
-          //     "enly",e.nativeEvent.layerY,
-          //    "eny",e.nativeEvent.y, 
-          //     "enpy",e.nativeEvent.pageY,
-          //    "ency",e.nativeEvent.clientY
-          //     );
        }}
 
        style={ 
@@ -86,4 +70,21 @@ const TooltipButton = ({ seatValue, seatnumber, row ,hendler }:ToolTipButtonType
 
 
 export default TooltipButton
+
+        // click event X , Y 
+        //   console.log( 
+              
+          //     "x",e.clientX,
+          //     "x",e.pageX,
+          //     "Ex",e.nativeEvent.pageX,
+          //     "enpx",e.nativeEvent.pageX,
+          //     "enlx",e.nativeEvent.layerX,
+
+          //      "ecy",e.clientY,
+          //     "epy",e.pageY,
+          //     "enly",e.nativeEvent.layerY,
+          //    "eny",e.nativeEvent.y, 
+          //     "enpy",e.nativeEvent.pageY,
+          //    "ency",e.nativeEvent.clientY
+          //     );
   
