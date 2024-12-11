@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-function DisableZoomEffect() {
+function DisableZoomEffect() :void {
   useEffect(() => {
     // Prevent zoom with the wheel
     const handleWheel = (e: WheelEvent) => {

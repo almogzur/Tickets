@@ -1,4 +1,4 @@
-import  {  useState   } from 'react';
+import  {  ReactNode, useState   } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import {Box , Stack as Flex } from '@mui/material';
 import List from '@mui/material/List';
@@ -96,7 +96,8 @@ export default function TemporaryDrawer() {
   );
 }
 
-const Item  = ({text, Icon ,link , index})=>{
+interface ItemPropsType  {text: string ,Icon :ReactNode , link:string,index:number }
+const Item  = ({text, Icon ,link , index} :ItemPropsType)=>{
   return    (  
    
 <Link href={link} style={{textDecoration:'none'  , color:"black" }}  >

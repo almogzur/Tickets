@@ -14,12 +14,7 @@ import ClientLayout from '../../Layouts/client-layout';
 
 
 
-import {
-  mainSeats as EilatMain ,
-   sideSeats as EilatSide ,
-    sideSeateTextStyles as EilatSideText ,
-     sideSeatsStyles as EilatSideStyels
-    } from '../../constants/theathers/eilat_1'
+import   Eilat_1   from '../../constants/theathers/eilat_1'
 
 
 
@@ -49,7 +44,7 @@ const DetailsPage = ({}) => {
             <ShowCover imageSrc={event.cover} name = {event.name} />
             </Flex>
       
-         <ClinetSideSeates mainSeats={EilatMain} sideSeats={EilatSide} sideText={EilatSideText} sideStyles={EilatSideStyels}/>
+         <ClinetSideSeates mainSeats={Eilat_1.mainSeats} sideSeats={Eilat_1.sideSeats} sideText={Eilat_1.testsStyle} sideStyles={Eilat_1.styles}/>
      {/* <Map/>  */}
       </ClientLayout>
     </>

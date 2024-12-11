@@ -1,4 +1,4 @@
-import NextAuth from "next-auth"
+import NextAuth, { User } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import client from '@/lib/CRUD_db'
 import { MongoDBAdapter } from "@auth/mongodb-adapter"
@@ -40,7 +40,7 @@ export const authOptions = {
 
            if(credential.password === DbUser.password){
             const user = { id:DbUser._id.toString(), name:DbUser.name  }
-            console.log("auth return user session ", user);
+           // console.log("auth return user session ", user);
             
             return user
            }
@@ -58,7 +58,9 @@ export const authOptions = {
   callbacks: { 
     // invoke after provider return  
     
-    async signIn({ user, account, profile,credentials }) {
+    async signIn( user: any, ) {
+      console.log( user);
+      
       
       // returning the user presist it as session 
       if(user){

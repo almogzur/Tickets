@@ -265,15 +265,12 @@ const ClinetSideSeates = ({mainSeats,sideSeats,sideText,sideStyles}:{mainSeats:S
           <Link
             href={{
                 pathname: "/payment",
-                query: {
-                movieId: event?.id,
-                selectedSeatsQuery: JSON.stringify(selectedSeats),
-              },
+          
             }}
           >
             <Button  sx={{background:Colors.b , color:"#fff" , height:60 ,fontSize:!xs?20:30, letterSpacing:1 ,lineHeight:1.2 , }} >
               מעבר לתשלום    <br/>
-              סה״כ {selectedSeats.length * (event?.ticketCost || 0) + " שח"}
+              סה״כ {selectedSeats.length * (  0) + " שח"}
             </Button>
           </Link>
         )

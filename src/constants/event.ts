@@ -6,12 +6,7 @@ import poriat from '../../data/covers/poriat.jpeg'
 import noa from '../../data/covers/noa.jpeg'
 
 
-import {
-  mainSeats as Eilat1_MainSeats,
-  sideSeats  as Eilat1_sidendSeats,
-  sideSeatsStyles as Eilat_1SideSeatsStyles,
-  sideSeateTextStyles as Eilat1_SideSeateTextStyles
-} from '../constants/theathers/eilat_1'
+import Eilat_1 from '../constants/theathers/eilat_1'
 
 
 
@@ -46,10 +41,10 @@ export const events: Event[] = [
     ticketCost: 200,
     citizenTicketCost :1,
     cover:arzi,
-    mainSeats:Eilat1_MainSeats,
-    sideSeats:Eilat1_sidendSeats,
-    sideeatsStyles:Eilat_1SideSeatsStyles,
-    sideTextStyles:Eilat1_SideSeateTextStyles,
+    mainSeats:Eilat_1.mainSeats,
+    sideSeats:Eilat_1.sideSeats,
+    sideeatsStyles:Eilat_1.styles,
+    sideTextStyles:Eilat_1.testsStyle
   },
   {
    id: 2,

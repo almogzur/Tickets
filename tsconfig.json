@@ -17,6 +17,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "noImplicitAny": true,
+    "typeRoots": ["./typings", "./vendor/types"],
     "paths": {
       "@/*": [
         "./src/*"

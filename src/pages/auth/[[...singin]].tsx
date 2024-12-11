@@ -11,9 +11,7 @@ import { MdOutlineCancelPresentation } from "react-icons/md";
 
 interface errorMessagesType{
 
-  Callback:string
-  CredentialsSignin:string
-  Default:string
+  [key: string]: string;
 }
 
 const SingInPage=()=>{
@@ -22,12 +20,12 @@ const SingInPage=()=>{
   const { data: session ,status ,update } = useSession()
   const theme = useTheme()
 
-  const {error} =  router.query
+  const {error }  =  router.query
 
   const errorMessages :errorMessagesType  = {
-    Callback: "Error in the OAuth callback handler route.",
-    CredentialsSignin: "שם משתמש או סמסמה לא קיימים במערכת ",
-    Default: "שגיאה במערכת נסה שנית ",
+     Callback: "Error in the OAuth callback handler route.",
+     CredentialsSignin: "שם משתמש או סמסמה לא קיימים במערכת ",
+     Default: "שגיאה במערכת נסה שנית ",
   };
 
  
@@ -125,8 +123,6 @@ return (
           </Flex>
 
 
-
-
             <Flex direction={'row'} justifyContent={"center"}  >
                <Button type='submit'  sx={{bgcolor:Colors.b, color:"#fff" , width:"40%" , height:60 ,fontSize:20, fontWeight:"bold" }}  >התחבר</Button>
            </Flex>
@@ -134,7 +130,7 @@ return (
          </form>
      </Box>
                 {/*  change the quary system to context  */}
-     { errorMessages.hasOwnProperty(error as string) &&  <Alert sx={{direction:"rtl"}} severity="error">{errorMessages[error] }</Alert>}
+     { typeof error ==='string'&& errorMessages.hasOwnProperty( error) &&  <Alert sx={{direction:"rtl"}} severity="error">{ errorMessages[error] }</Alert>}
 
     </Paper>
 

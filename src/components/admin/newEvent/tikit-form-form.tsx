@@ -27,7 +27,7 @@ interface PriceFormPropsType {
             {Dates.length ?  Dates.map((date,i)=>{
           
           return (  
-             <Flex  justifyContent={"space-around"} bgcolor={grey[100]} m={1} border={"solid .5px black"} borderRadius={2} padding={2}  >
+             <Flex  key={date.toString()} justifyContent={"space-around"} bgcolor={grey[100]} m={1} border={"solid .5px black"} borderRadius={2} padding={2}  >
                  <Flex direction={"row"} alignItems={"center"} >
 
                      <Flex>
