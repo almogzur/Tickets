@@ -1,8 +1,8 @@
 import {  CSSProperties, useContext } from 'react'
 
 import {Colors} from '@/lib/colors'
-import ClientTipContext from '@/context/client-tip-context'
 
+import Context from '../../context/client-tip-context'
 const styles :Record<string,CSSProperties> =  {
   seats: {
     backgroundColor: "#fff",
@@ -31,7 +31,7 @@ const styles :Record<string,CSSProperties> =  {
 
 const TooltipButton = ({ seatValue, seatnumber, row ,hendler }:ToolTipButtonType) => {
 
-  const {clientTipPosition, setClientTipPosition ,clinetTipInfo ,setClinetTipInfo, resetClinetTip }=useContext(ClientTipContext)
+  const {clientTipPosition, setClientTipPosition ,clinetTipInfo ,setClinetTipInfo, resetClinetTip }=useContext(Context)
 
 
 
