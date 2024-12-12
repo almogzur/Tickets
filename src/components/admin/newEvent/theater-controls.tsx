@@ -9,6 +9,7 @@ import MuliSelectTip from '@/components/admin/newEvent/multi-select-tip'
 import AdminNewEventTheatherMap from './admin-new-event-theather-map';
 import { TheaterType } from '@/pages/_app';
 import AdminMapPositionsContext from '@/context/admin-map-positions-context';
+import { grey } from '@mui/material/colors';
 
 
 
@@ -118,18 +119,19 @@ import AdminMapPositionsContext from '@/context/admin-map-positions-context';
             setTheater={setTheater}
           /> 
 
-      <Typography variant='h4' textAlign='start' sx={{color:"black"}} >מושבים</Typography> 
-
-       <Container   sx={{boxShadow:` 3px 3px 3px 2px ${theme.palette.primary.main}`, marginBottom:3}} >
-         <AdminNewEventTheatherMap isMultiSelect={isMultiSelect}  setIsMultiSelect={setIsMultiSelect} multiSelectBadgeInfo={amountOfSeatsSelcted}    >
-          <Flex direction={"column"}    height={!xs? 320 : 600}      sx={{direction:"ltr"}}  >
-             <Stage  />
-             {MainSeatS}
-             {Text}
-             {SideSeats}
-          </Flex>      
-        </AdminNewEventTheatherMap>      
-      </Container>
+         <AdminNewEventTheatherMap // style in children 
+           isMultiSelect={isMultiSelect}  
+           setIsMultiSelect={setIsMultiSelect}
+            multiSelectBadgeInfo={amountOfSeatsSelcted}   
+             >
+             <Flex direction={"column"}    height={!xs? 320 : 600}      sx={{direction:"ltr"}}  >
+               <Stage  />
+               {MainSeatS}
+               {Text}
+               {SideSeats}
+            </Flex>      
+         </AdminNewEventTheatherMap>      
+ 
       </>
       );
   };

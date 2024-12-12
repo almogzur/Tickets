@@ -34,10 +34,11 @@ const DatesList = ({addDataHndler,removeDateHndler,Dates}:DatesListPropsType)=>{
   return (
     <>
 
-     <Flex  direction={  "column"} alignItems={!md? "center":"baceline"}   >   
+     <Flex  direction={  "column"}  width={"inherit"}   height={'calc(100% - 80px)'}
+  overflow={"auto" } >   
 
     {/* piker */}
-    <FormControl sx={{background:grey[400] , position:'sticky' , top:40 , zIndex:2 , }} >
+        <FormControl sx={{background:grey[400] , position:'sticky' , top:0 , zIndex:2 , }}  >
       <MobileDateTimePicker    
         slotProps={{
              textField:{ placeholder:"בחר תאריך" ,   }
@@ -86,7 +87,7 @@ const Item = ({date ,hendler }:DatePikerItemPropsType)=>{
 
   return  ( 
  
-   <ListItem  sx={{background:grey[200] , borderRadius:2 , width:"inherit" , m:2 , boxShadow:"0.5px 0.5px 0.1em black"}}   >
+   <ListItem  sx={{background:grey[200] , width:"inherit" , m:2 , boxShadow:"0.5px 0.5px 0.1em black"}}   >
     <ListItemAvatar  >
        <Button color='error' onClick={()=>hendler(date)}>
          <Avatar sx={{background:theme.palette.error.light}} >
@@ -98,10 +99,10 @@ const Item = ({date ,hendler }:DatePikerItemPropsType)=>{
   <ListItemText 
       primaryTypographyProps={{fontSize:18}}
       
-      sx={{color:theme.palette.primary.main  }} 
+      sx={{color:"black"}} 
       primary={date.toLocaleDateString("he-IL",options)} 
       secondary={ "שעה : " + date.toLocaleTimeString("he-IL")  }  
-      secondaryTypographyProps={{style:{color:theme.palette.error.main, fontSize:15}}} />
+      secondaryTypographyProps={{style:{ fontSize:15}}} />
  </ListItem>
 
 

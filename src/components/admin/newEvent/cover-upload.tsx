@@ -2,7 +2,7 @@ import { useSession } from 'next-auth/react'
 import {Dispatch, MouseEventHandler, SetStateAction, useContext, useEffect,useRef,useState} from 'react'
 import { useRouter } from 'next/router'
 import {Typography , Stack as Flex, Select ,useTheme , Box, FormControl, FormLabel, InputLabel, OutlinedInput, Button, Divider } from '@mui/material'
-import OutLineInputWrap from '../input-wrap'
+import OutLineInputWrap from '../input'
 import { grey } from '@mui/material/colors'
 import Image from 'next/image'
 import WidthContext from '@/context/WidthContext'
@@ -36,28 +36,28 @@ const CoverUpload=({file , preview,onFileChange,setFile,setPreview}:CoverUploadP
 
 return (
     <>
-         <Typography variant='h4' mt={2}  textAlign="start" sx={{color:"black"}}  >תמונה  ראשית </Typography>
          
-            <Flex   >
+      <Flex mt={3}    >
 
               <FormControl sx={{
-                    m:1,
+                    m:0,
                     p:2,
                     bgcolor:grey[400],
                     display:"flex",
                     flexWrap:"wrap",
-                    flexDirection:  "row",
+                    flexDirection:  "column",
                     alignItems:"center",
                      justifyContent:"space-evenly",
-                     gap:2
+                     gap:2,
+                     boxShadow:theme.shadows[15],
                        }}
                       >
-         
-                <Button sx={{ height:60}}  onClick={openDialog} > {  "בחר תמונה "} </Button> 
-                { preview && 
-                 <Button onClick={()=>{setPreview(null); setFile(null)}} sx={{ width:100 , height:60 }} >הסר
-                </Button>
-                }
+                <Typography variant='h6'  textAlign="start" sx={{color:"black"}}  >תמונת  נושא </Typography>
+
+                 <Flex direction={"row"} gap={10} >
+                   <Button sx={{ height:60}}  onClick={openDialog} > {  "בחר תמונה "} </Button> 
+                  { preview && <Button onClick={()=>{setPreview(null); setFile(null)}} sx={{ width:100 , height:60 }} >הסר</Button>}
+                </Flex>       
                 <input type='file' id='cover'    onChange={onFileChange}  accept=".jpg, .jpeg, .png"  ref={Inputref}   hidden />
               </FormControl>
 
@@ -65,22 +65,33 @@ return (
              <Typography sx={{color:"black"}} textAlign={"center"} variant='h5' >תצוגה מקדימה  
             </Typography>
             }
-             <Box textAlign={"center"} bgcolor={grey[300]} m={2}   borderRadius={4} mt={2} alignSelf={"center"} >
             { preview && 
+             <Box 
+                
+                bgcolor={grey[300]}     
+                alignSelf={"center"}  
+                sx={{
+                   padding:2 ,
+                   background:grey[400],
+                   boxShadow:theme.shadows[10],
+                   
+             
+                   }}  
+              >
             <>
             <Image 
               src={preview} 
               alt={file.name} 
-              width={!sm?250:!md? 400 :500}
+              width={!sm?250:!md? 400 :600}
               height={!sm?300:400}
-              style={{objectFit:"contain" ,padding:12 ,background:grey[300] ,borderRadius:10 }} 
+              style={{ objectFit:'contain'}} 
+              translate='yes'
+              
               />
-            <Typography sx={{color:"black" , m:.5}} variant='body2' >{file.name.toLocaleUpperCase()}</Typography>
+            <Typography sx={{color:"black" , m:.5}} variant='body2' > שם הקובץ :  {file.name.toLocaleUpperCase()}</Typography>
             </>
-            }
-
             </Box>
-       
+            }
     </Flex>
     </>
 ) 

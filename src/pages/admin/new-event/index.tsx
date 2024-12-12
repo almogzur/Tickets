@@ -5,7 +5,6 @@ import AdminLayout from '@/Layouts/admin-layout'
 import {Typography , OutlinedInput , Stack as Flex, Select , MenuItem, SelectChangeEvent, FormControl, useTheme, InputLabel, Button} from '@mui/material'
 
 import WidthContext from '@/context/WidthContext'
-import DatesList from '@/components/admin/newEvent/date-list'
 import TheaterControls from '@/components/admin/newEvent/theater-controls'
 import TabsForm from '@/components/admin/newEvent/tabs-form'
 import { Seats, SeatStyles } from '@/constants/models/Events'
@@ -14,6 +13,7 @@ import { DateTimeValidationError, PickerChangeHandlerContext } from '@mui/x-date
 import { TheaterType } from '@/pages/_app'
 import InfoForm from '@/components/admin/newEvent/info-form'
 import CoverUpload from '@/components/admin/newEvent/cover-upload'
+import { grey } from '@mui/material/colors'
 
 const NewEventPage=()=>{
 
@@ -67,9 +67,9 @@ const NewEventPage=()=>{
     setPrices(prev=>({...prev,[name]:tryTransformToNumber(value)}))  
   }
   // Cover 
-    const [file, setFile] = useState<File | null>(null);
-    const [preview ,setPreview] = useState<string>(null)
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const [file, setFile] = useState<File | null>(null);
+  const [preview ,setPreview] = useState<string>(null)
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 
       const selectedFile :File = e.target.files[0];
 
@@ -101,11 +101,10 @@ return (
    <meta name="viewport" content="width=device-width, user-scalable=no"/>
   </Head>
      <AdminLayout>
-      <Typography variant='h3' m={1} textAlign={"start"} sx={{color:"black"}} > אירוע חדש</Typography>
-        
 
-       <CoverUpload file={file} setFile={setFile} preview={preview} setPreview={setPreview} onFileChange={handleFileChange}  />
+      <Typography  variant='h4' m={1} textAlign={"start"} sx={{color:"black"  } } > אירוע חדש</Typography>
        <InfoForm InfoKeys={info} KysHndler={InfoHndler} TheaterHndler={setTheater} />
+
        <TabsForm 
        // Price
         normalPrice={Prices.normalPrice}
@@ -115,14 +114,24 @@ return (
         Dates={Dates} 
         addDataHndler={addDate } 
         removeDateHndler={ removeDate}
+        file={file} 
+        setFile={setFile}
+         preview={preview} 
+         setPreview={setPreview} 
+         onFileChange={handleFileChange} 
+
+
         //Setings
         //Colors
           />
+ 
+      
+       { theater.mainSeats && <TheaterControls theater={theater} setTheater={setTheater} />}
 
-      { theater.mainSeats && <TheaterControls theater={theater} setTheater={setTheater} />}
+  
+
       <Flex p={4} alignItems={"center"}  >
-      <Typography variant='h4' sx={{color:"black"}} >{"  מספר מושבים זמינים  "}{0}</Typography>
-      <Button sx={{height:70 ,width:100}} > שמור </Button>
+        <Button sx={{height:70 ,width:100}} > שמור </Button>
       </Flex>
 
      </AdminLayout>

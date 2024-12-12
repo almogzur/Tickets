@@ -1,5 +1,7 @@
-import { FormControl, InputLabel, OutlinedInput } from "@mui/material"
-import { ChangeEvent, ChangeEventHandler, CSSProperties, Dispatch, SetStateAction, SyntheticEvent, useState } from "react";
+import WidthContext from "@/context/WidthContext";
+import { FormControl, InputBase, InputLabel, OutlinedInput, TextField, TextFieldVariants } from "@mui/material"
+import { error } from "console";
+import { ChangeEvent, ChangeEventHandler, CSSProperties, Dispatch, SetStateAction, SyntheticEvent, useContext, useState } from "react";
 
 
 
@@ -29,24 +31,28 @@ type HTMLInputTypes =
 
 
 
-interface OutLineInputWrapType {
+interface InputWrapType {
     stateName:string // the name of the state to update in the event 
     label:string  
     value?:string
     onChangeHndler?:ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
     textColorStateFocused?:CSSProperties['color']
     textColorStateFilled?:CSSProperties['color']    
-    inputType?: HTMLInputTypes
     textColor?:CSSProperties['color']
+    inputType?: HTMLInputTypes
     isInputRequired?:boolean
-    labelBg?:CSSProperties['color']
+    bg?:CSSProperties['color']
+    variant?:TextFieldVariants
+    Fgrow?:number
+    error?:boolean
+    m?:number|"auto"
     
 }
 
 
 
 
-const OutLineInputWrap = ({
+const InputWrap = ({
     inputType,
     label,
     textColor,
@@ -56,36 +62,37 @@ const OutLineInputWrap = ({
      onChangeHndler,
      isInputRequired,
      stateName,
-     labelBg
-    }:OutLineInputWrapType)=>{
+     variant,
+     Fgrow ,
+     bg,
+     error,
+     m,
+    }:InputWrapType)=>{
+
+        const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
+
 
     return   (
-    <FormControl  sx={{ m: 1 , minWidth:130  }} variant="outlined">
-         <InputLabel
-             variant='outlined' 
-             
-             sx={{
-                textAlign:"center",
-                "&.MuiFormLabel-root:not(.MuiFormLabel-filled):not(.Mui-focused)":{color:textColor},//init
-                "&.Mui-focused ":{color:textColorStateFocused},
-                "&.MuiFormLabel-filled:not(.Mui-focused)":{color:textColorStateFilled},
-              }} 
-             htmlFor={label}
-        >
-            {label}
-        </InputLabel>
-        <OutlinedInput
+
+        <TextField
             id={label}
-            label={label}
             type={inputType}//defult to text
             value={value}
             onChange={onChangeHndler}
             required={isInputRequired}
             name={stateName}
-            sx={{background:labelBg }}
             
-   />
-    </FormControl>
+            sx={{ flexGrow:Fgrow?? null, bgcolor:bg?? "#fff" ,m:m }}
+            variant={variant?? 'filled'}
+            label={label}
+            error={error}
+            
+
+            
+
+        />
+   
+ 
     )
 }
-export default OutLineInputWrap
+export default InputWrap

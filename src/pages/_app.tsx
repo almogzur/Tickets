@@ -153,7 +153,17 @@ const theme  = createTheme({
             
           }
         }
+       },
+       MuiTextField:{
+        defaultProps:{},
+        styleOverrides:{
+          root:{
+            
+          }
+        },
+
        }
+       
        
        
     },

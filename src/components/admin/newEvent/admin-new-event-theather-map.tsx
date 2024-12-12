@@ -39,7 +39,7 @@ const AdminNewEventTheatherMap = ({children, isMultiSelect,setIsMultiSelect ,mul
         initialPositionX={ AdminMapPositions.x|| !sm? 95:  !md? -200:  -550}
         initialPositionY={  AdminMapPositions.y|| !sm? 50: 0 }
         limitToBounds={false}
-        minScale={ !md? 0.45 :!md? 1.3 :  1.5}
+        minScale={ !md? 0.35 :!md? 1 :  1.1}
         smooth
         maxScale={100}
         disabled={AdminMapPositions.disabled}
@@ -53,13 +53,13 @@ const AdminNewEventTheatherMap = ({children, isMultiSelect,setIsMultiSelect ,mul
       >
         {({ zoomIn, zoomOut, resetTransform, ...rest }) =>  {
           return   (
-            <>
+            <Flex bgcolor={grey[400]  }  p={1} boxShadow={theme.shadows[10]} mt={3} > 
               <Controls/>   
               <Divider sx={{borderWidth:3 , background:theme.palette.primary.dark}} />
             
 
-                <TransformComponent
-                  wrapperStyle={{ width:"100%" }}
+                 <TransformComponent
+                  wrapperStyle={{ width:"100%" ,background:"#fff"  }}
                
                  >
                    
@@ -73,7 +73,7 @@ const AdminNewEventTheatherMap = ({children, isMultiSelect,setIsMultiSelect ,mul
              
               
 
-            </>
+            </Flex>
         )
   }
   

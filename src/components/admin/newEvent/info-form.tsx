@@ -1,14 +1,14 @@
 import WidthContext from "@/context/WidthContext"
 import { Divider, Stack as Flex , Typography, useTheme } from "@mui/material"
 import { ChangeEventHandler, Dispatch, Key, SetStateAction, useContext } from "react"
-import OutLineInputWrap from "../input-wrap"
-import Editor from '@/components/text-editor/editor'
+import OutLineInputWrap from "../input"
 import { grey } from "@mui/material/colors"
 import TheaterSelect from "./theater-select"
 
 import  Eilat_1 from '../../../constants/theathers/eilat_1'
 import  Eilat_2 from '@/constants/theathers/eilat_2'
 import { TheaterType } from "@/pages/_app"
+import InputWrap from "../input"
 const TheaterList :TheaterType[] = [ Eilat_1, Eilat_2]
 
 interface InfoFormType { 
@@ -26,21 +26,18 @@ const InfoForm =({InfoKeys,KysHndler, TheaterHndler}:InfoFormType)=>{
   
      return(
       <>
-      <Typography sx={{color:'black'}} variant="h4" > פרטים ככלים </Typography>
-      <Flex    boxShadow={` 3px 3px 3px 2px ${theme.palette.primary.main}`}  sx={{}} >
-  
-         <Flex 
-          direction={!xs? "column": "row"} 
-          flexWrap={'wrap'}  
-          justifyContent={'space-around'} 
-          alignItems={!xs? "":'center'} 
-          border={"solid 0.5px black"} 
-          m={1} 
-          p={1} 
-          borderRadius={1}
-          bgcolor={grey[400]} >
+      
+      <Flex  boxShadow={theme.shadows[10]} p={2} bgcolor={grey[400]} >
 
-            {Object.entries(InfoKeys).map(([name,value],i)=>{
+       <Typography sx={{color:'black'}} variant="h6" > פרטים כללים </Typography>
+    
+      <Flex   
+       alignItems={!xs? "":'center'} 
+       direction={ "row"} 
+       flexWrap={'wrap'}  
+       justifyContent={"space-around"}
+       >
+        {Object.entries(InfoKeys).map(([name,value],i)=>{
   
             let Locolize = (name: Key)  =>{
   
@@ -61,18 +58,27 @@ const InfoForm =({InfoKeys,KysHndler, TheaterHndler}:InfoFormType)=>{
               return LocLabel
             }
           
-            return <OutLineInputWrap   key={name} stateName={name} label={Locolize(name)} value={value} onChangeHndler={KysHndler }  labelBg="#fff"  />
+            return <InputWrap   
+                    key={name} 
+                    stateName={name} 
+                    label={Locolize(name)} 
+                    value={value} 
+                    onChangeHndler={KysHndler}  
+               
+                    m={0.5}
+                    isInputRequired
+                    
+                    />
             
-        })}
-             <TheaterSelect theaters={TheaterList} seter={TheaterHndler} />
-        </Flex>
+              })}
+         <TheaterSelect theaters={TheaterList} seter={TheaterHndler} />
+    </Flex>
   
-        <Flex m={1}>
-          <Editor/>
-        </Flex>
+        
   
-  
-     </Flex>   
+     </Flex>  
+
+   
      </>
   
      )

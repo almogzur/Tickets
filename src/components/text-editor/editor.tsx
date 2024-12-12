@@ -1,5 +1,5 @@
 import { Lock, LockOpen, TextFields } from "@mui/icons-material";
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Box, Button, Stack as Flex, Typography , useTheme } from "@mui/material";
 import type { EditorOptions } from "@tiptap/core";
 import { useCallback, useContext, useRef, useState } from "react";
 import {
@@ -29,6 +29,9 @@ function fileListToImageFiles(fileList: FileList): File[] {
 }
 
 export default function Editor() {
+
+  const theme  = useTheme()
+
 
   const extensions = useExtensions({
     placeholder: "הוסף תוכן על האירוע",
@@ -126,30 +129,45 @@ export default function Editor() {
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
 
   return (
-    <>
+    <Flex   p={1}   height='calc(100% - 95px)' overflow={"auto"}   >
+
       <Box
+ 
+
+
         sx={{
           // An example of how editor styles can be overridden. In this case,
           // setting where the scroll anchors to when jumping to headings. The
           // scroll margin isn't built in since it will likely vary depending on
           // where the editor itself is rendered (e.g. if there's a sticky nav
           // bar on your site).
-          
+            background:"#fff",
+      
             "& .MuiTiptap-RichTextContent-root":{
                 color:'black',
+               
+          
                 
               "& p.is-editor-empty:first-child::before":{ 
                 display:"flex" ,
                 width:"100%" , 
-                
                 fontWeight:"700",
-                fontSize:20
+                fontSize:20,
                 }
              },
-            "& .MuiTiptap-RichTextField-content":{  },
-            "& .MuiTiptap-RichTextContent-editable":{ },
+            "& .MuiTiptap-RichTextField-content":{ 
+                 
+
+             },
+            "& .MuiTiptap-RichTextContent-editable":{
+              minHeight: !xs? 100 : !sm? 145 :!md? 250 : !lg? 270 : 300
+
+             },
             
-            "& .MuiSvgIcon-root":{color:blue[900], scale:1.3},
+            "& .MuiSvgIcon-root":{
+                color:theme.palette.primary.main,
+                 scale:1.3
+                },
             "& .ProseMirror": {
               "& h1, & h2, & h3, & h4, & h5, & h6": {
               scrollMarginTop: showMenuBar ? 50 : 0,
@@ -160,23 +178,23 @@ export default function Editor() {
         }}
       > 
       
-        <RichTextEditor
+         <RichTextEditor
           ref={rteRef}
           extensions={extensions} 
-        
           
+          immediatelyRender
           editable={isEditable}
           editorProps={{
             handleDrop: handleDrop,
             handlePaste: handlePaste,
           }}
-          renderControls={() => <Box sx={{ background:grey[400], p:2 ,borderRadius:1, border:"solid 0.5px black" }}><EditorMenuControls  /> </Box> }
+          renderControls={() => <Box sx={{  p:2, m:0 ,borderRadius:1,  background:grey[200]  }}><EditorMenuControls  /> </Box> }
           RichTextFieldProps={{
             // The "outlined" variant is the default (shown here only as
             // example), but can be changed to "standard" to remove the outlined
             // field border from the editor
             variant: 'outlined',
-          
+            
             
             MenuBarProps: {
               hide: !showMenuBar,
@@ -187,7 +205,7 @@ export default function Editor() {
             // for showing/hiding the editor menu bar, and a "submit" button for
             // saving/viewing the HTML content
             footer: (
-              <Stack
+              <Flex
                 direction="row"
                 spacing={2}
                 sx={{
@@ -235,7 +253,7 @@ export default function Editor() {
                 >
                   שמור
                 </Button>
-              </Stack>
+              </Flex>
             ),
           }}
           
@@ -253,7 +271,7 @@ export default function Editor() {
 
 
 
-      {/* {submittedContent && (
+{/* {submittedContent && (
         <>
           <pre style={{ marginTop: 10, overflow: "auto", maxWidth: "100%" }}>
             {submittedContent}
@@ -268,9 +286,11 @@ export default function Editor() {
             />
           </Box>
         </>
-      ) } */}
+      ) } */
+      }
 
 
-    </>
+
+   </Flex>
   );
 }

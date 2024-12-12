@@ -61,14 +61,15 @@ export default function TemporaryDrawer() {
 
   return (
     <>
-    <Flex direction={"row"} >
+    <nav dir='rtl' style={{boxShadow:theme.shadows[10] , padding:5}  }  >
       <Button 
-          sx={{background:theme.palette.background.paper,  } } 
+          sx={{  } } 
            onClick={toggleDrawer(true)}
            >
-            <RiArchiveDrawerFill size={'2em'} color={theme.palette.primary.main} />
+            <RiArchiveDrawerFill size={'2em'} />
       </Button>
-      </Flex>
+    
+      </nav>
 
 
       <Drawer
