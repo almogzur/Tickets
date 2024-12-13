@@ -1,4 +1,4 @@
-import { TheaterType } from '@/pages/_app';
+import { TheaterType } from '@/pages/_app';     
 import {Typography , OutlinedInput , Stack as Flex, Select , MenuItem, SelectChangeEvent, FormControl, useTheme, InputLabel, styled, InputBase} from '@mui/material'
 import { grey } from '@mui/material/colors';
 import { Dispatch, SetStateAction, useState } from 'react';
@@ -13,12 +13,12 @@ const TheaterSelect =({theaters,seter}:{theaters:TheaterType[], seter:Dispatch<S
 
 return (
   
-   <FormControl  sx={{ minWidth:220, m:0.5 }}    variant='outlined' >
+   <FormControl  sx={{ width:180, minWidth:220,  m:0.5, flexGrow:4 }}    variant='outlined' >
       <InputLabel  >בחר אולם</InputLabel>
      <Select
       value={name}
       variant='filled'
-      sx={{bgcolor:"#fff"}}
+
       onChange={handleChange}
 
 

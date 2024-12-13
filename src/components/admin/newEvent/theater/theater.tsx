@@ -5,22 +5,21 @@ import WidthContext from '@/context/WidthContext';
 import { Colors } from '@/lib/colors';
 import SingleSelectTip from './singel-select-tip';
 import AdminSeatBtn from './adminSeatBtn'
-import MuliSelectTip from '@/components/admin/newEvent/multi-select-tip'
+import MuliSelectTip from '@/components/admin/newEvent/theater/multi-select-tip'
 import AdminNewEventTheatherMap from './admin-new-event-theather-map';
 import { TheaterType } from '@/pages/_app';
 import AdminMapPositionsContext from '@/context/admin-map-positions-context';
-import { grey } from '@mui/material/colors';
 
 
 
 
 
-  interface TheaterControlsPropsType { 
+  interface TheaterPropsType { 
      theater: TheaterType ,
      setTheater:Dispatch<SetStateAction<TheaterType>> 
     }
 
-    const TheaterControls = ({theater,setTheater}:TheaterControlsPropsType ) => {
+    const Theater = ({theater,setTheater}:TheaterPropsType ) => {
       const {AdminMapPositions,setAdminMapPositions} =useContext(AdminMapPositionsContext)
 
       const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
@@ -159,5 +158,5 @@ import { grey } from '@mui/material/colors';
                </div>
              </Flex >
     }   
-  export default TheaterControls
+  export default Theater
 

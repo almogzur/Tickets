@@ -1,20 +1,21 @@
 import { Typography , Stack as Flex ,useTheme, Pagination, Chip, Box, AppBar, Tabs, Tab, Divider, Button, Badge} from "@mui/material"
 import { ChangeEvent, ChangeEventHandler, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState } from "react"
-import InputWrap from "../input"
+import InputWrap from "../../input"
 import { grey } from "@mui/material/colors"
-import DatesList from "./date-list"
 import { PickerChangeHandlerContext, DateTimeValidationError } from "@mui/x-date-pickers"
 import WidthContext from "@/context/WidthContext"
 import { FcPlanner } from "react-icons/fc";
 import { FcFilm } from "react-icons/fc";
 import { FcSettings } from "react-icons/fc";
 import { FcStackOfPhotos } from "react-icons/fc";
-import Editor from '@/components/text-editor/editor'
+
 import { FcAnswers } from "react-icons/fc";
 import { FcCurrencyExchange } from "react-icons/fc";
 import { FcAddImage } from "react-icons/fc";
-import CoverUpload from "./cover-upload"
 
+import DatesListTab from "./date-list-tab"
+import CoverUploadTab from "./cover-upload-tab"
+import EditorTab from '@/components/admin/newEvent/tabs/text-editor-tab/editor'
 
 interface TabFormPropsType {
     normalPrice:string
@@ -63,13 +64,14 @@ interface TabFormPropsType {
         sx={{ 
            height:!sm?500:600 ,
            mt:3,
-           background:grey[400],
+  
         
            boxShadow:theme.shadows[10]
            
           
             }} 
       
+        
         >
         <Tabs
           value={pageVale}
@@ -86,11 +88,21 @@ interface TabFormPropsType {
 
         <Tab value={1} label="תמונה ראשית "  sx={{color:"#fff"}}  icon={<FcAddImage size={"2em"} />}    /> 
         <Tab value={2} label="טקסט"  sx={{color:"#fff"}}  icon={<FcAnswers size={"2em"} />}    /> 
+        <Tab value={3} label="תאריכים"  sx={{color:"#fff",zIndex:2}}  icon={<FcPlanner size={"2em"} />}     />
 
-        <Tab value={3} label="מושבים"  sx={{color:"#fff",zIndex:2}}  icon={<FcCurrencyExchange size={"2em"} />}     />
+        {Dates.length === 0 &&   <Badge 
+          showZero
+          badgeContent={Dates.length}
+          overlap='circular'
+          variant='dot'
+          color='error'
+            sx={{position:"relative" , left:10, top:5}}
+         />
+         }
+        <Tab value={4} label="מושבים"  sx={{color:"#fff",zIndex:2}}  icon={<FcCurrencyExchange size={"2em"} />}     />
 
-         <Tab value={4} label="תאריכים"  sx={{color:"#fff",zIndex:2}}  icon={<FcPlanner size={"2em"} />}     />
-        
+   
+  
             
         <Tab value={5} label="כרטיסים"  sx={{color:"#fff"}} icon={<FcFilm size={"2em"} />} />
         <Badge 
@@ -99,44 +111,38 @@ interface TabFormPropsType {
           overlap='circular'
           variant='standard'
           color='warning'
-          anchorOrigin={{
-          vertical: 'top',
-           horizontal: 'right',   
-             }} 
+         
              sx={{position:"relative" , left:10, top:5}}
-               >
-         </Badge>
+          />
+       
         <Tab value={6} label="הגדרות"  sx={{color:"#fff"}}   icon={<FcSettings size={"2em"} />}  />
         <Tab value={7} label="עיצוב"  sx={{color:"#fff"}} icon={<FcStackOfPhotos size={"2em"} />}  />
         <Tab value={8} label="שמור"  sx={{color:"#fff"}}  />
         <Tab value={9} label="שמור"  sx={{color:"#fff"}} />
        </Tabs>
 
-       <Divider sx={{borderWidth:2}}  ></Divider>
        {
-      pageVale ===1 ?
-      <CoverUpload file={file} setFile={setFile} preview={preview} setPreview={setPreview} onFileChange={onFileChange}  />
-        :
+
+        // to Switch Function
+       pageVale ===1 ?
+       <CoverUploadTab file={file} setFile={setFile} preview={preview} setPreview={setPreview} onFileChange={onFileChange}  />
+       :
        pageVale ===2 ? 
-      
-       <Editor />
+       <EditorTab />
        :
        pageVale===3 ?
-       <SeatsTab/>
+       <DatesListTab Dates={Dates} addDataHndler={addDataHndler} removeDateHndler={removeDateHndler}  />
+
        :
        pageVale === 4 ?
-       <DatesList Dates={Dates} addDataHndler={addDataHndler} removeDateHndler={removeDateHndler}  />
-    
-   
+       <SeatsTab/>
+
        :
        pageVale===5?
        <TikitsTab Dates={Dates} normalPrice={""} dicountPrice={""} PriceHndler={ PriceHndler} />
-    
-         
        :
        pageVale===6 ?
        <SettingTab/>
-     
        :
        pageVale=== 7 ?
        <ColorTab/>
@@ -242,6 +248,9 @@ interface TabFormPropsType {
 
 
 const SeatsTab =()=>{
+    // option 1 add all price hear 
+    // option 2 add them localy in cards 
+
   return (
     <>
     <Typography variant='h4' sx={{color:"black"}} >{"  מספר מושבים זמינים  "}{0}</Typography>
@@ -252,9 +261,7 @@ const SeatsTab =()=>{
 }
 
   
-  
-  
-  
+
 
   interface SetingsTabPropsType {}
 

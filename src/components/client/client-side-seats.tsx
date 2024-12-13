@@ -256,14 +256,14 @@ const ClinetSideSeates = ({mainSeats,sideSeats,sideText,sideStyles}:{mainSeats:S
       );
   };
 
-
-
-
-
-
+  // IMPORTENT DINT DEl 
+  // make this shoping cart 
+  // add state for
+  // 1 Complite 
+  // 2 levers 
+  //  capture user info 
   
-  
-  const PaymentButton = ()  =>  {
+  const ShopingCart = ()  =>  {
   
       if( selectedSeats.length === 0  ){
         return
@@ -364,7 +364,7 @@ const ClinetSideSeates = ({mainSeats,sideSeats,sideText,sideStyles}:{mainSeats:S
                 zIndex={1000} 
                  >
              <ResetSelectedSeatsButton/>
-             <PaymentButton/>
+             <ShopingCart/>
            </Flex>
            </>
            :null

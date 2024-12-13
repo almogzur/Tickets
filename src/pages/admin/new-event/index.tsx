@@ -5,14 +5,13 @@ import AdminLayout from '@/Layouts/admin-layout'
 import {Typography , OutlinedInput , Stack as Flex, Select , MenuItem, SelectChangeEvent, FormControl, useTheme, InputLabel, Button} from '@mui/material'
 
 import WidthContext from '@/context/WidthContext'
-import TheaterControls from '@/components/admin/newEvent/theater-controls'
-import TabsForm from '@/components/admin/newEvent/tabs-form'
+import Theater from '@/components/admin/newEvent/theater/theater'
+import TabsForm from '@/components/admin/newEvent/tabs/tabs-form'
 import { Seats, SeatStyles } from '@/constants/models/Events'
 import Head from 'next/head'
 import { DateTimeValidationError, PickerChangeHandlerContext } from '@mui/x-date-pickers'
 import { TheaterType } from '@/pages/_app'
 import InfoForm from '@/components/admin/newEvent/info-form'
-import CoverUpload from '@/components/admin/newEvent/cover-upload'
 import { grey } from '@mui/material/colors'
 
 const NewEventPage=()=>{
@@ -67,11 +66,15 @@ const NewEventPage=()=>{
     setPrices(prev=>({...prev,[name]:tryTransformToNumber(value)}))  
   }
   // Cover 
-  const [file, setFile] = useState<File | null>(null);
-  const [preview ,setPreview] = useState<string>(null)
+  const [file, setFile] = useState<File>(null);
+  const [preview ,setPreview] = useState<string>("")
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 
+        console.log(e.target.files);
+        
+
       const selectedFile :File = e.target.files[0];
+
 
       if (selectedFile) {
         setFile (selectedFile)
@@ -103,7 +106,9 @@ return (
      <AdminLayout>
 
       <Typography  variant='h4' m={1} textAlign={"start"} sx={{color:"black"  } } > אירוע חדש</Typography>
+
        <InfoForm InfoKeys={info} KysHndler={InfoHndler} TheaterHndler={setTheater} />
+       { theater.mainSeats && <Theater theater={theater} setTheater={setTheater} />}
 
        <TabsForm 
        // Price
@@ -126,7 +131,6 @@ return (
           />
  
       
-       { theater.mainSeats && <TheaterControls theater={theater} setTheater={setTheater} />}
 
   
 

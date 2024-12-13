@@ -61,10 +61,11 @@ export default function TemporaryDrawer() {
 
   return (
     <>
-    <nav dir='rtl' style={{boxShadow:theme.shadows[10] , padding:5}  }  >
+    <nav dir='rtl' style={{boxShadow:theme.shadows[10], height:60 , background:"black"}  }  >
       <Button 
           sx={{  } } 
            onClick={toggleDrawer(true)}
+           variant='outlined'
            >
             <RiArchiveDrawerFill size={'2em'} />
       </Button>

@@ -28,7 +28,7 @@ function fileListToImageFiles(fileList: FileList): File[] {
   });
 }
 
-export default function Editor() {
+export default function EditorTab() {
 
   const theme  = useTheme()
 

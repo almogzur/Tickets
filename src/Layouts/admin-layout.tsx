@@ -1,11 +1,14 @@
-import {  ReactNode, useEffect } from 'react';
+import {  ReactNode, useContext, useEffect } from 'react';
 import MiniDrawer from '../components/Drawer'
 import {Stack as Flex, Container } from '@mui/material'
 import { useSession } from 'next-auth/react';
 import router from 'next/router';
+import WidthContext from '@/context/WidthContext';
 
 const AdminLayout = ({ children }: {children?:ReactNode}) => {
   const { data: session ,status ,update} = useSession()
+  const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
+
 
 useEffect(()=>{
   console.log(session , status);
@@ -22,7 +25,7 @@ useEffect(()=>{
          <Flex direction={"row"} 
           sx={{   }}
             >
-          <Container  sx={{}} >
+          <Container  sx={{   p : !xs? 0.3 :0.5 }} >
             {children}
           </Container>
         </Flex>

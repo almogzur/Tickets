@@ -1,8 +1,7 @@
 import WidthContext from "@/context/WidthContext"
-import { Divider, Stack as Flex , Typography, useTheme } from "@mui/material"
+import {  Stack as Flex , Typography, useTheme } from "@mui/material"
 import { ChangeEventHandler, Dispatch, Key, SetStateAction, useContext } from "react"
-import OutLineInputWrap from "../input"
-import { grey } from "@mui/material/colors"
+
 import TheaterSelect from "./theater-select"
 
 import  Eilat_1 from '../../../constants/theathers/eilat_1'
@@ -27,7 +26,7 @@ const InfoForm =({InfoKeys,KysHndler, TheaterHndler}:InfoFormType)=>{
      return(
       <>
       
-      <Flex  boxShadow={theme.shadows[10]} p={2} bgcolor={grey[400]} >
+      <Flex  boxShadow={theme.shadows[10]} p={2}   >
 
        <Typography sx={{color:'black'}} variant="h6" > פרטים כללים </Typography>
     
@@ -64,7 +63,7 @@ const InfoForm =({InfoKeys,KysHndler, TheaterHndler}:InfoFormType)=>{
                     label={Locolize(name)} 
                     value={value} 
                     onChangeHndler={KysHndler}  
-               
+                    Fgrow={1}
                     m={0.5}
                     isInputRequired
                     
