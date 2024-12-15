@@ -17,7 +17,7 @@ return (
       <InputLabel  >בחר אולם</InputLabel>
      <Select
       value={name}
-      variant='filled'
+      variant='standard'
 
       onChange={handleChange}
 

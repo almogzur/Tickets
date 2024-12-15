@@ -1,5 +1,5 @@
 import { useSession } from 'next-auth/react'
-import {ChangeEvent, ChangeEventHandler, Dispatch, FormEvent, Key, SetStateAction, useContext, useEffect,useState} from 'react'
+import {ChangeEvent, ChangeEventHandler, Dispatch, FormEvent, Key, MouseEventHandler, SetStateAction, useContext, useEffect,useState} from 'react'
 import { useRouter } from 'next/router'
 import AdminLayout from '@/Layouts/admin-layout'
 import {Typography , OutlinedInput , Stack as Flex, Select , MenuItem, SelectChangeEvent, FormControl, useTheme, InputLabel, Button} from '@mui/material'
@@ -10,9 +10,15 @@ import TabsForm from '@/components/admin/newEvent/tabs/tabs-form'
 import { Seats, SeatStyles } from '@/constants/models/Events'
 import Head from 'next/head'
 import { DateTimeValidationError, PickerChangeHandlerContext } from '@mui/x-date-pickers'
-import { TheaterType } from '@/pages/_app'
+import { Schedule, TheaterType } from '@/pages/_app'
 import InfoForm from '@/components/admin/newEvent/info-form'
 import { grey } from '@mui/material/colors'
+import TabsEventDatesContext from '@/context/tabs-event-dates-context'
+import { time } from 'console'
+import dayjs from 'dayjs'
+
+
+
 
 const NewEventPage=()=>{
 
@@ -32,24 +38,78 @@ const NewEventPage=()=>{
     const value = e.target.value
     setInfo(prve=>({...prve,[name]:value}))
   }
-  // Dates 
-  const [Dates, setDates] = useState<Date[]>([])
-  const [dateEroor,setDateEroor ]= useState(false)
-  const addDate = (e:any,context:PickerChangeHandlerContext<DateTimeValidationError>) :void => {
-    // console.log(e , context);
-        const newDate = new Date(e.$y , e.$M ,e.$D,e.$H , e.$m) 
 
-         if (e && e.$y && e.$M && e.$D && e.$H && e.$m ) {
-             setDates((prev) => prev.indexOf(newDate) ?  [...prev, newDate ] :null);
+
+  // Dates  Coontext 
+
+  const [schedules, setSchedules] = useState<Schedule[]>([])
+  const [dateEroor,setDateEroor ]= useState(false)
+
+  const addEventDate = (e:dayjs.Dayjs,context:PickerChangeHandlerContext<DateTimeValidationError>) :void => {
+
+
+         if (e && e.year() && e.month() && e.day() ) {
+          const newDate = new Date(e.year() , e.month() ,e.day()) 
+          setSchedules(p=>[...p , {date:newDate ,hours:[],isEventClosedForSeal:false}])
              
          }
        //  error henler
-    };
-  const removeDate = (dateToRemove: Date):void => {
-      setDates((prev) => prev.filter((date) => date !== dateToRemove));
-    };
+  };
+
+  const removeDate = (schedulArg: Schedule ):void => {
+    setSchedules((prev) => [...prev].filter((schedul) => schedul !== schedulArg)  )  
+
+  };
+
+
+  const addEventHour = (e: dayjs.Dayjs,schedul:Schedule,  schedulIndex: number): void => {
+    
+
+    if (e && (e.hour() || (e.hour() && e.minute()))) {
+      const newTime = new Date(0, 0, 0, e.hour(), e.minute()).toLocaleTimeString("he-IL");
+      setSchedules((prev) =>
+        prev.map((schedule, index) =>
+          index === schedulIndex
+            ? ({
+                ...schedule,
+                hours: schedule.hours.hasOwnProperty(newTime)// Check for duplicates
+                  ? schedul.hours// Keep the existing hours if duplicate
+                  : [...schedule.hours, { time: newTime, endOfSales: null }], // Add with `endOfSales` as null (or a valid Date object)
+              })
+            : schedule // Return other schedules unchanged
+        )
+      );
+
+      console.log(schedules);
+      
+    }
+  };
+
+
+  const removeEventHour = (hourIndex:number,schedulIndex:number):void=>{
+
+    console.log(hourIndex,schedulIndex);
+    
+      setSchedules(prev=>
+        prev.map((schedule, index) =>
+          index === schedulIndex ?
+        ({
+          ...schedule,
+           hours:[...schedule.hours].filter((item,i)=> i !== hourIndex )
+        })
+        :
+        schedule
+    )
+  )
+      
+
+
+  }
+
+
+
   //Price
-  const [Prices, setPrices] =useState({normalPrice:"",discountPricel:""})
+  const [Prices, setPrices] =useState({normal:"",discount:"", })
   const PricesHndler =  (e: ChangeEvent<HTMLInputElement|HTMLTextAreaElement>)=>{
     const name = e.target.name 
     const value = e.target.value
@@ -82,12 +142,19 @@ const NewEventPage=()=>{
 
       }
     };
-  // Ad Text 
-  const [adText,setAdText ]= useState()
+
   // Seats Amount 
   const [totalSeats ,setTotalSeats]= useState<number>(0)
+
+  // Ad Text 
+  const [adText,setAdText ]= useState()
+
+
+
+
    
   // Tikit Settings 
+
 
   // Color Theams
  
@@ -97,6 +164,7 @@ const NewEventPage=()=>{
 if (status === 'loading') {
      return <h1 style={{textAlign:'center'}}>Loading...</h1>
 }
+
 
 return (
   <>
@@ -110,30 +178,29 @@ return (
        <InfoForm InfoKeys={info} KysHndler={InfoHndler} TheaterHndler={setTheater} />
        { theater.mainSeats && <Theater theater={theater} setTheater={setTheater} />}
 
+       <TabsEventDatesContext.Provider value={{schedules,setSchedules,dateEroor,addEventDate,removeDate,addEventHour,removeEventHour}}>
+        
        <TabsForm 
-       // Price
-        normalPrice={Prices.normalPrice}
-        dicountPrice={Prices.discountPricel}
+       // Tikit
+         normal={Prices.normal}
+        dicount={Prices.discount}
         PriceHndler={PricesHndler}
-        // Dates
-        Dates={Dates} 
-        addDataHndler={addDate } 
-        removeDateHndler={ removeDate}
-        file={file} 
-        setFile={setFile}
+
+        // file 
+         file={file} 
+         setFile={setFile}
          preview={preview} 
          setPreview={setPreview} 
          onFileChange={handleFileChange} 
 
+     
+  
 
         //Setings
         //Colors
           />
- 
+       </TabsEventDatesContext.Provider>
       
-
-  
-
       <Flex p={4} alignItems={"center"}  >
         <Button sx={{height:70 ,width:100}} > שמור </Button>
       </Flex>

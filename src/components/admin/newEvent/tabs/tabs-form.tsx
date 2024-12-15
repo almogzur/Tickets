@@ -1,57 +1,80 @@
-import { Typography , Stack as Flex ,useTheme, Pagination, Chip, Box, AppBar, Tabs, Tab, Divider, Button, Badge} from "@mui/material"
-import { ChangeEvent, ChangeEventHandler, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState } from "react"
+//Cmponents
+import { Typography , Stack as Flex ,useTheme, Box, Tabs, Tab, Badge} from "@mui/material"
+
+import { ChangeEvent, ChangeEventHandler, CSSProperties, Dispatch, SetStateAction, useContext, useEffect, useState } from "react"
 import InputWrap from "../../input"
-import { grey } from "@mui/material/colors"
-import { PickerChangeHandlerContext, DateTimeValidationError } from "@mui/x-date-pickers"
+
+// Context 
 import WidthContext from "@/context/WidthContext"
+import TabsEventDatesContext from '@/context/tabs-event-dates-context'
+//Icons 
 import { FcPlanner } from "react-icons/fc";
 import { FcFilm } from "react-icons/fc";
 import { FcSettings } from "react-icons/fc";
 import { FcStackOfPhotos } from "react-icons/fc";
-
 import { FcAnswers } from "react-icons/fc";
 import { FcCurrencyExchange } from "react-icons/fc";
 import { FcAddImage } from "react-icons/fc";
 
+// Tabs 
 import DatesListTab from "./date-list-tab"
 import CoverUploadTab from "./cover-upload-tab"
 import EditorTab from '@/components/admin/newEvent/tabs/text-editor-tab/editor'
+import TikitsTab from './tikits-tab'
+
+//Types
+import { TheaterType } from "@/pages/_app"
 
 interface TabFormPropsType {
-    normalPrice:string
-    dicountPrice:string
-    PriceHndler: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
 
-    Dates:Date[]
-    addDataHndler :(e:any, context: PickerChangeHandlerContext<DateTimeValidationError>) => void
-    removeDateHndler:(dateToRemove: Date) => void
 
+  //Tikit
+  normal:string
+  dicount:string
+  PriceHndler: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
+
+
+
+  //File 
     file:File
     preview:string
     setPreview:Dispatch<SetStateAction<string>>
     onFileChange: (e: React.ChangeEvent<HTMLInputElement>) =>void
     setFile:Dispatch<SetStateAction<File>>
+
+
+  
+
   }
 
 
   const TabsForm = ({
-     normalPrice,
-     dicountPrice,
+     normal,
+     dicount,
      PriceHndler,
-     Dates ,
-      removeDateHndler,
-      addDataHndler,
+
       file,
       setFile,
       preview,
       setPreview,
-      onFileChange
+      onFileChange,
+
+
+      
+  
     }
       :TabFormPropsType)=>
   {
     const theme = useTheme()
     const [pageVale, setPageVale] = useState(1);
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
+    const { schedules,setSchedules,addEventDate,removeDate,dateEroor, } = useContext(TabsEventDatesContext)
+
+
+    const TabComonStyleAttribute :CSSProperties = {
+       color:"#fff",
+       fontWeight:700,
+    }
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
       setPageVale(newValue);
@@ -62,14 +85,10 @@ interface TabFormPropsType {
 
       <Box  
         sx={{ 
-           height:!sm?500:600 ,
-           mt:3,
-  
-        
-           boxShadow:theme.shadows[10]
-           
-          
-            }} 
+             height:!sm?600:700 ,
+             mt:3,
+             boxShadow:theme.shadows[10]
+           }} 
       
         
         >
@@ -86,39 +105,34 @@ interface TabFormPropsType {
           
          >
 
-        <Tab value={1} label="תמונה ראשית "  sx={{color:"#fff"}}  icon={<FcAddImage size={"2em"} />}    /> 
-        <Tab value={2} label="טקסט"  sx={{color:"#fff"}}  icon={<FcAnswers size={"2em"} />}    /> 
-        <Tab value={3} label="תאריכים"  sx={{color:"#fff",zIndex:2}}  icon={<FcPlanner size={"2em"} />}     />
+        <Tab value={1} label="תמונה ראשית "  sx={{...TabComonStyleAttribute}}  icon={<FcAddImage size={"2em"} />}    /> 
+        <Tab value={2} label="טקסט"  sx={{...TabComonStyleAttribute}}  icon={<FcAnswers size={"2em"} />}    /> 
+        <Tab value={3} label="תאריכים"  sx={{...TabComonStyleAttribute}}  icon={<FcPlanner size={"2em"} />}     />
 
-        {Dates.length === 0 &&   <Badge 
+        {schedules.length === 0 &&   <Badge 
           showZero
-          badgeContent={Dates.length}
+          badgeContent={schedules.length}
           overlap='circular'
           variant='dot'
           color='error'
             sx={{position:"relative" , left:10, top:5}}
          />
-         }
-        <Tab value={4} label="מושבים"  sx={{color:"#fff",zIndex:2}}  icon={<FcCurrencyExchange size={"2em"} />}     />
+         }    
+        <Tab value={4} label="כרטיסים"  sx={{...TabComonStyleAttribute}} icon={<FcFilm size={"2em"} />} />
 
-   
-  
-            
-        <Tab value={5} label="כרטיסים"  sx={{color:"#fff"}} icon={<FcFilm size={"2em"} />} />
         <Badge 
-          
-          badgeContent={Dates.length}
+          badgeContent={schedules.length}
           overlap='circular'
           variant='standard'
           color='warning'
          
-             sx={{position:"relative" , left:10, top:5}}
+           sx={{position:"relative" , left:10, top:5}}
           />
        
-        <Tab value={6} label="הגדרות"  sx={{color:"#fff"}}   icon={<FcSettings size={"2em"} />}  />
-        <Tab value={7} label="עיצוב"  sx={{color:"#fff"}} icon={<FcStackOfPhotos size={"2em"} />}  />
-        <Tab value={8} label="שמור"  sx={{color:"#fff"}}  />
-        <Tab value={9} label="שמור"  sx={{color:"#fff"}} />
+        <Tab value={5} label="הגדרות"  sx={{...TabComonStyleAttribute}}   icon={<FcSettings size={"2em"} />}  />
+        <Tab value={6} label="עיצוב"  sx={{...TabComonStyleAttribute}} icon={<FcStackOfPhotos size={"2em"} />}  />
+        <Tab value={7} label="שמור"  sx={{...TabComonStyleAttribute}}  />
+        <Tab value={8} label="שמור"  sx={{...TabComonStyleAttribute}} />
        </Tabs>
 
        {
@@ -131,20 +145,21 @@ interface TabFormPropsType {
        <EditorTab />
        :
        pageVale===3 ?
-       <DatesListTab Dates={Dates} addDataHndler={addDataHndler} removeDateHndler={removeDateHndler}  />
-
+       <DatesListTab /> // context 
        :
-       pageVale === 4 ?
-       <SeatsTab/>
-
+       pageVale===4?
+       <TikitsTab 
+          Dates={[]} 
+          normal={""} 
+          dicount={""} 
+          PriceHndler={ PriceHndler}
+      
+           />
        :
-       pageVale===5?
-       <TikitsTab Dates={Dates} normalPrice={""} dicountPrice={""} PriceHndler={ PriceHndler} />
-       :
-       pageVale===6 ?
+       pageVale===5 ?
        <SettingTab/>
        :
-       pageVale=== 7 ?
+       pageVale=== 6 ?
        <ColorTab/>
        :
        null
@@ -162,111 +177,16 @@ interface TabFormPropsType {
 
 
   
-  interface TikitsTabPropsType {
-   Dates:Date[]
-   normalPrice:string
-   dicountPrice:string
-   PriceHndler: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
-    }
+ 
 
-  const TikitsTab = ({Dates,PriceHndler,normalPrice,dicountPrice}:TikitsTabPropsType)=>{ 
-    const theme = useTheme()
-
-    return (
-      <Box 
-       height={'calc(100% - 80px)'}
-       overflow={"auto"} 
-      > 
-      {Dates.length ?  Dates.map((date:Date,i:number)=>{
-    
-     return <Tikit key={date.toString()+i} date={date} />
-     })
-    :
-       <Flex justifyContent={"center"} alignItems={"center"} alignContent={"center"} height={"inherit"}  >
-        <Typography variant="h6" sx={{color:"black"}} >בחר תאריך לאירוע </Typography>
-       </Flex>
-    }           
-      </Box>
-
-    )
-  }
-
-  interface TikitPropsType { date:Date}
-
-  const Tikit = ({date}:TikitPropsType)=>{
-
-    const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
-
-    const options :Intl.DateTimeFormatOptions = {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    };
-    
-
-    const [ Prices, setPrices ] = useState({ normal  : 0 , discount : 0 , citizen : 0  })
-
-    return (   
-       <Flex  
-         key={date.toString()}  
-       justifyContent={"space-around"} 
-       bgcolor={grey[100]} 
-       m={2} 
-    
-   
-       padding={2}
-
-       
-     >
-
-          <Typography variant="h6" sx={{color:'black'}} textAlign={"start"}   > תאריך  : {date.toLocaleDateString("he-IL",options)  } שעה: {date.toLocaleTimeString("he-IL") }</Typography>
-
-   
-
-        
-         <Flex direction={"row"}  >
-          <InputWrap  label={'מחיר רגיל'} stateName={""}  Fgrow={4} />
-          <InputWrap  label={'מחיר מוזל'} stateName={""}  Fgrow={6}  />
-     
-         </Flex>
-
-         <Flex>
-         <InputWrap  label={'מחיר  תושב'} stateName={""}   />
-         </Flex>
-
-       
-        <Flex   direction={!sm? "column": 'row'}  >
-         <InputWrap  isInputRequired  label={' תאריך סגירת מכירות'} stateName={'discountPricel'}    Fgrow={4}  />
-         <InputWrap  label={'  תיאור'}  stateName={'discountPricel'}    Fgrow={12}   />
-        </Flex>
-
-      </Flex>
-)
-  }
-
-
-
-const SeatsTab =()=>{
-    // option 1 add all price hear 
-    // option 2 add them localy in cards 
-
-  return (
-    <>
-    <Typography variant='h4' sx={{color:"black"}} >{"  מספר מושבים זמינים  "}{0}</Typography>
-    <Typography variant='h4' sx={{color:"black"}} >{"  מחיר מושב "}{0}</Typography>
-    </>
-
-  )
-}
-
-  
 
 
   interface SetingsTabPropsType {}
 
   const SettingTab= ()=>{
-    return (<></>)
+    return (<>
+      <InputWrap stateName={""} label={"שם באתר "} helpText={" שם :  /https://domain.co.il/event"  } />
+    </>)
    }
 
   interface ColorTabPropsType {}

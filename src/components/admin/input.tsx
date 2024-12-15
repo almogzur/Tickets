@@ -1,5 +1,5 @@
 import WidthContext from "@/context/WidthContext";
-import { FormControl, InputBase, InputLabel, OutlinedInput, TextField, TextFieldVariants } from "@mui/material"
+import { FormControl, InputBase, InputLabel, OutlinedInput, StandardTextFieldProps, TextField, TextFieldProps, TextFieldVariants, Typography } from "@mui/material"
 import { error } from "console";
 import { ChangeEvent, ChangeEventHandler, CSSProperties, Dispatch, SetStateAction, SyntheticEvent, useContext, useState } from "react";
 
@@ -31,7 +31,8 @@ type HTMLInputTypes =
 
 
 
-interface InputWrapType {
+interface InputWrapType   {
+    
     stateName:string // the name of the state to update in the event 
     label:string  
     value?:string
@@ -46,7 +47,8 @@ interface InputWrapType {
     Fgrow?:number
     error?:boolean
     m?:number|"auto"
-    
+    helpText? :string
+    isDisabled?:boolean
 }
 
 
@@ -67,6 +69,9 @@ const InputWrap = ({
      bg,
      error,
      m,
+     helpText,
+     isDisabled
+     
     }:InputWrapType)=>{
 
         const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
@@ -80,16 +85,13 @@ const InputWrap = ({
             value={value}
             onChange={onChangeHndler}
             required={isInputRequired}
+            disabled={isDisabled}
             name={stateName}
-            
-            sx={{ flexGrow:Fgrow?? null, bgcolor:bg?? "#fff" ,m:m }}
-            variant={variant?? 'filled'}
+            helperText={ helpText? <Typography variant='subtitle2'  textAlign={"start"} >{helpText}</Typography> : null }
+            sx={{ flexGrow:Fgrow?? null, bgcolor:bg?? "#fff" ,m:m , maxWidth:!xs? 160 : null  }}
+            variant={variant?? 'standard'}
             label={label}
             error={error}
-            
-
-            
-
         />
    
  

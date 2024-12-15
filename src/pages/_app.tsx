@@ -61,6 +61,14 @@ export interface MultiTipeInfoType  {
 export interface TheaterType {mainSeats:Seats , sideSeats:Seats , testsStyle:SeatStyles , styles:SeatStyles ,ThaeaterName:string}
 
 
+export interface Schedule {
+  date: Date;
+  hours: { time: string; endOfSales: Date | null }[]; // Array of objects
+  isEventClosedForSeal:boolean
+
+} 
+
+
 
 
 const theme  = createTheme({    
@@ -73,7 +81,14 @@ const theme  = createTheme({
     ,
 
     components: {
-        MuiInputBase:{
+      MuiTypography:{
+        defaultProps:{},
+        styleOverrides:{
+          root:{color:"black"}
+        }
+        
+      },
+      MuiInputBase:{
           defaultProps:{  },
           styleOverrides:{}
         },
@@ -84,7 +99,7 @@ const theme  = createTheme({
             root:{
               direction:"ltr"  ,
                width:"100%" , 
-               textAlign:"center",
+               textAlign:"end",
                fontSize:18,
               // position is set global color in component wraper 
               // "&.MuiFormLabel-root:not(.MuiFormLabel-filled):not(.Mui-focused)":{color:'pink'},
@@ -103,7 +118,7 @@ const theme  = createTheme({
          styleOverrides:{
            root:{  
             direction:"rtl",
-            background:grey[100],
+             height:45,
             "&.Mui-focused": {},
             "&:hover": {},
             "& .MuiOutlinedInput-notchedOutline": {},
@@ -112,9 +127,9 @@ const theme  = createTheme({
            },    
            input:{
             direction:"rtl",
-            padding:13,
+       
             "&:hover":{  },
-            '&::placeholder':{color:blue[700],fontSize:20, fontWeight:700 , opacity:.7  } 
+            '&::placeholder':{ fontWeight:700 , opacity:.7  } 
            }
          }
        },
@@ -155,10 +170,14 @@ const theme  = createTheme({
         }
        },
        MuiTextField:{
-        defaultProps:{},
+        defaultProps:{
+
+        },
         styleOverrides:{
           root:{
-            
+              direction:'rtl',
+           
+              
           }
         },
 
@@ -177,6 +196,7 @@ const theme  = createTheme({
 function MyApp({  Component,  pageProps: { session, ...pageProps }}: AppProps) {
 
   const [events, setEvents] = useState<Event[]>(eventData);
+
 
   // Admin Side
 

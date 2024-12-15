@@ -66,6 +66,7 @@ const InfoForm =({InfoKeys,KysHndler, TheaterHndler}:InfoFormType)=>{
                     Fgrow={1}
                     m={0.5}
                     isInputRequired
+                  
                     
                     />
             
