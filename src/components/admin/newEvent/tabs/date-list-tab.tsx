@@ -1,5 +1,5 @@
 
-import {  Typography  , Stack as Flex, Button , Box, Divider, FormControl, Alert, Accordion, AccordionSummary, AccordionDetails } from '@mui/material'
+import {  Typography  , Stack as Flex, Button , Box, Divider, FormControl, Alert, Accordion, AccordionSummary, AccordionDetails, Fade } from '@mui/material'
 import {Dispatch, SetStateAction, useContext, useEffect,useState} from 'react'
 import WidthContext from '@/context/WidthContext';
 
@@ -10,7 +10,7 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 
 import Avatar from '@mui/material/Avatar';
 import { MdDelete } from "react-icons/md";
-import { MobileDatePicker ,MobileTimePicker} from '@mui/x-date-pickers'
+import { MobileDatePicker ,MobileDateTimePicker,MobileTimePicker} from '@mui/x-date-pickers'
 import { FcPlanner } from "react-icons/fc";
 import TabsEventDatesContext from '@/context/tabs-event-dates-context'
 
@@ -118,29 +118,26 @@ const MainDate = ({ schedul,schedulIndex , panel,ExpendedChangeHendler }:MainDat
 
   return  ( 
  
-     <Accordion expanded={panel === schedulIndex+1 }  onChange={ExpendedChangeHendler(schedulIndex+1)}  sx={{ width:"inherit"  , boxShadow:theme.shadows[1] }}   >
+     <Accordion expanded={panel === schedulIndex+1 }  onChange={ExpendedChangeHendler(schedulIndex+1)}  sx={{ width:"inherit"  }}   >
 
       <AccordionSummary  
-        sx={{position:panel === schedulIndex+1 ? "sticky" : null, top:0 ,zIndex:2 ,bgcolor:"#fff"}}
+        sx={{position:panel === schedulIndex+1 ? "sticky" : null, top:10 ,zIndex:2 ,bgcolor:"#fff" ,border:"nonce" , height:80}}
         expandIcon={<MdExpandCircleDown size={"3em"}  />}
          >
           
-           <Flex direction={'row'}    alignItems={"center"} justifyContent={"space-between"}  gap={2} width={"100%"}   >
+           <Flex direction={'row'}    alignItems={"center"} justifyContent={"space-between"}  gap={2} width={"100%"}  >
             <Typography textAlign={'start'} variant={"h6"} > { schedul.date.toLocaleDateString("he-IL",options)  }</Typography>          
 
 
              <Avatar sx={{background:theme.palette.error.main , mx:3 }} color='error' onClick={()=>removeDate(schedul)} variant='rounded'  >
-            <MdDelete   />
+               <MdDelete   />
             </Avatar>
             
           </Flex>
           
-       
       </AccordionSummary>
-      <Divider sx={{borderWidth:1.5 , background:theme.palette.error.main ,position:panel === schedulIndex+1 ? "sticky" : null, top:75 ,zIndex:2  }} />
-
-
-       <Flex direction={"row"} alignItems={"center"}  bgcolor={"#fff"}   gap={1}   p={2}  position={ panel === schedulIndex+1 ? "sticky" : null} top={80} zIndex={2} >
+        
+       <Flex direction={"row"} alignItems={"center"}     gap={1}   p={2 }    position={"sticky"} top={"10%"} height={70} >
 
               <FcPlanner size={"2em"} />
               <MobileTimePicker    
@@ -150,6 +147,7 @@ const MainDate = ({ schedul,schedulIndex , panel,ExpendedChangeHendler }:MainDat
            
        </Flex>
        
+
         {schedul.hours.map(({time,endOfSales},i)=>{
            return ( <HoursListItem key={time} time={time} schedul={schedul} hoursIndex={i} schedulIndex={schedulIndex}  />
      
@@ -157,7 +155,7 @@ const MainDate = ({ schedul,schedulIndex , panel,ExpendedChangeHendler }:MainDat
          })
    
       }
-      <Divider sx={{borderWidth:1.5 , background:theme.palette.error.main , }} />
+
     </Accordion>
  
 )
@@ -166,14 +164,18 @@ const MainDate = ({ schedul,schedulIndex , panel,ExpendedChangeHendler }:MainDat
 
 const HoursListItem =({time,schedul,hoursIndex,schedulIndex}:{time:string,schedul:Schedule,hoursIndex:number,schedulIndex:number})=>{
   const { removeEventHour} = useContext(TabsEventDatesContext)
+  const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
 
   const theme = useTheme()
      return(
            
-            <Flex direction={"row"} p={0.5} alignItems={"center"}  gap={1} justifyContent={"space-around"}  >
-                    <Typography variant='body1' fontWeight={700} >{"שעה"} : {time}</Typography>
-                    <InputWrap stateName={''} label={' סגירת הזמנות  '}/>
-                    <Avatar sx={{background:theme.palette.error.main , mx:3 }} color='error' variant='rounded'  >
+            <Flex direction={"row"} p={0.5} alignItems={"center"} justifyContent={!xs? "center": "space-between"}  >
+                    <Typography variant='body1' sx={{width:110 ,mx:2}} fontWeight={700} >{"שעה"} : {time}</Typography>
+                   <MobileDateTimePicker
+                                       slotProps={{textField:{ placeholder:" סגירת מכירות " ,    }}}      
+
+                     />
+                    <Avatar sx={{background:theme.palette.error.main , mx:1 }} color='error' variant='rounded'  >
                       <MdDelete size={""} onClick={(e)=>removeEventHour(hoursIndex,schedulIndex)}   />
                     </Avatar>
             </Flex>
