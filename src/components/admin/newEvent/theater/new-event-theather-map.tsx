@@ -1,11 +1,11 @@
 import { TransformWrapper, TransformComponent, useControls, getTransformStyles } from "react-zoom-pan-pinch";
 import { useState, useEffect, useContext, ReactNode, } from 'react'
-import AdminMapPositionsContext from '../../../../context/admin-map-positions-context';
+import AdminMapPositionsContext from '../../../../context/admin/new-event/map/admin-map-positions-context';
 import { Stack as Flex , Typography as Heading , Button, Avatar , useTheme, Divider} from '@mui/material'
 import { FaPlus } from "react-icons/fa6";
 import { FaMinus } from "react-icons/fa";
-import SingleTipContext from '@/context/single-tip-context';
-import MutiTipContext from '@/context/multi-select-context'
+import SingleTipContext from '@/context/admin/new-event/map/single-tip-context';
+import MutiTipContext from '@/context/admin/new-event/map/multi-select-context'
 import { LuRefreshCcw } from "react-icons/lu";
 import SeatColorsIndex from "../../../seats-color-index";
 import WidthContext from "@/context/WidthContext";

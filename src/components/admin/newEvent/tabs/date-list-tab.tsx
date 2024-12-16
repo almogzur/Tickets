@@ -12,7 +12,7 @@ import Avatar from '@mui/material/Avatar';
 import { MdDelete } from "react-icons/md";
 import { MobileDatePicker ,MobileDateTimePicker,MobileTimePicker} from '@mui/x-date-pickers'
 import { FcPlanner } from "react-icons/fc";
-import TabsEventDatesContext from '@/context/tabs-event-dates-context'
+import TabsEventDatesContext from '@/context/admin/new-event/tabs/tabs-event-schedules-context'
 
 import { MdExpandCircleDown } from "react-icons/md";
 
@@ -28,38 +28,33 @@ import InputWrap from '../../input';
 const DatesList = ()=>{
 
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
-    const { schedules,setSchedules,addEventDate,removeDate,dateEroor, } = useContext(TabsEventDatesContext)
-    const [expanded, setExpanded] = useState<number | false>(false);
-
-    const ExpendedChangeHendler = (panel: number) => (event: React.SyntheticEvent, isExpanded: boolean) => {    
-    
-        setExpanded(isExpanded ? panel : false);
-      };
-
+    const { schedule,setSchedule,addScheduleDate,removeScheduleDate,dateEroor,  } = useContext(TabsEventDatesContext)
+   
     const theme = useTheme()
- // first pick day 
- // then pick enven repetition time that dat ie 3 6 9 
- // mark done 
- // contine to new day 
 
 
 
   return (
     <>
         {/* piker */}
-       <Flex direction={'row'} alignItems={'center'} mx={2}  >
+       <Flex direction={'row'} alignItems={'center'} mx={2}   >
 
         <FcPlanner size={'3em'}  />
 
         <MobileDatePicker    
+              
              slotProps={{
-              textField:{ placeholder:"לחץ לבחור מועד  " , helperText:<Typography variant='subtitle2' textAlign={'start'} >בחר מועד / מספר מועדים</Typography>  }
-                
+              textField:{ 
+                required:true,
+                placeholder:"בחור מועד" ,
+                 helperText:<Typography variant='subtitle2' textAlign={'start'} >בחר מועד</Typography> 
+                 }
+                             
               
             }}
-            sx={{mt:2 }}
+            sx={{mt:2 , height:60 }}
  
-             onAccept={addEventDate}
+             onAccept={addScheduleDate}
         
        />
        </Flex>
@@ -70,22 +65,8 @@ const DatesList = ()=>{
          width={"inherit"}  
          height={'calc(85% - 80px)'}
          overflow={"auto" } 
-        >   
-        <Box  width={"100%"}  >
-         <List  >
-             {schedules.map((schedul,i)=>{         
-                return <MainDate 
-                    key={schedul.date.toString()+i+"EventDate"}  
-                    schedul={schedul} 
-                    schedulIndex={i}  
-                    panel={expanded}  
-                    ExpendedChangeHendler={ExpendedChangeHendler} 
-                  />  
-                 })}
-         </List>
-       </Box>
-
-
+        >      
+       { schedule.day && <MainDate schedul={schedule} />  }
       </Flex>
     </>
  )
@@ -97,91 +78,111 @@ export default DatesList
 
 interface MainDatePropsType { 
   schedul:Schedule
-  schedulIndex:number
-  panel:number|false
-  ExpendedChangeHendler:(panel: number) => (event: React.SyntheticEvent, isExpanded: boolean) => void
+ 
  }
 
-
-
-const MainDate = ({ schedul,schedulIndex , panel,ExpendedChangeHendler }:MainDatePropsType)=>{
-
-   const { removeDate,dateEroor, addEventHour} = useContext(TabsEventDatesContext)
+const MainDate = ({ schedul  }:MainDatePropsType)=>{
+   const { removeScheduleDate,dateEroor, removeScheduleHour,addScheduleHour,setEndOfDate} = useContext(TabsEventDatesContext)
    const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
-
-
   const theme = useTheme()
 
-  const options :Intl.DateTimeFormatOptions = {
+  const FullDateOptions :Intl.DateTimeFormatOptions = {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+    hour:'2-digit',
+    minute:'2-digit'
+  };
+  const samiDateOptions :Intl.DateTimeFormatOptions = {
           weekday: 'long',
           year: 'numeric',
           month: 'long',
           day: 'numeric',
+    
         };
+
+  const  sortDateOptions :Intl.DateTimeFormatOptions = {
+    hour:'2-digit',
+    minute:'2-digit'
+  };
         
 
   return  ( 
  
-     <Accordion expanded={panel === schedulIndex+1 }  onChange={ExpendedChangeHendler(schedulIndex+1)}  sx={{ width:"inherit"  }}   >
+     <Accordion    sx={{ width:"inherit"  }}   >
 
       <AccordionSummary  
-        sx={{position:panel === schedulIndex+1 ? "sticky" : null, top:0 ,zIndex:2 ,bgcolor:"#fff" ,border:"nonce" , height:80}}
+        sx={{position:"sticky" , top:0 ,zIndex:2 ,bgcolor:"#fff" ,border:"nonce" , height:80}}
         expandIcon={<MdExpandCircleDown size={"3em"}  />}
          >
           
            <Flex direction={'row'}    alignItems={"center"} justifyContent={"space-between"}  gap={2} width={"100%"}  >
-            <Typography textAlign={'start'} variant={"h6"} > { schedul.date.toLocaleDateString("he-IL",options)  }</Typography>          
+            <Typography textAlign={'start'} variant={"h6"} > { schedul.day.toLocaleDateString("he-IL",samiDateOptions)   }</Typography>          
 
 
-             <Avatar sx={{background:theme.palette.error.main , mx:3 }} color='error' onClick={()=>removeDate(schedul)} variant='rounded'  >
-               <MdDelete   />
+             <Avatar sx={{background:theme.palette.error.main , mx:3 ,p:0.5 }} color='error' onClick={()=>removeScheduleDate(schedul)} variant='rounded'  >
+               <MdDelete  size={"1.5em"} />
             </Avatar>
             
           </Flex>
           
       </AccordionSummary>
         
-       <Flex direction={"row"}     gap={1}   p={2 }   sx={{transition:"all ease 2s " }} >
+       <Flex direction={"row"} gap={1} p={2 } >
 
-              <FcPlanner size={"2em"} />
+              <FcPlanner size={"3em"} />
               <MobileTimePicker    
-                    slotProps={{textField:{ placeholder:"לחץ לבחור שעה / שעות " ,  helperText: <Typography textAlign={"start"} variant='subtitle2' >הוסף שעה </Typography> }}}      
-                    onAccept={(e)=>{  addEventHour(e,schedul,schedulIndex) } }
-                    
+                    slotProps={{
+                      textField:{
+                          placeholder:"שעה" ,
+                          helperText: <Typography textAlign={"start"} variant='subtitle2' >הוסף שעה לאירוע </Typography> 
+                       }}}      
+                    onAccept={(e)=>{  addScheduleHour(e,schedul) } } 
                    />
+              <FcPlanner size={"3em"} />
+              <MobileTimePicker    
+                    slotProps={{
+                      textField:{ 
+                        placeholder:"שעת סגירה קופות" ,
+                        helperText: <>
+                        <Typography textAlign={"start"} variant='subtitle2' >הוסף שעה לסגור קופות </Typography>
+                        <Typography textAlign={"start"} variant='subtitle2' >אופציונלי ניתן לשינוי </Typography>
+                        </>
+                         }}}      
+                    onAccept={(e)=>{ setEndOfDate(e,schedul) } } 
+                   />
+                   
            
        </Flex>
+
+     
        
 
-        {schedul.hours.map(({time,endOfSales},i)=>{
-           return ( <HoursListItem key={time} time={time} schedul={schedul} hoursIndex={i} schedulIndex={schedulIndex}  />
+     { schedul.hour &&  <HoursListItem EventHour={schedul.hour.toLocaleDateString("he-IL",sortDateOptions).slice(10)}  />}
      
-            )
-         })
-   
-      }
-
+     {schedul.closingSealesDate && <HoursListItem endOfSalesDate={schedul.closingSealesDate.toLocaleDateString("he-IL",FullDateOptions)}/>}
+            
+    
     </Accordion>
  
 )
   }
 
 
-const HoursListItem =({time,schedul,hoursIndex,schedulIndex}:{time:string,schedul:Schedule,hoursIndex:number,schedulIndex:number})=>{
-  const { removeEventHour} = useContext(TabsEventDatesContext)
+const HoursListItem =({endOfSalesDate,EventHour}:{EventHour?:string,endOfSalesDate?:string})=>{
+  const { removeScheduleHour , removeEndOdDate} = useContext(TabsEventDatesContext)
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
+
+  
 
   const theme = useTheme()
      return(
            
-            <Flex direction={"row"} p={0.5} alignItems={"center"} justifyContent={!xs? "center": "space-between"}  >
-                    <Typography variant='body1' sx={{width:110 ,mx:2}} fontWeight={700} >{"שעה"} : {time}</Typography>
-                   <MobileDateTimePicker
-                                       slotProps={{textField:{ placeholder:" סגירת מכירות " ,    }}}      
-
-                     />
-                    <Avatar sx={{background:theme.palette.error.main , mx:1 }} color='error' variant='rounded'  >
-                      <MdDelete size={""} onClick={(e)=>removeEventHour(hoursIndex,schedulIndex)}   />
+            <Flex direction={"row"} p={0.5}  alignItems={"center"} justifyContent={"space-between"}  width={"70%"} mx={'auto'} >
+          {  EventHour &&    <Typography variant='body1' fontWeight={700} > שעת האירוע : {EventHour}</Typography>}    
+          {endOfSalesDate && <Typography variant='body1' fontWeight={700} > סגירה קופות : {endOfSalesDate}</Typography> }         
+                    <Avatar  sx={{background:theme.palette.error.main , mx:1 }} color='error' variant='rounded'  >
+                      <MdDelete size={""} onClick={(e)=> endOfSalesDate? removeEndOdDate(): removeScheduleHour()     }   />
                     </Avatar>
             </Flex>
 

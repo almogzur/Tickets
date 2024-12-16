@@ -16,7 +16,7 @@ type HTMLInputTypes =
   | "hidden"
   | "image"
   | "month"
- // | "number"  this is not valit with react and ts see   https://stackoverflow.com/questions/61070803/how-to-handle-number-input-in-typescript
+  | "number" 
   | "password"
   | "radio"
   | "range"

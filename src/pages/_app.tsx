@@ -11,13 +11,13 @@ import { events as eventData } from '../constants/event';
 import MoviesContext from '../context/Events'
 import WidthContext from '../context/WidthContext';
 /////
-import AdminTransformContext  from '../context/admin-map-positions-context'
-import ClineTransformContext from '@/context/client-map-positions-context'
+import AdminTransformContext  from '../context/admin/new-event/map/admin-map-positions-context'
+import ClineTransformContext from '@/context/client/client-map-positions-context'
 ///////
-import SingleTipContext from '@/context/single-tip-context';
-import multiSelectContext from '@/context/multi-select-context';
+import SingleTipContext from '@/context/admin/new-event/map/single-tip-context';
+import multiSelectContext from '@/context/admin/new-event/map/multi-select-context';
 ///////
-import ClientTipContext from '@/context/c-tip-context'
+import ClientTipContext from '@/context/client/c-tip-context'
 //Auth 
 import { SessionProvider } from "next-auth/react"
 
@@ -58,16 +58,24 @@ export interface MultiTipeInfoType  {
   err:string
   selectdir:"R"|"L"
 }
-export interface TheaterType {mainSeats:Seats , sideSeats:Seats , testsStyle:SeatStyles , styles:SeatStyles ,ThaeaterName:string}
-
-
+export interface TheaterType {
+     mainSeats:Seats 
+     sideSeats:Seats 
+     testsStyle:SeatStyles 
+     styles:SeatStyles 
+     ThaeaterName:string
+      }
 export interface Schedule {
-  date: Date;
-  hours: { time: string; endOfSales: Date | null }[]; // Array of objects
+  day: Date;
+  hour: Date; // Array of objects
   isEventClosedForSeal:boolean
-
+  closingSealesDate:Date
 } 
-
+export interface Ticket  {
+  label:string
+  price:number
+  discription:string
+}
 
 
 
@@ -75,7 +83,7 @@ const theme  = createTheme({
     direction:"rtl",
     palette:{
       primary:{main:blue[700]},
-      secondary:{main:"#7E1891"},
+      secondary:{main:"#3f51b5"},
    
     }
     ,

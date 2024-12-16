@@ -4,8 +4,8 @@ import
 
  { useTheme } from '@mui/material';
 import { green, orange, pink } from '@mui/material/colors';
-import SingleTipontext from '@/context/single-tip-context';
-import MultiSelectContext from '@/context/multi-select-context';
+import SingleTipontext from '@/context/admin/new-event/map/single-tip-context'
+import MultiSelectContext from '@/context/admin/new-event/map/multi-select-context';
 import React from 'react';
 import { first } from '@tiptap/core/dist/commands';
 

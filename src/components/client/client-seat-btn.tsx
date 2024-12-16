@@ -2,7 +2,7 @@ import {  CSSProperties, useContext } from 'react'
 
 import {Colors} from '@/lib/colors'
 
-import ClientTipContext from '@/context/c-tip-context'
+import ClientTipContext from '@/context/client/c-tip-context'
 const styles :Record<string,CSSProperties> =  {
   seats: {
     backgroundColor: "#fff",

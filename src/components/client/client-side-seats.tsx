@@ -10,7 +10,7 @@ import {Colors} from '../../lib/colors'
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 
-import ClientTipContext from '@/context/c-tip-context'
+import ClientTipContext from '@/context/client/c-tip-context'
 
 import { IoTicketSharp } from "react-icons/io5";
 import { FaTrashAlt } from "react-icons/fa";

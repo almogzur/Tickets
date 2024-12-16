@@ -1,6 +1,6 @@
 import { TransformWrapper, TransformComponent, useControls, getTransformStyles } from "react-zoom-pan-pinch";
 import { useState, useEffect, useContext, ReactNode, SetStateAction, } from 'react'
-import ClientPositionContext from '../../context/client-map-positions-context'
+import ClientPositionContext from '../../context/client/client-map-positions-context'
 import { Stack as Flex , Typography as Heading , Button, Avatar , useTheme, Divider} from '@mui/material'
 import { FaPlus } from "react-icons/fa6";
 import { FaMinus } from "react-icons/fa";

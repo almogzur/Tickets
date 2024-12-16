@@ -1,5 +1,6 @@
+import { Positions, TipinfoType } from '@/pages/_app'
 import { createContext } from 'react'
-import { TipinfoType ,Positions } from '../pages/_app'
+
 
 
 interface SingleTipContenxtType {

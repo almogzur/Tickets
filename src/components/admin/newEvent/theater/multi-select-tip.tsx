@@ -1,7 +1,7 @@
 import { useTheme ,Stack as Flex, Typography, Divider, Button, Chip} from "@mui/material"
 import { motion ,AnimatePresence } from "framer-motion"
 import { CSSProperties, Dispatch, SetStateAction, useContext } from "react"
-import MultiSelectContext from "@/context/multi-select-context"
+import MultiSelectContext from "@/context/admin/new-event/map/multi-select-context"
 import { grey, orange, pink } from "@mui/material/colors"
 import { TheaterType } from "@/pages/_app"
 

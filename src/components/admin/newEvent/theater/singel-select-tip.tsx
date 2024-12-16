@@ -1,5 +1,5 @@
 
-import SingleTipContext from "@/context/single-tip-context"
+import SingleTipContext from "@/context/admin/new-event/map/single-tip-context"
 import WidthContext from "@/context/WidthContext"
 import { motion ,AnimatePresence } from "framer-motion"
 import { CSSProperties, Dispatch, MouseEventHandler, SetStateAction, useContext, useEffect, useState } from "react"

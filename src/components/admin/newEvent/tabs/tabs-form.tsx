@@ -4,34 +4,31 @@ import { Typography , Stack as Flex ,useTheme, Box, Tabs, Tab, Badge} from "@mui
 import { ChangeEvent, ChangeEventHandler, CSSProperties, Dispatch, SetStateAction, useContext, useEffect, useState } from "react"
 import InputWrap from "../../input"
 
-// Context 
+// Context Useg
 import WidthContext from "@/context/WidthContext"
-import TabsEventDatesContext from '@/context/tabs-event-dates-context'
+import TabsEventsSchedulesContext from '@/context/admin/new-event/tabs/tabs-event-schedules-context'
+
 //Icons 
-import { FcPlanner } from "react-icons/fc";
+import { FcIntegratedWebcam, FcPlanner } from "react-icons/fc";
 import { FcFilm } from "react-icons/fc";
 import { FcSettings } from "react-icons/fc";
 import { FcStackOfPhotos } from "react-icons/fc";
 import { FcAnswers } from "react-icons/fc";
-import { FcCurrencyExchange } from "react-icons/fc";
 import { FcAddImage } from "react-icons/fc";
+import { FcShare } from "react-icons/fc";
 
 // Tabs 
 import DatesListTab from "./date-list-tab"
 import CoverUploadTab from "./cover-upload-tab"
 import EditorTab from '@/components/admin/newEvent/tabs/text-editor-tab/editor'
-import TikitsTab from './tikits-tab'
+import TicketsTab from './tickit-tab/tickets-tab'
+import SettingTab from "./settings-tab"
+import ColorTab from "./colors-tab"
+import AdOptionsTab from "./ad-options-tab"
 
 //Types
-import { TheaterType } from "@/pages/_app"
 
 interface TabFormPropsType {
-
-
-  //Tikit
-  normal:string
-  dicount:string
-  PriceHndler: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
 
 
 
@@ -47,28 +44,19 @@ interface TabFormPropsType {
 
   }
 
-
-  const TabsForm = ({
-     normal,
-     dicount,
-     PriceHndler,
-
+const TabsForm = ({
       file,
       setFile,
       preview,
       setPreview,
-      onFileChange,
-
-
-      
-  
+      onFileChange,  
     }
       :TabFormPropsType)=>
   {
     const theme = useTheme()
     const [pageVale, setPageVale] = useState(1);
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
-    const { schedules,setSchedules,addEventDate,removeDate,dateEroor, } = useContext(TabsEventDatesContext)
+    const { schedule,setSchedule,addScheduleDate,removeScheduleDate,dateEroor, } = useContext(TabsEventsSchedulesContext)
 
 
     const TabComonStyleAttribute :CSSProperties = {
@@ -82,7 +70,6 @@ interface TabFormPropsType {
     
     return (
     <>
-
       <Box  
         sx={{ 
              height:!sm?600:700 ,
@@ -101,17 +88,15 @@ interface TabFormPropsType {
           scrollButtons
           allowScrollButtonsMobile        
           variant='scrollable'
-          
-          
          >
 
         <Tab value={1} label="תמונה ראשית "  sx={{...TabComonStyleAttribute}}  icon={<FcAddImage size={"2em"} />}    /> 
         <Tab value={2} label="טקסט"  sx={{...TabComonStyleAttribute}}  icon={<FcAnswers size={"2em"} />}    /> 
-        <Tab value={3} label="תאריכים"  sx={{...TabComonStyleAttribute}}  icon={<FcPlanner size={"2em"} />}     />
+        <Tab value={3} label="תאריך ושעה"  sx={{...TabComonStyleAttribute}}  icon={<FcPlanner size={"2em"} />}     />
 
-        {schedules.length === 0 &&   <Badge 
+        { schedule && Object.entries(schedule).length === 0 &&   <Badge 
           showZero
-          badgeContent={schedules.length}
+          badgeContent={0}
           overlap='circular'
           variant='dot'
           color='error'
@@ -119,19 +104,9 @@ interface TabFormPropsType {
          />
          }    
         <Tab value={4} label="כרטיסים"  sx={{...TabComonStyleAttribute}} icon={<FcFilm size={"2em"} />} />
-
-        <Badge 
-          badgeContent={schedules.length}
-          overlap='circular'
-          variant='standard'
-          color='warning'
-         
-           sx={{position:"relative" , left:10, top:5}}
-          />
-       
         <Tab value={5} label="הגדרות"  sx={{...TabComonStyleAttribute}}   icon={<FcSettings size={"2em"} />}  />
-        <Tab value={6} label="עיצוב"  sx={{...TabComonStyleAttribute}} icon={<FcStackOfPhotos size={"2em"} />}  />
-        <Tab value={7} label="שמור"  sx={{...TabComonStyleAttribute}}  />
+        <Tab value={6} label="צבעים"  sx={{...TabComonStyleAttribute}} icon={<FcStackOfPhotos size={"2em"} />}  />
+        <Tab value={7} label="פירסום"  sx={{...TabComonStyleAttribute}} icon={<FcIntegratedWebcam size={"2em"}/>}  />
         <Tab value={8} label="שמור"  sx={{...TabComonStyleAttribute}} />
        </Tabs>
 
@@ -139,28 +114,31 @@ interface TabFormPropsType {
 
         // to Switch Function
        pageVale ===1 ?
-       <CoverUploadTab file={file} setFile={setFile} preview={preview} setPreview={setPreview} onFileChange={onFileChange}  />
+       <CoverUploadTab 
+          file={file} 
+          setFile={setFile} 
+          preview={preview} 
+          setPreview={setPreview} 
+          onFileChange={onFileChange}  
+          />
        :
-       pageVale ===2 ? 
+       pageVale === 2 ? 
        <EditorTab />
        :
-       pageVale===3 ?
+       pageVale === 3 ?
        <DatesListTab /> // context 
        :
-       pageVale===4?
-       <TikitsTab 
-          Dates={[]} 
-          normal={""} 
-          dicount={""} 
-          PriceHndler={ PriceHndler}
-      
-           />
+       pageVale === 4?
+       <TicketsTab/>
        :
-       pageVale===5 ?
+       pageVale === 5 ?
        <SettingTab/>
        :
-       pageVale=== 6 ?
+       pageVale === 6 ?
        <ColorTab/>
+       :
+       pageVale === 7 ?
+       <AdOptionsTab/>
        :
        null
         }
@@ -172,30 +150,4 @@ interface TabFormPropsType {
     
   }
 
-
-
-
-
-  
- 
-
-
-
-  interface SetingsTabPropsType {}
-
-  const SettingTab= ()=>{
-    return (<>
-      <InputWrap stateName={""} label={"שם באתר "} helpText={" שם :  /https://domain.co.il/event"  } />
-    </>)
-   }
-
-  interface ColorTabPropsType {}
-
-
-  const ColorTab =()=>{
-    return (<></>)
-  }
-
-
-
-  export default TabsForm
+export default TabsForm

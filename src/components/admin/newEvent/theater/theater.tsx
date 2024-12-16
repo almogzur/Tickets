@@ -6,9 +6,9 @@ import { Colors } from '@/lib/colors';
 import SingleSelectTip from './singel-select-tip';
 import AdminSeatBtn from './adminSeatBtn'
 import MuliSelectTip from '@/components/admin/newEvent/theater/multi-select-tip'
-import AdminNewEventTheatherMap from './admin-new-event-theather-map';
+import AdminNewEventTheatherMap from './new-event-theather-map';
 import { TheaterType } from '@/pages/_app';
-import AdminMapPositionsContext from '@/context/admin-map-positions-context';
+import AdminMapPositionsContext from '@/context/admin/new-event/map/admin-map-positions-context';
 
 
 

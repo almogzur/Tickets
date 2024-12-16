@@ -26,8 +26,9 @@ const InfoForm =({InfoKeys,KysHndler, TheaterHndler}:InfoFormType)=>{
      return(
       <>
       
-      <Flex  boxShadow={theme.shadows[10]} p={2}   >
+      <Flex  boxShadow={theme.shadows[10]} p={2} mt={3}   >
 
+      <Typography  variant='h5' m={1} textAlign={"start"} sx={{color:"black"  } } > אירוע חדש</Typography>
        <Typography sx={{color:'black'}} variant="h6" > פרטים כללים </Typography>
     
       <Flex   

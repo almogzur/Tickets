@@ -1,5 +1,5 @@
 import { createContext } from 'react'
-import { TipinfoType ,Positions } from '../pages/_app'
+import { TipinfoType ,Positions } from '@/pages/_app'
 
 
 

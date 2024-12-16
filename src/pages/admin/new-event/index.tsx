@@ -1,22 +1,25 @@
-import { useSession } from 'next-auth/react'
-import {ChangeEvent, ChangeEventHandler, Dispatch, FormEvent, Key, MouseEventHandler, SetStateAction, useContext, useEffect,useState} from 'react'
-import { useRouter } from 'next/router'
-import AdminLayout from '@/Layouts/admin-layout'
-import {Typography , OutlinedInput , Stack as Flex, Select , MenuItem, SelectChangeEvent, FormControl, useTheme, InputLabel, Button} from '@mui/material'
 
-import WidthContext from '@/context/WidthContext'
-import Theater from '@/components/admin/newEvent/theater/theater'
-import TabsForm from '@/components/admin/newEvent/tabs/tabs-form'
-import { Seats, SeatStyles } from '@/constants/models/Events'
-import Head from 'next/head'
-import { DateTimeValidationError, PickerChangeHandlerContext } from '@mui/x-date-pickers'
-import { Schedule, TheaterType } from '@/pages/_app'
-import InfoForm from '@/components/admin/newEvent/info-form'
-import { grey } from '@mui/material/colors'
-import TabsEventDatesContext from '@/context/tabs-event-dates-context'
-import { time } from 'console'
+// React | Next
+import { useSession } from 'next-auth/react'
+import { ChangeEvent, useContext, useEffect,useState} from 'react'
+import { useRouter } from 'next/router'
+
+//Types
+import { Schedule, TheaterType, Ticket } from '@/pages/_app'
 import dayjs from 'dayjs'
 
+//components
+import Head from 'next/head'
+import {Typography  , Stack as Flex,  useTheme, Button} from '@mui/material'
+import AdminLayout from '@/Layouts/admin-layout'
+import InfoForm from '@/components/admin/newEvent/info-form'
+import { DateTimeValidationError, PickerChangeHandlerContext } from '@mui/x-date-pickers'
+import TabsForm from '@/components/admin/newEvent/tabs/tabs-form'
+import Theater from '@/components/admin/newEvent/theater/theater'
+
+//WraperContex
+import TabsEventDatesContext from '@/context/admin/new-event/tabs/tabs-event-schedules-context'
+import TabsTickets from '@/context/admin/new-event/tabs/tabs-tikits-context'
 
 
 
@@ -24,7 +27,6 @@ const NewEventPage=()=>{
 
   const router = useRouter()
   const { data: session ,status ,update} = useSession()
-  const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
   const theme = useTheme()
 
   //Theater 
@@ -39,92 +41,68 @@ const NewEventPage=()=>{
     setInfo(prve=>({...prve,[name]:value}))
   }
 
-
-  // Dates  Coontext 
-
-  const [schedules, setSchedules] = useState<Schedule[]>([])
+  // Schedules Coontext State
+  const [schedule, setSchedule] = useState<Schedule>({day:null,hour:null,closingSealesDate:null,isEventClosedForSeal:null})
   const [dateEroor,setDateEroor ]= useState(false)
 
-  const addEventDate = (e:dayjs.Dayjs,context:PickerChangeHandlerContext<DateTimeValidationError>) :void => {
+  const addScheduleDate = (e:dayjs.Dayjs,context:PickerChangeHandlerContext<DateTimeValidationError>) :void => {
 
-
-         if (e && e.year() && e.month() && e.day() ) {
+       if (e && e.year() && e.month() && e.day() ) {
           const newDate = new Date(e.year() , e.month() ,e.day()) 
-          setSchedules(p=>[...p , {date:newDate ,hours:[],isEventClosedForSeal:false}])
+          setSchedule(p=>({...p,day:newDate }))
              
          }
        //  error henler
   };
-
-  const removeDate = (schedulArg: Schedule ):void => {
-    setSchedules((prev) => [...prev].filter((schedul) => schedul !== schedulArg)  )  
+  const removeScheduleDate = (schedulArg: Schedule ):void => {
+      setSchedule(p=>({...p,day:null , hour:null}))
 
   };
-
-
-  const addEventHour = (e: dayjs.Dayjs,schedul:Schedule,  schedulIndex: number): void => {
+  const addScheduleHour = (e: dayjs.Dayjs,schedule:Schedule, ): void => {
     
 
-    if (e && (e.hour() || (e.hour() && e.minute()))) {
-      const newTime = new Date(0, 0, 0, e.hour(), e.minute()).toLocaleTimeString("he-IL");
-      setSchedules((prev) =>
-        prev.map((schedule, index) =>
-          index === schedulIndex
-            ? ({
-                ...schedule,
-                hours: schedule.hours.hasOwnProperty(newTime)// Check for duplicates
-                  ? schedul.hours// Keep the existing hours if duplicate
-                  : [...schedule.hours, { time: newTime, endOfSales: null }], // Add with `endOfSales` as null (or a valid Date object)
-              })
-            : schedule // Return other schedules unchanged
-        )
-      );
+    if (e && e.hour() || e.hour() && e.minute()) {
+      const day = schedule.day.getDay()
+      const month = schedule.day.getMonth()
+      const year = schedule.day.getFullYear()
 
-      console.log(schedules);
+      const newTime = new Date(year,month,day,e.hour(), e.minute())
+        setSchedule(p=>({...p,hour:newTime}))
+
       
     }
   };
-
-
-  const removeEventHour = (hourIndex:number,schedulIndex:number):void=>{
-
-    console.log(hourIndex,schedulIndex);
+  const removeScheduleHour = ():void=>{
     
-      setSchedules(prev=>
-        prev.map((schedule, index) =>
-          index === schedulIndex ?
-        ({
-          ...schedule,
-           hours:[...schedule.hours].filter((item,i)=> i !== hourIndex )
-        })
-        :
-        schedule
-    )
-  )
+      setSchedule(p=>({...p,hour:null}))
+  
+
+  }
+  const setEndOfDate= (e:dayjs.Dayjs,schedule:Schedule) :void =>{
       
+    if (e && e.hour() || (e.hour() && e.minute())) {
 
+      const day = schedule.day.getDay() + 1 // see : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/getDay
+      const month = schedule.day.getMonth()
+      const year = schedule.day.getFullYear()
+
+      const newDate = new Date(year,month,day,e.hour(),e.minute())
+      setSchedule(p=>({...p,closingSealesDate:newDate}))
+      console.log(newDate);
+      
+    } 
 
   }
-
-
-
-  //Price
-  const [Prices, setPrices] =useState({normal:"",discount:"", })
-  const PricesHndler =  (e: ChangeEvent<HTMLInputElement|HTMLTextAreaElement>)=>{
-    const name = e.target.name 
-    const value = e.target.value
-    const isValidPirce = tryTransformToNumber(value)
-
-    function tryTransformToNumber(valuearg: string) {
-      const number = Number(valuearg);
-      return isNaN(number) ? "" : number; 
+  const removeEndOdDate = ()=>{
+     setSchedule(p=>({...p,closingSealesDate:null}))
   }
-    if(!isValidPirce){
-      setDateEroor(true) 
-    }
-    
-    setPrices(prev=>({...prev,[name]:tryTransformToNumber(value)}))  
-  }
+  
+  //Tickets
+  const [tickets, setTickets] =useState<Ticket[]>([])
+  const updateTicketsPrice =():void=>{}
+  const updateTicketslabel =():void=>{}
+  const updateTickitDiscription=():void=>{}
+
   // Cover 
   const [file, setFile] = useState<File>(null);
   const [preview ,setPreview] = useState<string>("")
@@ -172,20 +150,17 @@ return (
    <meta name="viewport" content="width=device-width, user-scalable=no"/>
   </Head>
      <AdminLayout>
-
-      <Typography  variant='h4' m={1} textAlign={"start"} sx={{color:"black"  } } > אירוע חדש</Typography>
-
+       <form>
        <InfoForm InfoKeys={info} KysHndler={InfoHndler} TheaterHndler={setTheater} />
+
        { theater.mainSeats && <Theater theater={theater} setTheater={setTheater} />}
 
-       <TabsEventDatesContext.Provider value={{schedules,setSchedules,dateEroor,addEventDate,removeDate,addEventHour,removeEventHour}}>
+
+        {/* TavsFormNexted */}
+         <TabsTickets.Provider  value={{tickets ,setTickets,updateTicketsPrice,updateTicketslabel,updateTickitDiscription,}} >
+         <TabsEventDatesContext.Provider value={{schedule,setSchedule,dateEroor,addScheduleDate,removeScheduleDate,addScheduleHour,removeScheduleHour,setEndOfDate,removeEndOdDate}}>
         
        <TabsForm 
-       // Tikit
-         normal={Prices.normal}
-        dicount={Prices.discount}
-        PriceHndler={PricesHndler}
-
         // file 
          file={file} 
          setFile={setFile}
@@ -193,17 +168,16 @@ return (
          setPreview={setPreview} 
          onFileChange={handleFileChange} 
 
-     
-  
-
         //Setings
         //Colors
           />
-       </TabsEventDatesContext.Provider>
-      
+         </TabsEventDatesContext.Provider>
+         </TabsTickets.Provider>
+          {/* TabsForm Nexted */}
       <Flex p={4} alignItems={"center"}  >
-        <Button sx={{height:70 ,width:100}} > שמור </Button>
+        <Button   sx={{height:50 ,width:100,background:"black"}} > שמור </Button>
       </Flex>
+      </form>
 
      </AdminLayout>
     </>

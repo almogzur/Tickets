@@ -1,12 +1,12 @@
-import SingleTipContext from "@/context/single-tip-context";
-import MultiSelectContext from "@/context/multi-select-context";
+import SingleTipContext from "@/context/admin/new-event/map/single-tip-context";
+import MultiSelectContext from "@/context/admin/new-event/map/multi-select-context";
 import { Colors } from "@/lib/colors";
 import { Avatar , Badge, Button, Divider, Stack as Flex, useTheme  } from "@mui/material";
 import { blue, green, grey, orange, pink, red } from "@mui/material/colors";
 import { useContext } from "react";
 import { TbDisabled } from "react-icons/tb";
 import WidthContext from "@/context/WidthContext";
-import AdminMapPositionsContext from '@/context/admin-map-positions-context';
+import AdminMapPositionsContext from '@/context/admin/new-event/map/admin-map-positions-context';
 
 
 
@@ -84,9 +84,9 @@ const AdminSeatColorsIndex =({isMuiltiSelct,setIsMultiSelect,multiSelectBadgeInf
          <Flex direction={'row'}  >
           <Avatar  sx={{ bgcolor: blue[800] , margin:0.3 , padding:.5 }} variant={'square'} >רגיל</Avatar>
           <Avatar sx={{ bgcolor: "black" , margin:0.3 , padding:.5 , color:"#ddd" }} variant={'square'} > חסום</Avatar>
-          <Avatar sx={{ bgcolor: green[800] , margin:.3 , padding:.5 }} variant={'square'} > מוזל</Avatar>
+          <Avatar sx={{ bgcolor: green[800] , margin:.3 , padding:.5 }} variant={'square'} > הנחה</Avatar>
           <Avatar sx={{ bgcolor: orange[600] , margin:.3 , padding:.5 }} variant={'square'} > נגיש</Avatar>
-          <Avatar sx={{ bgcolor: pink[600] , margin:.3 , padding:.5  ,textAlign:"center"}} variant={'square'} > מוזל נגיש</Avatar>
+          <Avatar sx={{ bgcolor: pink[600] , margin:.3 , padding:.5  ,textAlign:"center"}} variant={'square'} > הנחה נגיש</Avatar>
 
          </Flex>
         
