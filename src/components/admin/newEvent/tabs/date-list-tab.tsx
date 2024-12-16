@@ -47,12 +47,16 @@ const DatesList = ()=>{
   return (
     <>
         {/* piker */}
-       <Flex direction={'row'} alignItems={'end'} mx={2}  >
+       <Flex direction={'row'} alignItems={'center'} mx={2}  >
 
         <FcPlanner size={'3em'}  />
 
         <MobileDatePicker    
-             slotProps={{textField:{ placeholder:"לחץ לבחור תאריך " ,    }}}
+             slotProps={{
+              textField:{ placeholder:"לחץ לבחור מועד  " , helperText:<Typography variant='subtitle2' textAlign={'start'} >בחר מועד / מספר מועדים</Typography>  }
+                
+              
+            }}
             sx={{mt:2 }}
  
              onAccept={addEventDate}
@@ -121,7 +125,7 @@ const MainDate = ({ schedul,schedulIndex , panel,ExpendedChangeHendler }:MainDat
      <Accordion expanded={panel === schedulIndex+1 }  onChange={ExpendedChangeHendler(schedulIndex+1)}  sx={{ width:"inherit"  }}   >
 
       <AccordionSummary  
-        sx={{position:panel === schedulIndex+1 ? "sticky" : null, top:10 ,zIndex:2 ,bgcolor:"#fff" ,border:"nonce" , height:80}}
+        sx={{position:panel === schedulIndex+1 ? "sticky" : null, top:0 ,zIndex:2 ,bgcolor:"#fff" ,border:"nonce" , height:80}}
         expandIcon={<MdExpandCircleDown size={"3em"}  />}
          >
           
@@ -137,12 +141,13 @@ const MainDate = ({ schedul,schedulIndex , panel,ExpendedChangeHendler }:MainDat
           
       </AccordionSummary>
         
-       <Flex direction={"row"} alignItems={"center"}     gap={1}   p={2 }    position={"sticky"} top={"10%"} height={70} >
+       <Flex direction={"row"}     gap={1}   p={2 }   sx={{transition:"all ease 2s " }} >
 
               <FcPlanner size={"2em"} />
               <MobileTimePicker    
-                    slotProps={{textField:{ placeholder:"לחץ לבחור שעה " ,    }}}      
+                    slotProps={{textField:{ placeholder:"לחץ לבחור שעה / שעות " ,  helperText: <Typography textAlign={"start"} variant='subtitle2' >הוסף שעה </Typography> }}}      
                     onAccept={(e)=>{  addEventHour(e,schedul,schedulIndex) } }
+                    
                    />
            
        </Flex>
