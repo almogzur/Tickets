@@ -15,9 +15,10 @@ import { FcSettings } from "react-icons/fc";
 import { FcStackOfPhotos } from "react-icons/fc";
 import { FcAnswers } from "react-icons/fc";
 import { FcAddImage } from "react-icons/fc";
+import { FcBinoculars } from "react-icons/fc";
+import { FcInfo } from "react-icons/fc";
 
 // Tabs 
-import { FcInfo } from "react-icons/fc";
 
 import DatesListTab from "./date-list-tab"
 import CoverUploadTab from "./cover-upload-tab"
@@ -27,6 +28,7 @@ import SettingTab from "./settings-tab"
 import ColorTab from "./colors-tab"
 import AdOptionsTab from "./ad-options-tab"
 import InfoForm from "../info-form"
+import PrevieTab from "./ticket-tab/preview-tab"
 
 //Types
 
@@ -107,8 +109,8 @@ const TabsForm = ({
         <Tab value={4} label="כרטיסים"  sx={{...TabComonStyleAttribute}} icon={<FcFilm size={"2em"} />} />
         <Tab value={5} label="הגדרות"  sx={{...TabComonStyleAttribute}}   icon={<FcSettings size={"2em"} />}  />
         <Tab value={6} label="צבעים"  sx={{...TabComonStyleAttribute}} icon={<FcStackOfPhotos size={"2em"} />}  />
-        <Tab value={7} label="פירסום"  sx={{...TabComonStyleAttribute}} icon={<FcIntegratedWebcam size={"2em"}/>}  />
-        <Tab value={8} label="שמור"  sx={{...TabComonStyleAttribute}} />
+        <Tab value={7} label="תצוגה מקדימה "  sx={{...TabComonStyleAttribute}} icon={<FcBinoculars size={"2em"}/>} />
+        <Tab value={8} label="פירסום"  sx={{...TabComonStyleAttribute}} icon={<FcIntegratedWebcam size={"2em"}/>}  />
        </Tabs>
   
  
@@ -141,9 +143,11 @@ const TabsForm = ({
        <ColorTab/>
        :
        pageVale === 7 ?
-       <AdOptionsTab/>
+       <PrevieTab/>
        :
-       null
+       pageVale=== 8?
+       <AdOptionsTab/>
+       :null
       }
        
       </Box>
