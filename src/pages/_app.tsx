@@ -37,12 +37,16 @@ import { heIL as coreHeb } from '@mui/material/locale';
 //Mui LOC
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
-//---------
-
-//Map
+// Geo Location  Map  Css
 import '@tomtom-international/web-sdk-maps/dist/maps.css'
 
-export interface Positions {x:number ,y:number , Scale?:number , disabled? :boolean}
+// Theater Types
+export interface Positions {
+    x:number ,
+    y:number ,
+    Scale?:number ,
+    disabled? :boolean
+}
 export interface TipinfoType {
   initValue:number,
   row:string,
@@ -64,7 +68,12 @@ export interface TheaterType {
      testsStyle:SeatStyles 
      styles:SeatStyles 
      ThaeaterName:string
-      }
+}
+/////////////
+export interface InfoFormType {
+  keys:{  name:string ,location:string, cat:string}
+  theater:TheaterType
+}
 export interface Schedule {
   day: Date;
   hour: Date; // Array of objects
@@ -72,9 +81,12 @@ export interface Schedule {
   closingSealesDate:Date
 } 
 export interface Ticket  {
-  label:string
+  type:"normal"|"discount"
   price:number
+  eventDate:string
+  location:string
   discription:string
+  discoundInfo?:string
 }
 
 

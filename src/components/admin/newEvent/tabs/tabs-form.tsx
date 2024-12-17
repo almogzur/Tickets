@@ -1,5 +1,5 @@
 //Cmponents
-import { Typography , Stack as Flex ,useTheme, Box, Tabs, Tab, Badge} from "@mui/material"
+import { Typography , Stack as Flex ,useTheme, Box, Tabs, Tab, Badge, Container, Divider} from "@mui/material"
 
 import { ChangeEvent, ChangeEventHandler, CSSProperties, Dispatch, SetStateAction, useContext, useEffect, useState } from "react"
 import InputWrap from "../../input"
@@ -15,16 +15,18 @@ import { FcSettings } from "react-icons/fc";
 import { FcStackOfPhotos } from "react-icons/fc";
 import { FcAnswers } from "react-icons/fc";
 import { FcAddImage } from "react-icons/fc";
-import { FcShare } from "react-icons/fc";
 
 // Tabs 
+import { FcInfo } from "react-icons/fc";
+
 import DatesListTab from "./date-list-tab"
 import CoverUploadTab from "./cover-upload-tab"
 import EditorTab from '@/components/admin/newEvent/tabs/text-editor-tab/editor'
-import TicketsTab from './tickit-tab/tickets-tab'
+import TicketsTab from './ticket-tab/tickets-tab'
 import SettingTab from "./settings-tab"
 import ColorTab from "./colors-tab"
 import AdOptionsTab from "./ad-options-tab"
+import InfoForm from "../info-form"
 
 //Types
 
@@ -54,7 +56,7 @@ const TabsForm = ({
       :TabFormPropsType)=>
   {
     const theme = useTheme()
-    const [pageVale, setPageVale] = useState(1);
+    const [pageVale, setPageVale] = useState(0);
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
     const { schedule,setSchedule,addScheduleDate,removeScheduleDate,dateEroor, } = useContext(TabsEventsSchedulesContext)
 
@@ -69,27 +71,26 @@ const TabsForm = ({
     };
     
     return (
-    <>
+
       <Box  
         sx={{ 
-             height:!sm?600:700 ,
-             mt:3,
+             height:!sm?550:850 ,
+             direction:"rtl",
              boxShadow:theme.shadows[10]
-           }} 
-      
-        
+           }}   
         >
         <Tabs
           value={pageVale}
           onChange={handleChange}
           textColor='primary'
           indicatorColor='primary'
-          sx={{ background:"black"   } }
+          sx={{ background:"black"}}
           scrollButtons
           allowScrollButtonsMobile        
           variant='scrollable'
+          
          >
-
+        <Tab value={0} label="מידע כללי"  sx={{...TabComonStyleAttribute}}  icon={<FcInfo size={"2em"} />}    /> 
         <Tab value={1} label="תמונה ראשית "  sx={{...TabComonStyleAttribute}}  icon={<FcAddImage size={"2em"} />}    /> 
         <Tab value={2} label="טקסט"  sx={{...TabComonStyleAttribute}}  icon={<FcAnswers size={"2em"} />}    /> 
         <Tab value={3} label="תאריך ושעה"  sx={{...TabComonStyleAttribute}}  icon={<FcPlanner size={"2em"} />}     />
@@ -109,10 +110,12 @@ const TabsForm = ({
         <Tab value={7} label="פירסום"  sx={{...TabComonStyleAttribute}} icon={<FcIntegratedWebcam size={"2em"}/>}  />
         <Tab value={8} label="שמור"  sx={{...TabComonStyleAttribute}} />
        </Tabs>
-
-       {
-
-        // to Switch Function
+  
+ 
+      {
+        pageVale=== 0 ?
+        <InfoForm/>
+        :
        pageVale ===1 ?
        <CoverUploadTab 
           file={file} 
@@ -141,11 +144,10 @@ const TabsForm = ({
        <AdOptionsTab/>
        :
        null
-        }
-
-
+      }
+       
       </Box>
-    </>
+
     )
     
   }

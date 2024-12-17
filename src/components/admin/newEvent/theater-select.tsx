@@ -1,9 +1,14 @@
-import { TheaterType } from '@/pages/_app';     
+import { InfoFormType, TheaterType } from '@/pages/_app';     
 import {Typography , OutlinedInput , Stack as Flex, Select , MenuItem, SelectChangeEvent, FormControl, useTheme, InputLabel, styled, InputBase} from '@mui/material'
 import { grey } from '@mui/material/colors';
 import { Dispatch, SetStateAction, useState } from 'react';
 
-const TheaterSelect =({theaters,seter}:{theaters:TheaterType[], seter:Dispatch<SetStateAction<TheaterType>> })=> { 
+interface TheaterSelectType {
+  theaters?:TheaterType[],
+  setInfoFileds:Dispatch<SetStateAction<InfoFormType>>
+}
+
+const TheaterSelect =({theaters,setInfoFileds}:TheaterSelectType)=> { 
 
     const [name ,setName]= useState<string>("")
 
@@ -30,7 +35,7 @@ return (
                    key={theater.ThaeaterName} 
                    value={theater.ThaeaterName}
                   // ... coping the theater avoid mutation of the main Theater Object 
-                  onClick={()=>{seter({...theater})}} 
+                  onClick={()=>{setInfoFileds(p=>({...p,theater:theater}))}} 
                   >{theater.ThaeaterName}
                 </MenuItem>
 

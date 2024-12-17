@@ -3,12 +3,12 @@ import { motion ,AnimatePresence } from "framer-motion"
 import { CSSProperties, Dispatch, SetStateAction, useContext } from "react"
 import MultiSelectContext from "@/context/admin/new-event/map/multi-select-context"
 import { grey, orange, pink } from "@mui/material/colors"
-import { TheaterType } from "@/pages/_app"
+import { InfoFormType, TheaterType } from "@/pages/_app"
 
     interface MultiSelectTipType {
         isMultiSelect: boolean
         theraer:TheaterType
-        setTheater:Dispatch<SetStateAction<TheaterType>>
+        setTheater:Dispatch<SetStateAction<InfoFormType>>
     }
 
   const MuliSelectTip =({theraer,setTheater}:MultiSelectTipType)=>{
@@ -31,50 +31,75 @@ import { TheaterType } from "@/pages/_app"
       let newRow : number[]
       
        if(inMain){
-        setTheater( p => {
-                    // Find the movie object reference
-             const newEventState = {...p};
-
-            const newEventMainSeats = {...newEventState.mainSeats};
-            const updatedRow = [...newEventMainSeats[row]]; // Clone the specific row
-
-             if (dirArg==="R"){
-                newRow = updatedRow.fill(newSeatValueArg , second , first +1 )
-             }
-             else if (dirArg==="L"){
-                newRow=  updatedRow.fill(newSeatValueArg ,first , second+1 )
-             }
-                // Assign the updated row back to the seat details
-                newEventMainSeats[row] = updatedRow;
-
-                newEventState.mainSeats = newEventMainSeats;
-
-                // Assign the updated seat details back to the movie
-                return newEventState; // Return the updated state
-           });
+        setTheater((prevState) => {
+          // Clone the previous state immutably
+          const newState = {
+            ...prevState,
+            theater: { ...prevState.theater },
+          };
+        
+          // Clone the sideSeats object
+          const newSideSeats = { ...newState.theater.mainSeats };
+        
+          // Clone the specific row to ensure immutability
+          const updatedRow = [...newSideSeats[row]];
+        
+          // Perform updates based on the direction
+          let newRow;
+          if (dirArg === "R") {
+            newRow = updatedRow.map((seat, index) =>
+              index >= second && index <= first ? newSeatValueArg : seat
+            );
+          } else if (dirArg === "L") {
+            newRow = updatedRow.map((seat, index) =>
+              index >= first && index <= second ? newSeatValueArg : seat
+            );
+          }
+        
+          // Update the specific row in sideSeats
+          newSideSeats[row] = newRow;
+        
+          // Reassign updated sideSeats back to the state
+          newState.theater.mainSeats = newSideSeats;
+        
+          return newState;
+        });
          }
          else if(inSide){
-          setTheater( p => {
-            // Find the movie object reference
-           const newEventState = {...p};
-           const newEventMainSeats = {...newEventState.sideSeats};
-           const updatedRow = [...newEventMainSeats[row]]; // Clone the specific row
+        setTheater((prevState) => {
+  // Clone the previous state immutably
+  const newState = {
+    ...prevState,
+    theater: { ...prevState.theater },
+  };
 
-            if (dirArg==="R"){
-             newRow = updatedRow.fill(newSeatValueArg , second , first +1 )
-           }
-            else if (dirArg==="L"){
-            newRow=  updatedRow.fill(newSeatValueArg ,first , second+1 )
+  // Clone the sideSeats object
+  const newSideSeats = { ...newState.theater.sideSeats };
 
-           }
-        // Assign the updated row back to the seat details
-        newEventMainSeats[row] = updatedRow;
+  // Clone the specific row to ensure immutability
+  const updatedRow = [...newSideSeats[row]];
 
-        newEventState.sideSeats = newEventMainSeats;
+  // Perform updates based on the direction
+  let newRow;
+  if (dirArg === "R") {
+    newRow = updatedRow.map((seat, index) =>
+      index >= second && index <= first ? newSeatValueArg : seat
+    );
+  } else if (dirArg === "L") {
+    newRow = updatedRow.map((seat, index) =>
+      index >= first && index <= second ? newSeatValueArg : seat
+    );
+  }
 
-        // Assign the updated seat details back to the movie
-        return newEventState; // Return the updated state
-   });
+  // Update the specific row in sideSeats
+  newSideSeats[row] = newRow;
+
+  // Reassign updated sideSeats back to the state
+  newState.theater.sideSeats = newSideSeats;
+
+  return newState;
+});
+   
          }
        resetMultiTip()
  };

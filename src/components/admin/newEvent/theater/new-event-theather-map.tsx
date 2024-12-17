@@ -53,7 +53,7 @@ const AdminNewEventTheatherMap = ({children, isMultiSelect,setIsMultiSelect ,mul
       >
         {({ zoomIn, zoomOut, resetTransform, ...rest }) =>  {
           return   (
-            <Flex    p={1} boxShadow={theme.shadows[10]} mt={3} > 
+            <Flex    boxShadow={theme.shadows[10]} mt={3} > 
               <Controls/>   
               <Divider sx={{borderWidth:3 , background:theme.palette.primary.dark}} />
             

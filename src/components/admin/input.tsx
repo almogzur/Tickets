@@ -1,5 +1,5 @@
 import WidthContext from "@/context/WidthContext";
-import { FormControl, InputBase, InputLabel, OutlinedInput, StandardTextFieldProps, TextField, TextFieldProps, TextFieldVariants, Typography } from "@mui/material"
+import { FormControl, InputBase, InputLabel, MenuItem, OutlinedInput, StandardTextFieldProps, TextField, TextFieldProps, TextFieldVariants, Typography } from "@mui/material"
 import { error } from "console";
 import { ChangeEvent, ChangeEventHandler, CSSProperties, Dispatch, SetStateAction, SyntheticEvent, useContext, useState } from "react";
 
@@ -30,6 +30,10 @@ type HTMLInputTypes =
   | "week";
 
 
+  interface SelectIemType {
+    value:string,
+    label:string
+  }
 
 interface InputWrapType   {
     
@@ -49,6 +53,9 @@ interface InputWrapType   {
     m?:number|"auto"
     helpText? :string
     isDisabled?:boolean
+    customStyle?:CSSProperties
+    isSelect?:boolean
+    selectItems?:SelectIemType[]
 }
 
 
@@ -70,7 +77,11 @@ const InputWrap = ({
      error,
      m,
      helpText,
-     isDisabled
+     isDisabled,
+     customStyle,
+     isSelect,
+     selectItems=[]
+
      
     }:InputWrapType)=>{
 
@@ -88,11 +99,18 @@ const InputWrap = ({
             disabled={isDisabled}
             name={stateName}
             helperText={ helpText? <Typography variant='subtitle2'  textAlign={"start"} >{helpText}</Typography> : null }
-            sx={{ flexGrow:Fgrow?? null, bgcolor:bg?? "#fff" ,m:m , maxWidth:!xs? 160 : null  }}
+            sx={{ flexGrow:Fgrow?? null, bgcolor:bg?? "#fff" ,m:m , ...customStyle  }}
             variant={variant?? 'standard'}
             label={label}
             error={error}
-        />
+            select={isSelect && selectItems.length !==0}
+        >
+            {isSelect && selectItems.length !==0 && 
+                selectItems.map(({value,label},i)=>{
+                    return <MenuItem key={value} value={value}>{label}</MenuItem>
+                })
+            }
+        </TextField>
    
  
     )

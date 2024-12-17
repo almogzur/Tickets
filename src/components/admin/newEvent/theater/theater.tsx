@@ -1,27 +1,23 @@
 import {  CSSProperties, Dispatch, SetStateAction, useContext, useState } from 'react'
 import { Seats , SeatStyles } from '@/constants/models/Events';
-import {  Stack as Flex ,  Container, Typography, useTheme, } from '@mui/material'
-import WidthContext from '@/context/WidthContext';
+import {  Stack as Flex ,  Container, Typography, useTheme, Box, } from '@mui/material'
 import { Colors } from '@/lib/colors';
 import SingleSelectTip from './singel-select-tip';
 import AdminSeatBtn from './adminSeatBtn'
 import MuliSelectTip from '@/components/admin/newEvent/theater/multi-select-tip'
 import AdminNewEventTheatherMap from './new-event-theather-map';
 import { TheaterType } from '@/pages/_app';
+
+// Context 
+import WidthContext from '@/context/WidthContext';
 import AdminMapPositionsContext from '@/context/admin/new-event/map/admin-map-positions-context';
+import TabsInfoContest from '@/context/admin/new-event/tabs/tabs-info-context'
 
 
-
-
-
-  interface TheaterPropsType { 
-     theater: TheaterType ,
-     setTheater:Dispatch<SetStateAction<TheaterType>> 
-    }
-
-    const Theater = ({theater,setTheater}:TheaterPropsType ) => {
+    const Theater = () => {
       const {AdminMapPositions,setAdminMapPositions} =useContext(AdminMapPositionsContext)
-
+      const {infoFileds,setInfoFileds} = useContext(TabsInfoContest)
+   
       const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
       const theme = useTheme()
     
@@ -30,13 +26,13 @@ import AdminMapPositionsContext from '@/context/admin/new-event/map/admin-map-po
        const [amountOfSeatsSelcted , setAmountOfSeatsSelcted] = useState<number>(0)
 
 
-       const sideSeatsStylesObject = theater.styles &&  Object.fromEntries(
-        Object.entries(theater.styles ).map(([row, positions]) => [row, positions])
+       const sideSeatsStylesObject = infoFileds.theater.styles &&  Object.fromEntries(
+        Object.entries(infoFileds.theater.styles ).map(([row, positions]) => [row, positions])
       );
-       const sideTextStylesObject = theater.testsStyle &&  Object.fromEntries(
-        Object.entries(theater.testsStyle).map(([row, positions]) => [row, positions])
+       const sideTextStylesObject = infoFileds.theater.testsStyle &&  Object.fromEntries(
+        Object.entries(infoFileds.theater.testsStyle).map(([row, positions]) => [row, positions])
       );
-       const MainSeatS  = Object.entries(theater.mainSeats).map(([row, rowContent]) => {
+       const MainSeatS  = Object.entries(infoFileds.theater.mainSeats).map(([row, rowContent]) => {
         const colValue  = rowContent.map((seatValue: number, i: number) => {
           const textset = "מושב";
           const textrow = "שורה";
@@ -69,7 +65,7 @@ import AdminMapPositionsContext from '@/context/admin/new-event/map/admin-map-po
           </Flex>
         );
       });
-       const SideSeats = theater.sideSeats &&  Object.entries(theater.sideSeats).map(([row, rowContent])=>{
+       const SideSeats = infoFileds.theater.sideSeats &&  Object.entries(infoFileds.theater.sideSeats).map(([row, rowContent])=>{
         const colValue  = rowContent.map((seatValue: number, i: number) => {
          
         
@@ -99,23 +95,23 @@ import AdminMapPositionsContext from '@/context/admin/new-event/map/admin-map-po
             </Flex>
           );
       })
-       const Text = theater.testsStyle  &&  Object.entries(theater.sideSeats).map(([row, rowContent])=>{
+       const Text = infoFileds.theater.testsStyle  &&  Object.entries(infoFileds.theater.sideSeats).map(([row, rowContent])=>{
            return <Typography key={row}  color='textPrimary' height={0} style={sideTextStylesObject[row]} >{row}</Typography>
       })
 
     return (
 
-      <>
+      <Container>
        <SingleSelectTip 
-         theraer={theater}
-         setTheater={setTheater}
+         theraer={infoFileds.theater}
+         setTheater={setInfoFileds}
          isMultiSelect={isMultiSelect}
            /> 
 
          <MuliSelectTip 
             isMultiSelect={isMultiSelect}
-            theraer={theater}
-            setTheater={setTheater}
+            theraer={infoFileds.theater}
+            setTheater={setInfoFileds}
           /> 
 
          <AdminNewEventTheatherMap // style in children 
@@ -131,7 +127,7 @@ import AdminMapPositionsContext from '@/context/admin/new-event/map/admin-map-po
             </Flex>      
          </AdminNewEventTheatherMap>      
  
-      </>
+      </Container>
       );
   };
 

@@ -5,7 +5,7 @@ import { ChangeEvent, useContext, useEffect,useState} from 'react'
 import { useRouter } from 'next/router'
 
 //Types
-import { Schedule, TheaterType, Ticket } from '@/pages/_app'
+import { InfoFormType, Schedule, TheaterType, Ticket } from '@/pages/_app'
 import dayjs from 'dayjs'
 
 //components
@@ -19,8 +19,8 @@ import Theater from '@/components/admin/newEvent/theater/theater'
 
 //WraperContex
 import TabsEventDatesContext from '@/context/admin/new-event/tabs/tabs-event-schedules-context'
-import TabsTickets from '@/context/admin/new-event/tabs/tabs-tikits-context'
-
+import TabsTickets from '@/context/admin/new-event/tabs/tabs-ticket-context'
+import InfoTabContext from '@/context/admin/new-event/tabs/tabs-info-context'
 
 
 const NewEventPage=()=>{
@@ -30,16 +30,14 @@ const NewEventPage=()=>{
   const theme = useTheme()
 
   //Theater 
-  const [theater,setTheater] = useState<TheaterType>({mainSeats:null,sideSeats:null,styles:null,testsStyle:null,ThaeaterName:""})
+  //const [theater,setTheater] = useState<TheaterType>({mainSeats:null,sideSeats:null,styles:null,testsStyle:null,ThaeaterName:""})
   //const resetTheater= ()=>{ setMainSeatsState({...mainSeats}) ; setSideSeatsState({...sideSeats}) }
 
   // Info
-  const [info,setInfo]=useState({name:"",loction:"",cat:""})
-  const InfoHndler =  (e: ChangeEvent<HTMLInputElement|HTMLTextAreaElement>)=>{
-    const name = e.target.name 
-    const value = e.target.value
-    setInfo(prve=>({...prve,[name]:value}))
-  }
+  const [infoFileds,setInfoFileds]=useState<InfoFormType>({
+     keys:{name:null,location:null,cat:null} ,
+     theater:{mainSeats:null,sideSeats:null,styles:null,testsStyle:null,ThaeaterName:null}
+    })
 
   // Schedules Coontext State
   const [schedule, setSchedule] = useState<Schedule>({day:null,hour:null,closingSealesDate:null,isEventClosedForSeal:null})
@@ -55,7 +53,7 @@ const NewEventPage=()=>{
        //  error henler
   };
   const removeScheduleDate = (schedulArg: Schedule ):void => {
-      setSchedule(p=>({...p,day:null , hour:null}))
+      setSchedule(p=>({...p,day:null , hour:null ,closingSealesDate:null}))
 
   };
   const addScheduleHour = (e: dayjs.Dayjs,schedule:Schedule, ): void => {
@@ -99,9 +97,21 @@ const NewEventPage=()=>{
   
   //Tickets
   const [tickets, setTickets] =useState<Ticket[]>([])
-  const updateTicketsPrice =():void=>{}
-  const updateTicketslabel =():void=>{}
-  const updateTickitDiscription=():void=>{}
+
+  const updateTicket=(  key: "price"|"type"|"discription"|"discoundInfo" , value:string|number ):void=>{
+
+      setTickets(p=>({...p,[key]:value}))
+  }
+  const updteTicketsArray= (ticket:Ticket, Action:"add"|"remove"):void=>{
+    
+     if(Action==="add"){setTickets(p=>([...p,ticket]))}
+     else if (Action === "remove"){
+          setTickets(p=>([...p].filter((item)=> item !== ticket)))
+     }
+
+  }
+ 
+  
 
   // Cover 
   const [file, setFile] = useState<File>(null);
@@ -128,8 +138,6 @@ const NewEventPage=()=>{
   const [adText,setAdText ]= useState()
 
 
-
-
    
   // Tikit Settings 
 
@@ -150,32 +158,28 @@ return (
    <meta name="viewport" content="width=device-width, user-scalable=no"/>
   </Head>
      <AdminLayout>
-       <form>
-       <InfoForm InfoKeys={info} KysHndler={InfoHndler} TheaterHndler={setTheater} />
-
-       { theater.mainSeats && <Theater theater={theater} setTheater={setTheater} />}
-
-
-        {/* TavsFormNexted */}
-         <TabsTickets.Provider  value={{tickets ,setTickets,updateTicketsPrice,updateTicketslabel,updateTickitDiscription,}} >
+       <form>  
+         <InfoTabContext.Provider value={{infoFileds,setInfoFileds}}>
+         <TabsTickets.Provider  value={{tickets ,setTickets,updateTicket,updteTicketsArray}} >
          <TabsEventDatesContext.Provider value={{schedule,setSchedule,dateEroor,addScheduleDate,removeScheduleDate,addScheduleHour,removeScheduleHour,setEndOfDate,removeEndOdDate}}>
         
-       <TabsForm 
-        // file 
-         file={file} 
+         <TabsForm 
+          // file 
+           file={file} 
          setFile={setFile}
          preview={preview} 
          setPreview={setPreview} 
-         onFileChange={handleFileChange} 
+           onFileChange={handleFileChange} 
 
-        //Setings
-        //Colors
+          //Setings
+          //Colors
           />
+          { infoFileds.theater.mainSeats && <Theater  />}
          </TabsEventDatesContext.Provider>
          </TabsTickets.Provider>
-          {/* TabsForm Nexted */}
+         </InfoTabContext.Provider> -
       <Flex p={4} alignItems={"center"}  >
-        <Button   sx={{height:50 ,width:100,background:"black"}} > שמור </Button>
+        <Button disabled   sx={{height:50 ,width:100,background:"black"}} >  </Button>
       </Flex>
       </form>
 

@@ -18,6 +18,8 @@ import { FcCancel } from "react-icons/fc";
 
 import Link from 'next/link';
 
+import { FcPrevious } from "react-icons/fc";
+
 const DRAWER_OPEN_WIDTH = 160;
 
 
@@ -61,14 +63,10 @@ export default function TemporaryDrawer() {
 
   return (
     <>
-    <nav dir='rtl' style={{boxShadow:theme.shadows[10], height:60 , background:"black"}  }  >
-      <Button 
-          sx={{  } } 
-           onClick={toggleDrawer(true)}
-           variant='outlined'
-           >
-            <RiArchiveDrawerFill size={'2em'} />
-      </Button>
+    <nav dir='rtl' style={{ height:60 , background:"black" , display:"flex", flexDirection:"row"  , }   }  >
+      
+            <FcPrevious size={'1.5em'}  onClick={toggleDrawer(true)} style={{padding:10 , margin:10 , cursor:'pointer'}}/>
+     
     
       </nav>
 

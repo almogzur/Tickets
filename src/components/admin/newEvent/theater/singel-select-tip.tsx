@@ -7,7 +7,7 @@ import {  Button, Stack as Flex, Typography, useTheme } from "@mui/material"
 
 import {  grey, orange, pink } from "@mui/material/colors"
 import { Seats } from "@/constants/models/Events"
-import { TheaterType } from "@/pages/_app"
+import { InfoFormType, TheaterType } from "@/pages/_app"
 import { wrap } from "module"
  
 
@@ -15,7 +15,7 @@ import { wrap } from "module"
 interface SingleSelectTipPropsType  { 
   theraer:TheaterType ,
    isMultiSelect:boolean ,
-   setTheater:Dispatch<SetStateAction<TheaterType>>
+   setTheater:Dispatch<SetStateAction<InfoFormType>>
   }
 
 const SingleSelectTip= ({theraer,isMultiSelect ,setTheater }:SingleSelectTipPropsType)=>{
@@ -36,49 +36,59 @@ const SingleSelectTip= ({theraer,isMultiSelect ,setTheater }:SingleSelectTipProp
          const initVlaue = seatTipInfo.initValue
          const seatNumber = seatTipInfo.seatNumber
          
-         if(inMain){
-          setTheater( (p) => {
-                      // Find the movie object reference
-              const newEventState = {...p};
-              const newEventMainSeats = {...newEventState.mainSeats}
-
-              const updatedRow = [...newEventMainSeats[row]]; // Clone the specific row
- 
-                   // new seat state: newSeatValueArg
-                   updatedRow[seatNumber] = newSeatValueArg
-                  // Assign the updated row back to the seat details
-                 newEventMainSeats[row] = updatedRow;
-                   
-
-                 newEventState.mainSeats = newEventMainSeats;
-
-                  // Assign the updated seat details back to the movie
-                 
-                  return newEventState; // Return the updated state
-             });
-         }
+         if (inMain) {
+          setTheater((prevState) => {
+            // Clone the entire previous state
+            const newState = {
+              ...prevState,
+              theater: { ...prevState.theater }
+            };
+        
+            // Clone mainSeats object
+            const updatedMainSeats = { ...newState.theater.mainSeats };
+        
+            // Clone the specific row to avoid mutation
+            const updatedRow = [...updatedMainSeats[row]];
+        
+            // Update the specific seat in the row
+            updatedRow[seatNumber] = newSeatValueArg;
+        
+            // Assign the updated row back to mainSeats
+            updatedMainSeats[row] = updatedRow;
+        
+            // Assign the updated mainSeats back to theater
+            newState.theater.mainSeats = updatedMainSeats;
+        
+            // Return the updated state
+            return newState;
+          });
+        }
          else if(inSide){
-          setTheater( p => {
-               // Find the movie object reference
-                const newEventState = {...p}
-                const newEventMainSeats = {...newEventState.sideSeats};
-                const updatedRow = [...newEventMainSeats[row]]; // Clone the specific row
-                     
- 
-                // new seat state: newSeatValueArg
-                updatedRow[seatNumber] = newSeatValueArg
-               // Assign the updated row back to the seat details
-              newEventMainSeats[row] = updatedRow;
-                
-
-              newEventState.sideSeats = newEventMainSeats;
-
-               // Assign the updated seat details back to the movie
-              
-               return newEventState; // Return the updated state
-                  });
-   
-   
+          setTheater((prevState) => {
+            // Clone the entire previous state
+            const newState = {
+              ...prevState,
+              theater: { ...prevState.theater }
+            };
+        
+            // Clone mainSeats object
+            const updatedMainSeats = { ...newState.theater.sideSeats };
+        
+            // Clone the specific row to avoid mutation
+            const updatedRow = [...updatedMainSeats[row]];
+        
+            // Update the specific seat in the row
+            updatedRow[seatNumber] = newSeatValueArg;
+        
+            // Assign the updated row back to mainSeats
+            updatedMainSeats[row] = updatedRow;
+        
+            // Assign the updated mainSeats back to theater
+            newState.theater.sideSeats = updatedMainSeats;
+        
+            // Return the updated state
+            return newState;
+          });
          }
          resetSingleTip()
     };

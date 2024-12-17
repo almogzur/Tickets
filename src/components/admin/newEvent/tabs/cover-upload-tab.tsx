@@ -97,6 +97,7 @@ interface  BasicSpeedDialPropsType extends CoverUploadPropsType {
 
 function BasicSpeedDial({file,preview,setFile,setPreview,onFileChange,perentRef}:BasicSpeedDialPropsType) {
 
+  const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
 
   const  closeDialog : MouseEventHandler<HTMLDivElement> = (e): void => {
     const inputFile  = perentRef.current;
@@ -129,12 +130,11 @@ function BasicSpeedDial({file,preview,setFile,setPreview,onFileChange,perentRef}
 
   return (
     
-    <Box sx={{  transform: 'translateZ(0px)', flexGrow: 1 , }}>
+    <Box sx={{  transform: 'translateZ(0px)', flexGrow: 1 ,}}>
       <SpeedDial
-        ariaLabel="SpeedDial basic example"
+   
         sx={{ position: 'absolute', bottom: 16, right: 16 }}
-        icon={<SpeedDialIcon  />}
-      >
+        icon={<SpeedDialIcon />} ariaLabel={''}      >
     
           <SpeedDialAction
             

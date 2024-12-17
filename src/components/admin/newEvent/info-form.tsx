@@ -1,34 +1,36 @@
+// Context 
 import WidthContext from "@/context/WidthContext"
+import TabsInfoContext from '@/context/admin/new-event/tabs/tabs-info-context'
+
+//Components
 import {  Stack as Flex , Typography, useTheme } from "@mui/material"
 import { ChangeEventHandler, Dispatch, Key, SetStateAction, useContext } from "react"
-
 import TheaterSelect from "./theater-select"
+import InputWrap from "../input"
 
+//Data
 import  Eilat_1 from '../../../constants/theathers/eilat_1'
 import  Eilat_2 from '@/constants/theathers/eilat_2'
+
+//Types 
 import { TheaterType } from "@/pages/_app"
-import InputWrap from "../input"
+
 const TheaterList :TheaterType[] = [ Eilat_1, Eilat_2]
 
-interface InfoFormType { 
-  InfoKeys:{name:string,loction:string,cat:string,  } ,
-  KysHndler : ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
-  TheaterHndler:Dispatch<SetStateAction<TheaterType>>
-}
 
 
-
-const InfoForm =({InfoKeys,KysHndler, TheaterHndler}:InfoFormType)=>{
+const InfoForm =()=>{
 
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
+    const {infoFileds,setInfoFileds} = useContext(TabsInfoContext)
     const theme = useTheme()
   
      return(
       <>
       
-      <Flex  boxShadow={theme.shadows[10]} p={2} mt={3}   >
+      <Flex   p={2} mt={3}  height={'calc(100% - 80px)'}  >
 
-      <Typography  variant='h5' m={1} textAlign={"start"} sx={{color:"black"  } } > אירוע חדש</Typography>
+
        <Typography sx={{color:'black'}} variant="h6" > פרטים כללים </Typography>
     
       <Flex   
@@ -37,7 +39,7 @@ const InfoForm =({InfoKeys,KysHndler, TheaterHndler}:InfoFormType)=>{
        flexWrap={'wrap'}  
        justifyContent={"space-around"}
        >
-        {Object.entries(InfoKeys).map(([name,value],i)=>{
+        {Object.entries(infoFileds.keys).map(([name,value],i)=>{
   
             let Locolize = (name: Key)  =>{
   
@@ -47,7 +49,7 @@ const InfoForm =({InfoKeys,KysHndler, TheaterHndler}:InfoFormType)=>{
                switch(name){
                 case "name": LocLabel += "שם";
                 break;
-                case "loction": LocLabel += "מיקום";
+                case "location": LocLabel += "מיקום";
                 break;
                 case "cat": LocLabel += "קטגוריה";
                 break;
@@ -62,8 +64,7 @@ const InfoForm =({InfoKeys,KysHndler, TheaterHndler}:InfoFormType)=>{
                     key={name} 
                     stateName={name} 
                     label={Locolize(name)} 
-                    value={value} 
-                    onChangeHndler={KysHndler}  
+                
                     Fgrow={1}
                     m={0.5}
                     isInputRequired
@@ -72,7 +73,7 @@ const InfoForm =({InfoKeys,KysHndler, TheaterHndler}:InfoFormType)=>{
                     />
             
               })}
-         <TheaterSelect theaters={TheaterList} seter={TheaterHndler} />
+    <TheaterSelect theaters={[Eilat_1,Eilat_2]}  setInfoFileds={setInfoFileds}  />
     </Flex>
   
         
