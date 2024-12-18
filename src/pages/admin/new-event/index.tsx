@@ -5,7 +5,7 @@ import { ChangeEvent, useContext, useEffect,useState} from 'react'
 import { useRouter } from 'next/router'
 
 //Types
-import { InfoFormType, Schedule, TheaterType, Ticket } from '@/pages/_app'
+import { FullDateOptions, InfoFormType, Schedule, TheaterType, Ticket } from '@/pages/_app'
 import dayjs from 'dayjs'
 
 //components
@@ -34,19 +34,21 @@ const NewEventPage=()=>{
   //const resetTheater= ()=>{ setMainSeatsState({...mainSeats}) ; setSideSeatsState({...sideSeats}) }
 
   // Info
+// setter function in Component
   const [infoFileds,setInfoFileds]=useState<InfoFormType>({
      keys:{name:null,location:null,cat:null} ,
      theater:{mainSeats:null,sideSeats:null,styles:null,testsStyle:null,ThaeaterName:null}
     })
 
   // Schedules Coontext State
-  const [schedule, setSchedule] = useState<Schedule>({day:null,hour:null,closingSealesDate:null,isEventClosedForSeal:null})
+  const [schedule, setSchedule] = useState<Schedule>({day:null,closingSealesDate:null,isEventClosedForSeal:null})
   const [dateEroor,setDateEroor ]= useState(false)
 
   const addScheduleDate = (e:dayjs.Dayjs,context:PickerChangeHandlerContext<DateTimeValidationError>) :void => {
 
-       if (e && e.year() && e.month() && e.day() ) {
-          const newDate = new Date(e.year() , e.month() ,e.day()) 
+       if (e && e.year() && e.month() && e.date() && e.day()  ,e.hour(), e.minute() ) {
+         // set the time in utc  -3 form area time , 
+          const newDate = new Date(e.toDate())
           setSchedule(p=>({...p,day:newDate }))
              
          }
@@ -56,35 +58,10 @@ const NewEventPage=()=>{
       setSchedule(p=>({...p,day:null , hour:null ,closingSealesDate:null}))
 
   };
-  const addScheduleHour = (e: dayjs.Dayjs,schedule:Schedule, ): void => {
-    
-
-    if (e && e.hour() || e.hour() && e.minute()) {
-      const day = schedule.day.getDay()
-      const month = schedule.day.getMonth()
-      const year = schedule.day.getFullYear()
-
-      const newTime = new Date(year,month,day,e.hour(), e.minute())
-        setSchedule(p=>({...p,hour:newTime}))
-
-      
-    }
-  };
-  const removeScheduleHour = ():void=>{
-    
-      setSchedule(p=>({...p,hour:null}))
-  
-
-  }
   const setEndOfDate= (e:dayjs.Dayjs,schedule:Schedule) :void =>{
       
-    if (e && e.hour() || (e.hour() && e.minute())) {
-
-      const day = schedule.day.getDay() + 1 // see : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/getDay
-      const month = schedule.day.getMonth()
-      const year = schedule.day.getFullYear()
-
-      const newDate = new Date(year,month,day,e.hour(),e.minute())
+    if (e && e.year() && e.month() && e.date() && e.day()  ,e.hour(), e.minute()) {
+      const newDate = new Date(e.toDate())
       setSchedule(p=>({...p,closingSealesDate:newDate}))
       console.log(newDate);
       
@@ -161,7 +138,7 @@ return (
        <form>  
          <InfoTabContext.Provider value={{infoFileds,setInfoFileds}}>
          <TabsTickets.Provider  value={{tickets ,setTickets,updateTicket,updteTicketsArray}} >
-         <TabsEventDatesContext.Provider value={{schedule,setSchedule,dateEroor,addScheduleDate,removeScheduleDate,addScheduleHour,removeScheduleHour,setEndOfDate,removeEndOdDate}}>
+         <TabsEventDatesContext.Provider value={{schedule,setSchedule,dateEroor,addScheduleDate,removeScheduleDate,setEndOfDate,removeEndOdDate}}>
         
          <TabsForm 
           // file 

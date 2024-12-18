@@ -5,6 +5,7 @@ import TabsInfoContext from '@/context/admin/new-event/tabs/tabs-info-context'
 //Components
 import {  Stack as Flex , Typography, useTheme } from "@mui/material"
 import { ChangeEventHandler, Dispatch, Key, SetStateAction, useContext } from "react"
+
 import TheaterSelect from "./theater-select"
 import InputWrap from "../input"
 
@@ -13,10 +14,9 @@ import  Eilat_1 from '../../../constants/theathers/eilat_1'
 import  Eilat_2 from '@/constants/theathers/eilat_2'
 
 //Types 
-import { TheaterType } from "@/pages/_app"
+import { InfoFormType, TheaterType } from "@/pages/_app"
 
 const TheaterList :TheaterType[] = [ Eilat_1, Eilat_2]
-
 
 
 const InfoForm =()=>{
@@ -64,16 +64,30 @@ const InfoForm =()=>{
                     key={name} 
                     stateName={name} 
                     label={Locolize(name)} 
-                
+                    value={value}
+                     onChangeHndler={(e)=>{
+
+                      const key = e.target.name as keyof InfoFormType["keys"]; // Restrict to keys' properties
+                      const value = e.target.value;
+                    
+                      setInfoFileds((prev) => ({
+                        ...prev, // Keep the `theater` property as is
+                        keys: {
+                          ...prev.keys, // Copy existing `keys`
+                          [key]: value, // Update the targeted key
+                        },
+                      }))
+                  }  }
+                  
                     Fgrow={1}
                     m={0.5}
-                    isInputRequired
+                    
                   
                     
                     />
             
               })}
-    <TheaterSelect theaters={[Eilat_1,Eilat_2]}  setInfoFileds={setInfoFileds}  />
+       <TheaterSelect theaters={[Eilat_1,Eilat_2]}  setInfoFileds={setInfoFileds}  />
     </Flex>
   
         

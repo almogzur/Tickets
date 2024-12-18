@@ -4,9 +4,10 @@ import { ChangeEventHandler, Dispatch, SetStateAction, useContext, useState } fr
 
 //Context Useg
 import WidthContext from "@/context/WidthContext"
-import Eventschdual from "@/context/admin/new-event/tabs/tabs-event-schedules-context"
+import TabsEventSchduleContext from "@/context/admin/new-event/tabs/tabs-event-schedules-context"
+import TabsTicketContext from "@/context/admin/new-event/tabs/tabs-ticket-context"
 //Types
-import { TheaterType } from "@/pages/_app"
+import { FullDateOptions, TheaterType } from "@/pages/_app"
 
 // Components
 import InputWrap from "../../../input"
@@ -19,11 +20,13 @@ import { FcPlus } from "react-icons/fc";
 import TicketComponent from "./ticket"
 import { IoMdAddCircle } from "react-icons/io"
 
-interface TicketsTabPropsType {  }
+interface TicketsTabPropsType {  setTabPage? : Dispatch<SetStateAction<number>>}
  
-  const TicketsTab = ({}:TicketsTabPropsType)=>{ 
+  const TicketsTab = ({setTabPage}:TicketsTabPropsType)=>{ 
        const theme = useTheme()
        const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
+       const {tickets,setTickets}= useContext(TabsTicketContext)
+       const {schedule}= useContext(TabsEventSchduleContext)
 
        const countTheaterSeatAmount = ( theater: TheaterType ) : number =>{
 
@@ -68,40 +71,46 @@ interface TicketsTabPropsType {  }
                    </Flex>
                        {/* Add State updae functions */}
                      <Flex >
-                     <MakeNewTickit/>
+                     <MakeNewTickit setTabPage={setTabPage}  />
                      </Flex>
                </Flex>
           </Flex>
           <Divider sx={{borderWidth:2}} />
          </Flex>
 
+         {tickets.map((ticket,i)=>{
+                  return< TicketComponent key={i} type={"normal"} price={0} discription={""} location={""} eventDate={""}/>
+              })}
+
+
       <TicketComponent 
          
-         price={0} 
-         discription={"הופעה חיה של שחר חסון"} 
-         eventDate={new Date().toLocaleDateString("he-IL",{year:'numeric',month:'long', day:"numeric" , hour:'2-digit',})} 
-         type={'discount'} 
-         location={"תיאטראות -  אילת"}
-         discoundInfo="הנחה לחברי מועדון שופרסל"
-        
+            price={"0"}
+            evenName={"הופעה חיה של שחר חסון"}
+            eventDate={new Date().toLocaleDateString("he-IL", { year: 'numeric', month: 'long', day: "numeric", hour: '2-digit', })}
+            type={'discount'}
+            location={"תיאטראות -  אילת"}
+            discoundInfo="הנחה לחברי מועדון שופרסל"     
+            eventEndOfSeals={new Date().toLocaleDateString("he-IL", FullDateOptions)}
+
          />
           <TicketComponent 
          
-         price={159} 
-         discription={"הופעה חיה של שחר חסון"}
-         eventDate={new Date().toLocaleDateString("he-IL",{year:'numeric',month:'long', day:"numeric" , hour:'2-digit',})} 
-         type={'normal'} 
-         location={"תיאטראות -  אילת"}
+            price={"159"}
+            evenName={"הופעה חיה של שחר חסון"}
+            eventDate={new Date().toLocaleDateString("he-IL", { year: 'numeric', month: 'long', day: "numeric", hour: '2-digit', })}
+            type={'normal'}
+            location={"תיאטראות -  אילת"}
+            eventEndOfSeals={new Date().toLocaleDateString("he-IL", FullDateOptions)}
 
          />
-                <TicketComponent 
-         
-         price={159} 
-         discription={"הופעה חיה של שחר חסון"}
-         eventDate={new Date().toLocaleDateString("he-IL",{year:'numeric',month:'long', day:"numeric" , hour:'2-digit',})} 
-         type={'normal'} 
-         location={"תיאטראות -  אילת"}
-
+        <TicketComponent  
+            price={"159"}
+            evenName={"הופעה חיה של שחר חסון"}
+            eventDate={new Date().toLocaleDateString("he-IL", FullDateOptions)}
+            type={'normal'}
+            location={"תיאטראות -  אילת"}
+             eventEndOfSeals={new Date().toLocaleDateString("he-IL", FullDateOptions)}
          />
           {/* loop over tickits tikits.map....  */}
         

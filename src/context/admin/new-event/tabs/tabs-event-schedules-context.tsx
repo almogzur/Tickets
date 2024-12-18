@@ -11,8 +11,6 @@ interface TabsEventsSchedulesContextTye {
     dateEroor:boolean
     addScheduleDate :(e:dayjs.Dayjs, context: PickerChangeHandlerContext<DateTimeValidationError>) => void
     removeScheduleDate:(dateToRemove: Schedule) => void
-    addScheduleHour:(e:dayjs.Dayjs,schedul:Schedule) => void
-    removeScheduleHour:() => void
     setEndOfDate:(e:dayjs.Dayjs,schdual:Schedule)=> void
     removeEndOdDate:()=>void
 }

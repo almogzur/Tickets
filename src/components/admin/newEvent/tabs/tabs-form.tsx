@@ -111,6 +111,8 @@ const TabsForm = ({
         <Tab value={6} label="צבעים"  sx={{...TabComonStyleAttribute}} icon={<FcStackOfPhotos size={"2em"} />}  />
         <Tab value={7} label="תצוגה מקדימה "  sx={{...TabComonStyleAttribute}} icon={<FcBinoculars size={"2em"}/>} />
         <Tab value={8} label="פירסום"  sx={{...TabComonStyleAttribute}} icon={<FcIntegratedWebcam size={"2em"}/>}  />
+        <Tab value={8} label="שמור"  sx={{...TabComonStyleAttribute}} />
+
        </Tabs>
   
  
@@ -134,7 +136,7 @@ const TabsForm = ({
        <DatesListTab /> // context 
        :
        pageVale === 4?
-       <TicketsTab/>
+       <TicketsTab setTabPage={setPageVale} />
        :
        pageVale === 5 ?
        <SettingTab/>

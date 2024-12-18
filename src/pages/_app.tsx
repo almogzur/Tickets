@@ -70,23 +70,45 @@ export interface TheaterType {
      ThaeaterName:string
 }
 /////////////
+export const FullDateOptions :Intl.DateTimeFormatOptions = {
+  year:'numeric',
+  month: 'long',
+  weekday:'long',
+  day: '2-digit',
+  hour:'2-digit',
+  minute:"2-digit",
+};
+export const samiDateOptions :Intl.DateTimeFormatOptions = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      };
+export const  sortDateOptions :Intl.DateTimeFormatOptions = {
+  year:null,
+  month:null,
+  day:null,
+    hour:'2-digit',
+  minute:'2-digit'
+};
 export interface InfoFormType {
   keys:{  name:string ,location:string, cat:string}
   theater:TheaterType
 }
 export interface Schedule {
   day: Date;
-  hour: Date; // Array of objects
   isEventClosedForSeal:boolean
   closingSealesDate:Date
 } 
 export interface Ticket  {
-  type:"normal"|"discount"
-  price:number
-  eventDate:string
+  evenName:string
   location:string
-  discription:string
+  type:"normal"|"discount"
+  price:string
   discoundInfo?:string
+  discountPrice?:string
+  eventDate:string
+  TickerclosingSealesDate:string
 }
 
 
@@ -116,16 +138,7 @@ const theme  = createTheme({
         MuiInputLabel:{
           defaultProps:{},
           styleOverrides:{
-            root:{
-              direction:"ltr"  ,
-               width:"100%" , 
-               textAlign:"end",
-               fontSize:18,
-              // position is set global color in component wraper 
-              // "&.MuiFormLabel-root:not(.MuiFormLabel-filled):not(.Mui-focused)":{color:'pink'},
-               "&.Mui-focused":{  top:-5 ,  }, // them color
-               "&.MuiFormLabel-filled:not(.Mui-focused)":{ top:-5 }, // filed
-                },
+            root:{},
           }
         },
         MuiFormControl:{
@@ -137,20 +150,15 @@ const theme  = createTheme({
          defaultProps:{notched:false},
          styleOverrides:{
            root:{  
-            direction:"rtl",
-             height:45,
+  
+            height:50,
+
             "&.Mui-focused": {},
             "&:hover": {},
             "& .MuiOutlinedInput-notchedOutline": {},
             "&.Mui-focused .MuiOutlinedInput-notchedOutline": { },
             "& input::placeholder": {},
            },    
-           input:{
-            direction:"rtl",
-       
-            "&:hover":{  },
-            '&::placeholder':{ fontWeight:700 , opacity:.7  } 
-           }
          }
        },
        MuiStack:{
@@ -163,9 +171,7 @@ const theme  = createTheme({
        MuiSelect:{
         defaultProps:{},
         styleOverrides:{
-          root:{
-            direction:"rtl",
-            
+          root:{          
           }
         }
        },
@@ -189,21 +195,9 @@ const theme  = createTheme({
           }
         }
        },
-       MuiTextField:{
-        defaultProps:{
-
-        },
-        styleOverrides:{
-          root:{
-              direction:'rtl',
-           
-              
-          }
-        },
-
-       }
+    
        
-       
+   
        
     },
   

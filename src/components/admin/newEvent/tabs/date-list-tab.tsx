@@ -3,24 +3,22 @@ import {Dispatch, SetStateAction, useContext, useEffect,useState} from 'react'
 import WidthContext from '@/context/WidthContext';
 import { useTheme } from '@mui/material/styles';
 
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
+//Dates Formats 
+import { FullDateOptions , sortDateOptions, samiDateOptions } from '@/pages/_app';
 
 //Icons
 import { MdDelete } from "react-icons/md";
 import { FcPlanner } from "react-icons/fc";
 import { MdOutlineTimer } from "react-icons/md";
+import { FcLeave } from "react-icons/fc";
 
-import { TiArrowDownThick } from "react-icons/ti";
-import { FaCashRegister } from "react-icons/fa";
+import { TiArrowUpThick } from "react-icons/ti";
 
 
 //Components
-import {  Typography  , Stack as Flex, Button , Box, Divider, FormControl, Alert, Accordion, AccordionSummary, } from '@mui/material'
+import {  Typography  , Stack as Flex, Button , Box, Divider, FormControl, Alert, Accordion, AccordionSummary, Container, } from '@mui/material'
 import Avatar from '@mui/material/Avatar';
-import { MobileDatePicker ,MobileDateTimePicker,MobileTimePicker} from '@mui/x-date-pickers'
+import { MobileDateTimePicker} from '@mui/x-date-pickers'
 import TabsEventDatesContext from '@/context/admin/new-event/tabs/tabs-event-schedules-context'
 import InputWrap from '../../input';
 
@@ -43,24 +41,22 @@ const DatesList = ()=>{
 
 
   return (
-    <>
+    <Container>
         {/* piker */}
        <Flex direction={'row'} alignItems={'center'} mx={2}  gap={1} >
 
         <FcPlanner size={'3em'}  />
 
-        <MobileDatePicker    
+        <MobileDateTimePicker    
+                orientation= { !sm? "portrait": 'landscape'}
+             
               minDate={dayjs(new Date())}
              slotProps={{
               textField:{ 
           
                 required:true,
-                placeholder:"בחור יום" ,
-                 helperText:<Typography variant='body1' fontWeight={'bold'} textAlign={'start'} >בחר יום</Typography> 
+                placeholder:"בחר יום" ,
                  },
-                
-                             
-              
             }}
             sx={{mt:2 , height:60  }}
  
@@ -78,7 +74,7 @@ const DatesList = ()=>{
         >      
        { schedule.day && <MainDate schedul={schedule} />  }
       </Flex>
-    </>
+    </Container>
  )
 }
 
@@ -92,47 +88,29 @@ interface MainDatePropsType {
  }
 
 const MainDate = ({ schedul  }:MainDatePropsType)=>{
-   const { removeScheduleDate,dateEroor, removeScheduleHour,addScheduleHour,setEndOfDate} = useContext(TabsEventDatesContext)
+   const { removeScheduleDate,dateEroor,setEndOfDate} = useContext(TabsEventDatesContext)
    const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
   const theme = useTheme()
 
-  const FullDateOptions :Intl.DateTimeFormatOptions = {
-    weekday: 'long',
-    month: 'long',
-    day: 'numeric',
-    hour:'2-digit',
-    minute:'2-digit'
-  };
-  const samiDateOptions :Intl.DateTimeFormatOptions = {
-          weekday: 'long',
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-    
-        };
 
-  const  sortDateOptions :Intl.DateTimeFormatOptions = {
-    hour:'2-digit',
-    minute:'2-digit'
-  };
         
 
   return  ( 
  
-     <Accordion    sx={{ width:"inherit"  }}   >
+     <Accordion    >
 
       <AccordionSummary  
         sx={{position:"sticky" , top:0 ,zIndex:2 ,bgcolor:"#fff" ,border:"nonce" , height:80 ,direction:"ltr", m:0 ,p:1}}
         expandIcon={
           <Avatar variant='rounded' sx={{ borderRadius:1 , background:"#fff"}  }>
-          <TiArrowDownThick  size={"1.5em"} style={{marginRight:0 }} color='black' />
+          <TiArrowUpThick  size={"1.5em"} style={{marginRight:0 }} color='black' />
           </Avatar>
         }
          >
           
            <Flex direction={'row'}    alignItems={"center"}  width={"100%"}  justifyContent={'space-between'} >
 
-            <Typography sx={{mx:1}} textAlign={'start'} variant={"h6"} > { schedul.day.toLocaleDateString("he-IL",samiDateOptions)   }</Typography>          
+            <Typography sx={{mx:1}} textAlign={'start'}   variant={"h6"} > { schedul.day.toLocaleTimeString("he-IL",FullDateOptions) }</Typography>          
 
              <Avatar sx={{background:theme.palette.error.main  ,}} color='error' onClick={()=>removeScheduleDate(schedul)} variant='rounded'  >
                <MdDelete  size={"1.5em"}  />
@@ -145,27 +123,22 @@ const MainDate = ({ schedul  }:MainDatePropsType)=>{
         
        <Flex direction={"row"} gap={1} p={2 } >
 
+
               <FcPlanner size={"3em"} />
-              <MobileTimePicker   
-                  
- 
-                    slotProps={{
-                      textField:{
-                          placeholder:"שעה" ,
-                          helperText: <Typography textAlign={"start"} variant='subtitle2' >הוסף שעה לאירוע </Typography> 
-                       }}}      
-                    onAccept={(e)=>{  addScheduleHour(e,schedul) } } 
-                   />
-              <FcPlanner size={"3em"} />
-              <MobileTimePicker    
+              <MobileDateTimePicker    
+         
+                    minDate={dayjs(new Date())}
+                    maxDateTime={dayjs(schedul.day).subtract(2,"hours")}
+
                     slotProps={{
                       textField:{ 
                         placeholder:"שעת סגירה קופות" ,
                         helperText: <>
                         <Typography textAlign={"start"} variant='subtitle2' >הוסף שעה לסגור קופות </Typography>
-                        <Typography textAlign={"start"} variant='subtitle2' >אופציונלי ניתן לשינוי </Typography>
+                        <Typography textAlign={"start"} variant='subtitle2' >אופציונלי  </Typography>
                         </>
                          }}}      
+                         sx={{}}
                     onAccept={(e)=>{ setEndOfDate(e,schedul) } } 
                    />
                    
@@ -173,10 +146,7 @@ const MainDate = ({ schedul  }:MainDatePropsType)=>{
        </Flex>
 
      
-       
-
-     { schedul.hour &&  <HoursListItem EventHour={schedul.hour.toLocaleDateString("he-IL",sortDateOptions).slice(10)}  />}
-     
+            
      {schedul.closingSealesDate && <HoursListItem endOfSalesDate={schedul.closingSealesDate.toLocaleDateString("he-IL",FullDateOptions)}/>}
             
     
@@ -187,7 +157,7 @@ const MainDate = ({ schedul  }:MainDatePropsType)=>{
 
 
 const HoursListItem =({endOfSalesDate,EventHour}:{EventHour?:string,endOfSalesDate?:string})=>{
-  const { removeScheduleHour , removeEndOdDate} = useContext(TabsEventDatesContext)
+  const {  removeEndOdDate} = useContext(TabsEventDatesContext)
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
 
   
@@ -204,13 +174,13 @@ const HoursListItem =({endOfSalesDate,EventHour}:{EventHour?:string,endOfSalesDa
            }    
           {endOfSalesDate && 
           <Flex direction={"row"} gap={2} alignItems={"center"} >
-            <FaCashRegister size={"2em"}    />
+            <FcLeave size={"2em"}    />
             <Typography width={"90%"}  fontWeight={700} > סגירה קופות : {endOfSalesDate}</Typography> 
             </Flex>
           }
 
                <Avatar  sx={{background:theme.palette.error.main , mx:1 , }}  color='error' variant='rounded'  >
-                 <MdDelete size={"1.5em"} onClick={(e)=> endOfSalesDate? removeEndOdDate(): removeScheduleHour()     }   />
+                 <MdDelete size={"1.5em"} onClick={(e)=>  removeEndOdDate()    }   />
                 </Avatar>
             </Flex>
 
