@@ -245,7 +245,7 @@ interface MakeTIcketFormChipType {
     
   }
 
-  const MakeTicketFormChip =  ({text, icon , p, m,br,styleProps , grow , w ,v,Scale,setTabPage,newTab,placeholder}:MakeTIkitFormChipType)=>{
+  const MakeTicketFormChip =  ({text, icon , p, m,br,styleProps , grow , w ,v,Scale,setTabPage,newTab,placeholder}:MakeTIcketFormChipType)=>{
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
         return  <Chip 
                      onClick={ !text ? ()=>setTabPage(newTab): null}

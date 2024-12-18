@@ -79,7 +79,7 @@ interface TicketsTabPropsType {  setTabPage? : Dispatch<SetStateAction<number>>}
          </Flex>
 
          {tickets.map((ticket,i)=>{
-                  return< TicketComponent key={i} type={"normal"} price={0} discription={""} location={""} eventDate={""}/>
+                  return< TicketComponent key={i} evenName={""} location={""} type={"normal"} price={""} eventDate={""} TickerclosingSealesDate={""} />
               })}
 
 
@@ -91,7 +91,7 @@ interface TicketsTabPropsType {  setTabPage? : Dispatch<SetStateAction<number>>}
             type={'discount'}
             location={"תיאטראות -  אילת"}
             discoundInfo="הנחה לחברי מועדון שופרסל"     
-            eventEndOfSeals={new Date().toLocaleDateString("he-IL", FullDateOptions)}
+            TickerclosingSealesDate={new Date().toLocaleDateString("he-IL", FullDateOptions)}
 
          />
           <TicketComponent 
@@ -101,7 +101,7 @@ interface TicketsTabPropsType {  setTabPage? : Dispatch<SetStateAction<number>>}
             eventDate={new Date().toLocaleDateString("he-IL", { year: 'numeric', month: 'long', day: "numeric", hour: '2-digit', })}
             type={'normal'}
             location={"תיאטראות -  אילת"}
-            eventEndOfSeals={new Date().toLocaleDateString("he-IL", FullDateOptions)}
+            TickerclosingSealesDate={new Date().toLocaleDateString("he-IL", FullDateOptions)}
 
          />
         <TicketComponent  
@@ -110,7 +110,7 @@ interface TicketsTabPropsType {  setTabPage? : Dispatch<SetStateAction<number>>}
             eventDate={new Date().toLocaleDateString("he-IL", FullDateOptions)}
             type={'normal'}
             location={"תיאטראות -  אילת"}
-             eventEndOfSeals={new Date().toLocaleDateString("he-IL", FullDateOptions)}
+             TickerclosingSealesDate={new Date().toLocaleDateString("he-IL", FullDateOptions)}
          />
           {/* loop over tickits tikits.map....  */}
         

@@ -14,7 +14,7 @@ import { FcFilm, } from "react-icons/fc";
 import  MyChip from '@/components/admin/newEvent/chip'
 import { FcServices } from "react-icons/fc";
 
-const TicketComponent = ({price,evenName,eventDate,type,location,discoundInfo,eventEndOfSeals}:Ticket) => {
+const TicketComponent = ({price,evenName,eventDate,type,location,discoundInfo,TickerclosingSealesDate}:Ticket) => {
 
    
     const theme = useTheme()
@@ -84,7 +84,7 @@ const TicketComponent = ({price,evenName,eventDate,type,location,discoundInfo,ev
               </Flex>
 
               <Flex direction={ !xs? "column": "row"}  flexWrap={"wrap"}  alignContent={"center"} >
-              <MyChip text={eventEndOfSeals}  icon={<FcLeave color="red"/>} m={0.5} grow={0}  /> 
+              <MyChip text={TickerclosingSealesDate}  icon={<FcLeave color="red"/>} m={0.5} grow={0}  /> 
 
                { type === 'discount' && 
                   <MyChip text={discoundInfo}  icon={<MdDiscount color="red"/>} m={0.5} grow={0}  /> 
