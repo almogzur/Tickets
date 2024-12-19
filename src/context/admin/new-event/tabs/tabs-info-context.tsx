@@ -6,4 +6,18 @@ interface InfoTabContextType {
     setInfoFileds:Dispatch<SetStateAction<InfoFormType>>
 }
 
-export default createContext<InfoTabContextType>(null)
+export default createContext<InfoTabContextType>(
+    {
+        infoFileds:{
+            keys: {
+                name: undefined,
+                location: undefined,
+                cat: undefined
+            },
+            theater: undefined
+        },
+        setInfoFileds: function (value: SetStateAction<InfoFormType>): void {
+            throw new Error("Function not implemented.");
+        }
+    }
+)

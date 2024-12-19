@@ -30,7 +30,7 @@ return (
 
       >
 
-      { theaters.map((theater,i)=>{
+      { theaters?.map((theater,i)=>{
          return <MenuItem 
                    key={theater.ThaeaterName} 
                    value={theater.ThaeaterName}

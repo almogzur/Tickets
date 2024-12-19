@@ -43,7 +43,7 @@ interface InputWrapType   {
     
     stateName:string // the name of the state to update in the event 
     label:string  
-    value?:string
+    value?:string|null
     onChangeHndler?:ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
     textColorStateFocused?:CSSProperties['color']
     textColorStateFilled?:CSSProperties['color']    
@@ -152,7 +152,7 @@ const InputWrap = ({
                    } 
                },
                select:{
-                     IconComponent:null,
+        
                      startAdornment:icon
                }
                 

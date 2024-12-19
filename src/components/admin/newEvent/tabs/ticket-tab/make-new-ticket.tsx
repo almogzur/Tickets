@@ -1,74 +1,123 @@
-import  {useState,useContext,useRef, Dispatch, SetStateAction, ReactElement, CSSProperties, JSXElementConstructor} from 'react';
+
+//Reacg
+import  {useState,useContext, Dispatch, SetStateAction, ReactElement, CSSProperties, JSXElementConstructor, useEffect} from 'react';
+
+// Components 
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Typography,Stack as Flex, Divider, useTheme, Chip, Switch, FormControlLabel  } from '@mui/material';
-import { RiDragMoveFill , } from "react-icons/ri";
-import InputWrap from '@/components/admin/input';
-import { FcFilm, FcLeave, FcPlanner, FcViewDetails } from "react-icons/fc";
-import WidthContext from '@/context/WidthContext';
+import { Typography,Stack as Flex, Divider, useTheme, Chip, } from '@mui/material';
+import InputWrap from '@/components/input';
+
+//Icons
+import { FcBusinessman, FcFilm, FcLeave, FcPlanner, FcViewDetails } from "react-icons/fc";
 import { MdDiscount } from "react-icons/md";
+import { IoLocationSharp } from 'react-icons/io5';
 
-
-
-
+//Context Usege
+import WidthContext from '@/context/WidthContext';
 import TabsTicketContext from '@/context/admin/new-event/tabs/tabs-ticket-context';
 import TabsEventSchedulesContext from '@/context/admin/new-event/tabs/tabs-event-schedules-context';
 import TabsInfoContext from '@/context/admin/new-event/tabs/tabs-info-context';
-import MyChip from '../../chip';
-import { IoLocationSharp } from 'react-icons/io5';
-import { FullDateOptions, Ticket } from '@/pages/_app';
-import { TiKey } from 'react-icons/ti';
-import { red } from '@mui/material/colors';
-import Toggler from '../../toggler';
+
+// Types 
+import { BaceTicket, FullDateOptions, Ticket } from '@/pages/_app';
+
+//Colors
+import { grey, red } from '@mui/material/colors';
 
 export default function MakeNewTicket({setTabPage}:{setTabPage:Dispatch<SetStateAction<number>>}) {
+  
   const [open, setOpen] = useState(false);
-
   const  {tickets,updateTicket,updteTicketsArray} =useContext(TabsTicketContext)
-
   const {schedule} =useContext(TabsEventSchedulesContext)
   const {infoFileds}=  useContext(TabsInfoContext)
+  const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
+  const theme = useTheme()
+
+
+  interface TicketOptionType {
+    value: "normal" | "discount" | "citizen";
+    label: string;
+  }
   
+  const TicketOptions: TicketOptionType[] = [
+    { value: "normal", label: "מחיר מלא" },
+    { value: "discount", label: "הנחה" },
+    { value: "citizen", label: "תושב" },
+  ];
 
   const [Ticket, setTicket] =useState<Ticket>({
-      evenName:infoFileds.keys.name,
-      location:infoFileds.keys.location,
-      eventDate:schedule.day ? schedule.day.toLocaleDateString("he-il",FullDateOptions):null ,
-      price:null,
-      type:null,
-      discoundInfo:null,
-      discountPrice:null,
-      TickerclosingSealesDate:schedule.closingSealesDate ? schedule.closingSealesDate.toLocaleDateString("he-il",FullDateOptions):null ,
+    // Bace
+     evenName :infoFileds?.keys ? infoFileds?.keys.name: undefined,
+     location:infoFileds.keys.location,
+     eventDate:schedule.day ? schedule.day.toLocaleDateString("he-IL",FullDateOptions):"" ,
+     TicketClosingSealesDate:schedule.closingSealesDate ? schedule.closingSealesDate.toLocaleDateString("he-il",FullDateOptions):"null" ,
+     selectedType:undefined,
+      priceInfo:undefined,
+      finelPrice:undefined,
+    // state 
+      types:{
+          normal:{price:undefined,info:undefined},
+          discount:{price:undefined,info:undefined},
+          citizen:{price:undefined,info:"הנחת תושב"}
+        }
+   
     }) // local no resone to extract to context level
 
+    const resetTicketPricesForm =( ):void=>{
+      setTicket(p=>({
+           ...p,
+            finelPrice:undefined,
+            priceInfo:undefined,
+            selectedType:undefined,
+            
+            types:{ 
+              normal:{info:undefined,price:undefined},
+              discount:{info:undefined, price:undefined},
+              citizen:{info:"הנחת תושב",price:undefined}
+            }
+          }))
+    }
+
+    // useEffect(()=>{
+    //   console.log(Ticket);
+      
+    // }
+
+    // ,[Ticket])
+
     
-
-  
-  const theme = useTheme()
-       const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
-
-       const TicketOptions = [
-          {value:"normal",label:"מחיר מלא "},
-          {value:"discount",label:"הנחה"},
-          {value:"citizen",label:"תושב"}
-        ]
-
   const handleClickOpen = () => {
     setOpen(true);
   };
-
   const handleClose = () => {
-    console.log(validateAllFileds(Ticket));
-
+    
+    resetTicketPricesForm()
     setOpen(false);
   };
+  const validateFileds =( State:Ticket) : boolean=>{
 
-  const validateAllFileds =(State:Ticket) : boolean=>{
+             const TicketTypeSnapShot =  State.selectedType
 
-     return  true
+             const    { types  , ...rest }= State // removing 
+
+  
+
+
+              const Bace = rest
+              const ValidateArr =  Object.entries(Bace).map(([key,value],i)=>{
+
+                       return value !== null                  
+            })
+            console.log(ValidateArr)
+
+
+       
+   
+      return  true
   }
 
   return (
@@ -76,15 +125,16 @@ export default function MakeNewTicket({setTabPage}:{setTabPage:Dispatch<SetState
       <Button variant='contained' color='secondary' onClick={handleClickOpen} sx={{p:!xs?0.5:null , fontSize:!xs?13:null ,borderRadius:0 }}  >
          כרטיס חדש 
       </Button>
+
       <Dialog
         open={open}
         onClose={handleClose}
          fullWidth
       >
      
-        <DialogTitle style={{padding:12  }} >  
+        <DialogTitle style={{padding:12 , background:grey[200] }} >  
         
-          <Flex direction={"row"} alignItems={"center"}>
+          <Flex direction={"row"} alignItems={"center"}  >
 
                 <Flex direction={"row"} alignContent={"center"} gap={2} >
                      <Flex direction={"row"} alignItems={"center"} gap={2} >
@@ -104,10 +154,8 @@ export default function MakeNewTicket({setTabPage}:{setTabPage:Dispatch<SetState
 
 
             <Flex   >
-                <Flex direction={"row"} alignItems={"center"} gap={2} >
-                    <Typography variant='h6' >פרטי כרטיס</Typography>
-                  
-                </Flex>
+                  <Typography variant='h6' >פרטי כרטיס</Typography>
+                
                 <Flex >
 
                        <InputWrap
@@ -115,49 +163,127 @@ export default function MakeNewTicket({setTabPage}:{setTabPage:Dispatch<SetState
                          label={"סוג הכרטיס"}  
                          isSelect 
                          selectItems={TicketOptions}
-                         isRequired
-                         variant='standard'
-                         value={Ticket.type}
+                         value={Ticket.selectedType}
                          onChangeHndler={(e)=>{
-                                  const key = e.target.name
-                                  const value = e.target.value
-                                  setTicket(p=>({...p,[key]:value}))
+
+                              const value = e.target.value
+                                  
+                                  setTicket(p=>({...p,selectedType:value}))
                          }}   
                              />
-
+ 
+                   { Ticket.selectedType === 'normal' &&    
+                      <>
                       <InputWrap 
-                            stateName={'price'} 
+                            stateName={''} 
                             inputType='number'
-                            label={'מחיר'} 
-                            variant='standard'
-                            value={Ticket.price}
+                            label={'מחיר'}  
+                            value={Ticket.types.normal.price}
                             onChangeHndler={(e)=>{
-                              const key = e.target.name
+               
                               const value = e.target.value
-                              setTicket(p=>({...p,[key]:value}))
+                              setTicket(p=>({
+                                 ...p ,
+                                types:{
+                                  ...p.types,
+                                   normal:{...p.types.normal , price:value}
+                                }
+                              }))
 
                             }}
                              />
-                
-            
-                     { Ticket.type==="discount" &&  
+                             <InputWrap
+                               stateName={'priceInfo'}
+                                label={'תיאור'}
+                                helpText='אופציונלי'
+                                value={Ticket.types.normal.info}
+                                onChangeHndler={(e)=>{
+                                      const value =e.target.value
+                                      setTicket(p=>({
+                                        ...p ,
+                                        types:{
+                                          ...p.types,
+                                           normal:{...p.types.normal , info:value}
+                                        }
+                                        
+                                      }))
+                                }}
+                                icon={<FcFilm size={"2em"}/>}
+                                />
+                      </>
+                   }
+                   { Ticket.selectedType==="discount" &&  
+                       <>
+                         <InputWrap 
+                            stateName={''} 
+                            inputType='number'
+                            label={'מחיר הנחה '} 
+                            value={Ticket.types.discount.price}
+                            onChangeHndler={(e)=>{
+
+                              const value = e.target.value
+                              setTicket(p=>({
+                                ...p,
+                                types:{
+                                  ...p.types,
+                                   discount:{...p.types.discount, price:value}
+                                }
+
+                              }))
+
+                            }}
+                             />
                       <InputWrap
-                         stateName={'discoundInfo'} 
-                         value={Ticket.discoundInfo}
+                         stateName={''} 
+                         value={Ticket.types.discount.info}
                          onChangeHndler={(e)=>{
-                          const key = e.target.name
                           const value = e.target.value
-                          setTicket(p=>({...p,[key]:value}))
+                          setTicket(p=>({
+                            ...p,
+                            types:{
+                              ...p.types,
+                               discount:{...p.types.discount, info:value}
+                            }
+
+                          }))
 
                         }}
                          label={'תיאור ההנחה'} 
                           variant='standard'
-                           icon={<MdDiscount size={"2em"} style={{margin:10, color:"red"}}  />} 
+                           icon={<MdDiscount size={"2em"} style={{margin:10, color:theme.palette.secondary.main}}  />} 
                             />
-                           }
+                
+
+                      </>
+                   }
+                   { Ticket.selectedType==="citizen" && 
+                      <Flex  >
+                         <InputWrap 
+                            stateName={''} 
+                            value={Ticket.types.citizen.price}
+                            onChangeHndler={(e)=>{
+                              const value = e.target.value
+                              setTicket(p=>({
+                                ...p,
+                                types:{
+                                  ...p.types,
+                                   citizen:{...p.types.citizen, price:value}
+                                }
+                              }))
+
+                            }}
+                            label={'מחיר תתושב'} 
+                            inputType='number'
+
+                              />
 
 
-               
+                         <InputWrap  isDisabled  stateName={''} label={'תיאור : הנחת תושב'} icon={<FcBusinessman size={"2.5em"} style={{margin:3}}  />} />
+                       </Flex>
+                   }
+
+
+
                    <MakeTicketFormChip 
                         text={ Ticket.evenName }  
                         placeholder="הוסף שם  "
@@ -187,7 +313,7 @@ export default function MakeNewTicket({setTabPage}:{setTabPage:Dispatch<SetState
                           />
 
                   <MakeTicketFormChip
-                       text={ Ticket.TickerclosingSealesDate}
+                       text={ Ticket.TicketClosingSealesDate}
                        setTabPage={  setTabPage }
                        newTab={3}
                        placeholder='    הוסף תאריך סגירת  קופות '
@@ -196,16 +322,12 @@ export default function MakeNewTicket({setTabPage}:{setTabPage:Dispatch<SetState
                           grow={4}
                           />
 
-       
-                          
+                       
                 </Flex>
-           </Flex>
-           <FormControlLabel 
-           sx={{}}
-           slotProps={{typography:{variant:"button",}}}
-              control={<Switch  defaultChecked />} label="Label" />
-           <Toggler/>
 
+           </Flex>
+
+ 
 
         </DialogContent>
 
@@ -213,7 +335,8 @@ export default function MakeNewTicket({setTabPage}:{setTabPage:Dispatch<SetState
         <DialogActions  >
             <Flex direction={"row"} width={"100%"} justifyContent={"space-between"} gap={2} mx={1}  >
 
-                <Button color='secondary' disabled={validateAllFileds(Ticket)}  onClick={handleClose} sx={{borderRadius:0}} >צור</Button>
+                <Button color='secondary' disabled={validateFileds(Ticket)}  onClick={handleClose} sx={{borderRadius:0}} >צור</Button>
+
                 <Button  sx={{bgcolor:"black",borderRadius:0}} onClick={handleClose}>בטל</Button>
           </Flex>
         </DialogActions>
@@ -226,7 +349,7 @@ export default function MakeNewTicket({setTabPage}:{setTabPage:Dispatch<SetState
 
 
 interface MakeTIcketFormChipType {
-    text:string,
+    text:string|undefined,
     icon?:ReactElement<unknown, string | JSXElementConstructor<any>>,
     p?:CSSProperties['padding'] ,
     m?:CSSProperties['margin'],
@@ -248,7 +371,7 @@ interface MakeTIcketFormChipType {
   const MakeTicketFormChip =  ({text, icon , p, m,br,styleProps , grow , w ,v,Scale,setTabPage,newTab,placeholder}:MakeTIcketFormChipType)=>{
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
         return  <Chip 
-                     onClick={ !text ? ()=>setTabPage(newTab): null}
+                     onClick={ !text && setTabPage && newTab ? ()=>setTabPage(newTab) :undefined }
                      avatar={icon}
                      label={text??placeholder} 
                      sx={{
@@ -259,7 +382,7 @@ interface MakeTIcketFormChipType {
                         fontSize:!xs? 14: 16 ,
                         '& .MuiChip-label': {},
                         '& .MuiChip-avatar':{ scale:Scale?? 1.3 } ,
-                        bgcolor: !text ? red[100] : "#fff",
+                        bgcolor: !text ? red[50] : "#fff",
                         width: w? w:  !sm? "100%":null
                       }}
                       variant= {v? v: 'filled'  }
@@ -268,3 +391,7 @@ interface MakeTIcketFormChipType {
   }
 
 
+
+
+
+  

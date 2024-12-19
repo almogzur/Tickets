@@ -4,7 +4,7 @@ import WidthContext from '@/context/WidthContext';
 import { useTheme } from '@mui/material/styles';
 
 //Dates Formats 
-import { FullDateOptions , sortDateOptions, samiDateOptions } from '@/pages/_app';
+import { FullDateOptions , samiDateOptions } from '@/pages/_app';
 
 //Icons
 import { MdDelete } from "react-icons/md";
@@ -20,7 +20,7 @@ import {  Typography  , Stack as Flex, Button , Box, Divider, FormControl, Alert
 import Avatar from '@mui/material/Avatar';
 import { MobileDateTimePicker} from '@mui/x-date-pickers'
 import TabsEventDatesContext from '@/context/admin/new-event/tabs/tabs-event-schedules-context'
-import InputWrap from '../../input';
+import InputWrap from '../../../input';
 
 // Types
 import { Schedule } from '@/pages/_app';
@@ -60,7 +60,7 @@ const DatesList = ()=>{
             }}
             sx={{mt:2 , height:60  }}
  
-             onAccept={addScheduleDate}
+             onAccept={(e)=> e !== null ? addScheduleDate(e) : null}
         
        />
        </Flex>
@@ -110,7 +110,7 @@ const MainDate = ({ schedul  }:MainDatePropsType)=>{
           
            <Flex direction={'row'}    alignItems={"center"}  width={"100%"}  justifyContent={'space-between'} >
 
-            <Typography sx={{mx:1}} textAlign={'start'}   variant={"h6"} > { schedul.day.toLocaleTimeString("he-IL",FullDateOptions) }</Typography>          
+         { schedul.day ?  <Typography sx={{mx:1}} textAlign={'start'}   variant={"h6"} > { schedul.day.toLocaleTimeString("he-IL",FullDateOptions) }</Typography>     :null    } 
 
              <Avatar sx={{background:theme.palette.error.main  ,}} color='error' onClick={()=>removeScheduleDate(schedul)} variant='rounded'  >
                <MdDelete  size={"1.5em"}  />
@@ -139,7 +139,7 @@ const MainDate = ({ schedul  }:MainDatePropsType)=>{
                         </>
                          }}}      
                          sx={{}}
-                    onAccept={(e)=>{ setEndOfDate(e,schedul) } } 
+                    onAccept={ (e)=>  e !== null?   setEndOfDate(e,schedul) :null   }
                    />
                    
            

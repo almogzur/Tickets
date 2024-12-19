@@ -1,4 +1,4 @@
-import InputWrap from "../../input"
+import InputWrap from "../../../input"
 
 interface SetingsTabPropsType {}
 

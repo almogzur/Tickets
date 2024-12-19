@@ -9,9 +9,34 @@ interface TabsEventsSchedulesContextTye {
     schedule: Schedule
     setSchedule:Dispatch<SetStateAction<Schedule>>
     dateEroor:boolean
-    addScheduleDate :(e:dayjs.Dayjs, context: PickerChangeHandlerContext<DateTimeValidationError>) => void
-    removeScheduleDate:(dateToRemove: Schedule) => void
+    addScheduleDate : (e:dayjs.Dayjs) => void
+    removeScheduleDate:(dateToRemove: Schedule) => void 
     setEndOfDate:(e:dayjs.Dayjs,schdual:Schedule)=> void
     removeEndOdDate:()=>void
 }
-export default createContext<TabsEventsSchedulesContextTye>(null)
+
+
+
+export default createContext<TabsEventsSchedulesContextTye>({
+    schedule: {
+        day: undefined,
+        isEventClosedForSeal: undefined,
+        closingSealesDate: undefined
+    },
+    setSchedule: function (value: SetStateAction<Schedule>): void {
+        throw new Error('Function not implemented.')
+    },
+    dateEroor: false,
+    addScheduleDate: function (e: dayjs.Dayjs): void {
+        throw new Error('Function not implemented.')
+    },
+    removeScheduleDate: function (dateToRemove: Schedule): void {
+        throw new Error('Function not implemented.')
+    },
+    setEndOfDate: function (e: dayjs.Dayjs, schdual: Schedule): void {
+        throw new Error('Function not implemented.')
+    },
+    removeEndOdDate: function (): void {
+        throw new Error('Function not implemented.')
+    }
+})

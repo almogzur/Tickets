@@ -42,34 +42,65 @@ import '@tomtom-international/web-sdk-maps/dist/maps.css'
 
 // Theater Types
 export interface Positions {
-    x:number ,
-    y:number ,
-    Scale?:number ,
-    disabled? :boolean
+    x:number|undefined ,
+    y:number|undefined ,
+    Scale?:number|undefined ,
+    disabled? :boolean|undefined
 }
 export interface TipinfoType {
-  initValue:number,
-  row:string,
-  seatNumber:number
+  initValue:number|undefined
+  row:string|undefined
+  seatNumber:number|undefined
 } 
 export interface MultiTipeInfoType  {
-  seatNumber: any;
-  row: string;
-  first:number
-  second:number
-  totalselected:number
-  positionsSelected:number[]
-  err:string
-  selectdir:"R"|"L"
+  seatNumber: number|undefined
+  row: string|undefined
+  first:number|undefined
+  second:number|undefined
+  totalselected:number|undefined
+  positionsSelected:number[]|undefined
+  err:string|undefined
+  selectdir:"R"|"L"|undefined
 }
 export interface TheaterType {
      mainSeats:Seats 
      sideSeats:Seats 
-     testsStyle:SeatStyles 
-     styles:SeatStyles 
-     ThaeaterName:string
+     testsStyle:SeatStyles
+     styles:SeatStyles
+     ThaeaterName:string|undefined
 }
 /////////////
+
+export interface InfoFormType  {
+  keys:{  name:string|undefined ,location:string|undefined, cat:string|undefined} 
+  theater:TheaterType|undefined
+}
+export interface Schedule {
+  day: Date|undefined;
+  isEventClosedForSeal:boolean|undefined
+  closingSealesDate:Date|undefined
+} 
+export  interface BaceTicket  {
+  evenName:string|undefined
+  location:string|undefined
+  TicketClosingSealesDate:string|undefined
+  eventDate:string|undefined
+  finelPrice:string |undefined,
+  priceInfo:string|undefined
+  selectedType:string|undefined
+
+
+}
+export interface Ticket extends BaceTicket  {
+    // just for form function one hasMap will be sent  
+    types:{
+        normal:{ price:string|undefined , info:string|undefined ,  },
+        discount:{price:string|undefined, info:string|undefined },
+        citizen:{ price:string|undefined , info:"הנחת תושב"|undefined}
+    }
+}
+
+
 export const FullDateOptions :Intl.DateTimeFormatOptions = {
   year:'numeric',
   month: 'long',
@@ -83,34 +114,7 @@ export const samiDateOptions :Intl.DateTimeFormatOptions = {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
-      };
-export const  sortDateOptions :Intl.DateTimeFormatOptions = {
-  year:null,
-  month:null,
-  day:null,
-    hour:'2-digit',
-  minute:'2-digit'
 };
-export interface InfoFormType {
-  keys:{  name:string ,location:string, cat:string}
-  theater:TheaterType
-}
-export interface Schedule {
-  day: Date;
-  isEventClosedForSeal:boolean
-  closingSealesDate:Date
-} 
-export interface Ticket  {
-  evenName:string
-  location:string
-  type:"normal"|"discount"
-  price:string
-  discoundInfo?:string
-  discountPrice?:string
-  eventDate:string
-  TickerclosingSealesDate:string
-}
-
 
 
 const theme  = createTheme({    
@@ -218,26 +222,33 @@ function MyApp({  Component,  pageProps: { session, ...pageProps }}: AppProps) {
   const [AdminMapPositions , setAdminMapPositions] = useState<Positions>({x:0,y:0,Scale:0,disabled:false})
  
   // AdminSingleTipState 
-  const [ singleTipPositions, setSingleTipPositions]=useState<Positions>({x:0,y:0})
-  const [ seatTipInfo , setSeatTipInfo ] = useState<TipinfoType>({initValue:null,row:"",seatNumber:null})
-  const resetSingleTip  = () :void=> { setSingleTipPositions({x:0,y:0}) ; setSeatTipInfo({initValue:null, row:null , seatNumber:null}) }
+  const [ singleTipPositions, setSingleTipPositions]=useState<Positions>({x:undefined,y:undefined})
+  const [ seatTipInfo , setSeatTipInfo ] = useState<TipinfoType>({initValue:undefined,row:undefined,seatNumber:undefined})
+  const resetSingleTip  = () :void=> { setSingleTipPositions({x:0,y:0}) ; setSeatTipInfo({initValue:undefined, row:undefined , seatNumber:undefined}) }
 
   //AdminMiltiTipState
-  const [multiTipInfo, setMultiTipInfo]=useState<MultiTipeInfoType>({first:null, second:null,totalselected:0 ,positionsSelected:null, row:null ,err:null ,seatNumber:null  , selectdir:null })
-  const [ multiTipPositions , setMutiTipPositions ]= useState<{x:number ,y:number}>({x:0,y:0})
-  const resetMultiTip = ():void=>{ setMutiTipPositions({x:null,y:null}) ; setMultiTipInfo(p=>({first:null, second:null,totalselected:0 ,positionsSelected:null, row:null ,err:null ,seatNumber:null  , selectdir:null})  ) }
-  const resetErr = () : void=>{ setMultiTipInfo(p=>({...p,err:null}))}
+  const [multiTipInfo, setMultiTipInfo]=useState<MultiTipeInfoType>({
+      first:undefined, 
+      second:undefined,
+      totalselected:undefined ,
+      positionsSelected:undefined,
+       row:undefined ,
+       err:undefined ,seatNumber:undefined  , selectdir:undefined
+       })
+  const [ multiTipPositions , setMutiTipPositions ]= useState<Positions>({x:undefined,y:undefined})
+  const resetMultiTip = ():void=>{ setMutiTipPositions({x:undefined,y:undefined}) ; setMultiTipInfo(p=>({first:undefined, second:undefined,totalselected:undefined ,positionsSelected:undefined, row:undefined ,err:undefined ,seatNumber:undefined  , selectdir:undefined})  ) }
+  const resetErr = () : void=>{ setMultiTipInfo(p=>({...p,err:undefined}))}
 
 
 // Clinet Side
 
   // client map
-  const [ClientMapPositions , setClientMapPositions] =useState<Positions>({ x:0 ,y:0 ,Scale:0})
+  const [ClientMapPositions , setClientMapPositions] =useState<Positions>({ x:undefined ,y:undefined ,Scale:undefined})
 
   //Clinet SingleTip
-  const [clientTipPosition,setClientTipPosition]=useState<Positions>({x:null,y:null})
-  const [clinetTipInfo , setClinetTipInfo]=useState<TipinfoType>({initValue:null,row:null,seatNumber:null})
-  const resetClinetTip = ():void =>{ setClinetTipInfo({seatNumber:null,row:null,initValue:null}); setClientTipPosition({x:null,y:null}) }
+  const [clientTipPosition,setClientTipPosition]=useState<Positions>({x:undefined,y:undefined})
+  const [clinetTipInfo , setClinetTipInfo]=useState<TipinfoType>({initValue:undefined,row:undefined,seatNumber:undefined})
+  const resetClinetTip = ():void =>{ setClinetTipInfo({seatNumber:undefined,row:undefined,initValue:undefined}); setClientTipPosition({x:undefined,y:undefined}) }
 
   // media qurys
    const xxl = useMediaQuery('(min-width : 1600px)')

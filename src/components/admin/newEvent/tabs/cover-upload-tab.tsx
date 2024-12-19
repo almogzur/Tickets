@@ -9,11 +9,11 @@ import { FcAddImage } from "react-icons/fc";
 import { FcRemoveImage } from "react-icons/fc";
 
 interface CoverUploadPropsType { 
-    file:File
+    file:File | undefined
     preview:string
     setPreview:Dispatch<SetStateAction<string>>
     onFileChange: (e: React.ChangeEvent<HTMLInputElement>) =>void
-    setFile:Dispatch<SetStateAction<File>>
+    setFile:Dispatch<SetStateAction<File | undefined>>
 }
 
 const CoverUploadTab=({file , preview,onFileChange,setFile,setPreview}:CoverUploadPropsType)=>{
@@ -21,18 +21,9 @@ const CoverUploadTab=({file , preview,onFileChange,setFile,setPreview}:CoverUplo
     const router = useRouter()
     const theme =useTheme()
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
-    const Inputref =useRef(null)
-    
-    const openDialog: MouseEventHandler<HTMLButtonElement> = () => {
-        const inputFile  = Inputref.current;
 
-        if (inputFile) {
-            inputFile.click()
-            
-        }
-        return
-        
-      };
+    const Inputref = useRef<HTMLInputElement>(null);
+    
 
  
 return (
@@ -67,7 +58,7 @@ return (
  
       </Flex>
       <BasicSpeedDial 
-            file={undefined} 
+            file={file} 
             preview={preview} 
             setFile={setFile}
             setPreview={setPreview}
@@ -90,7 +81,7 @@ import SpeedDialAction from '@mui/material/SpeedDialAction';
 
 
 interface  BasicSpeedDialPropsType extends CoverUploadPropsType {
-   perentRef : React.RefObject<HTMLSelectElement>
+   perentRef : React.RefObject<HTMLInputElement>
 }
 
 
@@ -104,9 +95,9 @@ function BasicSpeedDial({file,preview,setFile,setPreview,onFileChange,perentRef}
     
     if (inputFile) {
 
-      inputFile.value=null
+      inputFile.value=""
       setPreview(""); 
-      setFile(null) 
+      setFile(undefined)
       
   }
   return

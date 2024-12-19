@@ -3,7 +3,7 @@ import MultiSelectContext from "@/context/admin/new-event/map/multi-select-conte
 import { Colors } from "@/lib/colors";
 import { Avatar , Badge, Button, Divider, Stack as Flex, useTheme  } from "@mui/material";
 import { blue, green, grey, orange, pink, red } from "@mui/material/colors";
-import { useContext } from "react";
+import { Dispatch, SetStateAction, useContext } from "react";
 import { TbDisabled } from "react-icons/tb";
 import WidthContext from "@/context/WidthContext";
 import AdminMapPositionsContext from '@/context/admin/new-event/map/admin-map-positions-context';
@@ -23,7 +23,7 @@ INDEX !!!!!
 
 interface SeatColorsIndexProps  { 
     isMuiltiSelct? :boolean ,
-    setIsMultiSelect:React.Dispatch<React.SetStateAction<Boolean>>
+    setIsMultiSelect:Dispatch<SetStateAction<boolean>>
     multiSelectBadgeInfo:number
  }
 
@@ -70,7 +70,7 @@ const AdminSeatColorsIndex =({isMuiltiSelct,setIsMultiSelect,multiSelectBadgeInf
            <Button  sx={{background:'black' , m:0.5}} 
            onClick={()=>{setAdminMapPositions(p=>({...p,disabled:!p.disabled}))}}
            >
-            {AdminMapPositions.disabled? "הפעל תזוזה":" בטל תזוזה"}
+            {AdminMapPositions?.disabled? "הפעל תזוזה":" בטל תזוזה"}
            </Button>
 
            <Button 

@@ -7,7 +7,7 @@ import { InfoFormType, TheaterType } from "@/pages/_app"
 
     interface MultiSelectTipType {
         isMultiSelect: boolean
-        theraer:TheaterType
+        theraer:TheaterType|undefined
         setTheater:Dispatch<SetStateAction<InfoFormType>>
     }
 
@@ -17,13 +17,14 @@ import { InfoFormType, TheaterType } from "@/pages/_app"
 
     const upateSeateValue  = (newSeatValueArg: number  ) : void =>  {
 
-        const dirArg = multiTipInfo.selectdir
-        const row = multiTipInfo.row 
-        const first = multiTipInfo.first
-        const second = multiTipInfo.second
+        const dirArg = multiTipInfo?.selectdir
+        const row = multiTipInfo?.row 
+        const first = multiTipInfo?.first
+        const second = multiTipInfo?.second
 
-      
-      const inMain = theraer.mainSeats.hasOwnProperty(row)
+        if(theraer !==null && theraer!== undefined){
+
+      const inMain =  theraer.mainSeats.hasOwnProperty(row) 
       const inSide = theraer.sideSeats.hasOwnProperty(row)
 
       
@@ -102,6 +103,9 @@ import { InfoFormType, TheaterType } from "@/pages/_app"
    
          }
        resetMultiTip()
+
+
+        }
  };
 
     const theme = useTheme()

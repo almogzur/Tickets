@@ -7,7 +7,7 @@ import {  Stack as Flex , Typography, useTheme } from "@mui/material"
 import { ChangeEventHandler, Dispatch, Key, SetStateAction, useContext } from "react"
 
 import TheaterSelect from "./theater-select"
-import InputWrap from "../input"
+import InputWrap from "../../input"
 
 //Data
 import  Eilat_1 from '../../../constants/theathers/eilat_1'

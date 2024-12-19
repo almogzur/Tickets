@@ -10,5 +10,13 @@ interface WidthContext {
     xxs:boolean
   }
 
-export default  createContext<WidthContext>(null)
+export default  createContext<WidthContext>({
+  xl:false,
+  xxl: false,
+  lg: false,
+  md: false,
+  sm: false,
+  xs: false,
+  xxs: false
+})
 

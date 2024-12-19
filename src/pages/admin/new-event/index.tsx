@@ -12,7 +12,6 @@ import dayjs from 'dayjs'
 import Head from 'next/head'
 import {Typography  , Stack as Flex,  useTheme, Button} from '@mui/material'
 import AdminLayout from '@/Layouts/admin-layout'
-import InfoForm from '@/components/admin/newEvent/info-form'
 import { DateTimeValidationError, PickerChangeHandlerContext } from '@mui/x-date-pickers'
 import TabsForm from '@/components/admin/newEvent/tabs/tabs-form'
 import Theater from '@/components/admin/newEvent/theater/theater'
@@ -36,15 +35,15 @@ const NewEventPage=()=>{
   // Info
 // setter function in Component
   const [infoFileds,setInfoFileds]=useState<InfoFormType>({
-     keys:{name:null,location:null,cat:null} ,
-     theater:{mainSeats:null,sideSeats:null,styles:null,testsStyle:null,ThaeaterName:null}
+     keys:{name:undefined,location:undefined,cat:undefined} ,
+     theater:{mainSeats:{},sideSeats:{},styles:{},testsStyle:{},ThaeaterName:undefined}
     })
 
   // Schedules Coontext State
-  const [schedule, setSchedule] = useState<Schedule>({day:null,closingSealesDate:null,isEventClosedForSeal:null})
+  const [schedule, setSchedule] = useState<Schedule>({day:undefined,closingSealesDate:undefined,isEventClosedForSeal:undefined})
   const [dateEroor,setDateEroor ]= useState(false)
 
-  const addScheduleDate = (e:dayjs.Dayjs,context:PickerChangeHandlerContext<DateTimeValidationError>) :void => {
+  const addScheduleDate = (e:dayjs.Dayjs) :void => {
 
        if (e && e.year() && e.month() && e.date() && e.day()  ,e.hour(), e.minute() ) {
          // set the time in utc  -3 form area time , 
@@ -55,7 +54,7 @@ const NewEventPage=()=>{
        //  error henler
   };
   const removeScheduleDate = (schedulArg: Schedule ):void => {
-      setSchedule(p=>({...p,day:null , hour:null ,closingSealesDate:null}))
+      setSchedule(p=>({...p,day:undefined , hour:undefined ,closingSealesDate:undefined}))
 
   };
   const setEndOfDate= (e:dayjs.Dayjs,schedule:Schedule) :void =>{
@@ -69,7 +68,7 @@ const NewEventPage=()=>{
 
   }
   const removeEndOdDate = ()=>{
-     setSchedule(p=>({...p,closingSealesDate:null}))
+     setSchedule(p=>({...p,closingSealesDate:undefined}))
   }
   
   //Tickets
@@ -88,25 +87,26 @@ const NewEventPage=()=>{
 
   }
  
-  
-
   // Cover 
-  const [file, setFile] = useState<File>(null);
+  const [file, setFile] = useState<File>();
   const [preview ,setPreview] = useState<string>("")
+  // romve function in cover upload component 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 
-        console.log(e.target.files);
-        
-
-      const selectedFile :File = e.target.files[0];
+      const selectedFile  = e.target.files !== null  ?  e.target.files[0] :null
 
 
-      if (selectedFile) {
+        if (selectedFile) {
+          
         setFile (selectedFile)
-        setPreview(URL.createObjectURL(e.target.files[0]));
+        setPreview(URL.createObjectURL(selectedFile));
 
-      }
+      
+        }
+
     };
+
+  
 
   // Seats Amount 
   const [totalSeats ,setTotalSeats]= useState<number>(0)
@@ -143,19 +143,20 @@ return (
          <TabsForm 
           // file 
            file={file} 
-         setFile={setFile}
-         preview={preview} 
+            setFile={setFile}
+            preview={preview} 
          setPreview={setPreview} 
            onFileChange={handleFileChange} 
 
           //Setings
           //Colors
           />
-          { infoFileds.theater.mainSeats && <Theater  />}
+          {  infoFileds.theater ? infoFileds.theater.mainSeats && <Theater  /> :null }
          </TabsEventDatesContext.Provider>
          </TabsTickets.Provider>
          </InfoTabContext.Provider> -
-      <Flex p={4} alignItems={"center"}  >
+
+        <Flex p={4} alignItems={"center"}  >
         <Button disabled   sx={{height:50 ,width:100,background:"black"}} >  </Button>
       </Flex>
       </form>

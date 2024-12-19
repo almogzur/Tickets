@@ -10,4 +10,15 @@ interface TicketContextType {
 }
 
 
-export default createContext<TicketContextType>(null)
+export default createContext<TicketContextType>({
+    tickets:[],
+    setTickets: function (value: SetStateAction<Ticket[]>): void {
+        throw new Error("Function not implemented.");
+    },
+    updateTicket: function (key: "price" | "type" | "discription" | "discoundInfo", value: string | number): void {
+        throw new Error("Function not implemented.");
+    },
+    updteTicketsArray: function (ticket: Ticket, Action: "add" | "remove"): void {
+        throw new Error("Function not implemented.");
+    }
+})

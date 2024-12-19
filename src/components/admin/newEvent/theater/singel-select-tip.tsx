@@ -8,12 +8,11 @@ import {  Button, Stack as Flex, Typography, useTheme } from "@mui/material"
 import {  grey, orange, pink } from "@mui/material/colors"
 import { Seats } from "@/constants/models/Events"
 import { InfoFormType, TheaterType } from "@/pages/_app"
-import { wrap } from "module"
  
 
 
 interface SingleSelectTipPropsType  { 
-  theraer:TheaterType ,
+  theraer:TheaterType|undefined ,
    isMultiSelect:boolean ,
    setTheater:Dispatch<SetStateAction<InfoFormType>>
   }
@@ -29,8 +28,9 @@ const SingleSelectTip= ({theraer,isMultiSelect ,setTheater }:SingleSelectTipProp
 
     const upateSeateValue = (newSeatValueArg: number) => {
 
+
               
-         const row : string = seatTipInfo.row
+         const row =  seatTipInfo.row
          const inMain = theraer.mainSeats.hasOwnProperty(row)
          const inSide = theraer.sideSeats.hasOwnProperty(row)
          const initVlaue = seatTipInfo.initValue

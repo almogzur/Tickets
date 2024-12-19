@@ -1,5 +1,5 @@
 import { TransformWrapper, TransformComponent, useControls, getTransformStyles } from "react-zoom-pan-pinch";
-import { useState, useEffect, useContext, ReactNode, } from 'react'
+import { useState, useEffect, useContext, ReactNode, Dispatch, SetStateAction, } from 'react'
 import AdminMapPositionsContext from '../../../../context/admin/new-event/map/admin-map-positions-context';
 import { Stack as Flex , Typography as Heading , Button, Avatar , useTheme, Divider} from '@mui/material'
 import { FaPlus } from "react-icons/fa6";
@@ -14,9 +14,9 @@ import { grey } from "@mui/material/colors";
 
 interface AdminTheaterMapPropsTypes {
    children? : ReactNode,
-   isMultiSelect? : boolean,
-   setIsMultiSelect?:React.Dispatch<React.SetStateAction<Boolean>>
-   multiSelectBadgeInfo?:number
+   isMultiSelect : boolean,
+   setIsMultiSelect:Dispatch<SetStateAction<boolean>>
+   multiSelectBadgeInfo:number
 
 
 }

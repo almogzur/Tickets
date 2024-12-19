@@ -7,4 +7,12 @@ interface ClientTransformContext {
     setClientMapPositions:React.Dispatch<React.SetStateAction<Positions>>
 }
 
-export default createContext<ClientTransformContext>(null)
+export default createContext<ClientTransformContext>({
+    ClientMapPositions:{
+        x: undefined,
+        y: undefined
+    },
+    setClientMapPositions:():void=>{
+            throw new Error("this is placeholder")
+    }
+})

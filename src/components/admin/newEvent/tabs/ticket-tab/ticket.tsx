@@ -1,27 +1,34 @@
-import InputWrap from "@/components/admin/input";
-import WidthContext from "@/context/WidthContext";
-import { Ticket } from "@/pages/_app";
+
+// React 
 import { useContext} from "react";
 
-import { Paper, useTheme , Stack as Flex ,Box ,Typography, Chip, Container, Avatar, TextFieldVariants, Divider } from "@mui/material";
-import { grey } from "@mui/material/colors";
-import { FcCurrencyExchange, FcLeave, FcSearch } from "react-icons/fc";
-import { FcPlanner } from "react-icons/fc";
+//Context 
+import WidthContext from "@/context/WidthContext";
+
+
+// Types 
+import { BaceTicket, Ticket } from "@/pages/_app";
+
+//Components 
+import { useTheme , Stack as Flex , Container, Divider } from "@mui/material";
+import  MyChip from '@/components/chip'
+
+// Icons 
+import {FcServices,FcFilm, FcBusinessman, FcCurrencyExchange, FcLeave, FcSearch,FcPlanner,FcViewDetails } from "react-icons/fc";
 import { IoLocationSharp } from "react-icons/io5";
-import { FcViewDetails } from "react-icons/fc";
 import { MdDelete, MdDiscount } from "react-icons/md";
-import { FcFilm, } from "react-icons/fc";
-import  MyChip from '@/components/admin/newEvent/chip'
-import { FcServices } from "react-icons/fc";
 
-const TicketComponent = ({price,evenName,eventDate,type,location,discoundInfo,TickerclosingSealesDate}:Ticket) => {
+//Colors
+import { grey } from "@mui/material/colors";
 
-   
+
+const TicketComponent = ({...props    }:BaceTicket) => {
+
     const theme = useTheme()
-           const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
+    const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
     
     return (
-      <Flex justifyContent={"center"} direction={"row"} >
+    <Flex justifyContent={"center"} direction={"row"} >
         
       <Container
       maxWidth="lg"
@@ -36,19 +43,32 @@ const TicketComponent = ({price,evenName,eventDate,type,location,discoundInfo,Ti
           <Flex display={"row"}   p={0}   >
 
               
-                
-                <Flex direction={"row"} alignItems={"center"} justifyContent={"space-between"} gap={1} m={0}  >
-                     <Flex>
+        
+
+                <Flex 
+                      direction={"row"}
+                       alignItems={"center"}
+                        justifyContent={"space-between"}
+                         gap={1}
+                          m={0}
+                           bgcolor={grey[200]}
+                            >
+                     <Flex >
                          <MyChip 
-                              text={type==="normal" ? "  רגיל " : type==="discount"? "  הנחה"   :null } 
-                               icon={<FcFilm size={"2em"} />} 
+                              text={ 
+                                  props.selectedType==="normal" ? "  רגיל "
+                                   :
+                                    props.selectedType==="discount"?
+                                     "הנחה" :
+                                     props.selectedType==="citizen"? "תושב "
+                                     :""
+                                     } 
+                               icon={  <FcFilm size={"2em"} color={"black"}  style={{border:`solid 1.5px ${theme.palette.secondary.main} ` ,  padding:1 }} />} 
                                 m={1}
                                  w={140}
                                   p={3}  
-                                 styleProps={{background:"#fff"}} 
+                                 styleProps={{background:grey[200]}} 
                                  Scale={1.7}
-                                 
-                                 
                                   />
                       </Flex>
 
@@ -68,26 +88,29 @@ const TicketComponent = ({price,evenName,eventDate,type,location,discoundInfo,Ti
 
                 <Flex direction={ !xs? "column": "row"} alignContent={"center"} flexWrap={"wrap"} >
 
-                  <MyChip text={ `${price}`} icon={<FcCurrencyExchange />} m={0.5} grow={1} />
-
-                  <MyChip text={ eventDate&& eventDate} icon={<FcPlanner/>} m={0.5} grow={4}/>
+                  <MyChip text={ props.selectedType?? ""  } icon={<FcCurrencyExchange />} m={0.5} grow={1} />
+                  <MyChip text={ props.eventDate?? ""} icon={<FcPlanner/>} m={0.5} grow={4}/>
 
               </Flex>
 
               <Flex direction={ !xs? "column": "row"} flexWrap={"wrap"} alignContent={"center"}    >
 
-                <MyChip text={location } icon={<IoLocationSharp color="#1a8cdc"/>} m={0.5}  />
+                <MyChip text={props.location ?? ""} icon={<IoLocationSharp color="#1a8cdc"/>} m={0.5}  />
 
-                <MyChip text={ evenName}  icon={<FcViewDetails/>}  m={0.5} />
+                <MyChip text={ props.evenName??""}  icon={<FcViewDetails/>}  m={0.5} />
 
                
               </Flex>
 
               <Flex direction={ !xs? "column": "row"}  flexWrap={"wrap"}  alignContent={"center"} >
-              <MyChip text={TickerclosingSealesDate}  icon={<FcLeave color="red"/>} m={0.5} grow={0}  /> 
+              <MyChip text={props.TicketClosingSealesDate?? ""}  icon={<FcLeave color="red"/>} m={0.5} grow={0}  /> 
 
-               { type === 'discount' && 
-                  <MyChip text={discoundInfo}  icon={<MdDiscount color="red"/>} m={0.5} grow={0}  /> 
+               { props.selectedType === 'discount' && 
+                  <MyChip text={props.priceInfo??""}  icon={<MdDiscount color="red"/>} m={0.5} grow={0}  /> 
+                }
+                {
+                  props.selectedType === "citizen" && 
+                  <MyChip text={props.priceInfo??""}  icon={<FcBusinessman color="red"/>} m={0.5} grow={0}  /> 
                 }
               </Flex>
                 

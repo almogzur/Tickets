@@ -10,7 +10,7 @@ import TabsTicketContext from "@/context/admin/new-event/tabs/tabs-ticket-contex
 import { FullDateOptions, TheaterType } from "@/pages/_app"
 
 // Components
-import InputWrap from "../../../input"
+import InputWrap from "../../../../input"
 import MakeNewTickit from "./make-new-ticket"
 import { Alert, AlertTitle, Box ,Paper, Button, Divider, Fade, Stack as Flex , Popover, Typography , useTheme} from "@mui/material"
 //Icons 
@@ -20,7 +20,7 @@ import { FcPlus } from "react-icons/fc";
 import TicketComponent from "./ticket"
 import { IoMdAddCircle } from "react-icons/io"
 
-interface TicketsTabPropsType {  setTabPage? : Dispatch<SetStateAction<number>>}
+interface TicketsTabPropsType {  setTabPage : Dispatch<SetStateAction<number>>}
  
   const TicketsTab = ({setTabPage}:TicketsTabPropsType)=>{ 
        const theme = useTheme()
@@ -78,39 +78,38 @@ interface TicketsTabPropsType {  setTabPage? : Dispatch<SetStateAction<number>>}
           <Divider sx={{borderWidth:2}} />
          </Flex>
 
-         {tickets.map((ticket,i)=>{
-                  return< TicketComponent key={i} evenName={""} location={""} type={"normal"} price={""} eventDate={""} TickerclosingSealesDate={""} />
-              })}
+         {/* {tickets.map((ticket,i)=>{
+                  return< TicketComponent key={i} evenName={""} location={""} selectedType={"normal"} finelPrice={""} eventDate={""} TicketClosingSealesDate={""} priceInfo={""} />
+              })} */}
 
 
       <TicketComponent 
          
-            price={"0"}
+         finelPrice={"0"}
             evenName={"הופעה חיה של שחר חסון"}
             eventDate={new Date().toLocaleDateString("he-IL", { year: 'numeric', month: 'long', day: "numeric", hour: '2-digit', })}
-            type={'discount'}
+            selectedType={'citizen'}
             location={"תיאטראות -  אילת"}
-            discoundInfo="הנחה לחברי מועדון שופרסל"     
-            TickerclosingSealesDate={new Date().toLocaleDateString("he-IL", FullDateOptions)}
+            priceInfo="הנחת תושב "     
+            TicketClosingSealesDate={new Date().toLocaleDateString("he-IL", FullDateOptions)}
 
          />
           <TicketComponent 
-         
-            price={"159"}
+            finelPrice={"159"}
             evenName={"הופעה חיה של שחר חסון"}
             eventDate={new Date().toLocaleDateString("he-IL", { year: 'numeric', month: 'long', day: "numeric", hour: '2-digit', })}
-            type={'normal'}
+            selectedType={'normal'}
             location={"תיאטראות -  אילת"}
-            TickerclosingSealesDate={new Date().toLocaleDateString("he-IL", FullDateOptions)}
-
+            TicketClosingSealesDate={new Date().toLocaleDateString("he-IL", FullDateOptions)} priceInfo={""}
          />
         <TicketComponent  
-            price={"159"}
+            finelPrice={"159"}
             evenName={"הופעה חיה של שחר חסון"}
             eventDate={new Date().toLocaleDateString("he-IL", FullDateOptions)}
-            type={'normal'}
+            selectedType ={'discount'}
+            priceInfo="הנחה לחברי מועדון "
             location={"תיאטראות -  אילת"}
-             TickerclosingSealesDate={new Date().toLocaleDateString("he-IL", FullDateOptions)}
+            TicketClosingSealesDate={new Date().toLocaleDateString("he-IL", FullDateOptions)}
          />
           {/* loop over tickits tikits.map....  */}
         

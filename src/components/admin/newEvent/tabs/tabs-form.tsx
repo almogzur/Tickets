@@ -2,7 +2,7 @@
 import { Typography , Stack as Flex ,useTheme, Box, Tabs, Tab, Badge, Container, Divider} from "@mui/material"
 
 import { ChangeEvent, ChangeEventHandler, CSSProperties, Dispatch, SetStateAction, useContext, useEffect, useState } from "react"
-import InputWrap from "../../input"
+import InputWrap from '@/components/input'
 
 // Context Useg
 import WidthContext from "@/context/WidthContext"
@@ -37,11 +37,11 @@ interface TabFormPropsType {
 
 
   //File 
-    file:File
+    file:File | undefined
     preview:string
     setPreview:Dispatch<SetStateAction<string>>
     onFileChange: (e: React.ChangeEvent<HTMLInputElement>) =>void
-    setFile:Dispatch<SetStateAction<File>>
+    setFile:Dispatch<SetStateAction<File|undefined>>
 
 
   
