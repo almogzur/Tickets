@@ -7,8 +7,8 @@ import { createContext, Dispatch, MouseEventHandler, SetStateAction } from 'reac
 
 interface TabsEventsSchedulesContextTye {
     schedule: Schedule
-    setSchedule:Dispatch<SetStateAction<Schedule>>
     dateEroor:boolean
+    setSchedule:Dispatch<SetStateAction<Schedule>>
     addScheduleDate : (e:dayjs.Dayjs) => void
     removeScheduleDate:(dateToRemove: Schedule) => void 
     setEndOfDate:(e:dayjs.Dayjs,schdual:Schedule)=> void
@@ -19,8 +19,8 @@ interface TabsEventsSchedulesContextTye {
 
 export default createContext<TabsEventsSchedulesContextTye>({
     schedule: {
+        isEventClosedForSeal: false,
         day: undefined,
-        isEventClosedForSeal: undefined,
         closingSealesDate: undefined
     },
     setSchedule: function (value: SetStateAction<Schedule>): void {

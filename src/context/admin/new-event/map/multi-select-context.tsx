@@ -26,17 +26,16 @@ export default createContext<MultiTipContenxtType>({
           throw new Error('Function not implemented.')
      },
      multiTipPositions: {
-          x: undefined,
-          y: undefined
+          x: 0,
+          y: 0,
      },
      multiTipInfo: {
-          seatNumber: undefined,
-          row: undefined,
-          first: undefined,
-          second: undefined,
-          totalselected: undefined,
-          positionsSelected: undefined,
-          err: undefined,
+          seatNumber: 0,
+          row: "",
+          first: 0,
+          second: 0,
+          totalselected: 0,
+          err: "",
           selectdir: undefined
      }
 })

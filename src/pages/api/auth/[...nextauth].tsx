@@ -31,14 +31,14 @@ export const authOptions = {
 
         // Add logic here to look up the user from the credentials supplied
 
-          let DbUser  = await collection.findOne({ "name"  : credential.name })
+          let DbUser  = await collection.findOne({ "name"  : credential?.name })
            
           if(!DbUser){ 
             console.log("auth return null from find user");  
             return null 
           }
 
-           if(credential.password === DbUser.password){
+           if(credential?.password === DbUser.password){
             const user = { id:DbUser._id.toString(), name:DbUser.name  }
            // console.log("auth return user session ", user);
             

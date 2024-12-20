@@ -318,6 +318,7 @@ const ClinetSideSeates = ({mainSeats,sideSeats,sideText,sideStyles}:{mainSeats:S
        </Container>
      )
     }
+    return null
   }
 
 
@@ -353,6 +354,7 @@ const ClinetSideSeates = ({mainSeats,sideSeats,sideText,sideStyles}:{mainSeats:S
 
         {selectedSeats.length ?  <>
            <TikitList selectedSeats={selectedSeats}  />
+
             <Flex 
                 direction={"row"} 
                 justifyContent={"space-around"} 
@@ -364,7 +366,7 @@ const ClinetSideSeates = ({mainSeats,sideSeats,sideText,sideStyles}:{mainSeats:S
                 zIndex={1000} 
                  >
              <ResetSelectedSeatsButton/>
-             <ShopingCart/>
+          {/*      <ShopingCart/>*/}
            </Flex>
            </>
            :null

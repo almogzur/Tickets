@@ -51,18 +51,18 @@ export default function MakeNewTicket({setTabPage}:{setTabPage:Dispatch<SetState
 
   const [Ticket, setTicket] =useState<Ticket>({
     // Bace
-     evenName :infoFileds?.keys ? infoFileds?.keys.name: undefined,
+     evenName :infoFileds?.keys ? infoFileds?.keys.name: "",
      location:infoFileds.keys.location,
      eventDate:schedule.day ? schedule.day.toLocaleDateString("he-IL",FullDateOptions):"" ,
      TicketClosingSealesDate:schedule.closingSealesDate ? schedule.closingSealesDate.toLocaleDateString("he-il",FullDateOptions):"null" ,
-     selectedType:undefined,
-      priceInfo:undefined,
-      finelPrice:undefined,
+     selectedType:"",
+      priceInfo:"",
+      finelPrice:"",
     // state 
       types:{
-          normal:{price:undefined,info:undefined},
-          discount:{price:undefined,info:undefined},
-          citizen:{price:undefined,info:"הנחת תושב"}
+          normal:{price:"",info:""},
+          discount:{price:"",info:""},
+          citizen:{price:"",info:"הנחת תושב"}
         }
    
     }) // local no resone to extract to context level
@@ -70,14 +70,14 @@ export default function MakeNewTicket({setTabPage}:{setTabPage:Dispatch<SetState
     const resetTicketPricesForm =( ):void=>{
       setTicket(p=>({
            ...p,
-            finelPrice:undefined,
-            priceInfo:undefined,
-            selectedType:undefined,
+            finelPrice:"",
+            priceInfo:"",
+            selectedType:"",
             
             types:{ 
-              normal:{info:undefined,price:undefined},
-              discount:{info:undefined, price:undefined},
-              citizen:{info:"הנחת תושב",price:undefined}
+              normal:{info:"",price:""},
+              discount:{info:"", price:""},
+              citizen:{price:"",info:'הנחת תושב'}
             }
           }))
     }
@@ -285,7 +285,7 @@ export default function MakeNewTicket({setTabPage}:{setTabPage:Dispatch<SetState
 
 
                    <MakeTicketFormChip 
-                        text={ Ticket.evenName }  
+                        text={ Ticket.evenName??"" }  
                         placeholder="הוסף שם  "
                         icon={<FcViewDetails/>} 
                          m={0.5}
@@ -294,7 +294,7 @@ export default function MakeNewTicket({setTabPage}:{setTabPage:Dispatch<SetState
 
                            />
                     <MakeTicketFormChip 
-                        text={Ticket.location}
+                        text={Ticket.location??""}
                         placeholder="הוסף מיקום  " 
                         setTabPage={ setTabPage }
                         newTab={0}
@@ -303,20 +303,20 @@ export default function MakeNewTicket({setTabPage}:{setTabPage:Dispatch<SetState
                       />  
 
                      <MakeTicketFormChip
-                       text={ Ticket.eventDate}
+                       text={ Ticket.eventDate??""}
                        setTabPage={  setTabPage }
                        newTab={3}
-                       placeholder='  הוסף תאריך  '
+                       placeholder='הוסף תאריך'
                          icon={<FcPlanner/>}
                          m={0.5}
                           grow={4}
                           />
 
                   <MakeTicketFormChip
-                       text={ Ticket.TicketClosingSealesDate}
+                       text={ Ticket.TicketClosingSealesDate??""}
                        setTabPage={  setTabPage }
                        newTab={3}
-                       placeholder='    הוסף תאריך סגירת  קופות '
+                       placeholder="הוסף סגירת קופות"
                          icon={<FcLeave/>}
                          m={0.5}
                           grow={4}
@@ -349,7 +349,7 @@ export default function MakeNewTicket({setTabPage}:{setTabPage:Dispatch<SetState
 
 
 interface MakeTIcketFormChipType {
-    text:string|undefined,
+    text:string,
     icon?:ReactElement<unknown, string | JSXElementConstructor<any>>,
     p?:CSSProperties['padding'] ,
     m?:CSSProperties['margin'],
@@ -373,7 +373,7 @@ interface MakeTIcketFormChipType {
         return  <Chip 
                      onClick={ !text && setTabPage && newTab ? ()=>setTabPage(newTab) :undefined }
                      avatar={icon}
-                     label={text??placeholder} 
+                     label={text?text:placeholder} 
                      sx={{
                         m:m?? 2, 
                         p:p?? 2.5, 

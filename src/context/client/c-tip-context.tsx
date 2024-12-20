@@ -13,13 +13,13 @@ interface ClinetTipContenxtType {
 
 export default createContext<ClinetTipContenxtType>({
      clientTipPosition: {
-          x: undefined,
-          y: undefined
+          x: 0,
+          y: 0
      },
      clinetTipInfo: {
-          initValue: undefined,
-          row: undefined,
-          seatNumber: undefined
+          initValue: 0,
+          row: "",
+          seatNumber: 0
      },
      setClientTipPosition: function (value: SetStateAction<Positions>): void {
           throw new Error('Function not implemented.')

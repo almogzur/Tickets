@@ -7,7 +7,7 @@ import { InfoFormType, TheaterType } from "@/pages/_app"
 
     interface MultiSelectTipType {
         isMultiSelect: boolean
-        theraer:TheaterType|undefined
+        theraer:TheaterType
         setTheater:Dispatch<SetStateAction<InfoFormType>>
     }
 
@@ -17,20 +17,15 @@ import { InfoFormType, TheaterType } from "@/pages/_app"
 
     const upateSeateValue  = (newSeatValueArg: number  ) : void =>  {
 
-        const dirArg = multiTipInfo?.selectdir
-        const row = multiTipInfo?.row 
-        const first = multiTipInfo?.first
-        const second = multiTipInfo?.second
-
-        if(theraer !==null && theraer!== undefined){
+        const dirArg = multiTipInfo.selectdir
+        const row = multiTipInfo.row 
+        const first = multiTipInfo.first
+        const second = multiTipInfo.second
 
       const inMain =  theraer.mainSeats.hasOwnProperty(row) 
       const inSide = theraer.sideSeats.hasOwnProperty(row)
 
-      
-      
-      let newRow : number[]
-      
+  
        if(inMain){
         setTheater((prevState) => {
           // Clone the previous state immutably
@@ -46,7 +41,7 @@ import { InfoFormType, TheaterType } from "@/pages/_app"
           const updatedRow = [...newSideSeats[row]];
         
           // Perform updates based on the direction
-          let newRow;
+          let newRow : number[] =[];
           if (dirArg === "R") {
             newRow = updatedRow.map((seat, index) =>
               index >= second && index <= first ? newSeatValueArg : seat
@@ -81,7 +76,8 @@ import { InfoFormType, TheaterType } from "@/pages/_app"
   const updatedRow = [...newSideSeats[row]];
 
   // Perform updates based on the direction
-  let newRow;
+  let newRow : number[] = [];
+
   if (dirArg === "R") {
     newRow = updatedRow.map((seat, index) =>
       index >= second && index <= first ? newSeatValueArg : seat
@@ -105,7 +101,7 @@ import { InfoFormType, TheaterType } from "@/pages/_app"
        resetMultiTip()
 
 
-        }
+        
  };
 
     const theme = useTheme()

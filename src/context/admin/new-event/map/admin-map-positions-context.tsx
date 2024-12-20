@@ -11,8 +11,8 @@ interface AdminTransformContext {
 
 export default createContext<AdminTransformContext>({
     AdminMapPositions:{
-        x:undefined,
-        y: undefined
+        x:0,
+        y: 0
     },
     setAdminMapPositions: function (value: SetStateAction<Positions>): void {
         throw new Error("Function not implemented.");

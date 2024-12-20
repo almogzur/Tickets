@@ -18,6 +18,7 @@ import TabsInfoContest from '@/context/admin/new-event/tabs/tabs-info-context'
       const {infoFileds,setInfoFileds} = useContext(TabsInfoContest)
    
       const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
+
       const theme = useTheme()
     
     
@@ -104,7 +105,6 @@ import TabsInfoContest from '@/context/admin/new-event/tabs/tabs-info-context'
        <SingleSelectTip 
          theraer={  infoFileds.theater}
          setTheater={setInfoFileds}
-         isMultiSelect={isMultiSelect}
            /> 
 
          <MuliSelectTip 

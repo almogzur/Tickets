@@ -26,9 +26,6 @@ const Tickets = () => {
 
   const selectedSeats = selectedSeatsQuery ?  JSON.parse(selectedSeatsQuery) : null
 
-useEffect(()=>{
-   console.log(event);
-},[])
 
   const SeatDetails = ({selectedSeats}: {selectedSeats: string[]}) => {
     return (
@@ -54,35 +51,35 @@ useEffect(()=>{
       </div>
   )}
 
-  const modifiedSeatValue = () => {
+  // const modifiedSeatValue = () => {
     
-    let newMovieSeatDetails = {...movieSeatDetails};
+  //   let newMovieSeatDetails = {...movieSeatDetails};
 
-    for(let key in newMovieSeatDetails) {
-      console.log(newMovieSeatDetails[key]);
+  //   for(let key in newMovieSeatDetails) {
+  //     console.log(newMovieSeatDetails[key]);
       
 
-      newMovieSeatDetails[key].forEach((seatValue, seatIndex) => {
-        if (seatValue === 2) {
-          movieSeatDetails[key][seatIndex] = 1;
-        }
-      })
-    }
-    setMovieSeatDetails (newMovieSeatDetails)
+  //          newMovieSeatDetails[key].forEach((seatValue, seatIndex) => {
+  //       if (seatValue === 2) {
+  //         movieSeatDetails[key][seatIndex] = 1;
+  //       }
+  //     })
+  //   }
+  //   setMovieSeatDetails (newMovieSeatDetails)
 
-  }
+  // }
 
 
-  const confirm = async () => {
-    modifiedSeatValue()
-      router.push('/');
-    }
+  // const confirm = async () => {
+  //   modifiedSeatValue()
+  //     router.push('/');
+  //   }
   
 
   const ConfirmButton = () => {
     return (
       <div className={styles.paymentButtonContainer}>
-        <Button   className={styles.paymentButton} onClick={ confirm   }>
+        <Button   className={styles.paymentButton} > {/*onClick={ confirm   }*/}
          { `Confirm Booking ()` }
         </Button>
       </div>

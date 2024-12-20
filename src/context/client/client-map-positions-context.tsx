@@ -9,8 +9,8 @@ interface ClientTransformContext {
 
 export default createContext<ClientTransformContext>({
     ClientMapPositions:{
-        x: undefined,
-        y: undefined
+        x: 0,
+        y: 0
     },
     setClientMapPositions:():void=>{
             throw new Error("this is placeholder")

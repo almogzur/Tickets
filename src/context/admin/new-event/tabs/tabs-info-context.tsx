@@ -10,11 +10,17 @@ export default createContext<InfoTabContextType>(
     {
         infoFileds:{
             keys: {
-                name: undefined,
-                location: undefined,
-                cat: undefined
+                name: "",
+                location: "",
+                cat: ""
             },
-            theater: undefined
+            theater: {
+                mainSeats: {},
+                sideSeats: {},
+                testsStyle: {},
+                styles: {},
+                ThaeaterName: ""
+            }
         },
         setInfoFileds: function (value: SetStateAction<InfoFormType>): void {
             throw new Error("Function not implemented.");

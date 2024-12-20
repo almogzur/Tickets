@@ -35,12 +35,12 @@ const NewEventPage=()=>{
   // Info
 // setter function in Component
   const [infoFileds,setInfoFileds]=useState<InfoFormType>({
-     keys:{name:undefined,location:undefined,cat:undefined} ,
-     theater:{mainSeats:{},sideSeats:{},styles:{},testsStyle:{},ThaeaterName:undefined}
+     keys:{name:"",location:"",cat:""} ,
+     theater:{mainSeats:{},sideSeats:{},styles:{},testsStyle:{},ThaeaterName:""}
     })
 
   // Schedules Coontext State
-  const [schedule, setSchedule] = useState<Schedule>({day:undefined,closingSealesDate:undefined,isEventClosedForSeal:undefined})
+  const [schedule, setSchedule] = useState<Schedule>({day:undefined,closingSealesDate:new Date(),isEventClosedForSeal:false})
   const [dateEroor,setDateEroor ]= useState(false)
 
   const addScheduleDate = (e:dayjs.Dayjs) :void => {
@@ -54,7 +54,7 @@ const NewEventPage=()=>{
        //  error henler
   };
   const removeScheduleDate = (schedulArg: Schedule ):void => {
-      setSchedule(p=>({...p,day:undefined , hour:undefined ,closingSealesDate:undefined}))
+      setSchedule(p=>({...p,day:undefined ,closingSealesDate:undefined}))
 
   };
   const setEndOfDate= (e:dayjs.Dayjs,schedule:Schedule) :void =>{

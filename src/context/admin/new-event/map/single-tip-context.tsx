@@ -14,13 +14,13 @@ interface SingleTipContenxtType {
 export default createContext<SingleTipContenxtType>(
      {
           singleTipPositions: {
-               x: undefined,
-               y: undefined
+               x: 0,
+               y: 0
           },
           seatTipInfo:{
-               initValue: undefined,
-               row: undefined,
-               seatNumber: undefined
+               initValue: 0,
+               row: "",
+               seatNumber: 0
           },
           resetSingleTip:():void=>{},
           

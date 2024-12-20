@@ -5,7 +5,6 @@ import { useRouter } from 'next/router'
 import { useState, useEffect, useContext, CSSProperties, useRef, } from 'react'
 import { Event } from '../../constants/models/Events'
 import MoviesContext from '../../context/Events';
-import DisableZoom from '../../lib/hooks/useDisablePinchZoomEffect'
 import WidthContext from '@/context/WidthContext';
 import ClinetSideSeates  from '../../components/client/client-side-seats'
 import { Container , Typography as Heading , Stack as Flex  , Button } from '@mui/material';

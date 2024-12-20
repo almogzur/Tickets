@@ -1,13 +1,10 @@
 import {  CSSProperties, useContext, useEffect, useState } from 'react'
 
-import 
-
- { useTheme } from '@mui/material';
+import { useTheme } from '@mui/material';
 import { green, orange, pink } from '@mui/material/colors';
 import SingleTipontext from '@/context/admin/new-event/map/single-tip-context'
 import MultiSelectContext from '@/context/admin/new-event/map/multi-select-context';
 import React from 'react';
-import { first } from '@tiptap/core/dist/commands';
 
 
 /*
@@ -82,14 +79,14 @@ const AdminSeatBtn = ({ seatValue, seatnumber, row , isMultiSelect }:AdminSeatBt
  const multiSelectHndler = (seatNArg:number,rowArg:string, xArg: number, yArg: number)=>{
 
         
-  console.log(multiTipInfo.row);
+
   
-          if(!multiTipInfo.row   ){
+          if(  multiTipInfo.row === undefined    ){
          
             setMutiTipPositions({x:xArg ,y:yArg})
             setMultiTipInfo(prev=>({...prev,first:seatNArg, row:rowArg}))
           }
-          else if( rowArg === multiTipInfo.row && seatNArg !== multiTipInfo.first ){
+          else if( multiTipInfo.first !== undefined &&  rowArg === multiTipInfo.row && seatNArg !== multiTipInfo.first ){
 
             const SelectingFromRight = multiTipInfo.first > seatNArg 
             const SelectingFromLeft = multiTipInfo.first < seatNArg
@@ -112,7 +109,7 @@ const AdminSeatBtn = ({ seatValue, seatnumber, row , isMultiSelect }:AdminSeatBt
               }
 
             resetErr()
-            setMultiTipInfo(p=>({...p,second:seatNArg, totalselected:total , positionsSelected:[multiTipInfo.first,seatNArg] }))     
+            setMultiTipInfo(p=>({...p,second:seatNArg, totalselected:total }))     
 
          
           }
@@ -122,7 +119,7 @@ const AdminSeatBtn = ({ seatValue, seatnumber, row , isMultiSelect }:AdminSeatBt
           // sets err
           setMultiTipInfo(p=>({...p,err:"נא לבחור מושב מאותה שורה"}))
            // reset secend for tip diveider and data integraty
-          setMultiTipInfo(p=>({...p,second:null , totalselected:0 }))     
+          setMultiTipInfo(p=>({...p,second:0 , totalselected:0 }))     
           setErrClicks(p=>(p+1))
           errCliks === 2?  resetMultiTip() : null
      
@@ -151,7 +148,7 @@ const AdminSeatBtn = ({ seatValue, seatnumber, row , isMultiSelect }:AdminSeatBt
          !isMultiSelect?
            openTip(e.nativeEvent.pageX,e.nativeEvent.pageY , seatValue , row ,seatnumber  ) 
            :
-           multiSelectHndler(seatnumber, row , e.nativeEvent.pageX , e.nativeEvent.pageY )
+           multiSelectHndler(seatnumber, row , e.nativeEvent.pageX , e.nativeEvent.pageY   )
        }}
 
       style={ 

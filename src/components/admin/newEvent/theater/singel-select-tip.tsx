@@ -4,20 +4,17 @@ import WidthContext from "@/context/WidthContext"
 import { motion ,AnimatePresence } from "framer-motion"
 import { CSSProperties, Dispatch, MouseEventHandler, SetStateAction, useContext, useEffect, useState } from "react"
 import {  Button, Stack as Flex, Typography, useTheme } from "@mui/material"
-
 import {  grey, orange, pink } from "@mui/material/colors"
-import { Seats } from "@/constants/models/Events"
 import { InfoFormType, TheaterType } from "@/pages/_app"
  
 
 
 interface SingleSelectTipPropsType  { 
-  theraer:TheaterType|undefined ,
-   isMultiSelect:boolean ,
+  theraer:TheaterType ,
    setTheater:Dispatch<SetStateAction<InfoFormType>>
   }
 
-const SingleSelectTip= ({theraer,isMultiSelect ,setTheater }:SingleSelectTipPropsType)=>{
+const SingleSelectTip= ({theraer ,setTheater }:SingleSelectTipPropsType)=>{
    const theme= useTheme()
 
     const { setSingleTipPositions,singleTipPositions , seatTipInfo, setSeatTipInfo,resetSingleTip }=useContext(SingleTipContext)
@@ -31,13 +28,14 @@ const SingleSelectTip= ({theraer,isMultiSelect ,setTheater }:SingleSelectTipProp
 
               
          const row =  seatTipInfo.row
-         const inMain = theraer.mainSeats.hasOwnProperty(row)
-         const inSide = theraer.sideSeats.hasOwnProperty(row)
+         const inMain = theraer?  theraer.mainSeats.hasOwnProperty(row??"") :null
+         const inSide = theraer? theraer.sideSeats.hasOwnProperty(row??"") : null
          const initVlaue = seatTipInfo.initValue
          const seatNumber = seatTipInfo.seatNumber
          
          if (inMain) {
           setTheater((prevState) => {
+            
             // Clone the entire previous state
             const newState = {
               ...prevState,
@@ -48,19 +46,20 @@ const SingleSelectTip= ({theraer,isMultiSelect ,setTheater }:SingleSelectTipProp
             const updatedMainSeats = { ...newState.theater.mainSeats };
         
             // Clone the specific row to avoid mutation
-            const updatedRow = [...updatedMainSeats[row]];
+            const updatedRow = [...updatedMainSeats[row??""]];
         
             // Update the specific seat in the row
-            updatedRow[seatNumber] = newSeatValueArg;
+            updatedRow[seatNumber?? 0] = newSeatValueArg;
         
             // Assign the updated row back to mainSeats
-            updatedMainSeats[row] = updatedRow;
+            updatedMainSeats[row?? 0] = updatedRow;
         
             // Assign the updated mainSeats back to theater
             newState.theater.mainSeats = updatedMainSeats;
         
             // Return the updated state
             return newState;
+            
           });
         }
          else if(inSide){
@@ -75,13 +74,13 @@ const SingleSelectTip= ({theraer,isMultiSelect ,setTheater }:SingleSelectTipProp
             const updatedMainSeats = { ...newState.theater.sideSeats };
         
             // Clone the specific row to avoid mutation
-            const updatedRow = [...updatedMainSeats[row]];
+            const updatedRow = [...updatedMainSeats[row??""]];
         
             // Update the specific seat in the row
-            updatedRow[seatNumber] = newSeatValueArg;
+            updatedRow[seatNumber?? 0] = newSeatValueArg;
         
             // Assign the updated row back to mainSeats
-            updatedMainSeats[row] = updatedRow;
+            updatedMainSeats[row??""] = updatedRow;
         
             // Assign the updated mainSeats back to theater
             newState.theater.sideSeats = updatedMainSeats;
