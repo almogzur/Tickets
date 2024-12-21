@@ -18,6 +18,13 @@ import { FcFilm, } from "react-icons/fc";
 import TicketComponent from "./ticket"
 import { IoMdAddCircle } from "react-icons/io"
 import { TheaterType, TicketType } from "@/pages/admin/new-event"
+import TheaterSelect from "../info-form/theater-select"
+
+
+import Eilat_1 from "@/constants/theathers/eilat_1";
+import Eilat_2 from "@/constants/theathers/eilat_2";
+import TabsInfoContext from "@/context/admin/new-event/tabs/tabs-info-context"
+
 
 interface TicketsTabPropsType {  setTabPage : Dispatch<SetStateAction<number>>}
  
@@ -25,6 +32,7 @@ interface TicketsTabPropsType {  setTabPage : Dispatch<SetStateAction<number>>}
        const theme = useTheme()
        const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
        const {tickets,setTickets}= useContext(TabsTicketContext)
+       const { setInfoFileds} = useContext(TabsInfoContext)
 
 
          const updateTicket=(  key: "price"|"type"|"discription"|"discoundInfo" , value:string|number ):void=>{
@@ -61,6 +69,7 @@ interface TicketsTabPropsType {  setTabPage : Dispatch<SetStateAction<number>>}
         
         >
         {/* Seats Amount */}
+        <TheaterSelect theaters={[Eilat_1,Eilat_2]}  setInfoFileds={setInfoFileds}  />
         <Flex position={"sticky"} top={0}  zIndex={2} bgcolor={"#fff"}>
 
           <Flex direction={"row"} p={1}  gap={2} alignItems={"center"} >
