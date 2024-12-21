@@ -1,5 +1,5 @@
 import { useSession } from 'next-auth/react'
-import {Dispatch, MouseEventHandler, Ref, SetStateAction, useContext, useEffect,useRef,useState} from 'react'
+import {Dispatch, MouseEventHandler , useContext, useRef} from 'react'
 import { useRouter } from 'next/router'
 import {Typography , Stack as Flex ,useTheme , Box } from '@mui/material'
 
@@ -7,23 +7,41 @@ import Image from 'next/image'
 import WidthContext from '@/context/WidthContext'
 import { FcAddImage } from "react-icons/fc";
 import { FcRemoveImage } from "react-icons/fc";
+import TabsInfoContext from '@/context/admin/new-event/tabs/tabs-info-context'
 
-interface CoverUploadPropsType { 
-    file:File | undefined
-    preview:string
-    setPreview:Dispatch<SetStateAction<string>>
-    onFileChange: (e: React.ChangeEvent<HTMLInputElement>) =>void
-    setFile:Dispatch<SetStateAction<File | undefined>>
-}
 
-const CoverUploadTab=({file , preview,onFileChange,setFile,setPreview}:CoverUploadPropsType)=>{
+import SpeedDial from '@mui/material/SpeedDial';
+import SpeedDialIcon from '@mui/material/SpeedDialIcon';
+import SpeedDialAction from '@mui/material/SpeedDialAction';
+
+
+
+interface CoverUploadPropsType { }
+
+const CoverUploadTab=({}:CoverUploadPropsType)=>{
 
     const router = useRouter()
     const theme =useTheme()
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
+  const {infoFileds,setInfoFileds} = useContext(TabsInfoContext)
 
     const Inputref = useRef<HTMLInputElement>(null);
     
+        const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      
+          const selectedFile  = e.target.files !== null  ?  e.target.files[0] :null
+    
+    
+            if (selectedFile) {
+              
+              setInfoFileds (p=>({...p, image:selectedFile}))
+              setInfoFileds( p=>({...p, preview:URL.createObjectURL(selectedFile)}) );
+
+            
+          
+            }
+    
+    };
 
  
 return (
@@ -31,38 +49,32 @@ return (
          
       <Flex   height={'calc(100% - 80px)'}  overflow={"auto"}  >
 
-                <input type='file' id='cover'    onChange={onFileChange}  accept=".jpg, .jpeg, .png "  ref={Inputref}   hidden />
+                <input type='file' id='cover'    onChange={handleFileChange}  accept=".jpg, .jpeg, .png "  ref={Inputref}   hidden />
 
-            { preview &&  file &&
+            { infoFileds.preview && infoFileds.image &&
              <Box  
                 alignSelf={"center"}  
-          sx={{ padding:!sm?0.5:!md?2:3, }}  
+                  sx={{ padding:!sm?0.5:!md?2:3, }}  
        
               >
             <>
             <Image 
-              src={preview} 
-              alt={file.name} 
+              src={infoFileds.preview} 
+              alt={infoFileds.image.name} 
               width={!sm?260:!md? 500 :600}
               height={!sm?300:400}
               style={{ objectFit:'contain'}} 
               translate='yes'
               
               />
-            <Typography sx={{color:"black" , m:.5}} fontWeight={700}  textAlign={'center'}  variant='body2' > שם הקובץ :  {file.name.toLocaleUpperCase()}</Typography>
+            <Typography sx={{color:"black" , m:.5}} fontWeight={700}  textAlign={'center'}  variant='body2' > שם הקובץ :  {infoFileds.image.name.toLocaleUpperCase()}</Typography>
             </>
-            </Box>
-    
+            </Box>  
             }
      
  
       </Flex>
       <BasicSpeedDial 
-            file={file} 
-            preview={preview} 
-            setFile={setFile}
-            setPreview={setPreview}
-             onFileChange={ onFileChange}
              perentRef={Inputref}
             />
 
@@ -70,13 +82,8 @@ return (
 ) 
 }
 
-export default CoverUploadTab
 
 
-
-import SpeedDial from '@mui/material/SpeedDial';
-import SpeedDialIcon from '@mui/material/SpeedDialIcon';
-import SpeedDialAction from '@mui/material/SpeedDialAction';
 
 
 
@@ -86,9 +93,11 @@ interface  BasicSpeedDialPropsType extends CoverUploadPropsType {
 
 
 
-function BasicSpeedDial({file,preview,setFile,setPreview,onFileChange,perentRef}:BasicSpeedDialPropsType) {
+function BasicSpeedDial({perentRef}:BasicSpeedDialPropsType) {
 
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
+  const {infoFileds,setInfoFileds} = useContext(TabsInfoContext)
+
 
   const  closeDialog : MouseEventHandler<HTMLDivElement> = (e): void => {
     const inputFile  = perentRef.current;
@@ -96,8 +105,8 @@ function BasicSpeedDial({file,preview,setFile,setPreview,onFileChange,perentRef}
     if (inputFile) {
 
       inputFile.value=""
-      setPreview(""); 
-      setFile(undefined)
+      setInfoFileds(p=>({...p,preview:""})); 
+      setInfoFileds(p=>({...p,image:undefined}))
       
   }
   return
@@ -147,3 +156,7 @@ function BasicSpeedDial({file,preview,setFile,setPreview,onFileChange,perentRef}
     
   );
 }
+
+
+
+export default CoverUploadTab

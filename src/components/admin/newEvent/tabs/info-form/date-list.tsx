@@ -11,6 +11,7 @@ import { MdDelete } from "react-icons/md";
 import { FcPlanner } from "react-icons/fc";
 import { MdOutlineTimer } from "react-icons/md";
 import { FcLeave } from "react-icons/fc";
+import { MdOutlineDateRange } from "react-icons/md";
 
 import { TiArrowUpThick } from "react-icons/ti";
 
@@ -19,62 +20,72 @@ import { TiArrowUpThick } from "react-icons/ti";
 import {  Typography  , Stack as Flex, Button , Box, Divider, FormControl, Alert, Accordion, AccordionSummary, Container, } from '@mui/material'
 import Avatar from '@mui/material/Avatar';
 import { MobileDateTimePicker} from '@mui/x-date-pickers'
-import TabsEventDatesContext from '@/context/admin/new-event/tabs/tabs-event-schedules-context'
-import InputWrap from '../../../input';
+
+
+//Context 
+import TabsInfoContext from '@/context/admin/new-event/tabs/tabs-info-context';
 
 // Types
-import { Schedule } from '@/pages/_app';
 import dayjs from 'dayjs';
-import { grey } from '@mui/material/colors';
-
-
-
-
 
 const DatesList = ()=>{
 
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
-    const { schedule,setSchedule,addScheduleDate,removeScheduleDate,dateEroor,  } = useContext(TabsEventDatesContext)
-   
+    const {  infoFileds ,setInfoFileds } = useContext(TabsInfoContext)
+
+    const [dateEroor,setDateEroor ]= useState(false)
+
     const theme = useTheme()
+
+   const addScheduleDate = (e:dayjs.Dayjs) :void => {
+
+    if (e && e.year() && e.month() && e.date() && e.day()  ,e.hour(), e.minute() ) {
+      // set the time in utc  -3 form area time , 
+       const newDate = new Date(e.toDate())
+
+          
+      }
+    //  error henler
+};
 
 
 
   return (
-    <Container>
-        {/* piker */}
-       <Flex direction={'row'} alignItems={'center'} mx={2}  gap={1} >
+    <>
+      
+       <Flex direction={'row'} alignItems={'center'}   gap={1} >
 
-        <FcPlanner size={'3em'}  />
+   
 
-        <MobileDateTimePicker    
-                orientation= { !sm? "portrait": 'landscape'}
-             
-              minDate={dayjs(new Date())}
-             slotProps={{
-              textField:{ 
-          
-                required:true,
-                placeholder:"בחר יום" ,
+     
+                <FcPlanner color={theme.palette.primary.main} size={'2.5em'}  />
+
+                <MobileDateTimePicker                 
+                  orientation= { !sm? "portrait": 'landscape'}    
+                  minDate={dayjs(new Date())}
+                  slotProps={{
+                    textField:{ 
+                    required:true,
+                    placeholder:"בחר יום" ,
                  },
             }}
-            sx={{mt:2 , height:60  }}
- 
-             onAccept={(e)=> e !== null ? addScheduleDate(e) : null}
-        
-       />
+              sx={{mt:2 , height:60  }}
+                   onAccept={(e)=> e !== null ? addScheduleDate(e) : null}
+           />
+
+
+
+
+
+
+
        </Flex>
 
-       <Divider sx={{m:1, borderWidth:3 }}/>
-   
-       <Flex  
-         width={"inherit"}  
-         height={'calc(85% - 80px)'}
-         overflow={"auto" } 
-        >      
-       { schedule.day && <MainDate schedul={schedule} />  }
+
+       <Flex   >      
+              { infoFileds.day && <MainDate  />  }
       </Flex>
-    </Container>
+    </>
  )
 }
 
@@ -82,16 +93,26 @@ export default DatesList
 
 
 
-interface MainDatePropsType { 
-  schedul:Schedule
- 
- }
 
-const MainDate = ({ schedul  }:MainDatePropsType)=>{
-   const { removeScheduleDate,dateEroor,setEndOfDate} = useContext(TabsEventDatesContext)
+const MainDate = ({   })=>{
+   const {infoFileds, setInfoFileds} = useContext(TabsInfoContext)
    const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
   const theme = useTheme()
 
+  const setEndOfDate= (e:dayjs.Dayjs) :void =>{
+   
+    if (e && e.year() && e.month() && e.date() && e.day()  ,e.hour(), e.minute()) {
+      const newDate = new Date(e.toDate())
+      console.log(newDate);
+      
+    } 
+   
+   }
+
+   const removeScheduleDate = ():void => {
+
+   };
+   
 
         
 
@@ -110,9 +131,9 @@ const MainDate = ({ schedul  }:MainDatePropsType)=>{
           
            <Flex direction={'row'}    alignItems={"center"}  width={"100%"}  justifyContent={'space-between'} >
 
-         { schedul.day ?  <Typography sx={{mx:1}} textAlign={'start'}   variant={"h6"} > { schedul.day.toLocaleTimeString("he-IL",FullDateOptions) }</Typography>     :null    } 
+         { infoFileds.day ?  <Typography sx={{mx:1}} textAlign={'start'}   variant={"h6"} > { infoFileds.day.toLocaleTimeString("he-IL",FullDateOptions) }</Typography>     :null    } 
 
-             <Avatar sx={{background:theme.palette.error.main  ,}} color='error' onClick={()=>removeScheduleDate(schedul)} variant='rounded'  >
+             <Avatar sx={{background:theme.palette.error.main  ,}} color='error' onClick={()=>removeScheduleDate} variant='rounded'  >
                <MdDelete  size={"1.5em"}  />
             </Avatar>
 
@@ -128,7 +149,7 @@ const MainDate = ({ schedul  }:MainDatePropsType)=>{
               <MobileDateTimePicker    
          
                     minDate={dayjs(new Date())}
-                    maxDateTime={dayjs(schedul.day).subtract(2,"hours")}
+                    maxDateTime={dayjs(infoFileds.day).subtract(2,"hours")}
 
                     slotProps={{
                       textField:{ 
@@ -139,7 +160,7 @@ const MainDate = ({ schedul  }:MainDatePropsType)=>{
                         </>
                          }}}      
                          sx={{}}
-                    onAccept={ (e)=>  e !== null?   setEndOfDate(e,schedul) :null   }
+                    onAccept={ (e)=>  e !== null?   setEndOfDate(e) :null   }
                    />
                    
            
@@ -147,7 +168,7 @@ const MainDate = ({ schedul  }:MainDatePropsType)=>{
 
      
             
-     {schedul.closingSealesDate && <HoursListItem endOfSalesDate={schedul.closingSealesDate.toLocaleDateString("he-IL",FullDateOptions)}/>}
+     {infoFileds.closingSealesDate && <HoursListItem endOfSalesDate={infoFileds.closingSealesDate.toLocaleDateString("he-IL",FullDateOptions)}/>}
             
     
     </Accordion>
@@ -157,9 +178,12 @@ const MainDate = ({ schedul  }:MainDatePropsType)=>{
 
 
 const HoursListItem =({endOfSalesDate,EventHour}:{EventHour?:string,endOfSalesDate?:string})=>{
-  const {  removeEndOdDate} = useContext(TabsEventDatesContext)
+
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
 
+  const removeEndOdDate = ()=>{
+  }
+  
   
 
   const theme = useTheme()

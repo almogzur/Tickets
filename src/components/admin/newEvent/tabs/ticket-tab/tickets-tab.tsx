@@ -4,21 +4,20 @@ import { ChangeEventHandler, Dispatch, SetStateAction, useContext, useState } fr
 
 //Context Useg
 import WidthContext from "@/context/WidthContext"
-import TabsEventSchduleContext from "@/context/admin/new-event/tabs/tabs-event-schedules-context"
 import TabsTicketContext from "@/context/admin/new-event/tabs/tabs-ticket-context"
+
 //Types
-import { FullDateOptions, TheaterType } from "@/pages/_app"
+import { FullDateOptions } from "@/pages/_app"
 
 // Components
-import InputWrap from "../../../../input"
 import MakeNewTickit from "./make-new-ticket"
-import { Alert, AlertTitle, Box ,Paper, Button, Divider, Fade, Stack as Flex , Popover, Typography , useTheme} from "@mui/material"
+import { Divider, Stack as Flex , Typography , useTheme} from "@mui/material"
 //Icons 
 
 import { FcFilm, } from "react-icons/fc";
-import { FcPlus } from "react-icons/fc";
 import TicketComponent from "./ticket"
 import { IoMdAddCircle } from "react-icons/io"
+import { TheaterType, TicketType } from "@/pages/admin/new-event"
 
 interface TicketsTabPropsType {  setTabPage : Dispatch<SetStateAction<number>>}
  
@@ -26,7 +25,20 @@ interface TicketsTabPropsType {  setTabPage : Dispatch<SetStateAction<number>>}
        const theme = useTheme()
        const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
        const {tickets,setTickets}= useContext(TabsTicketContext)
-       const {schedule}= useContext(TabsEventSchduleContext)
+
+
+         const updateTicket=(  key: "price"|"type"|"discription"|"discoundInfo" , value:string|number ):void=>{
+       
+             setTickets(p=>({...p,[key]:value}))
+         }
+         const updteTicketsArray= (ticket:TicketType, Action:"add"|"remove"):void=>{
+           
+            if(Action==="add"){setTickets(p=>([...p,ticket]))}
+            else if (Action === "remove"){
+                 setTickets(p=>([...p].filter((item)=> item !== ticket)))
+            }
+       
+         }
 
        const countTheaterSeatAmount = ( theater: TheaterType ) : number =>{
 
@@ -78,9 +90,7 @@ interface TicketsTabPropsType {  setTabPage : Dispatch<SetStateAction<number>>}
           <Divider sx={{borderWidth:2}} />
          </Flex>
 
-         {/* {tickets.map((ticket,i)=>{
-                  return< TicketComponent key={i} evenName={""} location={""} selectedType={"normal"} finelPrice={""} eventDate={""} TicketClosingSealesDate={""} priceInfo={""} />
-              })} */}
+
 
 
       <TicketComponent 

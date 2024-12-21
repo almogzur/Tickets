@@ -7,7 +7,7 @@ import WidthContext from "@/context/WidthContext";
 
 
 // Types 
-import { BaceTicket, Ticket } from "@/pages/_app";
+import { BaceTicket, TicketType } from "@/pages/admin/new-event";
 
 //Components 
 import { useTheme , Stack as Flex , Container, Divider } from "@mui/material";
@@ -33,14 +33,14 @@ const TicketComponent = ({...props    }:BaceTicket) => {
       <Container
       maxWidth="lg"
       disableGutters={true}
+      
         sx={{
-         boxShadow:3,
           m:1,
-
+          boxShadow:theme.shadows[10]
         }}
       >
         {/* Header */}
-          <Flex display={"row"}   p={0}   >
+          <Flex display={"row"}   p={0} >
 
               
         
@@ -52,8 +52,9 @@ const TicketComponent = ({...props    }:BaceTicket) => {
                          gap={1}
                           m={0}
                            bgcolor={grey[200]}
+                           boxShadow={theme.shadows[4]}
                             >
-                     <Flex >
+              
                          <MyChip 
                               text={ 
                                   props.selectedType==="normal" ? "  רגיל "
@@ -65,12 +66,12 @@ const TicketComponent = ({...props    }:BaceTicket) => {
                                      } 
                                icon={  <FcFilm size={"2em"} color={"black"}  style={{border:`solid 1.5px ${theme.palette.secondary.main} ` ,  padding:1 }} />} 
                                 m={1}
-                                 w={140}
-                                  p={3}  
+
+                                  p={2}  
                                  styleProps={{background:grey[200]}} 
-                                 Scale={1.7}
+                                 Scale={1.3}
                                   />
-                      </Flex>
+          
 
                      <Flex direction={"row" } gap={1} mx={!sm?1:2} >
                         <FcServices  size={"2em"} color="red"   />

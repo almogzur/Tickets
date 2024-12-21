@@ -1,7 +1,7 @@
 import { CSSProperties } from "react"
 import {Seats, SeatStyles} from '@/constants/models/Events'
 import { Colors } from "@/lib/colors"
-import { TheaterType } from "@/pages/_app"
+import { TheaterType } from "@/pages/admin/new-event"
 
 
 const positionAtr : CSSProperties = { 
@@ -141,7 +141,7 @@ export const Eilat2_sideTextStyles  : SeatStyles={
 }
 const ThaeaterName="2 אילת"
 
-const Eilat_2 :TheaterType ={ mainSeats: Eilat2_mainSeats , sideSeats: Eilat2_sideSeats, testsStyle: Eilat2_sideTextStyles ,styles:  Eilat2_sideStyles, ThaeaterName}
+const Eilat_2 :TheaterType ={ mainSeats: Eilat2_mainSeats , sideSeats: Eilat2_sideSeats, textsStyle: Eilat2_sideTextStyles ,styles:  Eilat2_sideStyles, ThaeaterName}
 
 export default Eilat_2
 

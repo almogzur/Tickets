@@ -6,7 +6,6 @@ import InputWrap from '@/components/input'
 
 // Context Useg
 import WidthContext from "@/context/WidthContext"
-import TabsEventsSchedulesContext from '@/context/admin/new-event/tabs/tabs-event-schedules-context'
 
 //Icons 
 import { FcIntegratedWebcam, FcPlanner } from "react-icons/fc";
@@ -19,48 +18,25 @@ import { FcBinoculars } from "react-icons/fc";
 import { FcInfo } from "react-icons/fc";
 
 // Tabs 
-
-import DatesListTab from "./date-list-tab"
-import CoverUploadTab from "./cover-upload-tab"
-import EditorTab from '@/components/admin/newEvent/tabs/text-editor-tab/editor'
 import TicketsTab from './ticket-tab/tickets-tab'
 import SettingTab from "./settings-tab"
 import ColorTab from "./colors-tab"
 import AdOptionsTab from "./ad-options-tab"
-import InfoForm from "../info-form"
+import InfoForm from "./info-form/Wrapper"
 import PrevieTab from "./ticket-tab/preview-tab"
 
 //Types
 
-interface TabFormPropsType {
 
 
 
-  //File 
-    file:File | undefined
-    preview:string
-    setPreview:Dispatch<SetStateAction<string>>
-    onFileChange: (e: React.ChangeEvent<HTMLInputElement>) =>void
-    setFile:Dispatch<SetStateAction<File|undefined>>
+interface TabFormPropsType {  }
 
+const TabsForm = ({ }:TabFormPropsType)=>{
 
-  
-
-  }
-
-const TabsForm = ({
-      file,
-      setFile,
-      preview,
-      setPreview,
-      onFileChange,  
-    }
-      :TabFormPropsType)=>
-  {
     const theme = useTheme()
     const [pageVale, setPageVale] = useState(0);
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
-    const { schedule,setSchedule,addScheduleDate,removeScheduleDate,dateEroor, } = useContext(TabsEventsSchedulesContext)
 
 
     const TabComonStyleAttribute :CSSProperties = {
@@ -68,7 +44,7 @@ const TabsForm = ({
        fontWeight:700,
     }
 
-    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
       setPageVale(newValue);
     };
     
@@ -83,7 +59,7 @@ const TabsForm = ({
         >
         <Tabs
           value={pageVale}
-          onChange={handleChange}
+          onChange={handleTabChange}
           textColor='primary'
           indicatorColor='primary'
           sx={{ background:"black"}}
@@ -93,25 +69,12 @@ const TabsForm = ({
           
          >
         <Tab value={0} label="מידע כללי"  sx={{...TabComonStyleAttribute}}  icon={<FcInfo size={"2em"} />}    /> 
-        <Tab value={1} label="תמונה ראשית "  sx={{...TabComonStyleAttribute}}  icon={<FcAddImage size={"2em"} />}    /> 
-        <Tab value={2} label="טקסט"  sx={{...TabComonStyleAttribute}}  icon={<FcAnswers size={"2em"} />}    /> 
-        <Tab value={3} label="תאריך ושעה"  sx={{...TabComonStyleAttribute}}  icon={<FcPlanner size={"2em"} />}     />
-
-        { schedule && Object.entries(schedule).length === 0 &&   <Badge 
-          showZero
-          badgeContent={0}
-          overlap='circular'
-          variant='dot'
-          color='error'
-            sx={{position:"relative" , left:10, top:5}}
-         />
-         }    
-        <Tab value={4} label="כרטיסים"  sx={{...TabComonStyleAttribute}} icon={<FcFilm size={"2em"} />} />
-        <Tab value={5} label="הגדרות"  sx={{...TabComonStyleAttribute}}   icon={<FcSettings size={"2em"} />}  />
-        <Tab value={6} label="צבעים"  sx={{...TabComonStyleAttribute}} icon={<FcStackOfPhotos size={"2em"} />}  />
-        <Tab value={7} label="תצוגה מקדימה "  sx={{...TabComonStyleAttribute}} icon={<FcBinoculars size={"2em"}/>} />
-        <Tab value={8} label="פירסום"  sx={{...TabComonStyleAttribute}} icon={<FcIntegratedWebcam size={"2em"}/>}  />
-        <Tab value={8} label="שמור"  sx={{...TabComonStyleAttribute}} />
+        <Tab value={1} label="כרטיסים"  sx={{...TabComonStyleAttribute}} icon={<FcFilm size={"2em"} />} />
+        <Tab value={2} label="הגדרות"  sx={{...TabComonStyleAttribute}}   icon={<FcSettings size={"2em"} />}  />
+        <Tab value={3} label="צבעים"  sx={{...TabComonStyleAttribute}} icon={<FcStackOfPhotos size={"2em"} />}  />
+        <Tab value={4} label="תצוגה מקדימה "  sx={{...TabComonStyleAttribute}} icon={<FcBinoculars size={"2em"}/>} />
+        <Tab value={5} label="פירסום"  sx={{...TabComonStyleAttribute}} icon={<FcIntegratedWebcam size={"2em"}/>}  />
+        <Tab value={6} label="שמור"  sx={{...TabComonStyleAttribute}} />
 
        </Tabs>
   
@@ -120,34 +83,19 @@ const TabsForm = ({
         pageVale=== 0 ?
         <InfoForm/>
         :
-       pageVale ===1 ?
-       <CoverUploadTab 
-          file={file} 
-          setFile={setFile} 
-          preview={preview} 
-          setPreview={setPreview} 
-          onFileChange={onFileChange}  
-          />
-       :
-       pageVale === 2 ? 
-       <EditorTab />
-       :
-       pageVale === 3 ?
-       <DatesListTab /> // context 
-       :
-       pageVale === 4?
+       pageVale === 1?
        <TicketsTab setTabPage={setPageVale} />
        :
-       pageVale === 5 ?
+       pageVale === 2 ?
        <SettingTab/>
        :
-       pageVale === 6 ?
+       pageVale === 3 ?
        <ColorTab/>
        :
-       pageVale === 7 ?
+       pageVale === 4 ?
        <PrevieTab/>
        :
-       pageVale=== 8?
+       pageVale=== 5?
        <AdOptionsTab/>
        :null
       }

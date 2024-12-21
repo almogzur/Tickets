@@ -1,4 +1,4 @@
-import { InfoFormType } from "@/pages/_app";
+import { InfoFormType } from "@/pages/admin/new-event";
 import { createContext, Dispatch, SetStateAction } from "react";
 
 interface InfoTabContextType {
@@ -6,21 +6,21 @@ interface InfoTabContextType {
     setInfoFileds:Dispatch<SetStateAction<InfoFormType>>
 }
 
+// explane the context why need to be here  ?
+
 export default createContext<InfoTabContextType>(
     {
         infoFileds:{
-            keys: {
-                name: "",
+                eventName: "",
                 location: "",
-                cat: ""
-            },
-            theater: {
-                mainSeats: {},
-                sideSeats: {},
-                testsStyle: {},
-                styles: {},
-                ThaeaterName: ""
-            }
+                cat: "",
+                theater: undefined,
+                day: undefined,
+                isEventClosedForSeal: false,
+                closingSealesDate: undefined,
+                pre: "",
+                image: undefined,
+                 preview: ""
         },
         setInfoFileds: function (value: SetStateAction<InfoFormType>): void {
             throw new Error("Function not implemented.");

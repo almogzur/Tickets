@@ -26,7 +26,6 @@ import { Color, createTheme, ThemeProvider } from '@mui/material/styles';
 import { blue, grey } from '@mui/material/colors';
 
 
-
 //Day JS
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import 'dayjs/locale/he';
@@ -61,44 +60,6 @@ export interface MultiTipeInfoType  {
   err:string
   selectdir:"R"|"L"|undefined
 }
-export interface TheaterType {
-     mainSeats:Seats 
-     sideSeats:Seats 
-     testsStyle:SeatStyles
-     styles:SeatStyles
-     ThaeaterName:string
-}
-/////////////
-
-export interface InfoFormType  {
-  keys:{  name:string ,location:string, cat:string} 
-  theater:TheaterType
-}
-export interface Schedule {
-  day: Date|undefined;
-  isEventClosedForSeal:boolean
-  closingSealesDate:Date|undefined
-} 
-export  interface BaceTicket  {
-  evenName:string
-  location:string
-  TicketClosingSealesDate:string
-  eventDate:string
-  finelPrice:string ,
-  priceInfo:string
-  selectedType:string
-
-
-}
-export interface Ticket extends BaceTicket  {
-    // just for form function one hasMap will be sent  
-    types:{
-        normal:{ price:string , info:string ,  },
-        discount:{price:string, info:string },
-        citizen:{ price:string , info:"הנחת תושב"}
-    }
-}
-
 
 export const FullDateOptions :Intl.DateTimeFormatOptions = {
   year:'numeric',

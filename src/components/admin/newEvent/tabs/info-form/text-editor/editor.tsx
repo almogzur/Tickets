@@ -129,7 +129,6 @@ export default function EditorTab() {
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
 
   return (
-    <Flex   p={1}   height='calc(100% - 95px)' overflow={"auto"}   >
 
       <Box
  
@@ -160,7 +159,6 @@ export default function EditorTab() {
 
              },
             "& .MuiTiptap-RichTextContent-editable":{
-              minHeight: !xs? 100 : !sm? 145 :!md? 250 : !lg? 270 : 300
 
              },
             
@@ -188,7 +186,7 @@ export default function EditorTab() {
             handleDrop: handleDrop,
             handlePaste: handlePaste,
           }}
-          renderControls={() => <Box sx={{  p:2, m:0 ,borderRadius:1,  background:grey[200]  }}><EditorMenuControls  /> </Box> }
+          renderControls={() => <Box sx={{  p:1, m:0 ,borderRadius:1,  background:grey[200]  }}><EditorMenuControls  /> </Box> }
           RichTextFieldProps={{
             // The "outlined" variant is the default (shown here only as
             // example), but can be changed to "standard" to remove the outlined
@@ -271,7 +269,7 @@ export default function EditorTab() {
 
 
 
-{/* {submittedContent && (
+/* {submittedContent && (
         <>
           <pre style={{ marginTop: 10, overflow: "auto", maxWidth: "100%" }}>
             {submittedContent}
@@ -287,10 +285,9 @@ export default function EditorTab() {
           </Box>
         </>
       ) } */
-      }
+      
 
 
 
-   </Flex>
   );
 }

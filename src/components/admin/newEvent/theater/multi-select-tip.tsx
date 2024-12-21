@@ -3,29 +3,33 @@ import { motion ,AnimatePresence } from "framer-motion"
 import { CSSProperties, Dispatch, SetStateAction, useContext } from "react"
 import MultiSelectContext from "@/context/admin/new-event/map/multi-select-context"
 import { grey, orange, pink } from "@mui/material/colors"
-import { InfoFormType, TheaterType } from "@/pages/_app"
+import {TheaterType } from "@/pages/admin/new-event"
+import { InfoFormType } from "@/pages/admin/new-event"
 
     interface MultiSelectTipType {
         isMultiSelect: boolean
-        theraer:TheaterType
+        theater:TheaterType
         setTheater:Dispatch<SetStateAction<InfoFormType>>
     }
 
-  const MuliSelectTip =({theraer,setTheater}:MultiSelectTipType)=>{
+  const MuliSelectTip =({theater,setTheater}:MultiSelectTipType)=>{
 
     const {multiTipPositions , setMutiTipPositions ,resetMultiTip , multiTipInfo,setMultiTipInfo ,resetErr}= useContext(MultiSelectContext)
 
     const upateSeateValue  = (newSeatValueArg: number  ) : void =>  {
+
+      console.log(multiTipInfo,theater);
+      
 
         const dirArg = multiTipInfo.selectdir
         const row = multiTipInfo.row 
         const first = multiTipInfo.first
         const second = multiTipInfo.second
 
-      const inMain =  theraer.mainSeats.hasOwnProperty(row) 
-      const inSide = theraer.sideSeats.hasOwnProperty(row)
+      const inMain = theater.mainSeats ?   theater.mainSeats.hasOwnProperty(row)  :null
+      const inSide = theater.sideSeats?  theater.sideSeats.hasOwnProperty(row)  :null
 
-  
+
        if(inMain){
         setTheater((prevState) => {
           // Clone the previous state immutably
@@ -33,7 +37,7 @@ import { InfoFormType, TheaterType } from "@/pages/_app"
             ...prevState,
             theater: { ...prevState.theater },
           };
-        
+          
           // Clone the sideSeats object
           const newSideSeats = { ...newState.theater.mainSeats };
         
@@ -99,6 +103,7 @@ import { InfoFormType, TheaterType } from "@/pages/_app"
    
          }
        resetMultiTip()
+        
 
 
         
@@ -131,7 +136,9 @@ import { InfoFormType, TheaterType } from "@/pages/_app"
            >
              <Flex alignItems={"center"} >
                <Typography color='primary' variant='inherit' textAlign={"center"} p={0.5} >{   multiTipInfo.row } מושב : {multiTipInfo.first+1}</Typography>                    
+               
                <Divider  sx={{ color:theme.palette.warning.main , p:0.5,  width:"100%"}}   > {multiTipInfo.second? "עד":null}</Divider>
+
                 {!multiTipInfo.err && multiTipInfo.second !==null &&
                  <Flex alignItems={"center"}> 
 
@@ -192,6 +199,7 @@ import { InfoFormType, TheaterType } from "@/pages/_app"
       
                  </Flex>
                 }
+
                {multiTipInfo.err && 
                  <Typography color='error' textAlign={"center"} variant='h6'  >{multiTipInfo.err}</Typography>
                }

@@ -1,4 +1,4 @@
-import {createContext} from "react";
+import {createContext, Dispatch, SetStateAction} from "react";
 import { Event } from "../constants/models/Events";
 import { events } from "../constants/event";
 
@@ -8,7 +8,7 @@ import { events } from "../constants/event";
 */
 interface MovieContextType {
   events: Event[],
-  setEvents: React.Dispatch<React.SetStateAction<Event[]>>
+  setEvents:Dispatch<SetStateAction<Event[]>>
 }
 
 export default createContext<MovieContextType>({

@@ -38,7 +38,7 @@ interface MyChipType {
                         fontSize:!xs? 14: 16 ,
                         '& .MuiChip-label': {},
                         '& .MuiChip-avatar':{ scale:Scale?? 1.3 } ,
-                        bgcolor:grey[200],
+                        bgcolor:"#fff",
                         width: w? w:  !sm? "100%":null
                       }}
                       variant= {v? v: 'filled'  }

@@ -22,7 +22,7 @@ const Tickets = () => {
 
   const event = events.find((mov) => mov.id === parseInt(movieId));
 
-  const [movieSeatDetails,setMovieSeatDetails]= useState(event?.mainSeats );
+  const [movieSeatDetails,setMovieSeatDetails]= useState(event?.theater );
 
   const selectedSeats = selectedSeatsQuery ?  JSON.parse(selectedSeatsQuery) : null
 

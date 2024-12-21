@@ -81,7 +81,7 @@ const AdminSeatBtn = ({ seatValue, seatnumber, row , isMultiSelect }:AdminSeatBt
         
 
   
-          if(  multiTipInfo.row === undefined    ){
+          if(  multiTipInfo.row.length!=0    ){
          
             setMutiTipPositions({x:xArg ,y:yArg})
             setMultiTipInfo(prev=>({...prev,first:seatNArg, row:rowArg}))

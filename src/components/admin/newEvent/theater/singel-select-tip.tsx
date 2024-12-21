@@ -5,16 +5,16 @@ import { motion ,AnimatePresence } from "framer-motion"
 import { CSSProperties, Dispatch, MouseEventHandler, SetStateAction, useContext, useEffect, useState } from "react"
 import {  Button, Stack as Flex, Typography, useTheme } from "@mui/material"
 import {  grey, orange, pink } from "@mui/material/colors"
-import { InfoFormType, TheaterType } from "@/pages/_app"
+import { TheaterType,InfoFormType } from "@/pages/admin/new-event"
  
 
 
 interface SingleSelectTipPropsType  { 
-  theraer:TheaterType ,
+  theater:TheaterType ,
    setTheater:Dispatch<SetStateAction<InfoFormType>>
   }
 
-const SingleSelectTip= ({theraer ,setTheater }:SingleSelectTipPropsType)=>{
+const SingleSelectTip= ({theater ,setTheater }:SingleSelectTipPropsType)=>{
    const theme= useTheme()
 
     const { setSingleTipPositions,singleTipPositions , seatTipInfo, setSeatTipInfo,resetSingleTip }=useContext(SingleTipContext)
@@ -28,8 +28,8 @@ const SingleSelectTip= ({theraer ,setTheater }:SingleSelectTipPropsType)=>{
 
               
          const row =  seatTipInfo.row
-         const inMain = theraer?  theraer.mainSeats.hasOwnProperty(row??"") :null
-         const inSide = theraer? theraer.sideSeats.hasOwnProperty(row??"") : null
+         const inMain = theater.mainSeats ?  theater.mainSeats.hasOwnProperty(row??"") :null
+         const inSide = theater.sideSeats? theater.sideSeats.hasOwnProperty(row??"") : null
          const initVlaue = seatTipInfo.initValue
          const seatNumber = seatTipInfo.seatNumber
          

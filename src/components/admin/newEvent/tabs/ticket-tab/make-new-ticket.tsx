@@ -19,11 +19,12 @@ import { IoLocationSharp } from 'react-icons/io5';
 //Context Usege
 import WidthContext from '@/context/WidthContext';
 import TabsTicketContext from '@/context/admin/new-event/tabs/tabs-ticket-context';
-import TabsEventSchedulesContext from '@/context/admin/new-event/tabs/tabs-event-schedules-context';
 import TabsInfoContext from '@/context/admin/new-event/tabs/tabs-info-context';
 
 // Types 
-import { BaceTicket, FullDateOptions, Ticket } from '@/pages/_app';
+import { BaceTicket, TicketType } from '@/pages/admin/new-event'
+
+import {FullDateOptions} from '@/pages/_app'
 
 //Colors
 import { grey, red } from '@mui/material/colors';
@@ -31,8 +32,7 @@ import { grey, red } from '@mui/material/colors';
 export default function MakeNewTicket({setTabPage}:{setTabPage:Dispatch<SetStateAction<number>>}) {
   
   const [open, setOpen] = useState(false);
-  const  {tickets,updateTicket,updteTicketsArray} =useContext(TabsTicketContext)
-  const {schedule} =useContext(TabsEventSchedulesContext)
+  const  {tickets ,setTickets} =useContext(TabsTicketContext)
   const {infoFileds}=  useContext(TabsInfoContext)
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
   const theme = useTheme()
@@ -49,12 +49,12 @@ export default function MakeNewTicket({setTabPage}:{setTabPage:Dispatch<SetState
     { value: "citizen", label: "תושב" },
   ];
 
-  const [Ticket, setTicket] =useState<Ticket>({
+  const [Ticket, setTicket] =useState<TicketType>({
     // Bace
-     evenName :infoFileds?.keys ? infoFileds?.keys.name: "",
-     location:infoFileds.keys.location,
-     eventDate:schedule.day ? schedule.day.toLocaleDateString("he-IL",FullDateOptions):"" ,
-     TicketClosingSealesDate:schedule.closingSealesDate ? schedule.closingSealesDate.toLocaleDateString("he-il",FullDateOptions):"null" ,
+     evenName :  infoFileds.eventName,
+     location:infoFileds.location,
+     eventDate:infoFileds.day ? infoFileds.day.toLocaleDateString("he-IL",FullDateOptions):"" ,
+     TicketClosingSealesDate:infoFileds.closingSealesDate ? infoFileds.closingSealesDate.toLocaleDateString("he-il",FullDateOptions):"null" ,
      selectedType:"",
       priceInfo:"",
       finelPrice:"",
@@ -98,7 +98,7 @@ export default function MakeNewTicket({setTabPage}:{setTabPage:Dispatch<SetState
     resetTicketPricesForm()
     setOpen(false);
   };
-  const validateFileds =( State:Ticket) : boolean=>{
+  const validateFileds =( State:TicketType) : boolean=>{
 
              const TicketTypeSnapShot =  State.selectedType
 

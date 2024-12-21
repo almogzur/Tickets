@@ -59,7 +59,8 @@
     "stylis": "^4.3.4",
     "stylis-plugin-rtl": "^2.1.1",
     "swr": "^1.1.1",
-    "usehooks-ts": "^3.1.0"
+    "usehooks-ts": "^3.1.0",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@types/node": "16.11.12",

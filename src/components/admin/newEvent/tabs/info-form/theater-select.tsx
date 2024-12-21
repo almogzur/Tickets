@@ -1,4 +1,4 @@
-import { InfoFormType, TheaterType } from '@/pages/_app';     
+import { InfoFormType, TheaterType } from '@/pages/admin/new-event';     
 import {Typography , OutlinedInput , Stack as Flex, Select , MenuItem, SelectChangeEvent, FormControl, useTheme, InputLabel, styled, InputBase} from '@mui/material'
 import { grey } from '@mui/material/colors';
 import { Dispatch, SetStateAction, useState } from 'react';
@@ -22,7 +22,7 @@ return (
       <InputLabel  >בחר אולם</InputLabel>
      <Select
       value={name}
-      variant='standard'
+      variant='outlined'
 
       onChange={handleChange}
 

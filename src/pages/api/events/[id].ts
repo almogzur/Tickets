@@ -14,7 +14,7 @@ export default function handler(req: NextApiRequest,res: NextApiResponse<Event|u
   } else if (req.method === 'PUT') {
     if (typeof id === 'string') {
       const movieIndex = events.findIndex(movie => movie.id === parseInt(id))
-      events[movieIndex].sideSeats = req.body.seatDetails;
+      events[movieIndex].theater = req.body.seatDetails;
       res.status(200).json(events[movieIndex])
     }
   }

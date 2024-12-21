@@ -1,24 +1,18 @@
-import { Ticket } from "@/pages/_app";
+import { TicketType } from "@/pages/admin/new-event";
 import { createContext, Dispatch, SetStateAction } from "react";
 
 
 interface TicketContextType {
-    tickets:Ticket[]
-    setTickets:Dispatch<SetStateAction<Ticket[]>>
-    updateTicket:(  key: "price"|"type"|"discription"|"discoundInfo" , value:string|number )=> void
-    updteTicketsArray: (ticket:Ticket, Action:"add"|"remove")=>void
+    tickets:TicketType[]
+    setTickets:Dispatch<SetStateAction<TicketType[]>>
+
 }
 
 
 export default createContext<TicketContextType>({
     tickets:[],
-    setTickets: function (value: SetStateAction<Ticket[]>): void {
-        throw new Error("Function not implemented.");
-    },
-    updateTicket: function (key: "price" | "type" | "discription" | "discoundInfo", value: string | number): void {
-        throw new Error("Function not implemented.");
-    },
-    updteTicketsArray: function (ticket: Ticket, Action: "add" | "remove"): void {
+    setTickets: function (value: SetStateAction<TicketType[]>): void {
         throw new Error("Function not implemented.");
     }
+
 })

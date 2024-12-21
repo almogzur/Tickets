@@ -6,7 +6,10 @@ import SingleSelectTip from './singel-select-tip';
 import AdminSeatBtn from './adminSeatBtn'
 import MuliSelectTip from '@/components/admin/newEvent/theater/multi-select-tip'
 import AdminNewEventTheatherMap from './new-event-theather-map';
-import { TheaterType } from '@/pages/_app';
+
+
+
+// Types 
 
 // Context 
 import WidthContext from '@/context/WidthContext';
@@ -16,12 +19,8 @@ import TabsInfoContest from '@/context/admin/new-event/tabs/tabs-info-context'
     const Theater = () => {
 
       const {infoFileds,setInfoFileds} = useContext(TabsInfoContest)
-   
       const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
-
-      const theme = useTheme()
-    
-    
+      const theme = useTheme()    
        const [isMultiSelect , setIsMultiSelect]=useState<boolean>(false)
        const [amountOfSeatsSelcted , setAmountOfSeatsSelcted] = useState<number>(0)
 
@@ -29,8 +28,8 @@ import TabsInfoContest from '@/context/admin/new-event/tabs/tabs-info-context'
        const sideSeatsStylesObject =  infoFileds.theater?.styles &&  Object.fromEntries(
         Object.entries(infoFileds.theater.styles ).map(([row, positions]) => [row, positions])
       )
-       const sideTextStylesObject =     infoFileds.theater?.testsStyle &&  Object.fromEntries(
-        Object.entries(infoFileds.theater.testsStyle).map(([row, positions]) => [row, positions])
+       const sideTextStylesObject =     infoFileds.theater?.textsStyle &&  Object.fromEntries(
+        Object.entries(infoFileds.theater.textsStyle).map(([row, positions]) => [row, positions])
       )
        const MainSeatS  =  infoFileds.theater?.mainSeats  && Object.entries(infoFileds.theater.mainSeats).map(([row, rowContent]) => {
         const colValue  = rowContent.map((seatValue: number, i: number) => {
@@ -85,7 +84,7 @@ import TabsInfoContest from '@/context/admin/new-event/tabs/tabs-info-context'
             <Flex
     
               key={row}
-              style={ sideSeatsStylesObject? sideSeatsStylesObject[row]:{}} // target by key in CSS
+              style={ sideSeatsStylesObject ? sideSeatsStylesObject[row] : {}} // target by key in CSS
               justifyContent="center"
           
               direction={'row'}
@@ -95,23 +94,29 @@ import TabsInfoContest from '@/context/admin/new-event/tabs/tabs-info-context'
             </Flex>
           );
       })
-       const Text = infoFileds.theater?.sideSeats  &&  Object.entries(infoFileds.theater.sideSeats).map(([row, rowContent])=>{
-           return <Typography key={row}  color='textPrimary' height={0} style={sideTextStylesObject? sideTextStylesObject[row]:{}} >{row}</Typography>
-      })
+       const Text = infoFileds.theater?.sideSeats?   Object.entries(infoFileds.theater.sideSeats).map(([row, rowContent])=>{
+           return <Typography key={row}  color='textPrimary' height={0} style={sideTextStylesObject? sideTextStylesObject[row] :{}} >{row}</Typography>
+      }):undefined
 
     return (
 
       <Container>
-       <SingleSelectTip 
-         theraer={  infoFileds.theater}
-         setTheater={setInfoFileds}
+        
+        {infoFileds.theater &&    
+           <>
+            <SingleSelectTip 
+              theater={  infoFileds.theater}
+               setTheater={setInfoFileds}
            /> 
 
          <MuliSelectTip 
             isMultiSelect={isMultiSelect}
-            theraer={infoFileds.theater}
+            theater={infoFileds.theater}
             setTheater={setInfoFileds}
-          /> 
+          />
+          </>
+            }
+
 
          <AdminNewEventTheatherMap // style in children 
            isMultiSelect={isMultiSelect}  
