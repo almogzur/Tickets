@@ -141,7 +141,7 @@ export default function EditorTab() {
           // where the editor itself is rendered (e.g. if there's a sticky nav
           // bar on your site).
             background:"#fff",
-      
+            
             "& .MuiTiptap-RichTextContent-root":{
                 color:'black',
                
@@ -191,7 +191,7 @@ export default function EditorTab() {
             // The "outlined" variant is the default (shown here only as
             // example), but can be changed to "standard" to remove the outlined
             // field border from the editor
-            variant: 'outlined',
+            variant: 'standard',
             
             
             MenuBarProps: {
@@ -240,7 +240,7 @@ export default function EditorTab() {
                   IconComponent={isEditable ? Lock : LockOpen}
                 />
 
-                <Button
+                {/* <Button
                   variant="contained"
                   size="small"
                   onClick={() => {
@@ -250,7 +250,7 @@ export default function EditorTab() {
                   }}
                 >
                   שמור
-                </Button>
+                </Button> */}
               </Flex>
             ),
           }}

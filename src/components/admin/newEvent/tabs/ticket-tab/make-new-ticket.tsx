@@ -1,6 +1,5 @@
-
-//Reacg
-import  {useState,useContext, Dispatch, SetStateAction, ReactElement, CSSProperties, JSXElementConstructor, useEffect} from 'react';
+//Recte
+import  {useState,useContext, Dispatch, SetStateAction, ReactElement, CSSProperties, JSXElementConstructor, useEffect, ChangeEvent} from 'react';
 
 // Components 
 import Button from '@mui/material/Button';
@@ -8,13 +7,14 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Typography,Stack as Flex, Divider, useTheme, Chip, } from '@mui/material';
-import InputWrap from '@/components/input';
+import { Typography,Stack as Flex, Divider, useTheme, Chip, Select, MenuItem, FormControl, InputLabel, SelectChangeEvent, } from '@mui/material';
+import InputWrap from '@/components/input-wrap';
 
 //Icons
 import { FcBusinessman, FcFilm, FcLeave, FcPlanner, FcViewDetails } from "react-icons/fc";
 import { MdDiscount } from "react-icons/md";
 import { IoLocationSharp } from 'react-icons/io5';
+import { IoTicket } from "react-icons/io5";
 
 //Context Usege
 import WidthContext from '@/context/WidthContext';
@@ -22,107 +22,114 @@ import TabsTicketContext from '@/context/admin/new-event/tabs/tabs-ticket-contex
 import TabsInfoContext from '@/context/admin/new-event/tabs/tabs-info-context';
 
 // Types 
-import { BaceTicket, TicketType } from '@/pages/admin/new-event'
-
+import { BaceTIcketType, InfoFormType, BaceTicketVS, BaceTIcketType_Partial } from '@/pages/admin/new-event'
 import {FullDateOptions} from '@/pages/_app'
 
 //Colors
 import { grey, red } from '@mui/material/colors';
+import { DateTimePicker, DateTimeValidationError, MobileDateTimePicker } from '@mui/x-date-pickers';
+import dayjs, { Dayjs } from 'dayjs';
+import SelectWrap from '@/components/select-wrap';
+import DateTimePickerWrap from '@/components/date-time-wrap';
 
-export default function MakeNewTicket({setTabPage}:{setTabPage:Dispatch<SetStateAction<number>>}) {
+
+
+
+interface TicketOptionType {
+  value: "normal" | "discount" | "citizen";
+  label: string;
+}
+
+interface MakeNewTicketType {
+  setTabPage:Dispatch<SetStateAction<number>>
+
+}
+
+export default function MakeNewTicket({setTabPage }:MakeNewTicketType) {
   
   const [open, setOpen] = useState(false);
   const  {tickets ,setTickets} =useContext(TabsTicketContext)
-  const {infoFileds}=  useContext(TabsInfoContext)
+ const {infoFileds,setInfoFileds} = useContext(TabsInfoContext)
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
   const theme = useTheme()
+  const [dateEroor,setDateEroor ]= useState(false)
+
+  const [Ticket, setTicket] =useState<BaceTIcketType_Partial >({
+    // Bace
+     eventName :  infoFileds.eventName,
+     location:infoFileds.location,
+     Date: infoFileds.Date,
+     EndSealesDate :undefined  ,
+     cat:infoFileds.cat,
+     selectedType:undefined,
+      priceInfo:"",
+      finelPrice:0, 
+ }) 
 
 
-  interface TicketOptionType {
-    value: "normal" | "discount" | "citizen";
-    label: string;
-  }
-  
-  const TicketOptions: TicketOptionType[] = [
-    { value: "normal", label: "מחיר מלא" },
-    { value: "discount", label: "הנחה" },
-    { value: "citizen", label: "תושב" },
+ const TicketOptions: TicketOptionType[] = [
+        { value: "normal", label: "מחיר מלא" },
+        { value: "discount", label: "הנחה" },
+        { value: "citizen", label: "תושב" },
   ];
 
-  const [Ticket, setTicket] =useState<TicketType>({
-    // Bace
-     evenName :  infoFileds.eventName,
-     location:infoFileds.location,
-     eventDate:infoFileds.day ? infoFileds.day.toLocaleDateString("he-IL",FullDateOptions):"" ,
-     TicketClosingSealesDate:infoFileds.closingSealesDate ? infoFileds.closingSealesDate.toLocaleDateString("he-il",FullDateOptions):"null" ,
-     selectedType:"",
-      priceInfo:"",
-      finelPrice:"",
-    // state 
-      types:{
-          normal:{price:"",info:""},
-          discount:{price:"",info:""},
-          citizen:{price:"",info:"הנחת תושב"}
-        }
-   
-    }) // local no resone to extract to context level
+  // useEffect(()=>{    console.log(Ticket ,infoFileds)},[Ticket,infoFileds])
 
-    const resetTicketPricesForm =( ):void=>{
+  const resetTicketPricesForm =( ):void=>{
       setTicket(p=>({
            ...p,
-            finelPrice:"",
+            finelPrice:0,
             priceInfo:"",
-            selectedType:"",
+            selectedType:undefined,
+            TicketClosingSealesDate:undefined,
             
-            types:{ 
-              normal:{info:"",price:""},
-              discount:{info:"", price:""},
-              citizen:{price:"",info:'הנחת תושב'}
-            }
           }))
-    }
-
-    // useEffect(()=>{
-    //   console.log(Ticket);
-      
-    // }
-
-    // ,[Ticket])
-
-    
+  }
   const handleClickOpen = () => {
     setOpen(true);
   };
   const handleClose = () => {
     
-    resetTicketPricesForm()
+  
     setOpen(false);
   };
-  const validateFileds =( State:TicketType) : boolean=>{
+  const updateTicketEndOfSalesDate =(e: dayjs.Dayjs | null):void=>{
 
-             const TicketTypeSnapShot =  State.selectedType
+    if (e && e.year() && e.month() && e.date() && e.day()  && e.hour()&& e.minute() ) {
+      // set the time in utc  -3 form area time , 
+       const newDate = e.toDate()
+       setTicket(p=>({...p,EndSealesDate:newDate}))
+       setDateEroor(false)
+          
+      }
+      else{
+        //  error henler
+        setDateEroor(true)
+      }
 
-             const    { types  , ...rest }= State // removing 
+    
+  }
+  const validateFileds =( State:BaceTIcketType_Partial) : boolean=>{
 
-  
+            const result =  BaceTicketVS.safeParse(State)
+                console.log(result);
+                
 
-
-              const Bace = rest
-              const ValidateArr =  Object.entries(Bace).map(([key,value],i)=>{
-
-                       return value !== null                  
-            })
-            console.log(ValidateArr)
-
-
+        
        
-   
-      return  true
+   return !result.success
+
   }
 
   return (
     <>
-      <Button variant='contained' color='secondary' onClick={handleClickOpen} sx={{p:!xs?0.5:null , fontSize:!xs?13:null ,borderRadius:0 }}  >
+      <Button 
+         variant='contained' 
+         color='primary' 
+         onClick={handleClickOpen}
+         endIcon={<IoTicket  style={{marginRight:10}}/>} 
+         sx={{ fontSize:!xs?13:null ,borderRadius:0}}  
+         >
          כרטיס חדש 
       </Button>
 
@@ -132,17 +139,15 @@ export default function MakeNewTicket({setTabPage}:{setTabPage:Dispatch<SetState
          fullWidth
       >
      
-        <DialogTitle style={{padding:12 , background:grey[200] }} >  
+        <DialogTitle style={{padding:2   , background:"black"}} >  
         
           <Flex direction={"row"} alignItems={"center"}  >
-
-                <Flex direction={"row"} alignContent={"center"} gap={2} >
-                     <Flex direction={"row"} alignItems={"center"} gap={2} >
+                     <Flex  alignItems={"center"} gap={0} mx={1} >
                       
-                        <FcFilm size={!xs? "1.5em":"2em"} color={"black"}  style={{border:`solid ${theme.palette.secondary.main} ` , padding:1 }} />        
-                        <Typography variant='h5' >  {"כרטיס חדש"} </Typography> 
+                         <IoTicket  size={!sm?"1.5em":"1.7em"} color={theme.palette.primary.main}  />        
+                         <Typography variant='body1' sx={{color:"#fff" ,fontWeight:800}}  >{"כרטיס חדש"} </Typography> 
                      </Flex>        
-                </Flex>
+    
 
          </Flex>
 
@@ -150,151 +155,122 @@ export default function MakeNewTicket({setTabPage}:{setTabPage:Dispatch<SetState
 
         <Divider sx={{borderWidth:2}} ></Divider>
 
-        <DialogContent>
+        <DialogContent >
 
 
             <Flex   >
-                  <Typography variant='h6' >פרטי כרטיס</Typography>
+                  <Typography variant='h6' style={{}} >פרטי כרטיס</Typography>
                 
                 <Flex >
 
-                       <InputWrap
-                         stateName={'type'} 
-                         label={"סוג הכרטיס"}  
-                         isSelect 
-                         selectItems={TicketOptions}
-                         value={Ticket.selectedType}
-                         onChangeHndler={(e)=>{
+                   <SelectWrap   
+                           label='סוג כרטיס'
+                          items={TicketOptions} 
+                          changeHndler={(e)=>{setTicket(p=>({...p,selectedType:e.target.value}))}}  
+                          labelPositioin='top'
+                           />
 
-                              const value = e.target.value
-                                  
-                                  setTicket(p=>({...p,selectedType:value}))
-                         }}   
-                             />
  
                    { Ticket.selectedType === 'normal' &&    
                       <>
                       <InputWrap 
-                            stateName={''} 
-                            inputType='number'
-                            label={'מחיר'}  
-                            value={Ticket.types.normal.price}
-                            onChangeHndler={(e)=>{
-               
-                              const value = e.target.value
-                              setTicket(p=>({
-                                 ...p ,
-                                types:{
-                                  ...p.types,
-                                   normal:{...p.types.normal , price:value}
-                                }
-                              }))
-
-                            }}
-                             />
-                             <InputWrap
-                               stateName={'priceInfo'}
-                                label={'תיאור'}
-                                helpText='אופציונלי'
-                                value={Ticket.types.normal.info}
-                                onChangeHndler={(e)=>{
-                                      const value =e.target.value
-                                      setTicket(p=>({
-                                        ...p ,
-                                        types:{
-                                          ...p.types,
-                                           normal:{...p.types.normal , info:value}
-                                        }
-                                        
-                                      }))
-                                }}
-                                icon={<FcFilm size={"2em"}/>}
+       
+                       
+                          label={'מחיר'}
+                          value={Ticket.priceInfo}
+                          labelPositioin={'top'}   
+                          onChangeHndler={(e) => { }}       
+                                     />
+                       <InputWrap
+                         labelPositioin={'top'}                  
+                          stateName={'priceInfo'}
+                          label={'אופציונלי  תיאור'}
+                          value={Ticket.priceInfo}
+                          onChangeHndler={(e) => {
+                            const value = e.target.value;
+                            setTicket(p => ({...p}));
+                           } }  
                                 />
                       </>
                    }
                    { Ticket.selectedType==="discount" &&  
                        <>
                          <InputWrap 
-                            stateName={''} 
+                            stateName={''}
                             inputType='number'
-                            label={'מחיר הנחה '} 
-                            value={Ticket.types.discount.price}
-                            onChangeHndler={(e)=>{
+                            label={'מחיר הנחה '}
+                            value={Ticket.finelPrice}
+                            labelPositioin={'top'}
+                            icon={<FcBusinessman/>}
+                            onChangeHndler={(e) => {
 
-                              const value = e.target.value
-                              setTicket(p=>({
-                                ...p,
-                                types:{
-                                  ...p.types,
-                                   discount:{...p.types.discount, price:value}
-                                }
+                                 const value = e.target.value;
+                                 setTicket(p => ({
+            
+                                 }));
 
-                              }))
-
-                            }}
-                             />
+                            } } 
+        
+                        />    
                       <InputWrap
-                         stateName={''} 
-                         value={Ticket.types.discount.info}
-                         onChangeHndler={(e)=>{
-                          const value = e.target.value
-                          setTicket(p=>({
-                            ...p,
-                            types:{
-                              ...p.types,
-                               discount:{...p.types.discount, info:value}
-                            }
+                        icon={<FcBusinessman/>}
+                           stateName={''}
+                           value={Ticket.priceInfo}
+                           label={'תיאור ההנחה'}
+                           variant='standard' 
+                           labelPositioin={'top'}
+                           onChangeHndler={(e) => {
+                             const value = e.target.value;
+                             setTicket(p => ({...p  }));
+                           
+                           } }
+                               />
 
-                          }))
-
-                        }}
-                         label={'תיאור ההנחה'} 
-                          variant='standard'
-                           icon={<MdDiscount size={"2em"} style={{margin:10, color:theme.palette.secondary.main}}  />} 
-                            />
-                
 
                       </>
                    }
                    { Ticket.selectedType==="citizen" && 
                       <Flex  >
                          <InputWrap 
-                            stateName={''} 
-                            value={Ticket.types.citizen.price}
-                            onChangeHndler={(e)=>{
-                              const value = e.target.value
-                              setTicket(p=>({
-                                ...p,
-                                types:{
-                                  ...p.types,
-                                   citizen:{...p.types.citizen, price:value}
-                                }
-                              }))
-
-                            }}
-                            label={'מחיר תתושב'} 
-                            inputType='number'
-
-                              />
+                         
+                             stateName={''}
+                             value={Ticket.finelPrice}
+                             label={'מחיר תתושב'}
+                             inputType='number' 
+                             labelPositioin={'top'}
+                             onChangeHndler={(e) => {
+                               const value = e.target.value;
+                               setTicket(p => ({...p }));
+                          }}
+                          />
 
 
-                         <InputWrap  isDisabled  stateName={''} label={'תיאור : הנחת תושב'} icon={<FcBusinessman size={"2.5em"} style={{margin:3}}  />} />
                        </Flex>
                    }
 
-
-
-                   <MakeTicketFormChip 
-                        text={ Ticket.evenName??"" }  
-                        placeholder="הוסף שם  "
+                    <DateTimePickerWrap    
+                        value={ Ticket.EndSealesDate}
+                        minDate={new Date()}
+                        maxTIme={Ticket.Date}
+                        variant='standard'
+                        label={"סגירת מכירות לכרטיס זה"}
+                        onAcceptHendler={updateTicketEndOfSalesDate}
+                        orientation={'portrait'}
+                        labelPositioin={'top'}
+                        onEroorHndler={(e: DateTimeValidationError, context: dayjs.Dayjs | null): void => { } }
+                     />
+     
+                   <TicketChip 
+                        text={ Ticket.eventName }  
+                        placeholder="הוסף שם"
                         icon={<FcViewDetails/>} 
                          m={0.5}
                         setTabPage={   setTabPage }
                         newTab={0}
 
                            />
-                    <MakeTicketFormChip 
-                        text={Ticket.location??""}
+                    <TicketChip 
+                        text={Ticket.location}
                         placeholder="הוסף מיקום  " 
                         setTabPage={ setTabPage }
                         newTab={0}
@@ -302,25 +278,17 @@ export default function MakeNewTicket({setTabPage}:{setTabPage:Dispatch<SetState
                         m={0.5}
                       />  
 
-                     <MakeTicketFormChip
-                       text={ Ticket.eventDate??""}
+                     <TicketChip
+                       text={ Ticket.Date? Ticket.Date.toLocaleDateString("he-IL",FullDateOptions) : undefined}
                        setTabPage={  setTabPage }
-                       newTab={3}
+                       newTab={0}
                        placeholder='הוסף תאריך'
                          icon={<FcPlanner/>}
                          m={0.5}
                           grow={4}
                           />
 
-                  <MakeTicketFormChip
-                       text={ Ticket.TicketClosingSealesDate??""}
-                       setTabPage={  setTabPage }
-                       newTab={3}
-                       placeholder="הוסף סגירת קופות"
-                         icon={<FcLeave/>}
-                         m={0.5}
-                          grow={4}
-                          />
+
 
                        
                 </Flex>
@@ -348,8 +316,11 @@ export default function MakeNewTicket({setTabPage}:{setTabPage:Dispatch<SetState
 
 
 
-interface MakeTIcketFormChipType {
-    text:string,
+interface TicketChipType {
+    text:string|undefined
+    placeholder:string
+    newTab:number
+    setTabPage:Dispatch<SetStateAction<number>>
     icon?:ReactElement<unknown, string | JSXElementConstructor<any>>,
     p?:CSSProperties['padding'] ,
     m?:CSSProperties['margin'],
@@ -359,19 +330,15 @@ interface MakeTIcketFormChipType {
     w?:CSSProperties['width']
     v?:"filled"|"outlined"
     Scale?:number 
-    setTabPage?:Dispatch<SetStateAction<number>>
-    newTabNumber?:number
-    newTab?:number
-    placeholder?:string
     
 
     
   }
 
-  const MakeTicketFormChip =  ({text, icon , p, m,br,styleProps , grow , w ,v,Scale,setTabPage,newTab,placeholder}:MakeTIcketFormChipType)=>{
+  const TicketChip =  ({text, icon , p, m,br,styleProps , grow , w ,v,Scale,setTabPage,newTab,placeholder}:TicketChipType)=>{
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
         return  <Chip 
-                     onClick={ !text && setTabPage && newTab ? ()=>setTabPage(newTab) :undefined }
+                     onClick={ !text? ()=>setTabPage(newTab) :undefined }
                      avatar={icon}
                      label={text?text:placeholder} 
                      sx={{

@@ -1,7 +1,7 @@
 import { useSession } from 'next-auth/react'
 import {Dispatch, MouseEventHandler , useContext, useRef} from 'react'
 import { useRouter } from 'next/router'
-import {Typography , Stack as Flex ,useTheme , Box } from '@mui/material'
+import {Typography , Stack as Flex ,useTheme , Box, Button } from '@mui/material'
 
 import Image from 'next/image'
 import WidthContext from '@/context/WidthContext'
@@ -23,11 +23,37 @@ const CoverUploadTab=({}:CoverUploadPropsType)=>{
     const router = useRouter()
     const theme =useTheme()
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
-  const {infoFileds,setInfoFileds} = useContext(TabsInfoContext)
-
+    const {infoFileds,setInfoFileds} = useContext(TabsInfoContext)
     const Inputref = useRef<HTMLInputElement>(null);
+
+    const openDialog: MouseEventHandler<HTMLButtonElement> = (e) => {
+    const inputFile  = Inputref.current;
+
+    if (inputFile) {
+        inputFile.click()
+        
+    }
+    return
     
-        const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  };
+  const  closeDialog : MouseEventHandler<HTMLButtonElement> = (e): void => {
+    const inputFile  = Inputref.current;
+    
+    if (inputFile) {
+
+      inputFile.value=""
+      setInfoFileds(p=>({...p,preview:""})); 
+      setInfoFileds(p=>({...p,image:undefined}))
+      
+  }
+  return
+  
+
+  }
+
+
+    
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       
           const selectedFile  = e.target.files !== null  ?  e.target.files[0] :null
     
@@ -42,43 +68,24 @@ const CoverUploadTab=({}:CoverUploadPropsType)=>{
             }
     
     };
+    
 
  
 return (
-    <>
+
          
-      <Flex   height={'calc(100% - 80px)'}  overflow={"auto"}  >
-
-                <input type='file' id='cover'    onChange={handleFileChange}  accept=".jpg, .jpeg, .png "  ref={Inputref}   hidden />
-
-            { infoFileds.preview && infoFileds.image &&
-             <Box  
-                alignSelf={"center"}  
-                  sx={{ padding:!sm?0.5:!md?2:3, }}  
-       
-              >
-            <>
-            <Image 
-              src={infoFileds.preview} 
-              alt={infoFileds.image.name} 
-              width={!sm?260:!md? 500 :600}
-              height={!sm?300:400}
-              style={{ objectFit:'contain'}} 
-              translate='yes'
-              
-              />
-            <Typography sx={{color:"black" , m:.5}} fontWeight={700}  textAlign={'center'}  variant='body2' > שם הקובץ :  {infoFileds.image.name.toLocaleUpperCase()}</Typography>
-            </>
-            </Box>  
-            }
+      <Flex mt={3.5}  direction={"row"} gap={1}  >
      
+        <Button sx={{p:0.5 , boxShadow:0}} onClick={openDialog}  >הוסף תמונה</Button>
+        <Button sx={{p:0.5,boxShadow:0}}  onClick={closeDialog} >הסר תמונה </Button>
  
-      </Flex>
-      <BasicSpeedDial 
-             perentRef={Inputref}
-            />
+           <input type='file' id='cover'    onChange={handleFileChange}  accept=".jpg, .jpeg, .png "  ref={Inputref}   hidden />
 
-    </>
+      </Flex>
+
+      
+
+
 ) 
 }
 

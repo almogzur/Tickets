@@ -11,12 +11,17 @@ import { BaceTicket, TicketType } from "@/pages/admin/new-event";
 
 //Components 
 import { useTheme , Stack as Flex , Container, Divider } from "@mui/material";
-import  MyChip from '@/components/chip'
+import  MyChip from '@/components/chip-wrap'
 
 // Icons 
+import { FaEye } from "react-icons/fa6";
+
 import {FcServices,FcFilm, FcBusinessman, FcCurrencyExchange, FcLeave, FcSearch,FcPlanner,FcViewDetails } from "react-icons/fc";
 import { IoLocationSharp } from "react-icons/io5";
 import { MdDelete, MdDiscount } from "react-icons/md";
+import { MdEdit } from "react-icons/md";
+import { BsFillFileEarmarkPdfFill } from "react-icons/bs";
+import { FaFilePdf } from "react-icons/fa6";
 
 //Colors
 import { grey } from "@mui/material/colors";
@@ -36,85 +41,91 @@ const TicketComponent = ({...props    }:BaceTicket) => {
       
         sx={{
           m:1,
-          boxShadow:theme.shadows[10]
+          boxShadow:theme.shadows[1]
         }}
       >
-        {/* Header */}
+
           <Flex display={"row"}   p={0} >
-
-              
-        
-
+                    {/* Header */}
                 <Flex 
                       direction={"row"}
                        alignItems={"center"}
-                        justifyContent={"space-between"}
-                         gap={1}
-                          m={0}
+                        justifyContent={'space-between'}
+                      
+                     
+                          p={1}
                            bgcolor={grey[200]}
-                           boxShadow={theme.shadows[4]}
+                           boxShadow={theme.shadows[1]}
                             >
               
-                         <MyChip 
-                              text={ 
-                                  props.selectedType==="normal" ? "  רגיל "
-                                   :
-                                    props.selectedType==="discount"?
-                                     "הנחה" :
-                                     props.selectedType==="citizen"? "תושב "
-                                     :""
-                                     } 
-                               icon={  <FcFilm size={"2em"} color={"black"}  style={{border:`solid 1.5px ${theme.palette.secondary.main} ` ,  padding:1 }} />} 
-                                m={1}
+                
 
-                                  p={2}  
-                                 styleProps={{background:grey[200]}} 
-                                 Scale={1.3}
-                                  />
-          
+                 <Flex>
+                        <FaFilePdf size={"2em"} color={theme.palette.secondary.main} style={{marginRight:20}} />
+                 </Flex >
 
-                     <Flex direction={"row" } gap={1} mx={!sm?1:2} >
-                        <FcServices  size={"2em"} color="red"   />
-                        <FcSearch size={"2em"}  />
-                        <MdDelete  size={"2em"} color="red"  />
-                    </Flex>
+                    <Flex direction={'row'}  justifyContent={"end"} gap={2} >
+                      <MdEdit size={"2em"}  color={theme.palette.secondary.main} />
+                      <MdDelete  size={"2em"} color={theme.palette.secondary.main} />
+                </Flex>
+             
   
                   </Flex>
 
 
                   <Divider sx={{borderWidth:1.5}}/>
                       
-              
+              {/* Body */}
             <Flex m={0}  p={2}   >
 
-                <Flex direction={ !xs? "column": "row"} alignContent={"center"} flexWrap={"wrap"} >
 
-                  <MyChip text={ props.selectedType?? ""  } icon={<FcCurrencyExchange />} m={0.5} grow={1} />
-                  <MyChip text={ props.eventDate?? ""} icon={<FcPlanner/>} m={0.5} grow={4}/>
+            <Flex direction={ !xs? "column": "row"} alignContent={"center"}>
+
+          
+
+               </Flex>
+               
+          
+                <Flex direction={ !xs? "column": "row"} alignContent={"center"} flexWrap={"wrap"} >
+                <MyChip m={0.5} 
+                              text={ 
+                                  props.selectedType==="normal" ? "   סוג : רגיל "
+                                   :
+                                    props.selectedType==="discount"?  " סוג : הנחה"  :
+                                     props.selectedType==="citizen"? "סוג : תושב "
+                                     :""
+                                     } 
+                 />
+                   <MyChip text={   "מחיר : "+    props.finelPrice    }  m={0.5} grow={1} />
+
+                   { props.selectedType === 'discount' && 
+                  <MyChip text={props.priceInfo}   m={0.5} grow={0}  /> 
+                    }
+                  {
+                  props.selectedType === "citizen" && 
+                  <MyChip text={ "סוג ההנחה : "+ props.priceInfo}   m={0.5} grow={0}  /> 
+                }
+             
 
               </Flex>
 
               <Flex direction={ !xs? "column": "row"} flexWrap={"wrap"} alignContent={"center"}    >
 
-                <MyChip text={props.location ?? ""} icon={<IoLocationSharp color="#1a8cdc"/>} m={0.5}  />
+                <MyChip text={ "מיקום : " +  props.location}m={0.5}  />
 
-                <MyChip text={ props.evenName??""}  icon={<FcViewDetails/>}  m={0.5} />
+                <MyChip text={ "שם : " +props.evenName}   m={0.5} />
 
                
               </Flex>
 
               <Flex direction={ !xs? "column": "row"}  flexWrap={"wrap"}  alignContent={"center"} >
-              <MyChip text={props.TicketClosingSealesDate?? ""}  icon={<FcLeave color="red"/>} m={0.5} grow={0}  /> 
-
-               { props.selectedType === 'discount' && 
-                  <MyChip text={props.priceInfo??""}  icon={<MdDiscount color="red"/>} m={0.5} grow={0}  /> 
-                }
-                {
-                  props.selectedType === "citizen" && 
-                  <MyChip text={props.priceInfo??""}  icon={<FcBusinessman color="red"/>} m={0.5} grow={0}  /> 
-                }
+              <MyChip text={ "  תאריך האירוע :  " + props.eventDate}  m={0.5} grow={4}/>
+              <MyChip text={ "  סגירת קופות : " +  props.TicketClosingSealesDate}  m={0.5} grow={0}  /> 
+         
+          
               </Flex>
-                
+
+
             </Flex>
               
                 

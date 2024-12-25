@@ -26,12 +26,13 @@ import { InfoFormType } from "@/pages/admin/new-event"
         const first = multiTipInfo.first
         const second = multiTipInfo.second
 
-      const inMain = theater.mainSeats ?   theater.mainSeats.hasOwnProperty(row)  :null
-      const inSide = theater.sideSeats?  theater.sideSeats.hasOwnProperty(row)  :null
+      const inMain =  theater.mainSeats.hasOwnProperty(row)  
+      const inSide =  theater.sideSeats.hasOwnProperty(row)  
 
 
-       if(inMain){
-        setTheater((prevState) => {
+       if(inMain ){
+        setTheater(prevState => {
+
           // Clone the previous state immutably
           const newState = {
             ...prevState,

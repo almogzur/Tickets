@@ -2,7 +2,7 @@
 import { Typography , Stack as Flex ,useTheme, Box, Tabs, Tab, Badge, Container, Divider} from "@mui/material"
 
 import { ChangeEvent, ChangeEventHandler, CSSProperties, Dispatch, SetStateAction, useContext, useEffect, useState } from "react"
-import InputWrap from '@/components/input'
+import InputWrap from '@/components/input-wrap'
 
 // Context Useg
 import WidthContext from "@/context/WidthContext"
@@ -24,6 +24,7 @@ import ColorTab from "./colors-tab"
 import AdOptionsTab from "./ad-options-tab"
 import InfoForm from "./info-form/Wrapper"
 import PrevieTab from "./ticket-tab/preview-tab"
+import { IoTicket } from "react-icons/io5";
 
 //Types
 
@@ -69,7 +70,7 @@ const TabsForm = ({ }:TabFormPropsType)=>{
           
          >
         <Tab value={0} label="מידע כללי"  sx={{...TabComonStyleAttribute}}  icon={<FcInfo size={"2em"} />}    /> 
-        <Tab value={1} label="כרטיסים"  sx={{...TabComonStyleAttribute}} icon={<FcFilm size={"2em"} />} />
+        <Tab value={1} label="כרטיסים"  sx={{...TabComonStyleAttribute}} icon={<IoTicket size={"2em"} color={theme.palette.primary.main} />} />
         <Tab value={2} label="הגדרות"  sx={{...TabComonStyleAttribute}}   icon={<FcSettings size={"2em"} />}  />
         <Tab value={3} label="צבעים"  sx={{...TabComonStyleAttribute}} icon={<FcStackOfPhotos size={"2em"} />}  />
         <Tab value={4} label="תצוגה מקדימה "  sx={{...TabComonStyleAttribute}} icon={<FcBinoculars size={"2em"}/>} />

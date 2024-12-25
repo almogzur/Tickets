@@ -1,4 +1,5 @@
 import { InfoFormType } from "@/pages/admin/new-event";
+import dayjs from "dayjs";
 import { createContext, Dispatch, SetStateAction } from "react";
 
 interface InfoTabContextType {
@@ -13,14 +14,14 @@ export default createContext<InfoTabContextType>(
         infoFileds:{
                 eventName: "",
                 location: "",
-                cat: "",
-                theater: undefined,
-                day: undefined,
-                isEventClosedForSeal: false,
-                closingSealesDate: undefined,
                 pre: "",
+                cat: "",
+                Theater: undefined,
                 image: undefined,
-                 preview: ""
+                preview: "",
+                isEventClosedForSeal: false,
+                Date: new Date,
+           
         },
         setInfoFileds: function (value: SetStateAction<InfoFormType>): void {
             throw new Error("Function not implemented.");

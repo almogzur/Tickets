@@ -31,14 +31,14 @@ interface MyChipType {
                      avatar={icon}
                      label={text??placeholder} 
                      sx={{
-                        m:m?? 2, 
-                        p:p?? 2.5, 
+                        m:m?? 1, 
+                        p:p?? 1.5, 
                         justifyContent:"start", 
                         borderRadius:br?? 0,
                         fontSize:!xs? 14: 16 ,
                         '& .MuiChip-label': {},
                         '& .MuiChip-avatar':{ scale:Scale?? 1.3 } ,
-                        bgcolor:"#fff",
+                        background:grey[50],
                         width: w? w:  !sm? "100%":null
                       }}
                       variant= {v? v: 'filled'  }

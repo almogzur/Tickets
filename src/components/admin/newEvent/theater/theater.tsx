@@ -25,13 +25,13 @@ import TabsInfoContest from '@/context/admin/new-event/tabs/tabs-info-context'
        const [amountOfSeatsSelcted , setAmountOfSeatsSelcted] = useState<number>(0)
 
 
-       const sideSeatsStylesObject =  infoFileds.theater?.styles &&  Object.fromEntries(
-        Object.entries(infoFileds.theater.styles ).map(([row, positions]) => [row, positions])
+       const sideSeatsStylesObject =  infoFileds.Theater?.styles &&  Object.fromEntries(
+        Object.entries(infoFileds.Theater.styles ).map(([row, positions]) => [row, positions])
       )
-       const sideTextStylesObject =     infoFileds.theater?.textsStyle &&  Object.fromEntries(
-        Object.entries(infoFileds.theater.textsStyle).map(([row, positions]) => [row, positions])
+       const sideTextStylesObject =     infoFileds.Theater?.textsStyle &&  Object.fromEntries(
+        Object.entries(infoFileds.Theater.textsStyle).map(([row, positions]) => [row, positions])
       )
-       const MainSeatS  =  infoFileds.theater?.mainSeats  && Object.entries(infoFileds.theater.mainSeats).map(([row, rowContent]) => {
+       const MainSeatS  =  infoFileds.Theater?.mainSeats  && Object.entries(infoFileds.Theater.mainSeats).map(([row, rowContent]) => {
         const colValue  = rowContent.map((seatValue: number, i: number) => {
           const textset = "מושב";
           const textrow = "שורה";
@@ -64,7 +64,7 @@ import TabsInfoContest from '@/context/admin/new-event/tabs/tabs-info-context'
           </Flex>
         );
       })
-       const SideSeats = infoFileds.theater?.sideSeats &&  Object.entries(infoFileds.theater.sideSeats).map(([row, rowContent])=>{
+       const SideSeats = infoFileds.Theater?.sideSeats &&  Object.entries(infoFileds.Theater.sideSeats).map(([row, rowContent])=>{
         const colValue  = rowContent.map((seatValue: number, i: number) => {
          
         
@@ -94,7 +94,7 @@ import TabsInfoContest from '@/context/admin/new-event/tabs/tabs-info-context'
             </Flex>
           );
       })
-       const Text = infoFileds.theater?.sideSeats?   Object.entries(infoFileds.theater.sideSeats).map(([row, rowContent])=>{
+       const Text = infoFileds.Theater?.sideSeats?   Object.entries(infoFileds.Theater.sideSeats).map(([row, rowContent])=>{
            return <Typography key={row}  color='textPrimary' height={0} style={sideTextStylesObject? sideTextStylesObject[row] :{}} >{row}</Typography>
       }):undefined
 
@@ -102,16 +102,16 @@ import TabsInfoContest from '@/context/admin/new-event/tabs/tabs-info-context'
 
       <Container>
         
-        {infoFileds.theater &&    
+        {infoFileds.Theater &&    
            <>
             <SingleSelectTip 
-              theater={  infoFileds.theater}
+              theater={  infoFileds.Theater}
                setTheater={setInfoFileds}
            /> 
 
          <MuliSelectTip 
             isMultiSelect={isMultiSelect}
-            theater={infoFileds.theater}
+            theater={infoFileds.Theater}
             setTheater={setInfoFileds}
           />
           </>

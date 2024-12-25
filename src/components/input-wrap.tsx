@@ -7,6 +7,7 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import { blue } from "@mui/material/colors";
 import { IconType } from "react-icons";
 import { MdArrowBack, MdCabin } from "react-icons/md";
+import ControledLabel from "./controled-form-label";
 
 
 type HTMLInputTypes = 
@@ -35,16 +36,16 @@ type HTMLInputTypes =
 
 
   interface SelectIemType {
-    value:string,
+    value:any
     label:string
   }
 
 interface InputWrapType   {
     
-    stateName:string // the name of the state to update in the event 
+    stateName?:string // the name of the state to update in the event 
     label:string  
-    value?:string|null
-    onChangeHndler?:ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
+    value:string
+    onChangeHndler:ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement|HTMLSelectElement>
     textColorStateFocused?:CSSProperties['color']
     textColorStateFilled?:CSSProperties['color']    
     textColor?:CSSProperties['color']
@@ -62,6 +63,7 @@ interface InputWrapType   {
     isSelect?:boolean
     selectItems?:SelectIemType[]
     icon?:ReactNode
+        labelPositioin:"top"|"end"
 }
 
 
@@ -87,13 +89,11 @@ const InputWrap = ({
      isSelect,
      selectItems=[],
      hoverColor,
-     icon
+     icon,
+     labelPositioin
      
 
     }:InputWrapType)=>{
-
-        const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
-
 
     return   (
 
@@ -105,68 +105,25 @@ const InputWrap = ({
             required={isRequired}
             disabled={isDisabled}
             name={stateName}
-            helperText={ helpText? <Typography variant='subtitle2'  textAlign={"start"} >{helpText}</Typography> : null }
+            helperText={ helpText? <Typography variant='subtitle2' >{helpText}</Typography> : null }
 
             sx={{ 
                 flexGrow:Fgrow?? null,
-                 bgcolor:bg?? "#fff" ,
+                 bgcolor:bg,
                  m: m?m:0.5,
                   ...customStyle ,     
                
                 '&:hover': {
                     backgroundColor:hoverColor ,
-                    borderBottomColor:"red"
+
               }, }}
-            variant={variant?? 'standard'}
-            label={label}
-            error={error}
-            select={isSelect && selectItems.length !==0}
-            slotProps={{
-                
-                input:{
-                  fullWidth:false,
-                  endAdornment: icon
-                },
-                inputLabel:{              
-                 sx:{
-                        "&.MuiInputLabel-root":{ 
-                        
-                                   width:"100%" ,
-                                     direction:"ltr"  ,
-                                       fontSize:18 ,
-                                        color:textColor ,
-                                        display:"flex" ,
-                                        justifyContent:"end" 
-                                     },
-                        "&.MuiInputLabel-shrink":{ 
-                              width:"133%",
-                              unicodeBidi:"plaintext",
-                              textAlign:"start",
-                              fontSize:20 ,
-                              color:textColorStateFilled,
-                              top: variant==="outlined"? 7: -3,
-                              mx:0
-                                  },
-                        "&.Mui-focused":{color:"", },
-                        "&.Mui-required":{}
-                   } 
-               },
-               select:{
-        
-                     startAdornment:icon
-               }
-                
-              
-                
-              }}
-              color='secondary'
-        >
-            {isSelect && selectItems.length !==0 && 
-                selectItems.map(({value,label},i)=>{
-                    return <MenuItem key={value} value={value}>{label}</MenuItem>
-                })
-            }
-        </TextField>
+                   variant={variant?? 'standard'}
+                   label={<ControledLabel labelPositioin={labelPositioin} label={label}/>}
+                  error={error}
+                  select={isSelect && selectItems.length !==0}
+                  color='secondary'
+       />
+ 
    
  
     )

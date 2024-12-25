@@ -90,32 +90,53 @@ const theme  = createTheme({
       MuiTypography:{
         defaultProps:{},
         styleOverrides:{
-          root:{color:"black"}
+          root:{
+            color:"black",
+
+ 
+            
+          }
         }
         
       },
       MuiInputBase:{
-          defaultProps:{  },
-          styleOverrides:{}
+          defaultProps:{  
+              
+          },
+          styleOverrides:{
+            root:{
+
+            }
+          }
         },
         // when in form-control
         MuiInputLabel:{
           defaultProps:{},
           styleOverrides:{
-            root:{},
+            root:{
+
+       
+
+                 
+
+                 
+
+            },
           }
         },
         MuiFormControl:{
           defaultProps:{},
           styleOverrides:{
-          root:{   }
+          root:{
+          
+                 
+             }
         }},
         MuiOutlinedInput:{
          defaultProps:{notched:false},
          styleOverrides:{
            root:{  
-  
-            height:50,
+
 
             "&.Mui-focused": {},
             "&:hover": {},
@@ -154,9 +175,12 @@ const theme  = createTheme({
           root:{
             fontSize:"1em",
             fontWeight:700,
+            boxShadow:"none",
+            borderRadius:0
             
             
-          }
+          },
+    
         }
        },
     

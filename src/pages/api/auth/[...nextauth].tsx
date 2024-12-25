@@ -54,7 +54,7 @@ export const authOptions = {
       }
     })
   ],
-
+  
   callbacks: { 
     // invoke after provider return  
     
@@ -77,6 +77,11 @@ export const authOptions = {
   pages: {
      signIn: '/auth/signin',
 },
+// in production set seesstion 2 hours for a re loge
+//session:{
+//
+ // maxAge: 2 * 60 * 60
+//}
 
   
 }

@@ -23,6 +23,7 @@ return (
      <Select
       value={name}
       variant='outlined'
+      defaultValue=''
 
       onChange={handleChange}
 
@@ -40,7 +41,8 @@ return (
                 </MenuItem>
 
       })}
-
+        <MenuItem  onClick={()=>{setInfoFileds(p=>({...p,theater:undefined}))}} >
+        נקה בחירה </MenuItem>
     </Select>
    </FormControl>
   

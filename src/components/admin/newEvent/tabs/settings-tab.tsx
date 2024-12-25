@@ -1,10 +1,12 @@
-import InputWrap from "../../../input"
+import { ChangeEvent } from "react"
+import InputWrap from "../../../input-wrap"
 
 interface SetingsTabPropsType {}
 
 const SettingTab= ()=>{
   return (<>
-    <InputWrap stateName={""} label={"שם באתר "} helpText={" שם :  /https://domain.co.il/event"  } />
+    <InputWrap label={"שם באתר "} helpText={" שם :  /https://domain.co.il/event"} value={""} onChangeHndler={() =>{}} labelPositioin={"top"} />
+    <InputWrap label={"פרטים ליצירת קשר "} value={""} onChangeHndler={()=>{} } labelPositioin={"top"}/>
   </>)
  }
 
