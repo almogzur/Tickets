@@ -12,12 +12,21 @@ import {Typography  , Stack as Flex,  useTheme, Button} from '@mui/material'
 import AdminLayout from '@/Layouts/admin-layout'
 import { DateTimeValidationError, PickerChangeHandlerContext } from '@mui/x-date-pickers'
 import TabsForm from '@/components/admin/newEvent/tabs/tabs-form'
-import Theater from '@/components/admin/newEvent/theater/theater'
+import TheaterComponent from '@/components/admin/newEvent/theater/theater'
 
 //WraperContex
 import TabsTickets from '@/context/admin/new-event/tabs/tabs-ticket-context'
-import InfoTabContext from '@/context/admin/new-event/tabs/tabs-info-context'
+import TabInfoContext from '@/context/admin/new-event/tabs/tabs-info-context'
 import { Seats, SeatStyles } from '@/constants/models/Events'
+
+
+///////
+import SingleTipContext from '@/context/admin/new-event/map/single-tip-context';
+import MultiSelectContext from '@/context/admin/new-event/map/multi-select-context';
+import { Positions } from '@/pages/_app'
+import AdminTransformContext  from '@/context/admin/new-event/map/admin-map-positions-context'
+
+///////
 
 // validate schimas 
 export const BaceTicketVS = z.object({
@@ -57,12 +66,48 @@ export interface TheaterType {
   styles:SeatStyles
   ThaeaterName:string
 }
+export interface TipinfoType {
+initValue:number
+row:string
+seatNumber:number
+} 
+export interface MultiTipeInfoType  {
+seatNumber: number|undefined
+row: string
+first:number|undefined
+second:number|undefined
+totalselected:number
+err:string
+selectdir:"R"|"L"|undefined
+}
 
 const NewEventPage=()=>{
 
   const router = useRouter()
   const { data: session ,status ,update} = useSession()
   const theme = useTheme()
+
+    // AdminSingleTipState 
+    const [ singleTipPositions, setSingleTipPositions]=useState<Positions>({x:0,y:0})
+    const [ seatTipInfo , setSeatTipInfo ] = useState<TipinfoType>({initValue:0,row:"",seatNumber:0})
+    const resetSingleTip  = () :void=> { setSingleTipPositions({x:0,y:0}) ; setSeatTipInfo({initValue:0, row:"" , seatNumber:0}) }
+    const [AdminMapPositions , setAdminMapPositions] = useState<Positions>({x:0,y:0,Scale:0,disabled:false})
+
+    //AdminMiltiTipState
+    const [multiTipInfo, setMultiTipInfo]=useState<MultiTipeInfoType>({
+        first:undefined, 
+        second:undefined,
+        totalselected:0 ,
+         row:"" ,
+         err:"" ,
+         seatNumber:undefined  ,
+        selectdir:undefined
+         })
+    const [ multiTipPositions , setMutiTipPositions ]= useState<Positions>({x:0,y:0})
+    const resetMultiTip = ():void=>{ setMutiTipPositions({x:0,y:0}) ; setMultiTipInfo(p=>({first:undefined, second:undefined,totalselected:0 , row:"" ,err:"" ,seatNumber:undefined  , selectdir:undefined})  ) }
+    const resetErr = () : void=>{ setMultiTipInfo(p=>({...p,err:""}))}
+  
+  
 
   // G Info Filed 
   const [infoFileds,setInfoFileds]=useState<InfoFormType>({
@@ -98,17 +143,28 @@ return (
   </Head>
      <AdminLayout>
        <form>  
-         <InfoTabContext.Provider value={{infoFileds,setInfoFileds}}>
+
+
+         <TabInfoContext.Provider value={{infoFileds,setInfoFileds}}>
+
          <TabsTickets.Provider  value={{tickets ,setTickets}} >
-        
-         <TabsForm />
-
-           {  infoFileds.Theater &&
-          <Theater  /> 
-           }
-
+            <TabsForm />
          </TabsTickets.Provider>
-         </InfoTabContext.Provider> -
+
+          {  infoFileds.Theater &&
+             <AdminTransformContext.Provider value={{AdminMapPositions,setAdminMapPositions}}>   
+              <MultiSelectContext.Provider value={{multiTipPositions,setMutiTipPositions,resetMultiTip , multiTipInfo, setMultiTipInfo ,resetErr }} >
+               <SingleTipContext.Provider value={{ singleTipPositions, setSingleTipPositions, seatTipInfo, setSeatTipInfo , resetSingleTip }}>
+                   <TheaterComponent  TheaterDate={infoFileds.Theater}  /> 
+              </SingleTipContext.Provider>
+              </MultiSelectContext.Provider>
+            </AdminTransformContext.Provider>        
+          }
+
+         </TabInfoContext.Provider> 
+
+
+
 
         <Flex p={4} alignItems={"center"} gap={4} direction={"row"} justifyContent={"center"} >
         <Button disabled   sx={{height:50 ,width:100,background:"black"}} > פרסם </Button>

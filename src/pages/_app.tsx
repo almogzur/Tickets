@@ -11,12 +11,8 @@ import { events as eventData } from '../constants/event';
 import MoviesContext from '../context/Events'
 import WidthContext from '../context/WidthContext';
 /////
-import AdminTransformContext  from '../context/admin/new-event/map/admin-map-positions-context'
 import ClineTransformContext from '@/context/client/client-map-positions-context'
-///////
-import SingleTipContext from '@/context/admin/new-event/map/single-tip-context';
-import multiSelectContext from '@/context/admin/new-event/map/multi-select-context';
-///////
+
 import ClientTipContext from '@/context/client/c-tip-context'
 //Auth 
 import { SessionProvider } from "next-auth/react"
@@ -24,7 +20,6 @@ import { SessionProvider } from "next-auth/react"
 //MUI ------
 import { Color, createTheme, ThemeProvider } from '@mui/material/styles';
 import { blue, grey } from '@mui/material/colors';
-
 
 //Day JS
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -38,28 +33,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 // Geo Location  Map  Css
 import '@tomtom-international/web-sdk-maps/dist/maps.css'
+import { TipinfoType } from './admin/new-event';
 
-// Theater Types
-export interface Positions {
-    x:number ,
-    y:number ,
-    Scale?:number ,
-    disabled? :boolean
-}
-export interface TipinfoType {
-  initValue:number
-  row:string
-  seatNumber:number
-} 
-export interface MultiTipeInfoType  {
-  seatNumber: number
-  row: string
-  first:number
-  second:number
-  totalselected:number
-  err:string
-  selectdir:"R"|"L"|undefined
-}
 
 export const FullDateOptions :Intl.DateTimeFormatOptions = {
   year:'numeric',
@@ -75,6 +50,13 @@ export const samiDateOptions :Intl.DateTimeFormatOptions = {
         month: 'long',
         day: 'numeric',
 };
+
+export interface Positions {
+  x:number ,
+  y:number ,
+  Scale?:number ,
+  disabled? :boolean
+}
 
 
 const theme  = createTheme({    
@@ -195,37 +177,10 @@ const theme  = createTheme({
 
 )
 
-function MyApp({  Component,  pageProps: { session, ...pageProps }}: AppProps) {
+
+const MyApp=({  Component,  pageProps: { session, ...pageProps }}: AppProps)=> {
 
   const [events, setEvents] = useState<Event[]>(eventData);
-
-
-  // Admin Side
-
-  // admin map State 
-  const [AdminMapPositions , setAdminMapPositions] = useState<Positions>({x:0,y:0,Scale:0,disabled:false})
- 
-  // AdminSingleTipState 
-  const [ singleTipPositions, setSingleTipPositions]=useState<Positions>({x:0,y:0})
-  const [ seatTipInfo , setSeatTipInfo ] = useState<TipinfoType>({initValue:0,row:"",seatNumber:0})
-  const resetSingleTip  = () :void=> { setSingleTipPositions({x:0,y:0}) ; setSeatTipInfo({initValue:0, row:"" , seatNumber:0}) }
-
-  //AdminMiltiTipState
-  const [multiTipInfo, setMultiTipInfo]=useState<MultiTipeInfoType>({
-      first:0, 
-      second:0,
-      totalselected:0 ,
-       row:"" ,
-       err:"" ,
-       seatNumber:0  ,
-      selectdir:undefined
-       })
-  const [ multiTipPositions , setMutiTipPositions ]= useState<Positions>({x:0,y:0})
-  const resetMultiTip = ():void=>{ setMutiTipPositions({x:0,y:0}) ; setMultiTipInfo(p=>({first:0, second:0,totalselected:0 , row:"" ,err:"" ,seatNumber:0  , selectdir:undefined})  ) }
-  const resetErr = () : void=>{ setMultiTipInfo(p=>({...p,err:""}))}
-
-
-// Clinet Side
 
   // client map
   const [ClientMapPositions , setClientMapPositions] =useState<Positions>({ x:0 ,y:0 ,Scale:undefined})
@@ -249,10 +204,7 @@ return (
   <SessionProvider>
   <ThemeProvider theme={theme}>
   <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='he'  >
-  <multiSelectContext.Provider value={{multiTipPositions,setMutiTipPositions,resetMultiTip , multiTipInfo, setMultiTipInfo ,resetErr }} >
-  <SingleTipContext.Provider value={{ singleTipPositions, setSingleTipPositions, seatTipInfo, setSeatTipInfo , resetSingleTip }}>
   <ClineTransformContext.Provider value={{ClientMapPositions ,setClientMapPositions}}>
-  <AdminTransformContext.Provider value={{AdminMapPositions,setAdminMapPositions}}>
   <ClientTipContext.Provider value={{ clientTipPosition,setClientTipPosition, clinetTipInfo ,setClinetTipInfo,resetClinetTip }} >
   <MoviesContext.Provider value={{events, setEvents}}>
   <WidthContext.Provider value={{xxl,xl,lg,md,sm,xs,xxs}}>
@@ -260,10 +212,7 @@ return (
   </WidthContext.Provider>
   </MoviesContext.Provider>
   </ClientTipContext.Provider>
-  </AdminTransformContext.Provider>
   </ClineTransformContext.Provider>
-  </SingleTipContext.Provider>
-  </multiSelectContext.Provider>
   </LocalizationProvider>
   </ThemeProvider>
   </SessionProvider>

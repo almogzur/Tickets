@@ -1,4 +1,5 @@
-import { Positions, TipinfoType } from '@/pages/_app'
+import { Positions,  } from '@/pages/_app'
+import { TipinfoType } from '@/pages/admin/new-event'
 import { createContext, SetStateAction } from 'react'
 
 

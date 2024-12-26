@@ -1,14 +1,15 @@
-import { createContext, SetStateAction } from 'react'
+import { createContext, Dispatch, SetStateAction } from 'react'
 
 
-import { Positions , MultiTipeInfoType } from '@/pages/_app'
+import { Positions  } from '@/pages/_app'
+import { MultiTipeInfoType } from '@/pages/admin/new-event'
 
 interface MultiTipContenxtType {
      multiTipPositions:Positions
      multiTipInfo: MultiTipeInfoType
-     setMutiTipPositions:React.Dispatch<React.SetStateAction<Positions>>
+     setMutiTipPositions:Dispatch<React.SetStateAction<Positions>>
      resetMultiTip:()=> void
-     setMultiTipInfo:React.Dispatch<React.SetStateAction<MultiTipeInfoType>>
+     setMultiTipInfo:Dispatch<React.SetStateAction<MultiTipeInfoType>>
      resetErr: () => void
 }
 
@@ -32,8 +33,8 @@ export default createContext<MultiTipContenxtType>({
      multiTipInfo: {
           seatNumber: 0,
           row: "",
-          first: 0,
-          second: 0,
+          first: undefined,
+          second: undefined,
           totalselected: 0,
           err: "",
           selectdir: undefined

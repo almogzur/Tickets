@@ -10,14 +10,14 @@ import { TheaterType,InfoFormType } from "@/pages/admin/new-event"
 
 
 interface SingleSelectTipPropsType  { 
-  theater:TheaterType ,
+  theaterDate:TheaterType ,
    setTheater:Dispatch<SetStateAction<InfoFormType>>
   }
 
-const SingleSelectTip= ({theater ,setTheater }:SingleSelectTipPropsType)=>{
+const SingleSelectTip= ({theaterDate ,setTheater }:SingleSelectTipPropsType)=>{
    const theme= useTheme()
 
-    const { setSingleTipPositions,singleTipPositions , seatTipInfo, setSeatTipInfo,resetSingleTip }=useContext(SingleTipContext)
+    const { singleTipPositions , seatTipInfo, setSeatTipInfo,resetSingleTip }=useContext(SingleTipContext)
     
    // useEffect(()=>{ console.log(seatTipInfo) },[seatTipInfo])
 
@@ -28,66 +28,74 @@ const SingleSelectTip= ({theater ,setTheater }:SingleSelectTipPropsType)=>{
 
               
          const row =  seatTipInfo.row
-         const inMain = theater.mainSeats ?  theater.mainSeats.hasOwnProperty(row??"") :null
-         const inSide = theater.sideSeats? theater.sideSeats.hasOwnProperty(row??"") : null
-         const initVlaue = seatTipInfo.initValue
+         const inMain = theaterDate.mainSeats.hasOwnProperty(row) 
+         const inSide =  theaterDate.sideSeats.hasOwnProperty(row) 
          const seatNumber = seatTipInfo.seatNumber
          
          if (inMain) {
-          setTheater((prevState) => {
-            
-            // Clone the entire previous state
-            const newState = {
+           setTheater((prevState) => {
+
+                 if(prevState.Theater){
+                // Clone the entire previous state
+                  const newState = {
               ...prevState,
-              theater: { ...prevState.Theater }
-            };
+              Theater: { ...prevState.Theater }
+                   };
         
-            // Clone mainSeats object
-            const updatedMainSeats = { ...newState.theater.mainSeats };
-        
-            // Clone the specific row to avoid mutation
-            const updatedRow = [...updatedMainSeats[row??""]];
-        
-            // Update the specific seat in the row
-            updatedRow[seatNumber?? 0] = newSeatValueArg;
-        
-            // Assign the updated row back to mainSeats
-            updatedMainSeats[row?? 0] = updatedRow;
-        
-            // Assign the updated mainSeats back to theater
-            newState.theater.mainSeats = updatedMainSeats;
-        
-            // Return the updated state
-            return newState;
-            
-          });
+                    // Clone mainSeats object
+                    const updatedMainSeats = { ...newState.Theater.mainSeats };
+
+                    // Clone the specific row to avoid mutation
+                    const updatedRow = [...updatedMainSeats[row]];
+
+                    // Update the specific seat in the row
+                    updatedRow[seatNumber] = newSeatValueArg;
+
+                    // Assign the updated row back to mainSeats
+                    updatedMainSeats[row] = updatedRow;
+
+                    // Assign the updated mainSeats back to theater
+                    newState.Theater.mainSeats = updatedMainSeats;
+
+                    // Return the updated state
+                    return newState;
+                 }
+                else return prevState
+          }
+            );
+          
         }
          else if(inSide){
           setTheater((prevState) => {
-            // Clone the entire previous state
-            const newState = {
-              ...prevState,
-              theater: { ...prevState.Theater }
-            };
-        
-            // Clone mainSeats object
-            const updatedMainSeats = { ...newState.theater.sideSeats };
-        
-            // Clone the specific row to avoid mutation
-            const updatedRow = [...updatedMainSeats[row??""]];
-        
-            // Update the specific seat in the row
-            updatedRow[seatNumber?? 0] = newSeatValueArg;
-        
-            // Assign the updated row back to mainSeats
-            updatedMainSeats[row??""] = updatedRow;
-        
-            // Assign the updated mainSeats back to theater
-            newState.theater.sideSeats = updatedMainSeats;
-        
-            // Return the updated state
-            return newState;
-          });
+            if(prevState.Theater){
+
+                    // Clone the entire previous state
+                    const newState = {
+                      ...prevState,
+                      Theater: { ...prevState.Theater }
+                    };
+                  
+                    // Clone mainSeats object
+                    const updatedMainSeats = { ...newState.Theater.sideSeats };
+                  
+                    // Clone the specific row to avoid mutation
+                    const updatedRow = [...updatedMainSeats[row]];
+                  
+                    // Update the specific seat in the row
+                    updatedRow[seatNumber] = newSeatValueArg;
+                  
+                    // Assign the updated row back to mainSeats
+                    updatedMainSeats[row] = updatedRow;
+                  
+                    // Assign the updated mainSeats back to theater
+                    newState.Theater.sideSeats = updatedMainSeats;
+                  
+                    // Return the updated state
+                    return newState;
+             }
+             else return prevState
+          }
+        );
          }
          resetSingleTip()
     };

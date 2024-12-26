@@ -8,17 +8,17 @@ import { InfoFormType } from "@/pages/admin/new-event"
 
     interface MultiSelectTipType {
         isMultiSelect: boolean
-        theater:TheaterType
+        theaterDate:TheaterType
         setTheater:Dispatch<SetStateAction<InfoFormType>>
     }
 
-  const MuliSelectTip =({theater,setTheater}:MultiSelectTipType)=>{
+  const MuliSelectTip =({theaterDate,setTheater}:MultiSelectTipType)=>{
 
-    const {multiTipPositions , setMutiTipPositions ,resetMultiTip , multiTipInfo,setMultiTipInfo ,resetErr}= useContext(MultiSelectContext)
+    const {multiTipPositions  ,resetMultiTip , multiTipInfo,setMultiTipInfo ,resetErr}= useContext(MultiSelectContext)
 
     const upateSeateValue  = (newSeatValueArg: number  ) : void =>  {
 
-      console.log(multiTipInfo,theater);
+      console.log(multiTipInfo,theaterDate);
       
 
         const dirArg = multiTipInfo.selectdir
@@ -26,81 +26,97 @@ import { InfoFormType } from "@/pages/admin/new-event"
         const first = multiTipInfo.first
         const second = multiTipInfo.second
 
-      const inMain =  theater.mainSeats.hasOwnProperty(row)  
-      const inSide =  theater.sideSeats.hasOwnProperty(row)  
+      const inMain =  theaterDate.mainSeats.hasOwnProperty(row)  
+      const inSide =  theaterDate.sideSeats.hasOwnProperty(row)  
 
 
        if(inMain ){
         setTheater(prevState => {
+          if(prevState.Theater && first !==undefined &&second !==undefined){
 
-          // Clone the previous state immutably
-          const newState = {
-            ...prevState,
-            theater: { ...prevState.Theater },
-          };
-          
-          // Clone the sideSeats object
-          const newSideSeats = { ...newState.theater.mainSeats };
+                   // Clone the previous state immutably
+                   const newState = {
+                     ...prevState,
+                     Theater: { ...prevState.Theater },
+                   };
+
+                   // Clone the sideSeats object
+                   const newSideSeats = { ...newState.Theater.mainSeats };
+                 
+                   // Clone the specific row to ensure immutability
+                   const updatedRow = [...newSideSeats[row]];
+                 
+                   // Perform updates based on the direction
+                   let newRow : number[] =[];
+                   if (dirArg === "R") {
+                     newRow = updatedRow.map((seat, index) =>
+                       index >= second && index <= first ? newSeatValueArg : seat
+                     );
+                   } else if (dirArg === "L") {
+                     newRow = updatedRow.map((seat, index) =>
+                       index >= first && index <= second ? newSeatValueArg : seat
+                     );
+                   }
+                 
+                   // Update the specific row in sideSeats
+                   newSideSeats[row] = newRow;
         
-          // Clone the specific row to ensure immutability
-          const updatedRow = [...newSideSeats[row]];
+                     // Reassign updated sideSeats back to the state
+                     newState.Theater.mainSeats = newSideSeats;
         
-          // Perform updates based on the direction
-          let newRow : number[] =[];
-          if (dirArg === "R") {
-            newRow = updatedRow.map((seat, index) =>
-              index >= second && index <= first ? newSeatValueArg : seat
-            );
-          } else if (dirArg === "L") {
-            newRow = updatedRow.map((seat, index) =>
-              index >= first && index <= second ? newSeatValueArg : seat
-            );
-          }
-        
-          // Update the specific row in sideSeats
-          newSideSeats[row] = newRow;
-        
-          // Reassign updated sideSeats back to the state
-          newState.theater.mainSeats = newSideSeats;
-        
-          return newState;
-        });
+                    return newState;
+        }
+           else{
+                    return {...prevState}
+        }
+      }
+       );
          }
-         else if(inSide){
+      else if(inSide){
+
+
         setTheater((prevState) => {
-  // Clone the previous state immutably
-  const newState = {
-    ...prevState,
-    theater: { ...prevState.Theater },
-  };
+          if(prevState.Theater && first !==undefined &&second !==undefined){
+            // Clone the previous state immutably
+              const newState = {
+                ...prevState,
+                Theater: { ...prevState.Theater },
+              };
+            
+              // Clone the sideSeats object
+              const newSideSeats = { ...newState.Theater.sideSeats };
+            
+              // Clone the specific row to ensure immutability
+              const updatedRow = [...newSideSeats[row]];
+            
+              // Perform updates based on the direction
+              let newRow : number[] = [];
+            
+              if (dirArg === "R") {
+                newRow = updatedRow.map((seat, index) =>
+                  index >= second && index <= first ? newSeatValueArg : seat
+                );
+              } 
+              else if (dirArg === "L") {
+                newRow = updatedRow.map((seat, index) =>
+                  index >= first && index <= second ? newSeatValueArg : seat
+                );
+                }
 
-  // Clone the sideSeats object
-  const newSideSeats = { ...newState.theater.sideSeats };
+                // Update the specific row in sideSeats
+                newSideSeats[row] = newRow;
 
-  // Clone the specific row to ensure immutability
-  const updatedRow = [...newSideSeats[row]];
+                // Reassign updated sideSeats back to the state
+                newState.Theater.sideSeats = newSideSeats;
 
-  // Perform updates based on the direction
-  let newRow : number[] = [];
-
-  if (dirArg === "R") {
-    newRow = updatedRow.map((seat, index) =>
-      index >= second && index <= first ? newSeatValueArg : seat
-    );
-  } else if (dirArg === "L") {
-    newRow = updatedRow.map((seat, index) =>
-      index >= first && index <= second ? newSeatValueArg : seat
-    );
-  }
-
-  // Update the specific row in sideSeats
-  newSideSeats[row] = newRow;
-
-  // Reassign updated sideSeats back to the state
-  newState.theater.sideSeats = newSideSeats;
-
-  return newState;
-});
+              return newState;
+  
+          }
+          else{
+            return prevState
+          }
+        }
+);
    
          }
        resetMultiTip()
@@ -136,11 +152,11 @@ import { InfoFormType } from "@/pages/admin/new-event"
         }}
            >
              <Flex alignItems={"center"} >
-               <Typography color='primary' variant='inherit' textAlign={"center"} p={0.5} >{   multiTipInfo.row } מושב : {multiTipInfo.first+1}</Typography>                    
+            {multiTipInfo.first !==undefined &&   <Typography color='primary' variant='inherit' textAlign={"center"} p={0.5} >{   multiTipInfo.row } מושב : {multiTipInfo.first+1}</Typography>    }                
                
                <Divider  sx={{ color:theme.palette.warning.main , p:0.5,  width:"100%"}}   > {multiTipInfo.second? "עד":null}</Divider>
 
-                {!multiTipInfo.err && multiTipInfo.second !==null &&
+                {!multiTipInfo.err && multiTipInfo.second !==undefined &&
                  <Flex alignItems={"center"}> 
 
                  { multiTipInfo.second != undefined  &&  <Typography variant='inherit' textAlign={'center'}  color='warning'  >  מושב {  multiTipInfo.second+1}</Typography>}

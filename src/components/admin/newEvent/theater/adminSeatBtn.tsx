@@ -78,13 +78,10 @@ const AdminSeatBtn = ({ seatValue, seatnumber, row , isMultiSelect }:AdminSeatBt
 
  const multiSelectHndler = (seatNArg:number,rowArg:string, xArg: number, yArg: number)=>{
 
-        
-
-  
-          if(  multiTipInfo.row.length!=0    ){
+          if(  !multiTipInfo.row    ){
          
             setMutiTipPositions({x:xArg ,y:yArg})
-            setMultiTipInfo(prev=>({...prev,first:seatNArg, row:rowArg}))
+            setMultiTipInfo((prev)=>({...prev,first:seatNArg, row:rowArg}))
           }
           else if( multiTipInfo.first !== undefined &&  rowArg === multiTipInfo.row && seatNArg !== multiTipInfo.first ){
 

@@ -14,24 +14,25 @@ import AdminNewEventTheatherMap from './new-event-theather-map';
 // Context 
 import WidthContext from '@/context/WidthContext';
 import TabsInfoContest from '@/context/admin/new-event/tabs/tabs-info-context'
+import { TheaterType } from '@/pages/admin/new-event';
 
 
-    const Theater = () => {
+    const Theater = ({TheaterDate}:{TheaterDate:TheaterType}) => {
 
-      const {infoFileds,setInfoFileds} = useContext(TabsInfoContest)
+      const {setInfoFileds} = useContext(TabsInfoContest)
       const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
       const theme = useTheme()    
        const [isMultiSelect , setIsMultiSelect]=useState<boolean>(false)
        const [amountOfSeatsSelcted , setAmountOfSeatsSelcted] = useState<number>(0)
 
 
-       const sideSeatsStylesObject =  infoFileds.Theater?.styles &&  Object.fromEntries(
-        Object.entries(infoFileds.Theater.styles ).map(([row, positions]) => [row, positions])
+       const sideSeatsStylesObject =  Object.fromEntries(
+        Object.entries(TheaterDate.styles ).map(([row, positions]) => [row, positions])
       )
-       const sideTextStylesObject =     infoFileds.Theater?.textsStyle &&  Object.fromEntries(
-        Object.entries(infoFileds.Theater.textsStyle).map(([row, positions]) => [row, positions])
+       const sideTextStylesObject =     Object.fromEntries(
+        Object.entries(TheaterDate.textsStyle).map(([row, positions]) => [row, positions])
       )
-       const MainSeatS  =  infoFileds.Theater?.mainSeats  && Object.entries(infoFileds.Theater.mainSeats).map(([row, rowContent]) => {
+       const MainSeatS  =   Object.entries(TheaterDate.mainSeats).map(([row, rowContent]) => {
         const colValue  = rowContent.map((seatValue: number, i: number) => {
           const textset = "מושב";
           const textrow = "שורה";
@@ -43,7 +44,6 @@ import TabsInfoContest from '@/context/admin/new-event/tabs/tabs-info-context'
               seatnumber={i}
               row={row}
               isMultiSelect={isMultiSelect} 
-               
               />
           );
         })
@@ -64,7 +64,7 @@ import TabsInfoContest from '@/context/admin/new-event/tabs/tabs-info-context'
           </Flex>
         );
       })
-       const SideSeats = infoFileds.Theater?.sideSeats &&  Object.entries(infoFileds.Theater.sideSeats).map(([row, rowContent])=>{
+       const SideSeats =   Object.entries(TheaterDate.sideSeats).map(([row, rowContent])=>{
         const colValue  = rowContent.map((seatValue: number, i: number) => {
          
         
@@ -94,28 +94,28 @@ import TabsInfoContest from '@/context/admin/new-event/tabs/tabs-info-context'
             </Flex>
           );
       })
-       const Text = infoFileds.Theater?.sideSeats?   Object.entries(infoFileds.Theater.sideSeats).map(([row, rowContent])=>{
+       const Text =  Object.entries(TheaterDate.sideSeats).map(([row, rowContent])=>{
            return <Typography key={row}  color='textPrimary' height={0} style={sideTextStylesObject? sideTextStylesObject[row] :{}} >{row}</Typography>
-      }):undefined
+      })
 
     return (
 
       <Container>
         
-        {infoFileds.Theater &&    
+       
            <>
             <SingleSelectTip 
-              theater={  infoFileds.Theater}
+              theaterDate={  TheaterDate}
                setTheater={setInfoFileds}
            /> 
 
          <MuliSelectTip 
             isMultiSelect={isMultiSelect}
-            theater={infoFileds.Theater}
+            theaterDate={TheaterDate}
             setTheater={setInfoFileds}
           />
           </>
-            }
+            
 
 
          <AdminNewEventTheatherMap // style in children 
