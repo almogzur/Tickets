@@ -43,8 +43,8 @@ type HTMLInputTypes =
 interface InputWrapType   {
     
     stateName?:string // the name of the state to update in the event 
-    label:string  
-    value:string
+    label:string
+    value:string|number|undefined
     onChangeHndler:ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement|HTMLSelectElement>
     textColorStateFocused?:CSSProperties['color']
     textColorStateFilled?:CSSProperties['color']    
@@ -100,13 +100,13 @@ const InputWrap = ({
         <TextField
             id={label}
             type={inputType}//defult to text
-            value={value}
+            value={value?? ""}
             onChange={onChangeHndler}
             required={isRequired}
             disabled={isDisabled}
             name={stateName}
             helperText={ helpText? <Typography variant='subtitle2' >{helpText}</Typography> : null }
-
+      
             sx={{ 
                 flexGrow:Fgrow?? null,
                  bgcolor:bg,

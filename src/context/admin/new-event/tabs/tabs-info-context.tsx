@@ -16,6 +16,7 @@ export default createContext<InfoTabContextType>(
                 location: "",
                 pre: "",
                 cat: "",
+                TheaterName:"",
                 Theater: undefined,
                 image: undefined,
                 preview: "",

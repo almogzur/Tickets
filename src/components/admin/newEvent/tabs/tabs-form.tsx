@@ -63,7 +63,7 @@ const TabsForm = ({ }:TabFormPropsType)=>{
           onChange={handleTabChange}
           textColor='primary'
           indicatorColor='primary'
-          sx={{ background:"black"}}
+          sx={{ background:"black", position:'sticky',top:0,zIndex:100}}
           scrollButtons
           allowScrollButtonsMobile        
           variant='scrollable'

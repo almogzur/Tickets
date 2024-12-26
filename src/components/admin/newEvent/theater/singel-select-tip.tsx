@@ -39,7 +39,7 @@ const SingleSelectTip= ({theater ,setTheater }:SingleSelectTipPropsType)=>{
             // Clone the entire previous state
             const newState = {
               ...prevState,
-              theater: { ...prevState.theater }
+              theater: { ...prevState.Theater }
             };
         
             // Clone mainSeats object
@@ -67,7 +67,7 @@ const SingleSelectTip= ({theater ,setTheater }:SingleSelectTipPropsType)=>{
             // Clone the entire previous state
             const newState = {
               ...prevState,
-              theater: { ...prevState.theater }
+              theater: { ...prevState.Theater }
             };
         
             // Clone mainSeats object

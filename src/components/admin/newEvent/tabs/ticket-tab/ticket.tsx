@@ -7,7 +7,7 @@ import WidthContext from "@/context/WidthContext";
 
 
 // Types 
-import { BaceTicket, TicketType } from "@/pages/admin/new-event";
+import { BaceTIcketType, BaceTIcketType_Partial } from "@/pages/admin/new-event";
 
 //Components 
 import { useTheme , Stack as Flex , Container, Divider } from "@mui/material";
@@ -25,10 +25,11 @@ import { FaFilePdf } from "react-icons/fa6";
 
 //Colors
 import { grey } from "@mui/material/colors";
+import { FullDateOptions } from "@/pages/_app";
 
 
-const TicketComponent = ({...props    }:BaceTicket) => {
 
+const TicketComponent = ({ eventName,EndSealesDate,price,priceInfo,selectedType,cat,location ,Date  }:BaceTIcketType) => {
     const theme = useTheme()
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
     
@@ -61,12 +62,11 @@ const TicketComponent = ({...props    }:BaceTicket) => {
                 
 
                  <Flex>
-                        <FaFilePdf size={"2em"} color={theme.palette.secondary.main} style={{marginRight:20}} />
+                        <FaFilePdf size={"2em"} color={theme.palette.primary.main} style={{marginRight:5}} />
                  </Flex >
 
                     <Flex direction={'row'}  justifyContent={"end"} gap={2} >
-                      <MdEdit size={"2em"}  color={theme.palette.secondary.main} />
-                      <MdDelete  size={"2em"} color={theme.palette.secondary.main} />
+                      <MdDelete  size={"2.5em"} color={theme.palette.primary.main} />
                 </Flex>
              
   
@@ -89,21 +89,23 @@ const TicketComponent = ({...props    }:BaceTicket) => {
                 <Flex direction={ !xs? "column": "row"} alignContent={"center"} flexWrap={"wrap"} >
                 <MyChip m={0.5} 
                               text={ 
-                                  props.selectedType==="normal" ? "   סוג : רגיל "
+                                   selectedType==="normal" ?
+                                    " סוג : רגיל "
                                    :
-                                    props.selectedType==="discount"?  " סוג : הנחה"  :
-                                     props.selectedType==="citizen"? "סוג : תושב "
-                                     :""
+                                    selectedType==="discount"? 
+                                     " סוג : הנחה"
+                                       :
+                                    "סוג : תושב "
                                      } 
                  />
-                   <MyChip text={   "מחיר : "+    props.finelPrice    }  m={0.5} grow={1} />
+                   <MyChip text={   "מחיר : "+    price    }  m={0.5} grow={1} />
 
-                   { props.selectedType === 'discount' && 
-                  <MyChip text={props.priceInfo}   m={0.5} grow={0}  /> 
+                   { selectedType === 'discount' && 
+                  <MyChip text={priceInfo}   m={0.5} grow={0}  /> 
                     }
                   {
-                  props.selectedType === "citizen" && 
-                  <MyChip text={ "סוג ההנחה : "+ props.priceInfo}   m={0.5} grow={0}  /> 
+                  selectedType === "citizen" && 
+                  <MyChip text={  priceInfo}   m={0.5} grow={0}  /> 
                 }
              
 
@@ -111,16 +113,16 @@ const TicketComponent = ({...props    }:BaceTicket) => {
 
               <Flex direction={ !xs? "column": "row"} flexWrap={"wrap"} alignContent={"center"}    >
 
-                <MyChip text={ "מיקום : " +  props.location}m={0.5}  />
+                <MyChip text={ "מיקום : " +  location}m={0.5}  />
 
-                <MyChip text={ "שם : " +props.evenName}   m={0.5} />
+                <MyChip text={ "שם : " +eventName}   m={0.5} />
 
                
               </Flex>
 
               <Flex direction={ !xs? "column": "row"}  flexWrap={"wrap"}  alignContent={"center"} >
-              <MyChip text={ "  תאריך האירוע :  " + props.eventDate}  m={0.5} grow={4}/>
-              <MyChip text={ "  סגירת קופות : " +  props.TicketClosingSealesDate}  m={0.5} grow={0}  /> 
+              <MyChip text={ "  תאריך האירוע :  " +Date.toLocaleDateString("he-IL",FullDateOptions) }  m={0.5} grow={4}/>
+              <MyChip text={ "  סגירת קופות : " +  EndSealesDate.toLocaleDateString("he-Il",FullDateOptions)}  m={0.5} grow={0}  /> 
          
           
               </Flex>

@@ -3,6 +3,7 @@ import { ChangeEvent, CSSProperties, ReactElement, ReactNode, useState } from "r
 import { IconType } from "react-icons";
 import { FcAbout } from "react-icons/fc";
 import { TiArrowDownThick } from "react-icons/ti";
+import ControledLabel from "./controled-form-label";
 
 interface SelectIemType {
     value:any
@@ -12,6 +13,7 @@ interface SelectIemType {
 
 interface SelectWrapType {
     items:SelectIemType[]
+    value:string|undefined,
     changeHndler:(event: SelectChangeEvent<any>) => void
     styles?:CSSProperties
     label:string
@@ -21,13 +23,11 @@ interface SelectWrapType {
     
 }
 
-const SelectWrap = ({items, changeHndler ,styles , label, icon, variant , labelPositioin}:SelectWrapType)=>{
+const SelectWrap = ({items, changeHndler ,styles , label, icon, variant , labelPositioin,value}:SelectWrapType)=>{
 
-  const [loacalLabel, setLoacalLabel] = useState('');
 
-  const handleChange = (e:SelectChangeEvent<any>) => {
-    setLoacalLabel(e.target.value);
-  };
+
+
 
 
 
@@ -59,9 +59,9 @@ const SelectWrap = ({items, changeHndler ,styles , label, icon, variant , labelP
                 {label}
                 </InputLabel>
           <Select
-            label={label}  
-            value={loacalLabel }
-            onChange={(e)=>{changeHndler(e) ;   handleChange(e)}  }
+            label={label}
+            value={value ?? ""}
+            onChange={changeHndler }
             variant={ variant? variant: "standard"}
             endAdornment={labelPositioin === "top" ? icon : null}
             startAdornment={labelPositioin === "end"?   icon : null}

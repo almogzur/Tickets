@@ -12,8 +12,9 @@ import { FullDateOptions } from "@/pages/_app"
 // Components
 import MakeNewTickit from "./make-new-ticket"
 import { Container, Divider, Stack as Flex , Typography , useTheme} from "@mui/material"
-//Icons 
 
+
+//Icons 
 import { FcFilm, } from "react-icons/fc";
 import TicketComponent from "./ticket"
 import { IoMdAddCircle } from "react-icons/io"
@@ -28,8 +29,6 @@ import Eilat_2 from "@/constants/theathers/eilat_2";
 import TabsInfoContext from "@/context/admin/new-event/tabs/tabs-info-context"
 import SelectWrap from "@/components/select-wrap"
 import { IoTicket } from "react-icons/io5"
-
-
 
 
 
@@ -81,8 +80,10 @@ interface TicketsTabPropsType {  setTabPage : Dispatch<SetStateAction<number>>}
         <SelectWrap 
               label={"בחר אולם"}
               items={[{ label: Eilat_1.ThaeaterName, value: Eilat_1 }, { label: Eilat_2.ThaeaterName, value: Eilat_2 }]}
-              changeHndler={(e) => setInfoFileds(p => ({ ...p, Theater: e.target.value }))} labelPositioin={"top"}               
-                />
+              changeHndler={(e) => setInfoFileds(p => ({ ...p, Theater: e.target.value  , TheaterName:e.target.value}))} 
+              labelPositioin={"top"} 
+              value={infoFileds.TheaterName}               
+               />
         <Divider sx={{borderWidth:3,mt:1}} />
         { infoFileds.Theater &&
           <>
@@ -122,6 +123,9 @@ interface TicketsTabPropsType {  setTabPage : Dispatch<SetStateAction<number>>}
          </>
          }
           {/* loop over tickits tikits.map....  */}
+          {tickets.map((ticket,i)=>{
+              return <TicketComponent key={"ticket" + i + ticket.selectedType} {...ticket} />
+          })}
   
           </Container>
 
@@ -129,6 +133,7 @@ interface TicketsTabPropsType {  setTabPage : Dispatch<SetStateAction<number>>}
      </Flex>
      )
    }
+        // price={ticket.price} eventName={ticket.eventName} location={ticket.location} cat={ticket.cat} Date={ticket.Date} EndSealesDate={ticket.EndSealesDate} selectedType={ticket.selectedType} priceInfo={""}
 
 
 

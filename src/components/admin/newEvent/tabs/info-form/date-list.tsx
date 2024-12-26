@@ -51,7 +51,6 @@ const DatesList = ()=>{
        <Flex     >
 
        <DateTimePickerWrap                 
-          orientation={!sm ? "portrait" : 'landscape'}
           MediaQuery={theme.breakpoints.up("sm")}
           minDate={new Date()}
           value={ infoFileds.Date? infoFileds.Date :undefined }

@@ -3,7 +3,6 @@ import { StaticImageData } from "next/image"
 import { CSSProperties, ReactNode } from "react"
 
 export type Event = {
-  sideSeats: any
   id: number,
   name: string,
   cover: StaticImageData,

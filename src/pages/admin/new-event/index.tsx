@@ -23,13 +23,15 @@ import { Seats, SeatStyles } from '@/constants/models/Events'
 export const BaceTicketVS = z.object({
   eventName : z.string().min(3).max(20),
   location: z.string().min(3).max(20),
-  cat: z.string().min(3).max(20),
+  cat: z.union([z.string().min(3).max(20),z.undefined()]),
   Date:z.date(),
   EndSealesDate: z.date(),
-  selectedType:z.union([z.literal("normal"),z.literal("discount"),z.literal("citizen"),z.undefined()]),
+  selectedType:z.union([z.literal("normal"),z.literal("discount"),z.literal("citizen")]),
   priceInfo:z.string().min(3),
-  finelPrice: z.number().or(z.string().regex(/^(?:[1-9]\d*|0)(?:\.\d{1,2})?$/g,{message:"not valid number"}).transform(Number)) // notes below 
-  .refine((n) => n >= 0)
+  price: z
+     .string()
+    .regex(/^(?!0$)(?:[1-9]\d*|0?\.\d{1,2})$/g,{message:"not valid number"})
+    .or(z.number().nonnegative().min(1))
 })  
 
 export type  BaceTIcketType  =   z.infer<typeof BaceTicketVS  > 
@@ -41,12 +43,14 @@ export interface InfoFormType  {
    location:string,
    cat:string
    pre:string
+   TheaterName:string|undefined
    Theater:TheaterType|undefined
    image:File|undefined
    preview:string
    isEventClosedForSeal:boolean
-   Date:Date|undefined
-}export interface TheaterType {
+   Date:Date|undefined,
+}
+export interface TheaterType {
   mainSeats:Seats 
   sideSeats:Seats 
   textsStyle:SeatStyles
@@ -66,6 +70,7 @@ const NewEventPage=()=>{
      location:"",
     cat:"",
     Theater:undefined,
+    TheaterName:undefined,
      Date:undefined,
      isEventClosedForSeal:false,
      pre:"",
@@ -105,8 +110,10 @@ return (
          </TabsTickets.Provider>
          </InfoTabContext.Provider> -
 
-        <Flex p={4} alignItems={"center"}  >
-        <Button disabled   sx={{height:50 ,width:100,background:"black"}} >  </Button>
+        <Flex p={4} alignItems={"center"} gap={4} direction={"row"} justifyContent={"center"} >
+        <Button disabled   sx={{height:50 ,width:100,background:"black"}} > פרסם </Button>
+        <Button disabled   sx={{height:50 ,width:100,background:"black"}}>טויוטה</Button>
+
       </Flex>
       </form>
 

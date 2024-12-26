@@ -1,5 +1,5 @@
 import WidthContext from "@/context/WidthContext"
-import { DateTimePicker, DateTimeValidationError, PickerChangeHandlerContext } from "@mui/x-date-pickers"
+import { DateTimePicker, DateTimeValidationError, MobileDateTimePicker, PickerChangeHandlerContext } from "@mui/x-date-pickers"
 import dayjs from "dayjs"
 import { CSSProperties, useContext, useEffect, useMemo } from "react"
 import { TextFieldVariants, Typography, useTheme , Stack as Flex, TextFieldProps  } from "@mui/material"
@@ -7,6 +7,7 @@ import { FcAbout } from "react-icons/fc"
 
 import  { useFormControl } from '@mui/material/FormControl';
 import  ControledLabel  from "./controled-form-label"
+import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
 
 
 
@@ -20,7 +21,6 @@ interface DateTimePickerWrapType  {
     onAcceptHendler: (value: dayjs.Dayjs | null, context: PickerChangeHandlerContext<DateTimeValidationError>) => void
     onEroorHndler: (e:DateTimeValidationError, context:dayjs.Dayjs|null )=>void
     labelPositioin:"top"|"end"
-    orientation: "portrait"| 'landscape'
     MediaQuery?:string 
     color?:TextFieldProps['color']
     helpText?:string,
@@ -35,20 +35,18 @@ const DateTimePickerWrap =({
         onAcceptHendler  ,
         maxTIme,
          MediaQuery,
-         orientation,
           color,
           helpText,
           onEroorHndler,
           minDate,
-
+        
          }:DateTimePickerWrapType)=>{
 
         const theme = useTheme()
     return    ( 
 
     <DateTimePicker                 
-            orientation= {orientation}    
-            desktopModeMediaQuery={MediaQuery??theme.breakpoints.up("sm")}
+            desktopModeMediaQuery={MediaQuery??theme.breakpoints.up("lg")}
             value={value?  dayjs(value) :null }
             closeOnSelect={false}
             
@@ -64,7 +62,11 @@ const DateTimePickerWrap =({
             sx={{  m:0.5 }}       
             onAccept={onAcceptHendler}
             onChange={()=>{}}
-      
+            viewRenderers={{
+                hours: renderTimeViewClock,
+                minutes: renderTimeViewClock,
+       }}
+
             slotProps={{
                     textField:{
                         variant:variant??"outlined" ,

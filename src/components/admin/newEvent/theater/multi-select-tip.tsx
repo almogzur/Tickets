@@ -36,7 +36,7 @@ import { InfoFormType } from "@/pages/admin/new-event"
           // Clone the previous state immutably
           const newState = {
             ...prevState,
-            theater: { ...prevState.theater },
+            theater: { ...prevState.Theater },
           };
           
           // Clone the sideSeats object
@@ -71,7 +71,7 @@ import { InfoFormType } from "@/pages/admin/new-event"
   // Clone the previous state immutably
   const newState = {
     ...prevState,
-    theater: { ...prevState.theater },
+    theater: { ...prevState.Theater },
   };
 
   // Clone the sideSeats object

@@ -18,7 +18,6 @@ export const events: Event[] = [
     citizenTicketCost: 1,
     cover: arzi,
     theater: Eilat_1,
-    sideSeats: undefined
   },
   {
     id: 2,
@@ -67,7 +66,6 @@ export const events: Event[] = [
     //      F: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     //      G: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     //    }
-    ,
-    sideSeats: undefined
+    
   }
 ]
