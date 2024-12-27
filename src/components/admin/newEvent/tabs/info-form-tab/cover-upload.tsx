@@ -1,7 +1,7 @@
 import { useSession } from 'next-auth/react'
 import {Dispatch, MouseEventHandler , useContext, useRef} from 'react'
 import { useRouter } from 'next/router'
-import {Typography , Stack as Flex ,useTheme , Box, Button } from '@mui/material'
+import {Typography , Stack as Flex ,useTheme , Box, Button, Chip, Tooltip } from '@mui/material'
 
 import Image from 'next/image'
 import WidthContext from '@/context/WidthContext'
@@ -13,6 +13,9 @@ import TabsInfoContext from '@/context/admin/new-event/tabs/tabs-info-context'
 import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
+import { grey } from '@mui/material/colors'
+import { RiImageAddFill } from 'react-icons/ri'
+import { LuImageMinus } from 'react-icons/lu'
 
 
 
@@ -45,39 +48,31 @@ const CoverUploadTab=({}:CoverUploadPropsType)=>{
       setInfoFileds(p=>({...p,preview:""})); 
       setInfoFileds(p=>({...p,image:undefined}))
       
-  }
+    }
   return
-  
-
   }
 
-
-    
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       
           const selectedFile  = e.target.files !== null  ?  e.target.files[0] :null
     
-    
             if (selectedFile) {
-              
               setInfoFileds (p=>({...p, image:selectedFile}))
               setInfoFileds( p=>({...p, preview:URL.createObjectURL(selectedFile)}) );
-
-            
-          
             }
     
     };
     
-
- 
 return (
 
          
       <Flex mt={3.5}  direction={"row"} gap={1}  >
-     
-        <Button sx={{p:0.5 , boxShadow:0}} onClick={openDialog}  >הוסף תמונה</Button>
-        <Button sx={{p:0.5,boxShadow:0}}  onClick={closeDialog} >הסר תמונה </Button>
+        <Tooltip  title={"הוסף תמונה "} placement='top' >
+         <Button  sx={{p:0.5 , boxShadow:0, background:grey[200]}} onClick={openDialog}  variant='text'  ><RiImageAddFill size={"1.5em"}  /></Button>
+        </Tooltip>
+        <Tooltip  title={"הסר תמונה "} placement='top' >
+         <Button  sx={{p:0.5 , boxShadow:0, background:grey[200]}} onClick={openDialog}  variant='text'  ><LuImageMinus size={"1.5em"}  /></Button>
+        </Tooltip>
  
            <input type='file' id='cover'    onChange={handleFileChange}  accept=".jpg, .jpeg, .png "  ref={Inputref}   hidden />
 

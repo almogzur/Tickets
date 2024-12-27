@@ -16,6 +16,11 @@ import useExtensions from "./useExtensions";
 import { Colors } from "@/lib/colors";
 import WidthContext from "@/context/WidthContext";
 import { blue, grey } from "@mui/material/colors";
+import TabsInfoContext from "@/context/admin/new-event/tabs/tabs-info-context";
+
+
+import { RiSave3Fill } from "react-icons/ri";
+import { FaEye } from "react-icons/fa";
 
 
 function fileListToImageFiles(fileList: FileList): File[] {
@@ -28,19 +33,24 @@ function fileListToImageFiles(fileList: FileList): File[] {
   });
 }
 
-export default function EditorTab() {
+export default function Editor() {
 
   const theme  = useTheme()
 
 
+
   const extensions = useExtensions({
-    placeholder: "הוסף תוכן על האירוע",
+    placeholder: "הוסף טקסט על האירוע",
   });
 
 
   const rteRef = useRef<RichTextEditorRef>(null);
   const [isEditable, setIsEditable] = useState(true);
   const [showMenuBar, setShowMenuBar] = useState(true);
+  const {infoFileds,setInfoFileds}= useContext(TabsInfoContext)
+  const [submittedContent, setSubmittedContent] = useState("");
+
+
 
   const handleNewImageFiles = useCallback(
     (files: File[], insertPosition?: number): void => {
@@ -125,15 +135,9 @@ export default function EditorTab() {
       [handleNewImageFiles],
     );
 
-  const [submittedContent, setSubmittedContent] = useState("");
-  const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
 
   return (
-
       <Box
- 
-
-
         sx={{
           // An example of how editor styles can be overridden. In this case,
           // setting where the scroll anchors to when jumping to headings. The
@@ -175,11 +179,9 @@ export default function EditorTab() {
           },
         }}
       > 
-      
-         <RichTextEditor
+         <RichTextEditor    
           ref={rteRef}
           extensions={extensions} 
-          
           immediatelyRender
           editable={isEditable}
           editorProps={{
@@ -205,19 +207,39 @@ export default function EditorTab() {
             footer: (
               <Flex
                 direction="row"
-                spacing={2}
+                alignItems={"center"}
+                gap={1}
                 sx={{
                   borderTopStyle: "solid",
                   borderTopWidth: 1,
                   borderTopColor: (theme) => theme.palette.divider,
-                  py: 1,
-                  px: 1.5,
+                  py: 1.5,
+                  px: 1,
                 }}
               >
-                <MenuButton
+                  <MenuButton    
+                  onClick={() => {
+                    setInfoFileds(p => ({ ...p, pre: rteRef.current?.editor?.getHTML() ?? "" }));
+                  } } 
+                  IconComponent={  RiSave3Fill}
+                  tooltipLabel={"שמור"}           
+                  style={{color:theme.palette.primary.main, background:grey[200] }}
+                  
+                  
+                       />
+           
+              
+                <MenuButton 
+                     tooltipLabel={"תצוגה מקדומה"}         
+                     IconComponent={FaEye}
+                     style={{color:theme.palette.primary.main, background:grey[200]}}
+                       />
+                  
+      
+                {/* <MenuButton
                   value="formatting"
                   tooltipLabel={
-                    showMenuBar ? "Hide formatting" : "Show formatting"
+                    showMenuBar ? "הסתר תפריט " : "החזר תפריט"
                   }
                   size="small"
                   onClick={() =>
@@ -225,32 +247,26 @@ export default function EditorTab() {
                   }
                   selected={showMenuBar}
                   IconComponent={TextFields}
-                />
+                /> */}
 
                 <MenuButton
                   value="formatting"
+                  
                   tooltipLabel={
                     isEditable
-                      ? "Prevent edits (use read-only mode)"
-                      : "Allow edits"
+                      ? "נעל לעריכה"
+                      : "אפשר עריכה "
                   }
                   size="small"
                   onClick={() => setIsEditable((currentState) => !currentState)}
                   selected={!isEditable}
                   IconComponent={isEditable ? Lock : LockOpen}
+                  style={{color:theme.palette.primary.main, background:grey[200]}}
+
+                  
                 />
 
-                {/* <Button
-                  variant="contained"
-                  size="small"
-                  onClick={() => {
-                    setSubmittedContent(
-                      rteRef.current?.editor?.getHTML() ?? "",
-                    );
-                  }}
-                >
-                  שמור
-                </Button> */}
+      
               </Flex>
             ),
           }}

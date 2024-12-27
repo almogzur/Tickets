@@ -141,8 +141,8 @@ import { InfoFormType } from "@/pages/admin/new-event"
           style={{
             width:150,
             position:'absolute',   
-            top:`${multiTipPositions.y-135 }px`,
-            left:`${multiTipPositions.x-150}px`,
+            top:`${multiTipPositions.y-95 }px`,
+            left:`${multiTipPositions.x-50}px`,
             textAlign:"end",
             zIndex:4,
             background:grey['A400'],

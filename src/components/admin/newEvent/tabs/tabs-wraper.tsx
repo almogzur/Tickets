@@ -18,12 +18,12 @@ import { FcBinoculars } from "react-icons/fc";
 import { FcInfo } from "react-icons/fc";
 
 // Tabs 
-import TicketsTab from './ticket-tab/tickets-tab'
+import TicketsTab from './ticket-tab/tickets-wrapper'
 import SettingTab from "./settings-tab"
 import ColorTab from "./colors-tab"
 import AdOptionsTab from "./ad-options-tab"
-import InfoForm from "./info-form/Wrapper"
-import PrevieTab from "./ticket-tab/preview-tab"
+import InfoFormTab from "./info-form-tab/Info-form-tab"
+import PrevieTab from "./preview-tab"
 import { IoTicket } from "react-icons/io5";
 
 //Types
@@ -33,7 +33,7 @@ import { IoTicket } from "react-icons/io5";
 
 interface TabFormPropsType {  }
 
-const TabsForm = ({ }:TabFormPropsType)=>{
+const TabsWraper = ({ }:TabFormPropsType)=>{
 
     const theme = useTheme()
     const [pageVale, setPageVale] = useState(0);
@@ -82,7 +82,7 @@ const TabsForm = ({ }:TabFormPropsType)=>{
  
       {
         pageVale=== 0 ?
-        <InfoForm/>
+        <InfoFormTab/>
         :
        pageVale === 1?
        <TicketsTab setTabPage={setPageVale} />
@@ -107,4 +107,4 @@ const TabsForm = ({ }:TabFormPropsType)=>{
     
   }
 
-export default TabsForm
+export default TabsWraper

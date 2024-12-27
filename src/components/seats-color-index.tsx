@@ -1,12 +1,14 @@
 import SingleTipContext from "@/context/admin/new-event/map/single-tip-context";
 import MultiSelectContext from "@/context/admin/new-event/map/multi-select-context";
 import { Colors } from "@/lib/colors";
-import { Avatar , Badge, Button, Divider, Stack as Flex, useTheme  } from "@mui/material";
+import { Avatar , AvatarGroup, Badge, Button, Divider, Stack as Flex, Tooltip, useTheme  } from "@mui/material";
 import { blue, green, grey, orange, pink, red } from "@mui/material/colors";
 import { Dispatch, SetStateAction, useContext } from "react";
-import { TbDisabled } from "react-icons/tb";
 import WidthContext from "@/context/WidthContext";
 import AdminMapPositionsContext from '@/context/admin/new-event/map/admin-map-positions-context';
+import { IoMdMove } from "react-icons/io";
+import { BsFillSignStopFill } from "react-icons/bs";
+import { MdOutlineDeselect } from "react-icons/md";
 
 
 
@@ -58,36 +60,43 @@ const AdminSeatColorsIndex =({isMuiltiSelct,setIsMultiSelect,multiSelectBadgeInf
                         setIsMultiSelect(!isMuiltiSelct);
                         resetSingleTip();
                         resetMultiTip()
-                        
-                        
-                } }
+                    } }
                  sx={{ background:isMuiltiSelct? green['700']: "", m:0.5  }} 
                 >
                     סמן רצף   
            </Button>
            </Badge>
 
-           <Button  sx={{background:'black' , m:0.5}} 
+           <Button  sx={{background:AdminMapPositions.disabled?"red":"green" , m:0.5}} 
            onClick={()=>{setAdminMapPositions(p=>({...p,disabled:!p.disabled}))}}
            >
-            {AdminMapPositions?.disabled? "הפעל תזוזה":" בטל תזוזה"}
+            {AdminMapPositions.disabled?
+              <BsFillSignStopFill size={"2em"} />:
+             <IoMdMove size={"2em"}/>
+             }
            </Button>
 
+             <Tooltip  title={"נקה בחירה "} placement="top" >
            <Button 
-                sx={{m:0.5}}
+                sx={{m:0.5,p:0.5}}
                 color="error"
                 onClick={()=>{}}
-                >נקה הכול
+       
+                > 
+                {"נקה"}
+                <MdOutlineDeselect size={"2em"}/>
           </Button>
+          </Tooltip>
 
           </Flex>
          <Flex direction={'row'}  >
-          <Avatar  sx={{ bgcolor: blue[800] , margin:0.3 , padding:.5 }} variant={'square'} >רגיל</Avatar>
-          <Avatar sx={{ bgcolor: "black" , margin:0.3 , padding:.5 , color:"#ddd" }} variant={'square'} > חסום</Avatar>
-          <Avatar sx={{ bgcolor: green[800] , margin:.3 , padding:.5 }} variant={'square'} > הנחה</Avatar>
-          <Avatar sx={{ bgcolor: orange[600] , margin:.3 , padding:.5 }} variant={'square'} > נגיש</Avatar>
-          <Avatar sx={{ bgcolor: pink[600] , margin:.3 , padding:.5  ,textAlign:"center"}} variant={'square'} > הנחה נגיש</Avatar>
-
+         
+          <Avatar  sx={{ bgcolor: blue[800 ] ,p:.3}}>רגיל</Avatar>
+          <Avatar sx={{ bgcolor: "black" ,p:.3 }}  > חסום</Avatar>
+          <Avatar sx={{ bgcolor: green[800] ,p:.3 }}> הנחה</Avatar>
+          <Avatar sx={{ bgcolor: orange[600] ,p:.3 }}  > נגיש</Avatar>
+          <Avatar sx={{ bgcolor: pink[600] ,p:.3 ,textAlign:"center"}}  > הנחה נגיש</Avatar>
+        
          </Flex>
         
         </Flex>

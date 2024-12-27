@@ -39,11 +39,11 @@ import { TheaterType } from '@/pages/admin/new-event';
       
           return (
             <AdminSeatBtn // uses Context
-              key={`${row}.${i}`}
+                key={`${row}.${i}`}
               seatValue={seatValue}
               seatnumber={i}
               row={row}
-              isMultiSelect={isMultiSelect} 
+                isMultiSelect={isMultiSelect} 
               />
           );
         })

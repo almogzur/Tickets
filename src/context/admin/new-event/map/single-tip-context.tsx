@@ -25,11 +25,7 @@ export default createContext<SingleTipContenxtType>(
           },
           resetSingleTip:():void=>{},
           
-          setSingleTipPositions: function (value: SetStateAction<Positions>): void {
-               throw new Error('Function not implemented.')
-          },
-          setSeatTipInfo: function (value: SetStateAction<TipinfoType>): void {
-               throw new Error('Function not implemented.')
-          },
+          setSingleTipPositions: function (value: SetStateAction<Positions>): void {          },
+          setSeatTipInfo: function (value: SetStateAction<TipinfoType>): void {          },
      }
 )

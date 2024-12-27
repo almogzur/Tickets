@@ -5,6 +5,7 @@ import { green, orange, pink } from '@mui/material/colors';
 import SingleTipontext from '@/context/admin/new-event/map/single-tip-context'
 import MultiSelectContext from '@/context/admin/new-event/map/multi-select-context';
 import React from 'react';
+import { Positions } from '@/pages/_app';
 
 
 /*
@@ -24,6 +25,13 @@ interface AdminSeatBtnProps {
     isMultiSelect?:boolean
 }
 
+
+function TipAlingeSelfPositions (screenW:number,screenH:number,eventY:number,EentX:number  ):Positions{
+        const tipWidth = 150 
+        const tipHeight = 300
+        
+    return { x:0, y:0}
+}
 
 const AdminSeatBtn = ({ seatValue, seatnumber, row , isMultiSelect }:AdminSeatBtnProps) => {
 
@@ -93,7 +101,7 @@ const AdminSeatBtn = ({ seatValue, seatnumber, row , isMultiSelect }:AdminSeatBt
                 //right to left 
                 total = multiTipInfo.first - seatNArg +1
                 setMultiTipInfo(p=>({...p,selectdir:"R"}))
-               setMutiTipPositions({x:xArg ,y:yArg})
+     
                console.log("right");
 
                
@@ -146,6 +154,14 @@ const AdminSeatBtn = ({ seatValue, seatnumber, row , isMultiSelect }:AdminSeatBt
            openTip(e.nativeEvent.pageX,e.nativeEvent.pageY , seatValue , row ,seatnumber  ) 
            :
            multiSelectHndler(seatnumber, row , e.nativeEvent.pageX , e.nativeEvent.pageY   )
+           console.log(
+           "in H",  e.nativeEvent.view?.innerHeight,
+            "in W", e.nativeEvent.view?.innerWidth ,
+              "EY", e.nativeEvent.pageY ,
+              "EX", e.nativeEvent.pageX ,
+              e
+             );
+           
        }}
 
       style={ 

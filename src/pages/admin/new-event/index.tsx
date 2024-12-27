@@ -11,7 +11,7 @@ import Head from 'next/head'
 import {Typography  , Stack as Flex,  useTheme, Button} from '@mui/material'
 import AdminLayout from '@/Layouts/admin-layout'
 import { DateTimeValidationError, PickerChangeHandlerContext } from '@mui/x-date-pickers'
-import TabsForm from '@/components/admin/newEvent/tabs/tabs-form'
+import TabsWraper from '@/components/admin/newEvent/tabs/tabs-wraper'
 import TheaterComponent from '@/components/admin/newEvent/theater/theater'
 
 //WraperContex
@@ -44,7 +44,6 @@ export const BaceTicketVS = z.object({
 })  
 
 export type  BaceTIcketType  =   z.infer<typeof BaceTicketVS  > 
-
 export type  BaceTIcketType_Partial = Partial<BaceTIcketType>
 
 export interface InfoFormType  {
@@ -148,7 +147,7 @@ return (
          <TabInfoContext.Provider value={{infoFileds,setInfoFileds}}>
 
          <TabsTickets.Provider  value={{tickets ,setTickets}} >
-            <TabsForm />
+            <TabsWraper />
          </TabsTickets.Provider>
 
           {  infoFileds.Theater &&

@@ -151,7 +151,7 @@ export default function MakeNewTicket({setTabPage }:MakeNewTicketType) {
                       
                          <IoTicket  size={!sm?"1.5em":"1.7em"} color={theme.palette.primary.main}  />        
                          <Typography variant='body1' sx={{color:"#fff" ,fontWeight:800}}  >{"כרטיס חדש"} </Typography> 
-                     </Flex>        
+          </Flex>        
     
 
          </Flex>

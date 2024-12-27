@@ -54,7 +54,7 @@ const AdminNewEventTheatherMap = ({children, isMultiSelect,setIsMultiSelect ,mul
         {({ zoomIn, zoomOut, resetTransform, ...rest }) =>  {
           return   (
             <Flex    boxShadow={theme.shadows[10]} mt={3} > 
-              <Controls/>   
+              <MovmentControls/>   
               <Divider sx={{borderWidth:3 , background:theme.palette.primary.dark}} />
             
 
@@ -83,7 +83,7 @@ const AdminNewEventTheatherMap = ({children, isMultiSelect,setIsMultiSelect ,mul
   };
 
 
-  const Controls = () => {
+  const MovmentControls = () => {
     const {AdminMapPositions,setAdminMapPositions} =useContext(AdminMapPositionsContext)
     const { resetSingleTip}=useContext(SingleTipContext)
     const {resetMultiTip} = useContext(MutiTipContext)
