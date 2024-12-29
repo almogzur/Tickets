@@ -1,3 +1,4 @@
+
 import {  ReactNode, useContext, useEffect } from 'react';
 import MiniDrawer from '../components/Drawer'
 import {Stack as Flex, Container } from '@mui/material'
@@ -23,6 +24,7 @@ useEffect(()=>{
 
       
    <>
+
          <MiniDrawer  />  
      
             {children}
@@ -34,3 +36,4 @@ useEffect(()=>{
 }
  
 export default AdminLayout;
+export const dynamic = "force-dynamic"

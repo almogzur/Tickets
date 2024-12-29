@@ -25,6 +25,7 @@ import SingleTipContext from '@/context/admin/new-event/map/single-tip-context';
 import MultiSelectContext from '@/context/admin/new-event/map/multi-select-context';
 import { Positions } from '@/pages/_app'
 import AdminTransformContext  from '@/context/admin/new-event/map/admin-map-positions-context'
+import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next'
 
 ///////
 
@@ -178,10 +179,6 @@ return (
 }
 
 export default NewEventPage
-
-
-
-
 
 
 

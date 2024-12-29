@@ -14,3 +14,4 @@ const ClientLayout = ({ children }: any) => {
 }
  
 export default ClientLayout;
+export const dynamic = "force-dynamic"

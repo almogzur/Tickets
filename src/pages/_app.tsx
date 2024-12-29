@@ -34,6 +34,10 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 // Geo Location  Map  Css
 import '@tomtom-international/web-sdk-maps/dist/maps.css'
 import { TipinfoType } from './admin/new-event';
+import Script from 'next/script';
+
+
+import CPSLayout from '@/components/cps-layout';
 
 
 export const FullDateOptions :Intl.DateTimeFormatOptions = {
@@ -201,6 +205,7 @@ const MyApp=({  Component,  pageProps: { session, ...pageProps }}: AppProps)=> {
 
 
 return (
+  <CPSLayout>
   <SessionProvider>
   <ThemeProvider theme={theme}>
   <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='he'  >
@@ -208,7 +213,9 @@ return (
   <ClientTipContext.Provider value={{ clientTipPosition,setClientTipPosition, clinetTipInfo ,setClinetTipInfo,resetClinetTip }} >
   <MoviesContext.Provider value={{events, setEvents}}>
   <WidthContext.Provider value={{xxl,xl,lg,md,sm,xs,xxs}}>
-     <Component {...pageProps} />
+ 
+      <Component {...pageProps} />
+
   </WidthContext.Provider>
   </MoviesContext.Provider>
   </ClientTipContext.Provider>
@@ -216,6 +223,8 @@ return (
   </LocalizationProvider>
   </ThemeProvider>
   </SessionProvider>
+  </CPSLayout>
+
   )
 }
 
