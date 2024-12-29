@@ -1,9 +1,10 @@
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextFieldVariants } from "@mui/material"
-import { ChangeEvent, CSSProperties, ReactElement, ReactNode, useState } from "react"
+import { ChangeEvent, CSSProperties, ReactElement, ReactNode, useContext, useState } from "react"
 import { IconType } from "react-icons";
 import { FcAbout } from "react-icons/fc";
 import { TiArrowDownThick } from "react-icons/ti";
 import ControledLabel from "./controled-form-label";
+import WidthContext from "@/context/WidthContext";
 
 interface SelectIemType {
     value:any
@@ -28,6 +29,7 @@ const SelectWrap = ({items, changeHndler ,styles , label, icon, variant , labelP
 
 
 
+    const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
 
 
 
@@ -36,7 +38,7 @@ const SelectWrap = ({items, changeHndler ,styles , label, icon, variant , labelP
            <InputLabel 
               sx={{ 
                 "&.MuiInputLabel-root":{         
-                  width:  "93%" ,
+                  width: !xs?"85%": "92%" ,
                   direction:"ltr"  ,
                   fontSize:18 ,
                   display:"flex" ,
@@ -45,7 +47,7 @@ const SelectWrap = ({items, changeHndler ,styles , label, icon, variant , labelP
 
                 "&.MuiInputLabel-shrink":{ 
                       width: labelPositioin === "top"? "133%" : "22%",
-                      unicodeBidi:"plaintext",
+                     
                       textAlign:"start",
                       fontSize:20 ,
                       top: labelPositioin === "end"?  15:9,
@@ -59,7 +61,7 @@ const SelectWrap = ({items, changeHndler ,styles , label, icon, variant , labelP
                 {label}
                 </InputLabel>
           <Select
-            label={label}
+   
             value={value ?? ""}
             onChange={changeHndler }
             variant={ variant? variant: "standard"}

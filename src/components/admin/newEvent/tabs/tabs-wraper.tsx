@@ -30,7 +30,6 @@ import { IoTicket } from "react-icons/io5";
 
 
 
-
 interface TabFormPropsType {  }
 
 const TabsWraper = ({ }:TabFormPropsType)=>{

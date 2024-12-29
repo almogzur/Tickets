@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react';
 import router from 'next/router';
 import WidthContext from '@/context/WidthContext';
 
+
 const AdminLayout = ({ children }: {children?:ReactNode}) => {
   const { data: session ,status ,update} = useSession()
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)

@@ -2,5 +2,10 @@
     "importCost.javascriptExtensions": [
         "\\.jsx?$"
     ],
-    "editor.fontSize": 14
+    "editor.fontSize": 14,
+    "editor.fontFamily": "monospace",
+    "editor.wrappingStrategy": "advanced",
+    "editor.cursorBlinking": "phase",
+    "editor.cursorSmoothCaretAnimation": "off",
+    "editor.cursorStyle": "line"
 }

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
- 
+
 export function middleware(request: NextRequest) {
   const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
   const cspHeader = `
@@ -14,8 +14,11 @@ export function middleware(request: NextRequest) {
     frame-ancestors 'none';
     block-all-mixed-content;
     upgrade-insecure-requests;
+    frame-ancestors 'self';
+    Strict-Transport-Security: max-age=31536000; includeSubDomains
+
 `
- 
+
   const requestHeaders = new Headers(request.headers)
   requestHeaders.set('x-nonce', nonce)
   requestHeaders.set(
@@ -23,7 +26,7 @@ export function middleware(request: NextRequest) {
     // Replace newline characters and spaces
     cspHeader.replace(/\s{2,}/g, ' ').trim()
   )
- 
+
   return NextResponse.next({
     headers: requestHeaders,
     request: {

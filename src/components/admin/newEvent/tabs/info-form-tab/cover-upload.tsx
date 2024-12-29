@@ -71,7 +71,7 @@ return (
          <Button  sx={{p:0.5 , boxShadow:0, background:grey[200]}} onClick={openDialog}  variant='text'  ><RiImageAddFill size={"1.5em"}  /></Button>
         </Tooltip>
         <Tooltip  title={"הסר תמונה "} placement='top' >
-         <Button  sx={{p:0.5 , boxShadow:0, background:grey[200]}} onClick={openDialog}  variant='text'  ><LuImageMinus size={"1.5em"}  /></Button>
+      <Button sx={{ p: 0.5, boxShadow: 0, background: grey[200] }} onClick={closeDialog}  variant='text'  ><LuImageMinus size={"1.5em"}  /></Button>
         </Tooltip>
  
            <input type='file' id='cover'    onChange={handleFileChange}  accept=".jpg, .jpeg, .png "  ref={Inputref}   hidden />

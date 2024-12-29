@@ -202,4 +202,3 @@ export default AdminSeatBtn
           //     "enpy",e.nativeEvent.pageY,
           //    "ency",e.nativeEvent.clientY
           //     );
-  

@@ -39,4 +39,4 @@ yarn-error.log*
 # Local Netlify folder
 .netlify
 
-/src/components/ui
+*.tsbuildinfo
