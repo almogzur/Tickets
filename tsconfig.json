@@ -8,6 +8,7 @@
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
+    "target": "ES2020",
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "incremental": true,
@@ -18,6 +19,11 @@
     "jsx": "preserve",
     "noImplicitAny": true,
     "typeRoots": ["./typings", "./vendor/types"],
+    "types": [
+      "node",
+      "react",
+      "react-dom"
+    ],
     "paths": {
       "@/*": [
         "./src/*"
