@@ -1,5 +1,3 @@
-/** @type {import('next').NextConfig} */
-
 const cspHeader = `
     default-src 'self';
     script-src 'self' 'unsafe-eval' 'unsafe-inline';
@@ -13,9 +11,7 @@ const cspHeader = `
     upgrade-insecure-requests;
 `
 
-
 module.exports = {
-  reactStrictMode: true,
   async headers() {
     return [
       {
@@ -23,28 +19,10 @@ module.exports = {
         headers: [
           {
             key: 'Content-Security-Policy',
-            value: cspHeader.replace(/\s{2,}/g, ' ')
-              .trim() 
-         },
-          {
-            key: 'X-Frame-Options',
-            value: 'DENY',
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'origin-when-cross-origin',
-          },
-          {
-            key: 'Permissions-Policy',
-            value: "camera=(); battery=(self); geolocation=(); microphone=('https://somewhere.com')",
+            value: cspHeader.replace(/\n/g, ''),
           },
         ],
       },
-    ];
+    ]
   },
-
-};
+}
