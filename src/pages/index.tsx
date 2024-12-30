@@ -12,6 +12,9 @@ import Typography from '@mui/material/Typography';
 import {useGetEvents} from '../services/events'
 import { Event } from '../constants/models/Events';
 import ClientLayout from '../Layouts/client-layout';
+import { headers } from 'next/headers'
+
+
 
 export default function Home() {
 
@@ -57,7 +60,7 @@ export default function Home() {
   
   return (
     <  >
-      <Head>
+      <Head >
         <title>הזמנות כרטיסים  | בית</title>
       </Head>
 
@@ -70,3 +73,4 @@ export default function Home() {
     </>
   )
 }
+export const dynamic = 'force-dynamic';
