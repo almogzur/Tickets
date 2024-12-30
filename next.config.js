@@ -19,15 +19,32 @@ module.exports = {
   async headers() {
     return [
       {
-        source: '/((?!api|_next/static|_next/image|favicon.ico).*)',
+        source: '/(.*)',
         headers: [
           {
             key: 'Content-Security-Policy',
-            value: cspHeader.replace(/\n/g, ''),
+            value: cspHeader.replace(/\s{2,}/g, ' ')
+              .trim() 
+         },
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'origin-when-cross-origin',
+          },
+          {
+            key: 'Permissions-Policy',
+            value: "camera=(); battery=(self); geolocation=(); microphone=('https://somewhere.com')",
           },
         ],
       },
-    ]
+    ];
   },
 
 };
