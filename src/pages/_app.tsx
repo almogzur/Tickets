@@ -37,7 +37,6 @@ import { TipinfoType } from './admin/new-event';
 import Script from 'next/script';
 
 
-import CPSLayout from '@/components/cps-layout';
 
 
 export const FullDateOptions :Intl.DateTimeFormatOptions = {
@@ -205,7 +204,7 @@ const MyApp=({  Component,  pageProps: { session, ...pageProps }}: AppProps)=> {
 
 
 return (
-  <CPSLayout>
+ 
   <SessionProvider>
   <ThemeProvider theme={theme}>
   <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='he'  >
@@ -223,7 +222,7 @@ return (
   </LocalizationProvider>
   </ThemeProvider>
   </SessionProvider>
-  </CPSLayout>
+
 
   )
 }
