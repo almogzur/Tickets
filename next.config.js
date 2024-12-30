@@ -11,8 +11,18 @@ module.exports = {
         headers: [
           {
             key: 'Content-Security-Policy',
-            value:
-              "default-src 'self'; font-src 'self' 'https://fonts.googleapis.com'; img-src 'self' *.somewhere.com; script-src 'self'",
+            value:`
+                  default-src 'self';
+                  script- src 'self'  'strict-dynamic';
+                  style - src 'self'  ;
+                  img - src 'self' blob: data:;
+                  font - src 'self';
+                  object - src 'none';
+                  base - uri 'self';
+                  form - action 'self';
+                  frame - ancestors 'none';
+                  upgrade - insecure - requests;
+                  `,
           },
           {
             key: 'X-Frame-Options',
