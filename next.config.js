@@ -1,8 +1,11 @@
+const isProduction = process.env.NODE_ENV === 'production';
+
+
 const cspHeader = `
     default-src 'self';
-    script-src 'self' 'unsafe-eval' 'unsafe-inline';
+    script-src 'self' ${isProduction ? "" : "'unsafe-eval' 'unsafe-inline'" } ;  
     style-src 'self' 'unsafe-inline';
-    img-src 'self' blob: data:;
+    img-src 'self' ;
     font-src 'self';
     object-src 'none';
     base-uri 'self';
@@ -14,6 +17,8 @@ const cspHeader = `
  
 module.exports = {
         async headers() {
+        console.log(isProduction, "production");
+
             return [
                 {
                     source: '/((?!api|_next/static|_next/image|favicon.ico).*)',
