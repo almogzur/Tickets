@@ -19,11 +19,7 @@
     "jsx": "preserve",
     "noImplicitAny": true,
     "typeRoots": ["./typings", "./vendor/types"],
-    "types": [
-      "node",
-      "react",
-      "react-dom"
-    ],
+
     "paths": {
       "@/*": [
         "./src/*"
