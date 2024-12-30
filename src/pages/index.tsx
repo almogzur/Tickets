@@ -12,7 +12,6 @@ import Typography from '@mui/material/Typography';
 import {useGetEvents} from '../services/events'
 import { Event } from '../constants/models/Events';
 import ClientLayout from '../Layouts/client-layout';
-import { headers } from 'next/headers'
 
 
 
