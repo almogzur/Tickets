@@ -31,7 +31,20 @@ module.exports = {
                     {
                         key:'Referrer-Policy',
                         value:'strict-origin-when-cross-origin'
+                    },
+                    {
+                        key: "X-Content-Type-Options",
+                        value:"nosniff"
                     }
+                      // key : "Subresource Integrity", 
+
+                     /* 
+                     Explne : importing CDN Scrips bresource Integrity feature by specifying a base64-encoded cryptographic hash of a
+                     resource (file) you're telling the browser to fetch,
+                    */
+
+                    // Test Result: Subresource Integrity (SRI) not implemented, but all scripts are loaded from a similar origin.
+                    
                 ],
             },
         ]
