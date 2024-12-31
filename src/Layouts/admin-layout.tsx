@@ -36,4 +36,3 @@ useEffect(()=>{
 }
  
 export default AdminLayout;
-

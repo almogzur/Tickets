@@ -24,3 +24,4 @@ return (
 }
 
 export default ManageEventsPage
+

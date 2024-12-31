@@ -141,12 +141,3 @@ return (
 
 
 
-
-import type { InferGetServerSidePropsType, GetServerSideProps } from 'next'
-
-export const getServerSideProps = (async (context) => {
-
-  const nonce = context.res?.getHeader("x-nonce") as string
-  return { props: { nonce } }
-}) satisfies GetServerSideProps<{ nonce: string }>
-
