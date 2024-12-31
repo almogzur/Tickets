@@ -15,7 +15,7 @@ import ClientLayout from '../Layouts/client-layout';
 
 
 
-export default function Home() {
+export default function Home({nonce}:{nonce:string}) {
 
   const { events, isLoading, isError } = useGetEvents();
 
@@ -61,6 +61,7 @@ export default function Home() {
     <  >
       <Head >
         <title>הזמנות כרטיסים  | בית</title>
+
       </Head>
 
       <ClientLayout>
@@ -72,4 +73,11 @@ export default function Home() {
     </>
   )
 }
-export const dynamic = 'force-dynamic';
+import type { InferGetServerSidePropsType, GetServerSideProps } from 'next'
+
+
+export const getServerSideProps = (async (context) => {
+
+  const nonce = context.res?.getHeader("x-nonce") as string
+  return { props: { nonce } }
+}) satisfies GetServerSideProps<{ nonce: string }>

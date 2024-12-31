@@ -51,9 +51,9 @@ const SingInPage=()=>{
       }));
   };
 
-    if (status === 'loading') {
-     return <h1 style={{textAlign:'center'}}>Loading...</h1>
-}
+//     if (status === 'loading') {
+//      return <h1 style={{textAlign:'center'}}>Loading...</h1>
+// }
 
 
 
@@ -141,3 +141,11 @@ return (
 
 export default SingInPage 
 
+import type { InferGetServerSidePropsType, GetServerSideProps } from 'next'
+
+
+export const getServerSideProps = (async (context) => {
+
+  const nonce = context.res?.getHeader("x-nonce") as string
+  return { props: { nonce } }
+}) satisfies GetServerSideProps<{ nonce: string }>

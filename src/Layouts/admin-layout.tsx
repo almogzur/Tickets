@@ -36,4 +36,4 @@ useEffect(()=>{
 }
  
 export default AdminLayout;
-export const dynamic = "force-dynamic"
+

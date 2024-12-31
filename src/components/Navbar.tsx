@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { Button, Container, Stack as Flex , Typography } from '@mui/material'
 import { useSession } from 'next-auth/react';
 import { Colors } from '@/lib/colors';
-import { signIn } from "next-auth/react"
+
 
 const Navbar = () => {
   const { data: session, status } = useSession()

@@ -34,7 +34,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 // Geo Location  Map  Css
 import '@tomtom-international/web-sdk-maps/dist/maps.css'
 import { TipinfoType } from './admin/new-event';
-import Script from 'next/script';
+
 
 
 
@@ -180,10 +180,21 @@ const theme  = createTheme({
 
 )
 
+interface MyAppPropsType extends AppProps {
+  nonce: string
+}
 
-const MyApp=({  Component,  pageProps: { session, ...pageProps }}: AppProps)=> {
+import createCache from '@emotion/cache'
+import { CacheProvider } from '@emotion/react';
+
+
+
+
+const MyApp = ({ Component, pageProps: { nonce, session, ...pageProps } }: AppProps)=> {
 
   const [events, setEvents] = useState<Event[]>(eventData);
+  //const [cachedNonce] = useState(nonce);
+
 
   // client map
   const [ClientMapPositions , setClientMapPositions] =useState<Positions>({ x:0 ,y:0 ,Scale:undefined})
@@ -202,9 +213,16 @@ const MyApp=({  Component,  pageProps: { session, ...pageProps }}: AppProps)=> {
    const xs = useMediaQuery('(min-width : 489px)')
    const xxs = useMediaQuery('(min-width : 310px)')
 
+  const cache = createCache({
+    key: 'key',
+    nonce: nonce,
+    prepend: true,
+  });
+
 
 return (
- 
+  <CacheProvider value={cache}>
+
   <SessionProvider>
   <ThemeProvider theme={theme}>
   <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='he'  >
@@ -222,6 +240,7 @@ return (
   </LocalizationProvider>
   </ThemeProvider>
   </SessionProvider>
+ </CacheProvider>
 
 
   )
@@ -229,8 +248,14 @@ return (
 
 
 
-
 export default MyApp
 
+import type { InferGetServerSidePropsType, GetServerSideProps } from 'next'
+
+export const getServerSideProps = (async (context) => {
+  const nonce = context.res?.getHeader("x-nonce") 
+  return { props: { nonce } }
+
+}) satisfies GetServerSideProps<{ nonce: string | number | string[] | undefined }>
 
 
