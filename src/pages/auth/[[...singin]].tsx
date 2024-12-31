@@ -14,7 +14,7 @@ interface errorMessagesType{
   [key: string]: string;
 }
 
-const SingInPage=()=>{
+export default function SingInPage(){
 
   const router = useRouter()
   const { data: session ,status ,update } = useSession()
@@ -58,7 +58,7 @@ const SingInPage=()=>{
 
 
 return (
-<Container sx={{direction:"rtl"}}>
+   <Container sx={{direction:"rtl"}}>
   <Flex  height={'100vh'}  alignItems={"center"} justifyContent={"center"}   >
     <Paper elevation={16}   sx={{boxShadow:"" , width:"90%"}} >
       
@@ -139,13 +139,14 @@ return (
 ) 
 }
 
-export default SingInPage 
+
+
 
 import type { InferGetServerSidePropsType, GetServerSideProps } from 'next'
-
 
 export const getServerSideProps = (async (context) => {
 
   const nonce = context.res?.getHeader("x-nonce") as string
   return { props: { nonce } }
 }) satisfies GetServerSideProps<{ nonce: string }>
+

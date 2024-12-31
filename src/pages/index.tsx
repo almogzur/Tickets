@@ -82,4 +82,3 @@ export const getServerSideProps = (async (context) => {
   return { props: { nonce } }
 }) satisfies GetServerSideProps<{ nonce: string }>
 
-export const dynamic = 'force-dynamic'
