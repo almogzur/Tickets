@@ -36,9 +36,6 @@ import '@tomtom-international/web-sdk-maps/dist/maps.css'
 import { TipinfoType } from './admin/new-event';
 
 
-
-
-
 export const FullDateOptions :Intl.DateTimeFormatOptions = {
   year:'numeric',
   month: 'long',
@@ -180,8 +177,6 @@ const theme  = createTheme({
 
 )
 
-import createCache from '@emotion/cache'
-import { CacheProvider } from '@emotion/react';
 
 
 const MyApp = ({ Component, pageProps: { nonce, session, ...pageProps } }: AppProps)=> {
@@ -207,15 +202,9 @@ const MyApp = ({ Component, pageProps: { nonce, session, ...pageProps } }: AppPr
    const xs = useMediaQuery('(min-width : 489px)')
    const xxs = useMediaQuery('(min-width : 310px)')
 
-  const cache = createCache({
-    key: 'key',
-    nonce: nonce,
-    prepend: true,
-  });
-
 
 return (
-  <CacheProvider value={cache}>
+
 
   <SessionProvider  >
   <ThemeProvider theme={theme}>
@@ -234,7 +223,7 @@ return (
   </LocalizationProvider>
   </ThemeProvider>
   </SessionProvider>
- </CacheProvider>
+
 
 
   )
