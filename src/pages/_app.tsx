@@ -180,14 +180,8 @@ const theme  = createTheme({
 
 )
 
-interface MyAppPropsType extends AppProps {
-  nonce: string
-}
-
 import createCache from '@emotion/cache'
 import { CacheProvider } from '@emotion/react';
-
-
 
 
 const MyApp = ({ Component, pageProps: { nonce, session, ...pageProps } }: AppProps)=> {

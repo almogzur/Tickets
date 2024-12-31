@@ -5,7 +5,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 const cspHeader = `
     default-src 'self';
     script-src 'self' ${isProduction ? "" : "'unsafe-eval' 'unsafe-inline'"} ;  
-    style-src 'self' 'unsafe-inline';
+    style-src 'self'  ${isProduction ? "" : "'unsafe-inline'"}
     script-src 'self' ${isProduction ? "" : " 'unsafe-eval' 'unsafe-inline' "} ;  
     style-src 'self' ${isProduction ? "" : " 'unsafe-inline' "};
     img-src 'self' ;
