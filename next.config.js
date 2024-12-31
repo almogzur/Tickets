@@ -35,6 +35,10 @@ module.exports = {
                     {
                         key: "X-Content-Type-Options",
                         value:"nosniff"
+                    },
+                    {
+                        key: "Cross-Origin-Resource-Policy",
+                        value:'same-origin'
                     }
                       // key : "Subresource Integrity", 
 
