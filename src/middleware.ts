@@ -12,7 +12,7 @@ export function middleware(request: NextRequest) {
 
     const cspHeader = `
     script-src 'self' 'nonce-${nonce}' https: http: 'unsafe-eval';   
-    style-src 'self' 'nonce-${nonce}'
+    style-src 'self' 'nonce-${nonce}' ;
     default-src 'self';
     img-src 'self' blob: data:;
     font-src 'self';
