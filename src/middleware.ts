@@ -11,7 +11,7 @@ export function middleware(request: NextRequest) {
     const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
 
     const cspHeaderProd = `
-    script-src 'self' 'nonce-${nonce}' 'strict-dynamic';
+    script-src 'self' 'nonce-${nonce}' 'strict-dynamic' 'unsafe-eval';
     style-src 'self' 'nonce-${nonce}';
     default-src 'self';
     img-src 'self' blob: data:;
@@ -25,8 +25,8 @@ export function middleware(request: NextRequest) {
     `;
     
    const  cspHeaderDev = `
-        script-src 'self'  'unsafe-eval' ; 
-        style-src 'self' 'unsafe-inline';
+        script-src 'self' 'nonce-${nonce}'  'unsafe-eval' ; 
+        style-src 'self' 'nonce-${nonce}' 'unsafe-inline';
         default-src 'self';
         img-src 'self' blob: data:;
         font-src 'self';

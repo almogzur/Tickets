@@ -213,11 +213,15 @@ const MyApp = ({ Component, pageProps: { nonce, session, ...pageProps } }: AppPr
    const xs = useMediaQuery('(min-width : 489px)')
    const xxs = useMediaQuery('(min-width : 310px)')
 
-
+  const cache = createCache({
+    key: 'key',
+    nonce: nonce,
+    prepend: true,
+  });
 
 
 return (
-
+  <CacheProvider value={cache}>
 
   <SessionProvider  >
   <ThemeProvider theme={theme}>
@@ -236,7 +240,7 @@ return (
   </LocalizationProvider>
   </ThemeProvider>
   </SessionProvider>
-
+ </CacheProvider>
 
 
   )
