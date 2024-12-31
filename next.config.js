@@ -6,8 +6,6 @@ const cspHeader = `
     default-src 'self';
     script-src 'self' ${isProduction ? "" : "'unsafe-eval' 'unsafe-inline'"} ;  
     style-src 'self'  ${isProduction ? "" : "'unsafe-inline'"}
-    script-src 'self' ${isProduction ? "" : " 'unsafe-eval' 'unsafe-inline' "} ;  
-    style-src 'self' ${isProduction ? "" : " 'unsafe-inline' "};
     img-src 'self' ;
     font-src 'self';
     object-src 'none';
