@@ -11,7 +11,7 @@ export function middleware(request: NextRequest) {
     const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
 
     const cspHeader = `
-    script-src 'self' 'nonce-${nonce}' https: http: ${ process.env.NODE_ENV === 'production' ? '' : "'unsafe-eval'" };   
+    script-src 'self' 'nonce-${nonce}' https: http: unsafe-eval';   
     style-src 'self' 'nonce-${nonce}'
     default-src 'self';
     img-src 'self' blob: data:;
