@@ -2,7 +2,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 
 const cspHeader = `
-    default-src 'self';
+    default-src ${isProduction ? "'nene'": "'self'"} ;
     script-src 'self' ${isProduction ? "" : " 'unsafe-eval' 'unsafe-inline' " } ;  
     style-src 'self' ${isProduction ? "" : " 'unsafe-inline' "};
     img-src 'self' ;
@@ -12,6 +12,8 @@ const cspHeader = `
     form-action 'self';
     frame-ancestors 'none';
     upgrade-insecure-requests;
+    script-src-elem: 'self';  
+    child-src 'none'
 `
 
  
