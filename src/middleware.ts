@@ -10,9 +10,8 @@ const isProduction = process.env.NODE_ENV === 'production';
 export function middleware(request: NextRequest) {
     const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
 
-    const cspHeaderProd = `
-    script-src 'self' 'nonce-${nonce}' 'strict-dynamic' 'unsafe-eval';
-    style-src 'self' 'nonce-${nonce}';
+    const cspHeader = `
+    script-src 'self' 'nonce-${nonce}' https: http: ${ process.env.NODE_ENV === 'production' ? '' : "'unsafe-eval'" };    style-src 'self' 'nonce-${nonce}'
     default-src 'self';
     img-src 'self' blob: data:;
     font-src 'self';
@@ -24,19 +23,7 @@ export function middleware(request: NextRequest) {
     upgrade-insecure-requests;
     `;
     
-   const  cspHeaderDev = `
-        script-src 'self' 'nonce-${nonce}'  'unsafe-eval' ; 
-        style-src 'self' 'nonce-${nonce}' 'unsafe-inline';
-        default-src 'self';
-        img-src 'self' blob: data:;
-        font-src 'self';
-        object-src 'none';
-        base-uri 'self';
-        form-action 'self';
-        frame-ancestors 'none';
-        block-all-mixed-content;
-        upgrade-insecure-requests;
-        `;
+
     
 
     const requestHeaders = new Headers(request.headers)
@@ -44,7 +31,7 @@ export function middleware(request: NextRequest) {
     requestHeaders.set(
         'Content-Security-Policy',
         // Replace newline characters and spaces
-        isProduction ? cspHeaderProd.replace(/\s{2,}/g, ' ').trim() : cspHeaderDev.replace(/\s{2,}/g, ' ').trim() 
+         cspHeader.replace(/\s{2,}/g, ' ').trim()
     )
 
     return NextResponse.next({
