@@ -4,7 +4,7 @@ import TabsInfoContext from '@/context/admin/new-event/tabs/tabs-info-context'
 
 //Components
 import {  Box, Container, Divider, Stack as Flex , Typography, useTheme } from "@mui/material"
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import Image from "next/image"
 
 
@@ -14,6 +14,7 @@ import dayjs from "dayjs"
 import DateTimePickerWrap from "@/components/date-time-wrap"
 import InputWrap from "@/components/input-wrap"
 import { DateTimeValidationError, PickerChangeHandlerContext } from "@mui/x-date-pickers"
+import { FullDateOptions } from "@/pages/_app"
 
 const InfoForm =()=>{
 
@@ -22,21 +23,6 @@ const InfoForm =()=>{
   const theme = useTheme()
   const [dateEroor,setDateEroor ]= useState(false)    
 
-  const addScheduleDate = (e:dayjs.Dayjs|null ,  context: PickerChangeHandlerContext<DateTimeValidationError>) :void => {
-
-    if (e && e.year() && e.month() && e.date() && e.day() && e.hour()&& e.minute() ) {
-    // set the time in utc  -3 form area time , 
-     const newDate = new Date(e.toDate())
-     setInfoFileds(p=>({...p,Date:newDate}))
-     setDateEroor(false)
-    }
-    else{
-      //  error henler
-      setDateEroor(true)
-    }
-
-  
-};
 
 const ErrorHndler = (e:DateTimeValidationError, context:dayjs.Dayjs|null ):void=>{}
 
@@ -60,14 +46,19 @@ return(
          
             <DateTimePickerWrap                 
                 MediaQuery={theme.breakpoints.up("sm")}
-                minDate={new Date()}
-                value={ infoFileds.Date? infoFileds.Date :undefined }
-                onAcceptHendler={addScheduleDate}
+                value={infoFileds.Date}
+                onAcceptHendler={(e)=> e!==null ?
+                  setInfoFileds(p => ({ ...p, Date: e.toDate() })) 
+                  :
+                  null
+               }
+
                 label={"בחר תאריך"} 
                 labelPositioin={'end'}
                 color='secondary'
                 onEroorHndler={ErrorHndler}
-                       />
+
+                  />
 
 
             <InputWrap
@@ -86,7 +77,7 @@ return(
         <Divider sx={{borderWidth:1,mt:2,mb:2}} />
         
 
-          <Flex direction={"row"} justifyContent={""} >
+          <Flex direction={"row"} justifyContent={"center"} >
  
       {/**add peview !!!! */}
       {/**Validate preState */}

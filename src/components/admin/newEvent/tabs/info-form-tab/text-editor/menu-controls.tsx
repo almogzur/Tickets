@@ -1,26 +1,19 @@
-import { useTheme } from "@mui/material";
+import { Typography, useTheme } from "@mui/material";
 import {
   MenuButtonAddTable,
-  MenuButtonBlockquote,
   MenuButtonBold,
   MenuButtonBulletedList,
   MenuButtonCode,
   MenuButtonCodeBlock,
-  MenuButtonEditLink,
   MenuButtonHighlightColor,
   MenuButtonHorizontalRule,
-  MenuButtonImageUpload,
   MenuButtonIndent,
   MenuButtonItalic,
   MenuButtonOrderedList,
   MenuButtonRedo,
-  MenuButtonRemoveFormatting,
   MenuButtonStrikethrough,
-  MenuButtonSubscript,
-  MenuButtonSuperscript,
   MenuButtonTaskList,
   MenuButtonTextColor,
-  MenuButtonUnderline,
   MenuButtonUndo,
   MenuButtonUnindent,
   MenuControlsContainer,
@@ -29,6 +22,7 @@ import {
   MenuSelectFontSize,
   MenuSelectHeading,
   MenuSelectTextAlign,
+MenuButtonUnderline,
   isTouchDevice,
 } from "mui-tiptap";
 
@@ -40,6 +34,8 @@ export default function EditorMenuControls() {
 
         
       <MenuSelectFontFamily
+        tooltipTitle="פונט"
+          
         options={[
           { label: "Comic Sans", value: "Comic Sans MS, Comic Sans" },
           { label: "Cursive", value: "cursive" },
@@ -50,11 +46,12 @@ export default function EditorMenuControls() {
 
       <MenuDivider />
 
-      <MenuSelectHeading tooltipTitle="גודל טסקס" />
+      <MenuSelectHeading tooltipTitle="סוג טסקס" />
 
-      <MenuDivider />
+      <MenuDivider  />
 
-      <MenuSelectFontSize />
+      <MenuSelectFontSize tooltipTitle="גודל טסקס" />
+      <MenuButtonUnderline/>
 
       <MenuDivider />
 
@@ -62,13 +59,9 @@ export default function EditorMenuControls() {
 
       <MenuButtonItalic />
 
-      <MenuButtonUnderline />
 
       <MenuButtonStrikethrough />
 
-      <MenuButtonSubscript />
-
-      <MenuButtonSuperscript />
 
       <MenuDivider />
 
@@ -102,10 +95,6 @@ export default function EditorMenuControls() {
 
       <MenuDivider />
 
-      <MenuButtonEditLink />
-
-      <MenuDivider />
-
       <MenuSelectTextAlign />
 
       <MenuDivider />
@@ -130,8 +119,6 @@ export default function EditorMenuControls() {
 
       <MenuDivider />
 
-      <MenuButtonBlockquote />
-
       <MenuDivider />
 
       <MenuButtonCode />
@@ -140,21 +127,6 @@ export default function EditorMenuControls() {
 
       <MenuDivider />
 
-      <MenuButtonImageUpload
-        onUploadFiles={(files) =>
-          // For the sake of a demo, we don't have a server to upload the files
-          // to, so we'll instead convert each one to a local "temporary" object
-          // URL. This will not persist properly in a production setting. You
-          // should instead upload the image files to your server, or perhaps
-          // convert the images to bas64 if you would like to encode the image
-          // data directly into the editor content, though that can make the
-          // editor content very large.
-          files.map((file) => ({
-            src: URL.createObjectURL(file),
-            alt: file.name,
-          }))
-        }
-      />
 
       <MenuDivider />
 
@@ -164,7 +136,6 @@ export default function EditorMenuControls() {
 
       <MenuDivider />
 
-      <MenuButtonRemoveFormatting />
 
       <MenuDivider />
 

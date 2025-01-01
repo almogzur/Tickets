@@ -18,6 +18,7 @@ import WidthContext from "@/context/WidthContext";
 import { blue, grey } from "@mui/material/colors";
 import TabsInfoContext from "@/context/admin/new-event/tabs/tabs-info-context";
 
+import DOMPurify from "isomorphic-dompurify";
 
 import { RiSave3Fill } from "react-icons/ri";
 import { FaEye } from "react-icons/fa";
@@ -36,20 +37,14 @@ function fileListToImageFiles(fileList: FileList): File[] {
 export default function Editor() {
 
   const theme  = useTheme()
-
-
-
   const extensions = useExtensions({
     placeholder: "הוסף טקסט על האירוע",
   });
-
-
   const rteRef = useRef<RichTextEditorRef>(null);
   const [isEditable, setIsEditable] = useState(true);
   const [showMenuBar, setShowMenuBar] = useState(true);
   const {infoFileds,setInfoFileds}= useContext(TabsInfoContext)
   const [submittedContent, setSubmittedContent] = useState("");
-
 
 
   const handleNewImageFiles = useCallback(
@@ -188,9 +183,19 @@ export default function Editor() {
             handleDrop: handleDrop,
             handlePaste: handlePaste,
           }}
+         content={infoFileds.pre}
+         onUpdate={({editor,transaction})=>{
+            
+           const cleanEditorContent = DOMPurify.sanitize(editor.getHTML(),{})
+           setInfoFileds(p => ({ ...p, pre: cleanEditorContent }));
+           
+              
+
+        }}
           renderControls={() => <Box sx={{  p:1, m:0 ,borderRadius:1,  background:grey[200]  }}><EditorMenuControls  /> </Box> }
           RichTextFieldProps={{
             // The "outlined" variant is the default (shown here only as
+
             // example), but can be changed to "standard" to remove the outlined
             // field border from the editor
             variant: 'standard',
@@ -217,17 +222,15 @@ export default function Editor() {
                   px: 1,
                 }}
               >
-                  <MenuButton    
-                  onClick={() => {
-                    setInfoFileds(p => ({ ...p, pre: rteRef.current?.editor?.getHTML() ?? "" }));
-                  } } 
-                  IconComponent={  RiSave3Fill}
+              { /*    <MenuButton    
+                  onClick={() => { } } 
+                  IconComponent={RiSave3Fill}
                   tooltipLabel={"שמור"}           
                   style={{color:theme.palette.primary.main, background:grey[200] }}
                   
                   
                        />
-           
+              */}
               
                 <MenuButton 
                      tooltipLabel={"תצוגה מקדומה"}         

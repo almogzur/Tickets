@@ -1,6 +1,6 @@
 
 import {  ReactNode, useContext, useEffect } from 'react';
-import MiniDrawer from '../components/Drawer'
+import AdminDrawer from '../components/admin/admin-drawer'
 import {Stack as Flex, Container } from '@mui/material'
 import { useSession } from 'next-auth/react';
 import router from 'next/router';
@@ -20,18 +20,11 @@ useEffect(()=>{
 },[session,status])
 
 
-  return (
-
-      
+  return ( 
    <>
-
-         <MiniDrawer  />  
-     
-            {children}
-          
+    <AdminDrawer  />  
+    {children}          
   </>
-       
-  
   );
 }
  

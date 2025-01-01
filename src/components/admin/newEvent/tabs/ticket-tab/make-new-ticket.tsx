@@ -22,7 +22,7 @@ import TabsTicketContext from '@/context/admin/new-event/tabs/tabs-ticket-contex
 import TabsInfoContext from '@/context/admin/new-event/tabs/tabs-info-context';
 
 // Types 
-import { BaceTIcketType, InfoFormType, BaceTicketVS, BaceTIcketType_Partial } from '@/pages/admin/new-event'
+import { BaceTIcketType, InfoFormType, BaceTicketVS, BaceTIcketStateType, } from '@/pages/admin/new-event'
 import {FullDateOptions} from '@/pages/_app'
 
 //Colors
@@ -56,16 +56,16 @@ export default function MakeNewTicket({setTabPage }:MakeNewTicketType) {
   const theme = useTheme()
   const [formErrors,setFormErrors ]= useState(false)
 
-  const [Ticket, setTicket] =useState<BaceTIcketType_Partial >({
+  const [Ticket, setTicket] = useState<BaceTIcketStateType >({
     // Bace
       eventName :  infoFileds.eventName,
       location:infoFileds.location,
       Date: infoFileds.Date,
       cat:infoFileds.cat,
-      EndSealesDate :undefined  ,
+      EndSealesDate :new Date()  ,
       selectedType:undefined,
-      priceInfo:undefined,
-      price:undefined, 
+      priceInfo:"",
+      price:"", 
  }) 
 
 
@@ -80,10 +80,10 @@ export default function MakeNewTicket({setTabPage }:MakeNewTicketType) {
   const resetTicketPricesForm =( ):void=>{
       setTicket(p=>({
            ...p,
-           EndSealesDate :undefined  ,
+           EndSealesDate :new Date()  ,
            selectedType:undefined,
-           priceInfo:undefined,
-           price:undefined, 
+           priceInfo:"",
+           price:"", 
           }))
   }
   const handleClickOpen = () => {
@@ -101,23 +101,8 @@ export default function MakeNewTicket({setTabPage }:MakeNewTicketType) {
     handleClose()
   }
 
-  const updateTicketEndOfSalesDate =(e: dayjs.Dayjs | null):void=>{
 
-    if (e && e.year() && e.month() && e.date() && e.day()  && e.hour()&& e.minute() ) {
-      // set the time in utc  -3 form area time , 
-       const newDate = e.toDate()
-       setTicket(p=>({...p,EndSealesDate:newDate}))
-       setFormErrors(false)
-          
-      }
-      else{
-        //  error henler
-        setFormErrors(true)
-      }
-
-    
-  }
-  const validateFileds =( State:BaceTIcketType_Partial) : {result:boolean,data:BaceTIcketType|undefined , errors:ZodError<BaceTIcketType>|undefined}=>{
+  const validateFileds = (State: BaceTIcketStateType) : {result:boolean,data:BaceTIcketType|undefined , errors:ZodError<BaceTIcketType>|undefined}=>{
            const result =  BaceTicketVS.safeParse(State)
 
                 console.log(result);
@@ -146,12 +131,11 @@ export default function MakeNewTicket({setTabPage }:MakeNewTicketType) {
      
         <DialogTitle style={{padding:2   , background:"black"}} >  
         
-          <Flex direction={"row"} alignItems={"center"}  >
-                     <Flex  alignItems={"center"} gap={0} mx={1} >
-                      
-                         <IoTicket  size={!sm?"1.5em":"1.7em"} color={theme.palette.primary.main}  />        
-                         <Typography variant='body1' sx={{color:"#fff" ,fontWeight:800}}  >{"כרטיס חדש"} </Typography> 
-          </Flex>        
+
+          <Flex  direction={"row"} alignItems={"center"} gap={2} mx={1} p={2} >
+             <IoTicket  size={!sm?"1.5em":"1.7em"} color={theme.palette.primary.main}  />        
+             <Typography variant='body1' sx={{color:"#fff" ,fontWeight:800}}  >{"כרטיס חדש"} </Typography> 
+      
     
 
          </Flex>
@@ -173,7 +157,6 @@ export default function MakeNewTicket({setTabPage }:MakeNewTicketType) {
                           items={TicketOptions} 
                           changeHndler={(e)=>{
                             setTicket(p=>({...p,selectedType:e.target.value}))
-                            console.log(e.target.value);
                               e.target.value === "citizen"? setTicket(p=>({...p,priceInfo:"הנחת תושב"}))
                               :
                               e.target.value === "normal"? setTicket(p=>({...p,priceInfo:'מחיר מלא'}))
@@ -241,11 +224,14 @@ export default function MakeNewTicket({setTabPage }:MakeNewTicketType) {
                     <DateTimePickerWrap    
                         value={ Ticket.EndSealesDate}
                         minDate={new Date()}
-                        maxTIme={Ticket.Date}
+                        maxTIme={dayjs(Ticket.Date).toDate()}
                         variant='standard'
                         label={"סגירת מכירות לכרטיס זה"}
-                        onAcceptHendler={updateTicketEndOfSalesDate}
-                    
+                        onAcceptHendler={(e) => e !== null ?
+                         setTicket(p => ({ ...p, EndSealesDate: e.toDate() }))
+                         :
+                        null
+                         }
                         labelPositioin={'top'}
                         onEroorHndler={(e: DateTimeValidationError, context: dayjs.Dayjs | null): void => { } }
                      />
@@ -269,7 +255,7 @@ export default function MakeNewTicket({setTabPage }:MakeNewTicketType) {
                       />  
 
                      <TicketChip
-                       text={ Ticket.Date? Ticket.Date.toLocaleDateString("he-IL",FullDateOptions) : undefined}
+                       text={ Ticket.Date.toLocaleTimeString("he-IL",FullDateOptions)}
                        setTabPage={  setTabPage }
                        newTab={0}
                        placeholder='הוסף תאריך'
@@ -294,7 +280,7 @@ export default function MakeNewTicket({setTabPage }:MakeNewTicketType) {
             <Flex direction={"row"} width={"100%"} justifyContent={"space-between"} gap={2} mx={1}  >
 
                 <Button 
-                    color='secondary' 
+                     
                     disabled={!validateFileds(Ticket).result} 
                     onClick={addTicket}
                     sx={{borderRadius:0}}

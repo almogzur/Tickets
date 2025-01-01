@@ -20,13 +20,13 @@ import Link from 'next/link';
 
 import { FcPrevious } from "react-icons/fc";
 
-const DRAWER_OPEN_WIDTH = 160;
+const DRAWER_OPEN_WIDTH = 200;
 
 
 const links  = [
-  {text:'ראשי' , Icon:<FcHome size={"2em"} /> , link:"/admin" },
-  {text:'צור אירוע' , Icon:<FcPuzzle size={"2em"} /> , link:"/admin/new-event" },
-  {text:'ניהול אירועים ' , Icon:<FcBusinessman size={"2em"} /> , link:"/admin/manage-events" }
+  {text:'ראשי' , Icon:<FcHome size={"1.5em"} /> , link:"/admin" },
+  {text:'צור אירוע' , Icon:<FcPuzzle size={"1.5em"} /> , link:"/admin/new-event" },
+  {text:'ניהול אירועים ' , Icon:<FcBusinessman size={"1.5em"} /> , link:"/admin/manage-events" }
 
 ]
 const subLinks = [
@@ -34,8 +34,6 @@ const subLinks = [
 
 
 ]
-
-
 
 export default function TemporaryDrawer() {
 
@@ -46,29 +44,12 @@ export default function TemporaryDrawer() {
     setOpen(newOpen);
   };
 
-  const DrawerList = (
-    <Box sx={{ width: DRAWER_OPEN_WIDTH , direction:"rtl" }} role="presentation" onClick={toggleDrawer(false)}>
-      <List>
-        {links.map(( {text,Icon,link}, index) => (
-          <Item text={text} Icon={Icon} link={link} index={index} key={text}/>  
-          ))}
-      </List>
-      <Divider />
-      <List>
-        {/* {subLinks.map((text, index) => (
-          <Item text={text} index={index} key={text}/>  ))} */}
-      </List>
-    </Box>
-  );
 
   return (
     <>
     <nav dir='rtl' style={{ height:60 , background:"black" , display:"flex", flexDirection:"row"  , }   }  >
-      
-            <FcPrevious size={'1.5em'}  onClick={toggleDrawer(true)} style={{padding:10 , margin:10 , cursor:'pointer'}}/>
-     
-    
-      </nav>
+        <FcPrevious size={'1.5em'}  onClick={toggleDrawer(true)} style={{padding:10 , margin:10 , cursor:'pointer'}}/>
+    </nav>
 
 
       <Drawer
@@ -77,10 +58,10 @@ export default function TemporaryDrawer() {
         anchor='right'
         SlideProps={{ direction:"left" }}
          >
-        {DrawerList}
+        <DrawerList/>
 
         <ListItem sx={{background:"gray"}}>
-          <ListItemButton  sx={{minHeight: 48}} onClick={()=>signOut({callbackUrl:"/"})}>
+          <ListItemButton  onClick={()=>signOut({callbackUrl:"/"})}>
             <ListItemIcon
                  sx={{ } }
               >
@@ -99,14 +80,37 @@ export default function TemporaryDrawer() {
   );
 }
 
+
+
+
+const DrawerList = ()=>{
+ 
+return (
+  <Box sx={{ width: DRAWER_OPEN_WIDTH, direction: "rtl" }} role="presentation" >
+    <List>
+      {links.map(({ text, Icon, link }, index) => (
+        <DrawerItem text={text} Icon={Icon} link={link} index={index} key={text} />
+      ))}
+    </List>
+    <Divider />
+    <List>
+      {/* {subLinks.map((text, index) => (
+          <Item text={text} index={index} key={text}/>  ))} */}
+    </List>
+  </Box>
+)
+}
+
+
 interface ItemPropsType  {text: string ,Icon :ReactNode , link:string,index:number }
-const Item  = ({text, Icon ,link , index} :ItemPropsType)=>{
+
+const DrawerItem  = ({text, Icon ,link , index} :ItemPropsType)=>{
   return    (  
    
 <Link href={link} style={{textDecoration:'none'  , color:"black" }}  >
   <ListItem  disablePadding sx={{}} >
    <ListItemButton
-    sx={{minHeight: 48}}
+       
   >
      <ListItemText
         primary={text}

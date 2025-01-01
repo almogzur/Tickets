@@ -14,13 +14,10 @@ import { Highlight } from "@tiptap/extension-highlight";
 import { History } from "@tiptap/extension-history";
 import { HorizontalRule } from "@tiptap/extension-horizontal-rule";
 import { Italic } from "@tiptap/extension-italic";
-import { Link } from "@tiptap/extension-link";
 import { ListItem } from "@tiptap/extension-list-item";
 import { OrderedList } from "@tiptap/extension-ordered-list";
 import { Paragraph } from "@tiptap/extension-paragraph";
 import { Strike } from "@tiptap/extension-strike";
-import { Subscript } from "@tiptap/extension-subscript";
-import { Superscript } from "@tiptap/extension-superscript";
 import { TableCell } from "@tiptap/extension-table-cell";
 import { TableHeader } from "@tiptap/extension-table-header";
 import { TableRow } from "@tiptap/extension-table-row";
@@ -62,20 +59,12 @@ import {
 // https://github.com/ueberdosis/tiptap/issues/2571,
 // https://github.com/ueberdosis/tiptap/issues/2572, and
 // https://github.com/ueberdosis/tiptap/issues/514
-const CustomLinkExtension = Link.extend({
-  inclusive: false,
-});
+
 
 // Make subscript and superscript mutually exclusive
 // https://github.com/ueberdosis/tiptap/pull/1436#issuecomment-1031937768
 
-const CustomSubscript = Subscript.extend({
-  excludes: "superscript",
-});
 
-const CustomSuperscript = Superscript.extend({
-  excludes: "subscript",
-});
 export type UseExtensionsOptions = {
   /** Placeholder hint to show in the text input area before a user types a message. */
   placeholder?: string;
@@ -124,8 +113,7 @@ export default function useExtensions({
       ListItem,
       OrderedList,
       Paragraph,
-      CustomSubscript,
-      CustomSuperscript,
+
       Text,
 
       // Blockquote must come after Bold, since we want the "Cmd+B" shortcut to
@@ -140,18 +128,7 @@ export default function useExtensions({
       Italic,
       Underline,
       Strike,
-      CustomLinkExtension.configure({
-        // autolink is generally useful for changing text into links if they
-        // appear to be URLs (like someone types in literally "example.com"),
-        // though it comes with the caveat that if you then *remove* the link
-        // from the text, and then add a space or newline directly after the
-        // text, autolink will turn the text back into a link again. Not ideal,
-        // but probably still overall worth having autolink enabled, and that's
-        // how a lot of other tools behave as well.
-        autolink: true,
-        linkOnPaste: true,
-        openOnClick: false,
-      }),
+
       LinkBubbleMenuHandler,
 
       // Extensions

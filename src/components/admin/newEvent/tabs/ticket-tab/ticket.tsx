@@ -7,7 +7,7 @@ import WidthContext from "@/context/WidthContext";
 
 
 // Types 
-import { BaceTIcketType, BaceTIcketType_Partial } from "@/pages/admin/new-event";
+import { BaceTIcketType } from "@/pages/admin/new-event";
 
 //Components 
 import { useTheme , Stack as Flex , Container, Divider } from "@mui/material";

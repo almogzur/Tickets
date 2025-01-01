@@ -8,48 +8,56 @@ import { FcAbout } from "react-icons/fc"
 import  { useFormControl } from '@mui/material/FormControl';
 import  ControledLabel  from "./controled-form-label"
 import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
+import { tree } from "next/dist/build/templates/app-page"
 
 
 
 interface DateTimePickerWrapType  {
     label:string
     variant?:TextFieldVariants
-    value: Date|undefined
+    value:Date
     minDate? : Date 
     maxTIme? :Date
     isEroor?:boolean
     onAcceptHendler: (value: dayjs.Dayjs | null, context: PickerChangeHandlerContext<DateTimeValidationError>) => void
+    onChangeHendler?: (value: dayjs.Dayjs | null, context: PickerChangeHandlerContext<DateTimeValidationError>) => void
+
     onEroorHndler: (e:DateTimeValidationError, context:dayjs.Dayjs|null )=>void
     labelPositioin:"top"|"end"
     MediaQuery?:string 
     color?:TextFieldProps['color']
     helpText?:string,
+    disablePast?:boolean
 }
 
 const DateTimePickerWrap =({ 
-        label,
-        labelPositioin,
-        variant,
-        isEroor,
-        value,
-        onAcceptHendler  ,
-        maxTIme,
-         MediaQuery,
+          label,
+          labelPositioin,
+          variant,
+          isEroor,
+          value,
+          maxTIme,
+          MediaQuery,
           color,
           helpText,
-          onEroorHndler,
           minDate,
+          disablePast,
+          onAcceptHendler  ,
+          onEroorHndler,
+          onChangeHendler
         
          }:DateTimePickerWrapType)=>{
 
         const theme = useTheme()
+
+
     return    ( 
 
     <DateTimePicker                 
             desktopModeMediaQuery={MediaQuery??theme.breakpoints.up("lg")}
-            value={value?  dayjs(value) :null }
+            value={ dayjs(value) }
             closeOnSelect={false}
-            
+            disablePast={disablePast??true}
             minDate={minDate? dayjs(minDate):undefined} // day show
             // tryed not working curenntly
             // minTime ={}
@@ -61,7 +69,7 @@ const DateTimePickerWrap =({
             label={<ControledLabel labelPositioin={labelPositioin} label={label} />}
             sx={{  m:0.5 }}       
             onAccept={onAcceptHendler}
-            onChange={()=>{}}
+            onChange={onChangeHendler}
             viewRenderers={{
                 hours: renderTimeViewClock,
                 minutes: renderTimeViewClock,

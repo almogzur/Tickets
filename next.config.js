@@ -2,9 +2,6 @@
 const isProduction = process.env.NODE_ENV === 'production';
 
 
-
-    
-
 const cspHeader = `
     default-src 'self';
     script-src 'self' ${isProduction ? "" : "'unsafe-eval' 'unsafe-inline'"};
@@ -18,40 +15,41 @@ const cspHeader = `
     upgrade-insecure-requests;
 `
 
-module.exports = {
+const ProdObject = {
     async headers() {
-        return [
+      return [
+        {
+        source: '/(.*)',
+        headers: [
             {
-                source: '/(.*)',
-                headers: [
-                    {
-                        key: 'Content-Security-Policy',
-                        value: cspHeader.replace(/\n/g, ''),
-                    },
-                    {
-                        key:'Referrer-Policy',
-                        value:'strict-origin-when-cross-origin'
-                    },
-                    {
-                        key: "X-Content-Type-Options",
-                        value:"nosniff"
-                    },
-                    {
-                        key: "Cross-Origin-Resource-Policy",
-                        value:'same-origin'
-                    }
-                      // key : "Subresource Integrity", 
+                key: 'Content-Security-Policy',
+                value: cspHeader.replace(/\n/g, ''),
+            },
+            {
+                key: 'Referrer-Policy',
+                value: 'strict-origin-when-cross-origin'
+            },
+            {
+                key: "X-Content-Type-Options",
+                value: "nosniff"
+            },
+            {
+                key: "Cross-Origin-Resource-Policy",
+                value: 'same-origin'
+            }
+                    // key : "Subresource Integrity", 
 
-                     /* 
-                     Explne : importing CDN Scrips bresource Integrity feature by specifying a base64-encoded cryptographic hash of a
-                     resource (file) you're telling the browser to fetch,
-                    */
+                    /* 
+                    Explne : importing CDN Scrips bresource Integrity feature by specifying a base64-encoded cryptographic hash of a
+                    resource (file) you're telling the browser to fetch,
+                   */
 
                     // Test Result: Subresource Integrity (SRI) not implemented, but all scripts are loaded from a similar origin.
-                    
-                ],
-            },
-        ]
+
+                 ],
+        }
+]
+
     },
     reactStrictMode: true,
     poweredByHeader: false,
@@ -60,3 +58,15 @@ module.exports = {
         webVitalsAttribution: ['CLS', 'LCP']
     },
 }
+const DevObject = {
+    reactStrictMode: true,
+    poweredByHeader: false,
+    output: 'standalone',
+    experimental: {
+        webVitalsAttribution: ['CLS', 'LCP']
+    },
+}
+
+module.exports = isProduction? ProdObject : DevObject
+
+

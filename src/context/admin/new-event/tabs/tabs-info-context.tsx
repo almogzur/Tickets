@@ -21,7 +21,7 @@ export default createContext<InfoTabContextType>(
                 image: undefined,
                 preview: "",
                 isEventClosedForSeal: false,
-                Date: new Date,
+                Date:  new Date(),
            
         },
         setInfoFileds: function (value: SetStateAction<InfoFormType>): void {

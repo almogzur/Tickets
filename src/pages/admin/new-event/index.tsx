@@ -34,7 +34,7 @@ export const BaceTicketVS = z.object({
   eventName : z.string().min(3).max(20),
   location: z.string().min(3).max(20),
   cat: z.union([z.string().min(3).max(20),z.undefined()]),
-  Date:z.date(),
+  Date: z.date(),
   EndSealesDate: z.date(),
   selectedType:z.union([z.literal("normal"),z.literal("discount"),z.literal("citizen")]),
   priceInfo:z.string().min(3),
@@ -44,8 +44,18 @@ export const BaceTicketVS = z.object({
     .or(z.number().nonnegative().min(1))
 })  
 
-export type  BaceTIcketType  =   z.infer<typeof BaceTicketVS  > 
-export type  BaceTIcketType_Partial = Partial<BaceTIcketType>
+export type  BaceTIcketType  = z.infer<typeof BaceTicketVS> 
+export interface BaceTIcketStateType extends Omit<BaceTIcketType, "selectedType"> {
+  selectedType: "normal" | "discount" | "citizen" | undefined; 
+}
+
+export const MinValusForDb = z.object({
+
+})
+
+export const MinValusForDraft = z.object({
+
+})
 
 export interface InfoFormType  {
    eventName:string ,
@@ -57,7 +67,7 @@ export interface InfoFormType  {
    image:File|undefined
    preview:string
    isEventClosedForSeal:boolean
-   Date:Date|undefined,
+   Date:Date,
 }
 export interface TheaterType {
   mainSeats:Seats 
@@ -111,12 +121,12 @@ const NewEventPage=()=>{
 
   // G Info Filed 
   const [infoFileds,setInfoFileds]=useState<InfoFormType>({
-    eventName:"",
+     eventName:"",
      location:"",
-    cat:"",
-    Theater:undefined,
-    TheaterName:undefined,
-     Date:undefined,
+      cat:"",
+      Theater:undefined,
+     TheaterName:undefined,
+     Date:new Date(),
      isEventClosedForSeal:false,
      pre:"",
      image:undefined,
@@ -129,7 +139,9 @@ const NewEventPage=()=>{
   // Seats Amount 
   const [totalSeats ,setTotalSeats]= useState<number>(0)
 
-  useEffect(()=>{  })
+  // useEffect(() => {
+    // console.log(infoFileds);
+  //  }, [infoFileds])
 
 if (status === 'loading') {
      return <h1 style={{textAlign:'center'}}>Loading...</h1>
@@ -143,7 +155,6 @@ return (
   </Head>
      <AdminLayout>
        <form>  
-
 
          <TabInfoContext.Provider value={{infoFileds,setInfoFileds}}>
 
@@ -162,8 +173,6 @@ return (
           }
 
          </TabInfoContext.Provider> 
-
-
 
 
         <Flex p={4} alignItems={"center"} gap={4} direction={"row"} justifyContent={"center"} >

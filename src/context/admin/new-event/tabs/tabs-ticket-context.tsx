@@ -1,4 +1,4 @@
-import { BaceTIcketType, BaceTIcketType_Partial } from "@/pages/admin/new-event";
+import { BaceTIcketType } from "@/pages/admin/new-event";
 import { createContext, Dispatch, SetStateAction } from "react";
 
 

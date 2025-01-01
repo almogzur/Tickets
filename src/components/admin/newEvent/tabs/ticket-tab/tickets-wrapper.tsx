@@ -15,7 +15,6 @@ import { Container, Divider, Stack as Flex , Typography , useTheme} from "@mui/m
 
 
 //Icons 
-import { FcFilm, } from "react-icons/fc";
 import TicketComponent from "./ticket"
 import { IoMdAddCircle } from "react-icons/io"
 import { BaceTIcketType, TheaterType, 
@@ -41,6 +40,7 @@ interface TicketsTabPropsType {  setTabPage : Dispatch<SetStateAction<number>>}
    const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
    const {tickets,setTickets}= useContext(TabsTicketContext)
    const {infoFileds, setInfoFileds} = useContext(TabsInfoContext)
+
    const updateTicket=(  key: "price"|"type"|"discription"|"discoundInfo" , value:string|number ):void=>{   
     setTickets(p=>({...p,[key]:value}))
     }

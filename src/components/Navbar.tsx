@@ -1,10 +1,10 @@
 import Link from 'next/link';
 import Image from 'next/image'
-
 import { Button, Container, Stack as Flex , Typography } from '@mui/material'
 import { useSession } from 'next-auth/react';
 import { Colors } from '@/lib/colors';
 import { useRouter } from 'next/router';
+import { signIn } from "next-auth/react"
 
 
 const Navbar = () => {
@@ -30,14 +30,17 @@ const Navbar = () => {
 
 
 
-          <a href={"/auth/singin"} >
-          <Button variant='contained'  sx={{ height:50 ,m:2,bgcolor:Colors.b}} 
+   
+          <Button variant='contained'  
+            sx={{ height:50 ,m:2,bgcolor:Colors.b}} 
+            onClick={()=>{router.push("/auth/singin")}}
+>
+            <Typography variant='subtitle2' >התחברות למערכת </Typography>
 
-
-            > {"התחברות למערכת "} 
+            
 
           </Button>
-          </a>
+          
         
 
     </Flex>
