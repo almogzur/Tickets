@@ -18,11 +18,6 @@ import   Eilat_1   from '../../constants/theathers/eilat_1'
 
 
 
-
-
-
-
-
 const DetailsPage = ({}) => {  
 
   const router = useRouter()
@@ -41,11 +36,11 @@ const DetailsPage = ({}) => {
       </Head>
       
       <ClientLayout> 
-          <Flex direction={"column"}>
+          <Flex direction={"column"} bgcolor={"black"}>
             <ShowCover imageSrc={event.cover} name = {event.name} />
             </Flex>
       
-         <  ClientTheater theater={Eilat_1} peretSeter={ setEvents}  />
+         <ClientTheater theater={Eilat_1} peretSeter={ setEvents}  />
      {/* <Map/>  */}
       </ClientLayout>
     </>

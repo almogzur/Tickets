@@ -6,10 +6,12 @@ import { FaPlus } from "react-icons/fa6";
 import { FaMinus } from "react-icons/fa";
 
 
+
 import { LuRefreshCcw } from "react-icons/lu";
 
 import WidthContext from "@/context/WidthContext";
-import { ClinetSeatColorsIndex } from "../seats-color-index";
+import { ClinetSeatColorsIndex } from "../seats-controls";
+import ColorIndexDial from "../colors-dial";
 
 
 interface ClientTheaterMapPropsTypes {
@@ -53,6 +55,8 @@ const ClientTheaterMap = ({children }:ClientTheaterMapPropsTypes) => {
             <>
                 <Controls   />
 
+                  <Flex direction={"row"} justifyContent={"center"} mb={2}  >
+
                 <TransformComponent
                   wrapperStyle={{ width:"100%" }}
                
@@ -61,8 +65,8 @@ const ClientTheaterMap = ({children }:ClientTheaterMapPropsTypes) => {
                  
                 </TransformComponent>
 
-           
-              <ClinetSeatColorsIndex />
+               </Flex>
+              <ColorIndexDial />
              
               
 

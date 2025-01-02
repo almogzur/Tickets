@@ -1,15 +1,19 @@
+
 import { TransformWrapper, TransformComponent, useControls, getTransformStyles } from "react-zoom-pan-pinch";
-import { useState, useEffect, useContext, ReactNode, Dispatch, SetStateAction, } from 'react'
+import { useState, useEffect, useContext, ReactNode, Dispatch, SetStateAction, MouseEventHandler, } from 'react'
 import AdminMapPositionsContext from '../../../../context/admin/new-event/map/admin-map-positions-context';
-import { Stack as Flex , Typography as Heading , Button, Avatar , useTheme, Divider} from '@mui/material'
+import { Stack as Flex , Typography as Heading , Button, Avatar , useTheme, Divider, Box, SpeedDial, SpeedDialAction, SpeedDialIcon, Backdrop} from '@mui/material'
 import { FaPlus } from "react-icons/fa6";
 import { FaMinus } from "react-icons/fa";
 import SingleTipContext from '@/context/admin/new-event/map/single-tip-context';
 import MutiTipContext from '@/context/admin/new-event/map/multi-select-context'
 import { LuRefreshCcw } from "react-icons/lu";
-import SeatColorsIndex from "../../../seats-color-index";
+import SeatControls from "../../../seats-controls";
 import WidthContext from "@/context/WidthContext";
-import { grey } from "@mui/material/colors";
+import { blue, green, grey, orange, pink } from "@mui/material/colors";
+import { FcAddImage, FcRemoveImage } from "react-icons/fc";
+import tabsInfoContext from "@/context/admin/new-event/tabs/tabs-info-context";
+import ColorIndexDial from "@/components/colors-dial";
 
 
 interface AdminTheaterMapPropsTypes {
@@ -53,27 +57,35 @@ const AdminNewEventTheatherMap = ({children, isMultiSelect,setIsMultiSelect ,mul
       >
         {({ zoomIn, zoomOut, resetTransform, ...rest }) =>  {
           return   (
-            <Flex    boxShadow={theme.shadows[10]} mt={3} > 
+            <Flex    > 
               <MovmentControls/>   
-              <Divider sx={{borderWidth:3 , background:theme.palette.primary.dark}} />
             
-
+                  <Flex direction={"row"} justifyContent={"center"} mb={2}  >
+              
                  <TransformComponent
-                  wrapperStyle={{ width:"100%" ,background:"#fff"  }}
+                  wrapperStyle={{ width:!xs?"85%":"90%", background:grey[200] , border:"solid" ,borderRadius:15 }}
                
                  >
-                   
-
-                 {children}      
+                  
+         
+                  {children}   
+      
                  
                 </TransformComponent>
-   
-               <SeatColorsIndex isMuiltiSelct={isMultiSelect} setIsMultiSelect={setIsMultiSelect} multiSelectBadgeInfo={multiSelectBadgeInfo}   />
-           
+
+                 </Flex>
+      
+              <ColorIndexDial />
+              < SeatControls isMuiltiSelct={isMultiSelect} setIsMultiSelect={setIsMultiSelect} multiSelectBadgeInfo={multiSelectBadgeInfo}   />
+             
+
+
+            
              
               
 
             </Flex>
+
         )
   }
   
@@ -125,3 +137,5 @@ const AdminNewEventTheatherMap = ({children, isMultiSelect,setIsMultiSelect ,mul
   };
   
   export default AdminNewEventTheatherMap
+
+

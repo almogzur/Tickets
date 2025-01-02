@@ -7,20 +7,16 @@ import WidthContext from "@/context/WidthContext";
 
 
 // Types 
-import { BaceTIcketType } from "@/pages/admin/new-event";
+import { BaceTicketType } from "@/pages/admin/new-event";
 
 //Components 
 import { useTheme , Stack as Flex , Container, Divider } from "@mui/material";
 import  MyChip from '@/components/chip-wrap'
 
 // Icons 
-import { FaEye } from "react-icons/fa6";
 
-import {FcServices,FcFilm, FcBusinessman, FcCurrencyExchange, FcLeave, FcSearch,FcPlanner,FcViewDetails } from "react-icons/fc";
-import { IoLocationSharp } from "react-icons/io5";
 import { MdDelete, MdDiscount } from "react-icons/md";
-import { MdEdit } from "react-icons/md";
-import { BsFillFileEarmarkPdfFill } from "react-icons/bs";
+
 import { FaFilePdf } from "react-icons/fa6";
 
 //Colors
@@ -29,7 +25,7 @@ import { FullDateOptions } from "@/pages/_app";
 
 
 
-const TicketComponent = ({ eventName,EndSealesDate,price,priceInfo,selectedType,cat,location ,Date  }:BaceTIcketType) => {
+const TicketComponent = ({ eventName,EndSealesDate,price,priceInfo,selectedType,cat,location ,Date  }:BaceTicketType) => {
     const theme = useTheme()
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
     

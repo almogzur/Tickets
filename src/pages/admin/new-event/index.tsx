@@ -44,8 +44,8 @@ export const BaceTicketVS = z.object({
     .or(z.number().nonnegative().min(1))
 })  
 
-export type  BaceTIcketType  = z.infer<typeof BaceTicketVS> 
-export interface BaceTIcketStateType extends Omit<BaceTIcketType, "selectedType"> {
+export type  BaceTicketType  = z.infer<typeof BaceTicketVS> 
+export interface BaceTIcketStateType extends Omit<BaceTicketType, "selectedType"> {
   selectedType: "normal" | "discount" | "citizen" | undefined; 
 }
 
@@ -123,8 +123,8 @@ const NewEventPage=()=>{
   const [infoFileds,setInfoFileds]=useState<InfoFormType>({
      eventName:"",
      location:"",
-      cat:"",
-      Theater:undefined,
+     cat:"",
+     Theater:undefined,
      TheaterName:undefined,
      Date:new Date(),
      isEventClosedForSeal:false,
@@ -134,7 +134,7 @@ const NewEventPage=()=>{
     })
   
   //Tickets
-  const [tickets, setTickets] =useState<BaceTIcketType[]>([])
+  const [tickets, setTickets] =useState<BaceTicketType[]>([])
 
   // Seats Amount 
   const [totalSeats ,setTotalSeats]= useState<number>(0)

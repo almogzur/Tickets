@@ -1,3 +1,4 @@
+import ControledLabel from "@/components/controled-form-label";
 import { Typography, useTheme } from "@mui/material";
 import {
   MenuButtonAddTable,
@@ -35,8 +36,11 @@ export default function EditorMenuControls() {
         
       <MenuSelectFontFamily
         tooltipTitle="פונט"
-          
+        unsetOptionLabel
+        hideUnsetOption
+        emptyLabel={<Typography> פונט </Typography>}
         options={[
+          {label:"פונט",value:""},
           { label: "Comic Sans", value: "Comic Sans MS, Comic Sans" },
           { label: "Cursive", value: "cursive" },
           { label: "Monospace", value: "monospace" },
@@ -46,7 +50,12 @@ export default function EditorMenuControls() {
 
       <MenuDivider />
 
-      <MenuSelectHeading tooltipTitle="סוג טסקס" />
+      <MenuSelectHeading 
+          tooltipTitle="פיסקה" 
+            labels={{paragraph:<Typography>גודל פיסקה </Typography>}}
+                    
+          
+ />
 
       <MenuDivider  />
 
@@ -119,13 +128,8 @@ export default function EditorMenuControls() {
 
       <MenuDivider />
 
-      <MenuDivider />
 
       <MenuButtonCode />
-
-      <MenuButtonCodeBlock />
-
-      <MenuDivider />
 
 
       <MenuDivider />
@@ -141,6 +145,7 @@ export default function EditorMenuControls() {
 
       <MenuButtonUndo />
       <MenuButtonRedo />
+
     </MenuControlsContainer>
    
 

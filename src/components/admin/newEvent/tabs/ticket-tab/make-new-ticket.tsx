@@ -22,17 +22,18 @@ import TabsTicketContext from '@/context/admin/new-event/tabs/tabs-ticket-contex
 import TabsInfoContext from '@/context/admin/new-event/tabs/tabs-info-context';
 
 // Types 
-import { BaceTIcketType, InfoFormType, BaceTicketVS, BaceTIcketStateType, } from '@/pages/admin/new-event'
+import {  BaceTicketVS, BaceTIcketStateType, BaceTicketType, } from '@/pages/admin/new-event'
 import {FullDateOptions} from '@/pages/_app'
 
 //Colors
-import { grey, red } from '@mui/material/colors';
-import { DateTimePicker, DateTimeValidationError, MobileDateTimePicker } from '@mui/x-date-pickers';
+import {  red } from '@mui/material/colors';
+import { DateTimeValidationError } from '@mui/x-date-pickers';
 import dayjs, { Dayjs } from 'dayjs';
 import SelectWrap from '@/components/select-wrap';
 import DateTimePickerWrap from '@/components/date-time-wrap';
 import { ppid } from 'process';
 import { SafeParseError, SafeParseSuccess, ZodError } from 'zod';
+import { IoMdAddCircle } from 'react-icons/io';
 
 
 
@@ -102,7 +103,7 @@ export default function MakeNewTicket({setTabPage }:MakeNewTicketType) {
   }
 
 
-  const validateFileds = (State: BaceTIcketStateType) : {result:boolean,data:BaceTIcketType|undefined , errors:ZodError<BaceTIcketType>|undefined}=>{
+  const validateFileds = (State: BaceTIcketStateType) : {result:boolean,data:BaceTicketType|undefined , errors:ZodError<BaceTicketType>|undefined}=>{
            const result =  BaceTicketVS.safeParse(State)
 
                 console.log(result);
@@ -117,8 +118,8 @@ export default function MakeNewTicket({setTabPage }:MakeNewTicketType) {
          variant='contained' 
          color='primary' 
          onClick={handleClickOpen}
-         endIcon={<IoTicket  style={{marginRight:10}}/>} 
-         sx={{ fontSize:!xs?13:null ,borderRadius:0}}  
+        endIcon={<IoMdAddCircle  style={{paddingRight:10}}/>} 
+         sx={{ fontSize:!xs?13:null ,borderRadius:0 }}  
          >
          כרטיס חדש 
       </Button>
@@ -126,7 +127,8 @@ export default function MakeNewTicket({setTabPage }:MakeNewTicketType) {
       <Dialog
         open={open}
         onClose={handleClose}
-         fullWidth
+        fullWidth
+
       >
      
         <DialogTitle style={{padding:2   , background:"black"}} >  
@@ -142,14 +144,8 @@ export default function MakeNewTicket({setTabPage }:MakeNewTicketType) {
 
         </DialogTitle>
 
-        <Divider sx={{borderWidth:2}} ></Divider>
 
-        <DialogContent >
-
-
-            <Flex   >
-                  <Typography variant='h6' style={{}} >פרטי כרטיס</Typography>
-                
+        <DialogContent sx={{m:0, p:1}} >
                 <Flex >
 
                    <SelectWrap   
@@ -218,7 +214,7 @@ export default function MakeNewTicket({setTabPage }:MakeNewTicketType) {
 
 
 
-                       </Flex>
+                      </Flex>
                     }
 
                     <DateTimePickerWrap    
@@ -263,13 +259,8 @@ export default function MakeNewTicket({setTabPage }:MakeNewTicketType) {
                          m={0.5}
                           grow={4}
                           />
+                  </Flex>
 
-
-
-                       
-                </Flex>
-
-           </Flex>
 
  
 
@@ -321,10 +312,10 @@ interface TicketChipType {
         return  <Chip 
                      onClick={ !text? ()=>setTabPage(newTab) :undefined }
                      avatar={icon}
-                     label={text?text:placeholder} 
+                     label={<Typography>text?text:placeholder</Typography>} 
                      sx={{
-                        m:m?? 2, 
-                        p:p?? 2.5, 
+                        m:m?? 1, 
+                        p:p?? 1, 
                         justifyContent:"start", 
                         borderRadius:br?? 0,
                         fontSize:!xs? 14: 16 ,

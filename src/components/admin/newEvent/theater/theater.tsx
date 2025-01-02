@@ -1,6 +1,6 @@
 import {  CSSProperties, Dispatch, SetStateAction, useContext, useState } from 'react'
 import { Seats , SeatStyles } from '@/constants/models/Events';
-import {  Stack as Flex ,  Container, Typography, useTheme, Box, } from '@mui/material'
+import {  Stack as Flex ,  Container, Typography, useTheme, Box, Avatar, } from '@mui/material'
 import { Colors } from '@/lib/colors';
 import SingleSelectTip from './singel-select-tip';
 import AdminSeatBtn from './adminSeatBtn'
@@ -15,6 +15,7 @@ import AdminNewEventTheatherMap from './new-event-theather-map';
 import WidthContext from '@/context/WidthContext';
 import TabsInfoContest from '@/context/admin/new-event/tabs/tabs-info-context'
 import { TheaterType } from '@/pages/admin/new-event';
+import { blue, green, orange, pink } from '@mui/material/colors';
 
 
     const Theater = ({TheaterDate}:{TheaterDate:TheaterType}) => {
@@ -100,10 +101,10 @@ import { TheaterType } from '@/pages/admin/new-event';
 
     return (
 
-      <Container>
+      <>
         
        
-           <>
+   
             <SingleSelectTip 
               theaterDate={  TheaterDate}
                setTheater={setInfoFileds}
@@ -114,7 +115,7 @@ import { TheaterType } from '@/pages/admin/new-event';
             theaterDate={TheaterDate}
             setTheater={setInfoFileds}
           />
-          </>
+      
             
 
 
@@ -123,15 +124,18 @@ import { TheaterType } from '@/pages/admin/new-event';
            setIsMultiSelect={setIsMultiSelect}
             multiSelectBadgeInfo={amountOfSeatsSelcted}   
              >
-             <Flex direction={"column"}    height={!xs? 320 : 600}      sx={{direction:"ltr"}}  >
+             <Flex direction={"column"}    height={!xs? 320 : !sm? 400 : !md? 500 : 700}      sx={{direction:"ltr"}}  >
                <Stage  />
                {MainSeatS}
                {Text}
                {SideSeats}
-            </Flex>      
-         </AdminNewEventTheatherMap>      
+   
+            </Flex> 
+     
+         </AdminNewEventTheatherMap>    
+  
  
-      </Container>
+      </>
       );
   };
 

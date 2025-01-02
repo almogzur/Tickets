@@ -1,4 +1,4 @@
-import {Box , Stack as Flex , Typography as Heading , Button, Container, Typography, FormHelperText, FormLabel} from '@mui/material'
+import {Box , Stack as Flex , Typography as Heading , Button, Container, Typography, FormHelperText, FormLabel, useTheme} from '@mui/material'
 import { motion ,AnimatePresence } from "framer-motion"
 import { useState, useEffect, useContext, CSSProperties, useRef, Dispatch, SetStateAction, } from 'react'
 import MoviesContext from '../../context/Events';
@@ -129,7 +129,7 @@ const ClientTheater = ({theater, peretSeter}:ClientTheaterType) => {
 
 
   return (
-      <>
+      <div style={{background:"black"}}>
        <Heading p={2} variant='h4'  textAlign={"center"}  >מקומות ישיבה באולם</Heading>        
        <TheaterMap theater={theater} peretSeter={peretSeter}/>   
 
@@ -141,7 +141,6 @@ const ClientTheater = ({theater, peretSeter}:ClientTheaterType) => {
                 justifyContent={"space-around"} 
                 position={'fixed'} 
                 bottom={0}
-                bgcolor={Colors.a}
                 height={60}
                 width={'100%'}
                 zIndex={1000} 
@@ -153,7 +152,7 @@ const ClientTheater = ({theater, peretSeter}:ClientTheaterType) => {
            :null
            } 
          
-      </>
+      </div>
   
     );
   };
@@ -236,11 +235,8 @@ const ClientTheater = ({theater, peretSeter}:ClientTheaterType) => {
  export default ClientTheater
 
  const TheaterMap = ({theater, peretSeter}:ClientTheaterType) => {
+ const theme = useTheme()
 
-  const sideSeats = theater.sideSeats
-  const mainSeats = theater.mainSeats
-  const sideStyles = theater.styles
-  const texts=  theater.textsStyle 
   const {clientTipPosition,clinetTipInfo, setClientTipPosition  ,setClinetTipInfo, resetClinetTip }=useContext(ClientTipContext)
   
   const Stage = ()=>{
@@ -270,77 +266,75 @@ const ClientTheater = ({theater, peretSeter}:ClientTheaterType) => {
 
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
 
-  const sideSeatsStylesObject =  theater?.styles &&  Object.fromEntries(
-    Object.entries(theater.styles ).map(([row, positions]) => [row, positions])
-  )
-   const sideTextStylesObject = theater&& theater.textsStyle &&  Object.fromEntries(
-    Object.entries(theater.textsStyle).map(([row, positions]) => [row, positions])
-  );
+      const sideSeatsStylesObject =  Object.fromEntries(
+        Object.entries(theater.styles).map(([row, positions]) => [row, positions])
+      )
+       const sideTextStylesObject =  Object.fromEntries(
+        Object.entries(theater.textsStyle).map(([row, positions]) => [row, positions])
+      )
 
-   const MainSeatS  = mainSeats &&  Object.entries(mainSeats).map(([row, rowContent]) => {
-    const colValue  = rowContent.map((seatValue: number, i: number) => {
-      const textset = "מושב";
-      const textrow = "שורה";
-  
-      return (
-        <TooltipButton // uses Context
-          key={`${row}.${i}`}
-          seatValue={seatValue}
-          seatnumber={i} 
-          row={row} 
-          hendler={undefined}             
-          />
-      );
-    });
-  
-    return (
-      <Flex 
-        key={row}
-        justifyContent="center"
-        direction={'row'}
-        sx={{direction:"ltr"}}
-        alignItems={'baseline'}
-      >
-
-        <Typography  height={0} fontWeight={800} fontSize={6} color='secondary'  >{ !xs ? row.slice(5) :  row  }</Typography>
-          {colValue}
-        <Typography height={0} fontSize={6}  fontWeight={800} color='secondary'    >{ !xs ? row.slice(5) :  row  }</Typography>
-        
-      </Flex>
-    );
-  });
-   const SideSeats = sideSeats &&  Object.entries(sideSeats).map(([row, rowContent])=>{
-    const colValue  = rowContent.map((seatValue: number, i: number) => {
-     
-    
+       const MainSeatS  =   Object.entries(theater.mainSeats).map(([row, rowContent]) => {
+        const colValue  = rowContent.map((seatValue: number, i: number) => {
+          const textset = "מושב";
+          const textrow = "שורה";
+      
+          return (
+            <TooltipButton // uses Context
+              key={`${row}.${i}`}
+              seatValue={seatValue}
+              seatnumber={i}
+              row={row}
+               hendler={undefined}              />
+          );
+        })
+      
         return (
-          <TooltipButton
-            key={`${row}.${i}`}
-            seatValue={seatValue}
-            seatnumber={i}
-            row={row} 
-            hendler={undefined}            
-              />
+          <Flex 
+            key={row}
+            justifyContent="center"
+            
+            direction={'row'}
+            sx={{direction:"ltr"}}
+            alignItems={'top'}
+          >
+            <Typography variant='subtitle2' height={0} fontWeight={800} fontSize={6} sx={{color:"#fff"}}  >{ !xs ? row.slice(5) :  row  }</Typography>
+              {colValue}
+              <Typography variant='subtitle2' height={0} fontWeight={800} fontSize={6} sx={{color:"#fff"}}  >{ !xs? row.slice(5) :  row  }</Typography>
+            
+          </Flex>
         );
-      });
+      })
+       const SideSeats =   Object.entries(theater.sideSeats).map(([row, rowContent])=>{
+        const colValue  = rowContent.map((seatValue: number, i: number) => {
+         
+        
+            return (
+              <TooltipButton
+                key={`${row}.${i}`}
+                seatValue={seatValue}
+                seatnumber={i}
+                row={row} hendler={undefined}              
+                  />
+            );
+          });
+        
+          return (
+            <Flex
     
-      return (
-        <Flex
+              key={row}
+              style={sideSeatsStylesObject[row]} // target by key in CSS
+              justifyContent="center"
+              direction={'row'}
+              sx={{direction:"ltr"}}
+            >
+              {colValue}
+            </Flex>
+          );
+      })
+       const Text =  Object.entries(theater.sideSeats).map(([row, rowContent])=>{
+           return <Typography key={row} sx={{color:theme.palette.secondary.main}}  height={0} style={ sideTextStylesObject[row]} >{row}</Typography>
+      })
 
-          key={row}
-          style={sideSeatsStylesObject?  sideSeatsStylesObject[row ]:{}} // target by key in CSS
-          justifyContent="center"
-          direction={'row'}
-          sx={{direction:"ltr"}}
-        >
-          {colValue}
-        </Flex>
-      );
-  })
-
-  const Text = theater?.sideSeats  &&  Object.entries(theater.sideSeats).map(([row, rowContent])=>{
-    return <Typography key={row}  color='textPrimary' height={0} style={sideTextStylesObject? sideTextStylesObject[row]:{}} >{row}</Typography>
-})
 
         
     return (
@@ -376,16 +370,16 @@ const ClientTheater = ({theater, peretSeter}:ClientTheaterType) => {
        </AnimatePresence> 
 
 
-        <Container   sx={{boxShadow:' 3px 3px 3px 2px #fff', marginBottom:3 }} >
-          <ClientTheaterMap   key={"Clinetside"} >              
+          <ClientTheaterMap   >    
+
           <Flex direction={"column"}    height={!xs? 300 : 600}      sx={{direction:"ltr"}} >
            <Stage />
            {MainSeatS}
            {Text}
            {SideSeats}
         </Flex>      
+
           </ClientTheaterMap>         
-        </Container>
       </>
     );
 };

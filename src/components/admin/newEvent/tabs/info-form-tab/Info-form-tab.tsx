@@ -28,7 +28,7 @@ const ErrorHndler = (e:DateTimeValidationError, context:dayjs.Dayjs|null ):void=
 
 
 return(
-      <Flex direction={"row"} justifyContent={"center"}        height={'calc(100% - 80px)'} overflow={"auto"} >
+      <Flex direction={"row"} justifyContent={"center"}       height={'calc(100% - 80px)'} overflow={"auto"} >
 
       <Container  sx={{ m:2, p:1 }}   >
        <Typography sx={{color:'black'}} variant="h6" > פרטים כללים </Typography>
@@ -87,23 +87,18 @@ return(
 
          </Flex>
         
-
-
-
-  
-
          <CoverUpload  />
          
          { infoFileds.preview && infoFileds.image &&
 
-        <Flex  alignItems={"center"} m={2}>
+        <Flex  alignItems={"center"} >
 
          <Image 
            src={infoFileds.preview} 
            alt={infoFileds.image.name} 
-           width={!sm?260:!md? 500 :600}
+           width={!xs?260 : !sm?400 : !md? 500 : 600}
            height={!sm?300:400}
-           style={{ objectFit:'contain', margin:5}} 
+           style={{ objectFit:'contain', margin:1}} 
            />
          <Typography   
              sx={{color:"black" , m:.5}}

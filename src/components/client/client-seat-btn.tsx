@@ -6,8 +6,8 @@ import ClientTipContext from '@/context/client/c-tip-context'
 const styles :Record<string,CSSProperties> =  {
   seats: {
     backgroundColor: "#fff",
-    height:"4px",
-    width:"4px",
+    height:"7px",
+    width:"7px",
     color:"black",
     margin:2 ,
     fontWeight:"bold",

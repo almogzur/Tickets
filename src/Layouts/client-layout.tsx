@@ -6,9 +6,9 @@ const ClientLayout = ({ children }: any) => {
   return (
     <>
       <Navbar />
-      <Container sx={{background:"black"}} >
+
       { children }
-      </Container>
+
       </>
   );
 }

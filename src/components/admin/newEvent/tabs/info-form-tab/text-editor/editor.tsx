@@ -232,11 +232,12 @@ export default function Editor() {
                        />
               */}
               
-                <MenuButton 
+             { /*       <MenuButton 
                      tooltipLabel={"תצוגה מקדומה"}         
                      IconComponent={FaEye}
                      style={{color:theme.palette.primary.main, background:grey[200]}}
                        />
+             */}
                   
       
                 {/* <MenuButton

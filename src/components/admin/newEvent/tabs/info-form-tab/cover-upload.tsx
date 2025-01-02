@@ -39,7 +39,7 @@ const CoverUploadTab=({}:CoverUploadPropsType)=>{
     return
     
   };
-  const  closeDialog : MouseEventHandler<HTMLButtonElement> = (e): void => {
+    const closeDialog : MouseEventHandler<HTMLButtonElement> = (e): void => {
     const inputFile  = Inputref.current;
     
     if (inputFile) {
@@ -52,7 +52,7 @@ const CoverUploadTab=({}:CoverUploadPropsType)=>{
   return
   }
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       
           const selectedFile  = e.target.files !== null  ?  e.target.files[0] :null
     
@@ -64,9 +64,7 @@ const CoverUploadTab=({}:CoverUploadPropsType)=>{
     };
     
 return (
-
-         
-      <Flex mt={3.5}  direction={"row"} gap={1}  >
+    <Flex mt={3.5}  direction={"row"} gap={1}  >
         <Tooltip  title={"הוסף תמונה "} placement='top' >
          <Button  sx={{p:0.5 , boxShadow:0, background:grey[200]}} onClick={openDialog}  variant='text'  ><RiImageAddFill size={"1.5em"}  /></Button>
         </Tooltip>
@@ -76,11 +74,7 @@ return (
  
            <input type='file' id='cover'    onChange={handleFileChange}  accept=".jpg, .jpeg, .png "  ref={Inputref}   hidden />
 
-      </Flex>
-
-      
-
-
+    </Flex>
 ) 
 }
 
@@ -89,75 +83,6 @@ return (
 
 
 
-interface  BasicSpeedDialPropsType extends CoverUploadPropsType {
-   perentRef : React.RefObject<HTMLInputElement>
-}
-
-
-
-function BasicSpeedDial({perentRef}:BasicSpeedDialPropsType) {
-
-  const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
-  const {infoFileds,setInfoFileds} = useContext(TabsInfoContext)
-
-
-  const  closeDialog : MouseEventHandler<HTMLDivElement> = (e): void => {
-    const inputFile  = perentRef.current;
-    
-    if (inputFile) {
-
-      inputFile.value=""
-      setInfoFileds(p=>({...p,preview:""})); 
-      setInfoFileds(p=>({...p,image:undefined}))
-      
-  }
-  return
-  
-
-  }
-
-  const openDialog: MouseEventHandler<HTMLDivElement> = (e) => {
-    const inputFile  = perentRef.current;
-
-    if (inputFile) {
-        inputFile.click()
-        
-    }
-    return
-    
-  };
-
-
-
-
-  return (
-    
-    <Box sx={{  transform: 'translateZ(0px)', flexGrow: 1 ,}}>
-      <SpeedDial
-   
-        sx={{ position: 'absolute', bottom: 16, right: 16 }}
-        icon={<SpeedDialIcon />} ariaLabel={''}      >
-    
-          <SpeedDialAction
-            
-            icon={<FcAddImage size={"2em"} />}
-            onClick={openDialog}
-            tooltipTitle={"הוסף תמונה "}
-            
-          />
-            <SpeedDialAction
-      
-            icon={<FcRemoveImage size={"2em"}/>}
-            onClick={closeDialog} 
-            tooltipTitle={"הסר תמונה "}
-          />
-
-      </SpeedDial>
-    </Box>
-
-    
-  );
-}
 
 
 

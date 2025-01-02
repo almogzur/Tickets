@@ -29,7 +29,7 @@ interface SeatColorsIndexProps  {
     multiSelectBadgeInfo:number
  }
 
-const AdminSeatColorsIndex =({isMuiltiSelct,setIsMultiSelect,multiSelectBadgeInfo}:SeatColorsIndexProps)=> {
+const SeatControls =({isMuiltiSelct,setIsMultiSelect,multiSelectBadgeInfo}:SeatColorsIndexProps)=> {
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
 
     const {AdminMapPositions,setAdminMapPositions} =useContext(AdminMapPositionsContext)
@@ -38,12 +38,10 @@ const AdminSeatColorsIndex =({isMuiltiSelct,setIsMultiSelect,multiSelectBadgeInf
     const theme = useTheme()
 
     return (  
-        <>
-        <Divider sx={{borderWidth:3 , background:theme.palette.primary.dark}} />
+        
 
-         <Flex     justifyContent={"center"} alignItems={"center"}  >
 
-          <Flex direction={'row'}      m={0.5}  justifyContent={'center'} gap={!xs? 0: 7}    >
+          <Flex direction={'row'}    justifyContent={'space-around'} gap={!xs? 0:7}    >
             
            <Badge
              badgeContent={multiTipInfo.totalselected} 
@@ -61,13 +59,13 @@ const AdminSeatColorsIndex =({isMuiltiSelct,setIsMultiSelect,multiSelectBadgeInf
                         resetSingleTip();
                         resetMultiTip()
                     } }
-                 sx={{ background:isMuiltiSelct? green['700']: "", m:0.5  }} 
+                 sx={{ background:isMuiltiSelct? green['700']: "", }} 
                 >
                     סמן רצף   
            </Button>
            </Badge>
 
-           <Button  sx={{background:AdminMapPositions.disabled?"red":"green" , m:0.5}} 
+           <Button  sx={{background:AdminMapPositions.disabled?"red":"green"}} 
            onClick={()=>{setAdminMapPositions(p=>({...p,disabled:!p.disabled}))}}
            >
             {AdminMapPositions.disabled?
@@ -77,8 +75,8 @@ const AdminSeatColorsIndex =({isMuiltiSelct,setIsMultiSelect,multiSelectBadgeInf
            </Button>
 
              <Tooltip  title={"נקה בחירה "} placement="top" >
-           <Button 
-                sx={{m:0.5,p:0.5}}
+              <Button 
+               
                 color="error"
                 onClick={()=>{}}
        
@@ -89,22 +87,13 @@ const AdminSeatColorsIndex =({isMuiltiSelct,setIsMultiSelect,multiSelectBadgeInf
           </Tooltip>
 
           </Flex>
-         <Flex direction={'row'}  >
-         
-          <Avatar  sx={{ bgcolor: blue[800 ] ,p:.3}}>רגיל</Avatar>
-          <Avatar sx={{ bgcolor: "black" ,p:.3 }}  > חסום</Avatar>
-          <Avatar sx={{ bgcolor: green[800] ,p:.3 }}> הנחה</Avatar>
-          <Avatar sx={{ bgcolor: orange[600] ,p:.3 }}  > נגיש</Avatar>
-          <Avatar sx={{ bgcolor: pink[600] ,p:.3 ,textAlign:"center"}}  > הנחה נגיש</Avatar>
-        
-         </Flex>
-        
-        </Flex>
-        </>     
+
+
+                 
     );
 }
 
-export default AdminSeatColorsIndex;
+export default SeatControls;
 
 export const ClinetSeatColorsIndex = ()=>{
   return  <Flex direction={'row'} height={80}  justifyContent={"center"} borderTop={'solid'} >
