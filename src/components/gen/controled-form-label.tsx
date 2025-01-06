@@ -24,7 +24,8 @@ interface ControledLabelType {
             focused?
                 [ {   
                  width:labelPositioin==="end"? fullWidth*0.11 : fullWidth,
-                 color:error? "red" : color?theme.palette[`${color}`].main : null
+                 color:error? "red" : color?theme.palette[`${color}`].main : null,
+                  
                   },
                  variant==="outlined"&&
                   {
@@ -37,7 +38,7 @@ interface ControledLabelType {
                  }
                 ]
                  :
-                filled ?
+            filled ?
                  [
                  {
                   width:labelPositioin==="end"? fullWidth*0.11 : fullWidth,

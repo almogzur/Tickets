@@ -4,7 +4,6 @@ import { useRouter } from 'next/router'
 import { Stack as Flex , Box, Typography, FormControl, InputLabel , TextField, Paper, Button, Container, Alert } from '@mui/material'
 import Image from 'next/image'
 import Logo from '../../../public/logo.png'
-import { Colors } from '@/lib/colors'
 import { useTheme } from '@mui/material/styles';
 import { MdOutlineCancelPresentation } from "react-icons/md";
 
@@ -66,13 +65,14 @@ return (
         
          <MdOutlineCancelPresentation
           size={"3em"} 
-          color={Colors.b} 
+          color={theme.palette.secondary.main} 
           onClick={()=>router.back()}
           style={{margin:5}}
           />
        
 
-          <Typography p={2} color={Colors.b} textAlign={"center"}  variant='h3' > התחברות למערכת </Typography>
+          <Typography p={2}  color={theme.palette.secondary.main} 
+ textAlign={"center"}  variant='h3' > התחברות למערכת </Typography>
 
            <Flex direction={'row'} justifyContent={"center"} >
              <Image src={Logo} height={0} width={0}  alt=""></Image>
@@ -100,7 +100,7 @@ return (
                    
                 
                  '& .MuiInputBase-input':{ fontWeight:900 , width:"210px" , },
-                 '& .MuiInputBase-input::placeholder': {color: Colors.b , opacity:0.8},
+                 '& .MuiInputBase-input::placeholder': {color: theme.palette.secondary.main , opacity:0.8},
                 }}
                />
 
@@ -115,7 +115,7 @@ return (
                required
                sx={{ direction:"rtl" , m:1,
                 '& .MuiInputBase-input':{ fontWeight:900 ,},
-                '& .MuiInputBase-input::placeholder': {color: Colors.b , opacity:0.8},
+                '& .MuiInputBase-input::placeholder': {color: theme.palette.secondary.main , opacity:0.8},
                }}
                  />
              </Flex>
@@ -124,7 +124,7 @@ return (
 
 
             <Flex direction={'row'} justifyContent={"center"}  >
-               <Button type='submit'  sx={{bgcolor:Colors.b, color:"#fff" , width:"40%" , height:60 ,fontSize:20, fontWeight:"bold" }}  >התחבר</Button>
+               <Button type='submit'  sx={{bgcolor:theme.palette.secondary.main, color:"#fff" , width:"40%" , height:60 ,fontSize:20, fontWeight:"bold" }}  >התחבר</Button>
            </Flex>
 
          </form>

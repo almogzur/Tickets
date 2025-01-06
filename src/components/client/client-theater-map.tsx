@@ -10,8 +10,8 @@ import { FaMinus } from "react-icons/fa";
 import { LuRefreshCcw } from "react-icons/lu";
 
 import WidthContext from "@/context/WidthContext";
-import { ClinetSeatColorsIndex } from "../seats-controls";
-import ColorIndexDial from "../colors-dial";
+import { ClinetSeatColorsIndex } from "../theater-gen/seats-controls";
+import ColorIndexDial from "../theater-gen/colors-dial";
 
 
 interface ClientTheaterMapPropsTypes {

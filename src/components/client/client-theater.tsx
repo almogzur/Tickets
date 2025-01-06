@@ -1,12 +1,10 @@
-import {Box , Stack as Flex , Typography as Heading , Button, Container, Typography, FormHelperText, FormLabel, useTheme} from '@mui/material'
+import {Box , Stack as Flex , Typography as Heading , Button, Container, Typography, useTheme} from '@mui/material'
 import { motion ,AnimatePresence } from "framer-motion"
-import { useState, useEffect, useContext, CSSProperties, useRef, Dispatch, SetStateAction, } from 'react'
-import MoviesContext from '../../context/Events';
+import { useState, useEffect, useContext, CSSProperties, useRef, Dispatch, } from 'react'
 
 import { useRouter } from 'next/router'
 import WidthContext from '@/context/WidthContext';
 import Link from 'next/link';
-import {Colors} from '../../lib/colors'
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 
@@ -40,9 +38,6 @@ const ClientTheater = ({theater, peretSeter}:ClientTheaterType) => {
 
   const hendler = (seatValue: number, seatNumber: number, row: string) => {
   
-    
-
-
       // Update the selected seats array
          setSlectedSeats( prevSelectedSeats => {
          const seatKey = `${row}:${seatNumber}`;
@@ -80,7 +75,7 @@ const ClientTheater = ({theater, peretSeter}:ClientTheaterType) => {
           
             }}
           >
-            <Button  sx={{background:Colors.b , color:"#fff" , height:60 ,fontSize:!xs?20:30, letterSpacing:1 ,lineHeight:1.2 , }} >
+            <Button color='secondary'  sx={{ color:"#fff" , height:60 ,fontSize:!xs?20:30, letterSpacing:1 ,lineHeight:1.2 , }} >
               מעבר לתשלום    <br/>
               סה״כ {selectedSeats.length * (  0) + " שח"}
             </Button>
@@ -93,8 +88,9 @@ const ClientTheater = ({theater, peretSeter}:ClientTheaterType) => {
   
     if (selectedSeats.length) {
      return <Button 
-              sx={{background:"#fff" , color:Colors.b ,fontWeight:"bold", fontSize:20 }} 
+              sx={{background:"#fff"  ,fontWeight:"bold", fontSize:20 }} 
               onClick={()=>{}}
+              color='secondary'
 
              > 
               נקה בחירה
@@ -188,13 +184,13 @@ const ClientTheater = ({theater, peretSeter}:ClientTheaterType) => {
    return(
     
 
-      <ListItem alignItems='center'  sx={{ justifyContent:"space-between"  ,    marginTop:2  , boxShadow : `0 6px 2px -2px  ${Colors.a} `, padding:1,  }   }  key={value}  >
+      <ListItem alignItems='center'  sx={{ justifyContent:"space-between"  ,    marginTop:2  , boxShadow : `0 6px 2px -2px `, padding:1,  }   }  key={value}  >
 
                   
             <Flex  direction={"row"} width={"40%"}  justifyContent={"space-between"} alignItems={"center"}    >
 
               
-              <FaTrashAlt  color={Colors.a} size={"1.5em"} style={{border:`solid ${Colors.a}`, padding:7 ,  } } onClick={(e)=>{  hendler( 2 ,seatnumber,row)}}  />
+              <FaTrashAlt   size={"1.5em"} style={{border:`solid `, padding:7 ,  } } onClick={(e)=>{  hendler( 2 ,seatnumber,row)}}  />
   
      
                <FormControl sx={{color:"#fff" ,   }}   >
@@ -223,7 +219,7 @@ const ClientTheater = ({theater, peretSeter}:ClientTheaterType) => {
               
               <Typography variant='subtitle2' width={"100%"} textAlign={"center"} >{ ` מושב ${diplaySeatNumer} :  ${row} `} </Typography>
 
-              <IoTicketSharp color={Colors.b} size={"2em"} style={{border:`solid ${Colors.b}` , padding:3 }}  />
+              <IoTicketSharp  size={"2em"} style={{border:`solid ` , padding:3 }}  />
 
            </Flex>
 
@@ -258,7 +254,7 @@ const ClientTheater = ({theater, peretSeter}:ClientTheaterType) => {
   
     return    <Flex direction={'row'}  justifyContent={'center'}> 
                 <div style={Styles} > 
-                  <Typography variant='h6' color={Colors.b}>במה</Typography> 
+                  <Typography variant='h6' color={theme.palette.secondary.main}>במה</Typography> 
                </div>
              </Flex >
     }   

@@ -8,12 +8,12 @@ import { FaMinus } from "react-icons/fa";
 import SingleTipContext from '@/context/admin/new-event/map/single-tip-context';
 import MutiTipContext from '@/context/admin/new-event/map/multi-select-context'
 import { LuRefreshCcw } from "react-icons/lu";
-import SeatControls from "../../../seats-controls";
+import SeatControls from "../../../theater-gen/seats-controls";
 import WidthContext from "@/context/WidthContext";
 import { blue, green, grey, orange, pink } from "@mui/material/colors";
 import { FcAddImage, FcRemoveImage } from "react-icons/fc";
 import tabsInfoContext from "@/context/admin/new-event/tabs/tabs-info-context";
-import ColorIndexDial from "@/components/colors-dial";
+import ColorIndexDial from "@/components/theater-gen/colors-dial";
 
 
 interface AdminTheaterMapPropsTypes {

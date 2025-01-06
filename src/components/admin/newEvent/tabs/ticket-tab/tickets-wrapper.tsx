@@ -26,8 +26,9 @@ import Eilat_2 from "@/constants/theathers/eilat_2";
 
 
 import TabsInfoContext from "@/context/admin/new-event/tabs/tabs-info-context"
-import SelectWrap from "@/components/select-wrap"
+import SelectWrap from "@/components/gen/select-wrap"
 import { IoTicket } from "react-icons/io5"
+import { X } from "@mui/icons-material"
 
 
 
@@ -47,13 +48,13 @@ interface TicketsTabPropsType {  setTabPage : Dispatch<SetStateAction<number>>}
       setTickets(p=>([...p].filter((item)=> item !== ticket)))
             }
    }
-   const countTheaterSeatAmount = ( Theater: TheaterType ) : number =>{
+   const countTheaterSeat = ( Theater: TheaterType ) : number =>{
      const combineSeats  = [Theater.mainSeats,Theater.sideSeats]
        combineSeats.map((data,i)=>{
            console.log(data);    
         })   
     return 0
-        }
+   }
 
 
    return (
@@ -66,22 +67,23 @@ interface TicketsTabPropsType {  setTabPage : Dispatch<SetStateAction<number>>}
         overflow={"auto"}
         width={"100%"}
         direction={"row"}
-       justifyContent={"center"}
+        justifyContent={"center"}
     >
           <Container sx={{ m:2, p:1 }}  >
         {/* Seats Amount */}
-        <SelectWrap
+        <Flex width={"50%"} >
+           <SelectWrap
               label={"אולם"}
               items={[{ label: Eilat_1.ThaeaterName, value: Eilat_1 }, { label: Eilat_2.ThaeaterName, value: Eilat_2 }]}
               changeHndler={(e) => setInfoFileds(p => ({ ...p, Theater: e.target.value  , TheaterName:e.target.value}))} 
               labelPositioin={"top"} 
               value={infoFileds.TheaterName}  
-              variant='filled'
+              variant='standard'
               isShrinkTitelBold
               isTitelBold
-               />
+            />
+            </Flex>
 
- 
         { infoFileds.Theater &&
     
          <Flex position={"sticky"} top={0}  zIndex={2} bgcolor={"#fff"}>
@@ -115,7 +117,7 @@ interface TicketsTabPropsType {  setTabPage : Dispatch<SetStateAction<number>>}
          }
           {/* loop over tickits tikits.map....  */}
           {tickets.map((ticket,i)=>{
-              return <TicketComponent key={"ticket" + i + ticket.selectedType} {...ticket} />
+              return <TicketComponent key={"ticket" + i + ticket.selectedType} {...ticket} index={i}/>
           })}
   
           </Container>

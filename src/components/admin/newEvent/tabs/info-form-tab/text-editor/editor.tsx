@@ -1,21 +1,18 @@
 import { Lock, LockOpen, TextFields } from "@mui/icons-material";
-import { Box, Button, Stack as Flex, Typography , useTheme } from "@mui/material";
+import { Box, Stack as Flex , useTheme } from "@mui/material";
 import type { EditorOptions } from "@tiptap/core";
 import { useCallback, useContext, useRef, useState } from "react";
 import {
   LinkBubbleMenu,
   MenuButton,
   RichTextEditor,
-  RichTextReadOnly,
   TableBubbleMenu,
   insertImages,
   type RichTextEditorRef,
 } from "mui-tiptap";
 import EditorMenuControls from "./menu-controls";
 import useExtensions from "./useExtensions";
-import { Colors } from "@/lib/colors";
-import WidthContext from "@/context/WidthContext";
-import { blue, grey } from "@mui/material/colors";
+import { grey } from "@mui/material/colors";
 import TabsInfoContext from "@/context/admin/new-event/tabs/tabs-info-context";
 
 import DOMPurify from "isomorphic-dompurify";

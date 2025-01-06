@@ -1,19 +1,16 @@
 //Cmponents
-import { Typography , Stack as Flex ,useTheme, Box, Tabs, Tab, Badge, Container, Divider} from "@mui/material"
+import {  Stack as Flex ,useTheme, Box, Tabs, Tab} from "@mui/material"
 
-import { ChangeEvent, ChangeEventHandler, CSSProperties, Dispatch, SetStateAction, useContext, useEffect, useState } from "react"
-import InputWrap from '@/components/input-wrap'
+import {  CSSProperties,  useContext, useState } from "react"
 
 // Context Useg
 import WidthContext from "@/context/WidthContext"
 
 //Icons 
-import { FcIntegratedWebcam, FcPlanner } from "react-icons/fc";
-import { FcFilm } from "react-icons/fc";
+import { FcIntegratedWebcam } from "react-icons/fc";
 import { FcSettings } from "react-icons/fc";
 import { FcStackOfPhotos } from "react-icons/fc";
-import { FcAnswers } from "react-icons/fc";
-import { FcAddImage } from "react-icons/fc";
+
 import { FcBinoculars } from "react-icons/fc";
 import { FcInfo } from "react-icons/fc";
 

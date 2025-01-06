@@ -1,5 +1,5 @@
 //Recte
-import  {useState,useContext, Dispatch, SetStateAction, ReactElement, CSSProperties, JSXElementConstructor, useEffect, ChangeEvent, SyntheticEvent} from 'react';
+import  {useState,useContext, Dispatch, SetStateAction, ReactElement, CSSProperties, JSXElementConstructor, useEffect, ChangeEvent, SyntheticEvent, ReactNode} from 'react';
 
 // Components 
 import Button from '@mui/material/Button';
@@ -7,12 +7,11 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Typography,Stack as Flex, Divider, useTheme, Chip, Select, MenuItem, FormControl, InputLabel, SelectChangeEvent, } from '@mui/material';
-import InputWrap from '@/components/input-wrap';
+import { Typography,Stack as Flex, useTheme, Chip, } from '@mui/material';
+import InputWrap from '@/components/gen/input-wrap';
 
 //Icons
-import { FcBusinessman, FcFilm, FcLeave, FcPlanner, FcViewDetails } from "react-icons/fc";
-import { MdDiscount } from "react-icons/md";
+import { FcBusinessman, FcPlanner, FcViewDetails } from "react-icons/fc";
 import { IoLocationSharp } from 'react-icons/io5';
 import { IoTicket } from "react-icons/io5";
 
@@ -22,43 +21,38 @@ import TabsTicketContext from '@/context/admin/new-event/tabs/tabs-ticket-contex
 import TabsInfoContext from '@/context/admin/new-event/tabs/tabs-info-context';
 
 // Types 
-import {  BaceTicketVS, BaceTIcketStateType, BaceTicketType, } from '@/pages/admin/new-event'
-import {FullDateOptions} from '@/pages/_app'
+import { BaceTicketVS, BaceTicketStateType, BaceTicketType, } from '@/pages/admin/new-event'
+import { samiDateOptions} from '@/pages/_app'
 
 //Colors
 import {  red } from '@mui/material/colors';
 import { DateTimeValidationError } from '@mui/x-date-pickers';
 import dayjs, { Dayjs } from 'dayjs';
-import SelectWrap from '@/components/select-wrap';
-import DateTimePickerWrap from '@/components/date-time-wrap';
-import { ppid } from 'process';
+import SelectWrap from '@/components/gen/select-wrap';
+import DateTimePickerWrap from '@/components/gen/time-date/date-time-picker-wrap';
 import { SafeParseError, SafeParseSuccess, ZodError } from 'zod';
 import { IoMdAddCircle } from 'react-icons/io';
 
 
-
-
 interface TicketOptionType {
-  value: "normal" | "discount" | "citizen";
-  label: string;
+   value: "normal" | "discount" | "citizen" | "approachable" ;
+   label: string;
 }
-
 interface MakeNewTicketType {
   setTabPage:Dispatch<SetStateAction<number>>
 
 }
 
-export default function MakeNewTicket({setTabPage }:MakeNewTicketType) {
+export default function MakeNewTicket({setTabPage}:MakeNewTicketType) {
   
-  const [open, setOpen] = useState(false);
-  const  {tickets ,setTickets} =useContext(TabsTicketContext)
- const {infoFileds,setInfoFileds} = useContext(TabsInfoContext)
-  const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
   const theme = useTheme()
+  const [open, setOpen] = useState(false);
+  const {tickets ,setTickets} =useContext(TabsTicketContext)
+  const {infoFileds,setInfoFileds} = useContext(TabsInfoContext)
+  const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
   const [formErrors,setFormErrors ]= useState(false)
 
-  const [Ticket, setTicket] = useState<BaceTIcketStateType >({
-    // Bace
+  const [Ticket, setTicket] = useState<BaceTicketStateType>({
       eventName :  infoFileds.eventName,
       location:infoFileds.location,
       Date: infoFileds.Date,
@@ -67,17 +61,28 @@ export default function MakeNewTicket({setTabPage }:MakeNewTicketType) {
       selectedType:undefined,
       priceInfo:"",
       price:"", 
- }) 
+  }) 
 
 
- const TicketOptions: TicketOptionType[] = [
-        { value: "normal", label: "מחיר מלא" },
-        { value: "citizen", label: "תושב" },
-        { value: "discount", label: "הנחה" },
+  const generateTickitOptions = (tickets: BaceTicketStateType[]): TicketOptionType[] => {
+
+  const TicketOptions: TicketOptionType[] = [
+    { value: "normal", label: "מחיר מלא" },
+    { value: "citizen", label: "תושב" },
+    { value: "discount", label: "הנחה" },
+    { value: "approachable", label: "נגיש" }
   ];
 
- // useEffect(()=>{    console.log(Ticket ,infoFileds)},[Ticket,infoFileds])
-
+  if (tickets.length) {
+    // Filter TicketOptions to remove selected options except for "discount"
+    return TicketOptions.filter(option => 
+      option.value === "discount" || !tickets.some(ticket => ticket.selectedType === option.value)
+    );
+  } else {
+    // If no tickets, return all TicketOptions
+    return TicketOptions;
+  }
+  };
   const resetTicketPricesForm =( ):void=>{
       setTicket(p=>({
            ...p,
@@ -94,16 +99,13 @@ export default function MakeNewTicket({setTabPage }:MakeNewTicketType) {
     setOpen(false);
     resetTicketPricesForm()
   };
-
   const addTicket = (e:React.MouseEvent<HTMLButtonElement>):void=>{
     const newTicket =   validateFileds(Ticket).data ?    validateFileds(Ticket).data: undefined
     setTickets(p=>( newTicket? [...p,newTicket]:[...p]))
     resetTicketPricesForm()
     handleClose()
   }
-
-
-  const validateFileds = (State: BaceTIcketStateType) : {result:boolean,data:BaceTicketType|undefined , errors:ZodError<BaceTicketType>|undefined}=>{
+  const validateFileds = (State: BaceTicketStateType) : {result:boolean,data:BaceTicketType|undefined , errors:ZodError<BaceTicketType>|undefined}=>{
            const result =  BaceTicketVS.safeParse(State)
 
                 console.log(result);
@@ -111,6 +113,8 @@ export default function MakeNewTicket({setTabPage }:MakeNewTicketType) {
    return {result :result.success , data:result.data  , errors:result.error}
 
   }
+
+ // useEffect(()=>{    console.log(Ticket ,infoFileds)},[Ticket,infoFileds])
 
   return (
     <>
@@ -128,8 +132,7 @@ export default function MakeNewTicket({setTabPage }:MakeNewTicketType) {
         open={open}
         onClose={handleClose}
         fullWidth
-
-      >
+       >
      
         <DialogTitle style={{padding:2   , background:"black"}} >  
         
@@ -149,8 +152,10 @@ export default function MakeNewTicket({setTabPage }:MakeNewTicketType) {
                 <Flex >
 
                    <SelectWrap   
-                           label='סוג כרטיס'
-                          items={TicketOptions} 
+                       label='סוג כרטיס'
+                          items={generateTickitOptions(tickets)} 
+                          labelPositioin='top'
+                          value={Ticket.selectedType}
                           changeHndler={(e)=>{
                             setTicket(p=>({...p,selectedType:e.target.value}))
                               e.target.value === "citizen"? setTicket(p=>({...p,priceInfo:"הנחת תושב"}))
@@ -159,14 +164,12 @@ export default function MakeNewTicket({setTabPage }:MakeNewTicketType) {
                               :
                               e.target.value === "discount"? setTicket(p=>({...p,priceInfo:''}))
                               :
-                              null
+                              e.target.value === "approachable"? setTicket(p=>({...p,priceInfo:"מושב נגיש"}))
+                              :null
                           }}  
-                          labelPositioin='top'
-                          value={Ticket.selectedType}
-                           />
-
- 
-                   { Ticket.selectedType === 'normal' &&    
+                
+                    />
+                    { Ticket.selectedType === 'normal' &&    
                       <>
                       <InputWrap 
                           label={'מחיר'}
@@ -176,8 +179,8 @@ export default function MakeNewTicket({setTabPage }:MakeNewTicketType) {
                           onChangeHndler={(e) => {  setTicket(p=>({...p,price:e.target.value }))}}       
                        />
                       </>
-                   }
-                   { Ticket.selectedType==="discount" &&  
+                    }
+                    { Ticket.selectedType==="discount" &&  
                        <>
                          <InputWrap 
                             inputType='number'
@@ -200,9 +203,9 @@ export default function MakeNewTicket({setTabPage }:MakeNewTicketType) {
 
 
                       </>
-                   }
-                   { Ticket.selectedType==="citizen" && 
-                      <Flex  >
+                    }
+                    { Ticket.selectedType==="citizen" && 
+             
                          <InputWrap 
                              stateName={''}
                              value={Ticket.price}
@@ -214,7 +217,22 @@ export default function MakeNewTicket({setTabPage }:MakeNewTicketType) {
 
 
 
-                      </Flex>
+       
+                    }
+                    { Ticket.selectedType==='approachable' && 
+                
+                         <InputWrap 
+                             stateName={''}
+                             value={Ticket.price}
+                             label={'* מחיר'}
+                             inputType='number' 
+                             labelPositioin={'top'}
+                             onChangeHndler={(e) => {  setTicket(p=>({...p,price:e.target.value }))}}       
+                          />
+
+
+
+                    
                     }
 
                     <DateTimePickerWrap    
@@ -251,7 +269,7 @@ export default function MakeNewTicket({setTabPage }:MakeNewTicketType) {
                       />  
 
                      <TicketChip
-                       text={ Ticket.Date.toLocaleTimeString("he-IL",FullDateOptions)}
+                       text={ Ticket.Date.toLocaleTimeString("he-IL",samiDateOptions)}
                        setTabPage={  setTabPage }
                        newTab={0}
                        placeholder='הוסף תאריך'
@@ -285,9 +303,6 @@ export default function MakeNewTicket({setTabPage }:MakeNewTicketType) {
     </>
   );
 }
-
-
-
 interface TicketChipType {
     text:string|undefined
     placeholder:string
@@ -305,14 +320,14 @@ interface TicketChipType {
     
 
     
-  }
+}
 
-  const TicketChip =  ({text, icon , p, m,br,styleProps , grow , w ,v,Scale,setTabPage,newTab,placeholder}:TicketChipType)=>{
+const TicketChip =  ({text, icon , p, m,br,styleProps , grow , w ,v,Scale,setTabPage,newTab,placeholder}:TicketChipType):JSX.Element=>{
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
         return  <Chip 
                      onClick={ !text? ()=>setTabPage(newTab) :undefined }
                      avatar={icon}
-                     label={<Typography>text?text:placeholder</Typography>} 
+                     label={<Typography>{text?text:placeholder}</Typography>} 
                      sx={{
                         m:m?? 1, 
                         p:p?? 1, 
@@ -327,7 +342,7 @@ interface TicketChipType {
                       variant= {v? v: 'filled'  }
                       style={{...styleProps}}
                         />
-  }
+}
 
 
 

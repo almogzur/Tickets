@@ -1,5 +1,5 @@
 import { ChangeEvent } from "react"
-import InputWrap from "../../../input-wrap"
+import InputWrap from "@/components/gen/input-wrap"
 
 interface SetingsTabPropsType {}
 

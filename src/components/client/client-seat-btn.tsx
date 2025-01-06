@@ -1,8 +1,8 @@
 import {  CSSProperties, useContext } from 'react'
 
-import {Colors} from '@/lib/colors'
 
 import ClientTipContext from '@/context/client/c-tip-context'
+import { purple } from '@mui/material/colors';
 const styles :Record<string,CSSProperties> =  {
   seats: {
     backgroundColor: "#fff",
@@ -14,7 +14,7 @@ const styles :Record<string,CSSProperties> =  {
     zIndex:22
     
   },
-  seatSelected: {backgroundColor: Colors.b,},
+  seatSelected: {backgroundColor: purple[300]},
   seatBlocked: {color:"black"},
   seatBooked: {backgroundColor: "brown",cursor: "not-allowed"},
  

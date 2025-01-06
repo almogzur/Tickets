@@ -1,6 +1,4 @@
-import { Stack as Flex , Container } from "@mui/material";
-import Navbar from "../components/Navbar"
-
+import Navbar from "../components/gen/Navbar"
 
 const ClientLayout = ({ children }: any) => {
   return (

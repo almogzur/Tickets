@@ -1,6 +1,6 @@
 import SingleTipContext from "@/context/admin/new-event/map/single-tip-context";
 import MultiSelectContext from "@/context/admin/new-event/map/multi-select-context";
-import { Colors } from "@/lib/colors";
+
 import { Avatar , AvatarGroup, Badge, Button, Divider, Stack as Flex, Tooltip, useTheme  } from "@mui/material";
 import { blue, green, grey, orange, pink, red } from "@mui/material/colors";
 import { Dispatch, SetStateAction, useContext } from "react";
@@ -35,7 +35,6 @@ const SeatControls =({isMuiltiSelct,setIsMultiSelect,multiSelectBadgeInfo}:SeatC
     const {AdminMapPositions,setAdminMapPositions} =useContext(AdminMapPositionsContext)
     const { resetSingleTip }=useContext(SingleTipContext)
     const {resetMultiTip, multiTipInfo} =useContext(MultiSelectContext)
-    const theme = useTheme()
 
     return (  
         
@@ -96,9 +95,11 @@ const SeatControls =({isMuiltiSelct,setIsMultiSelect,multiSelectBadgeInfo}:SeatC
 export default SeatControls;
 
 export const ClinetSeatColorsIndex = ()=>{
+    const theme = useTheme()
+
   return  <Flex direction={'row'} height={80}  justifyContent={"center"} borderTop={'solid'} >
       <Avatar  sx={{ bgcolor: grey[300], margin:1 , padding:.5 }} variant={'square'} >זמין</Avatar>        
-      <Avatar sx={{ bgcolor: Colors.b , margin:1,padding:.5 }} variant={'square'} >נבחר</Avatar>
+      <Avatar sx={{ bgcolor: theme.palette.secondary.main, margin:1,padding:.5 }} variant={'square'} >נבחר</Avatar>
       <Avatar sx={{ bgcolor: red[800] , margin:1 , padding:.5 }} variant={'square'} >תפוס</Avatar>
       <Avatar sx={{ bgcolor: blue[800] , margin:1 , padding:.5 }} variant={'square'} > מוזל</Avatar>
       <Avatar sx={{ bgcolor: orange[600] , margin:1 , padding:.5 }} variant={'square'} > נגיש</Avatar>

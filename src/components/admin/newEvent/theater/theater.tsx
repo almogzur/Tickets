@@ -1,7 +1,6 @@
 import {  CSSProperties, Dispatch, SetStateAction, useContext, useState } from 'react'
 import { Seats , SeatStyles } from '@/constants/models/Events';
 import {  Stack as Flex ,  Container, Typography, useTheme, Box, Avatar, } from '@mui/material'
-import { Colors } from '@/lib/colors';
 import SingleSelectTip from './singel-select-tip';
 import AdminSeatBtn from './adminSeatBtn'
 import MuliSelectTip from '@/components/admin/newEvent/theater/multi-select-tip'
@@ -15,10 +14,8 @@ import AdminNewEventTheatherMap from './new-event-theather-map';
 import WidthContext from '@/context/WidthContext';
 import TabsInfoContest from '@/context/admin/new-event/tabs/tabs-info-context'
 import { TheaterType } from '@/pages/admin/new-event';
-import { blue, green, orange, pink } from '@mui/material/colors';
-
-
-    const Theater = ({TheaterDate}:{TheaterDate:TheaterType}) => {
+ 
+const Theater = ({TheaterDate}:{TheaterDate:TheaterType}) => {
 
       const {setInfoFileds} = useContext(TabsInfoContest)
       const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
@@ -140,6 +137,7 @@ import { blue, green, orange, pink } from '@mui/material/colors';
   };
 
   const Stage = ()=>{
+const theme = useTheme()
 
     const Styles :CSSProperties =  {          
         height:40 ,
@@ -158,7 +156,7 @@ import { blue, green, orange, pink } from '@mui/material/colors';
 
     return    <Flex direction={'row'}  justifyContent={'center'}> 
                 <div style={Styles} > 
-                  <Typography variant='h6' color={Colors.b}>במה</Typography> 
+                  <Typography variant='h6' color={theme.palette.secondary.main}>במה</Typography> 
                </div>
              </Flex >
     }   

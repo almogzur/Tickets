@@ -1,17 +1,17 @@
-import { BaceTIcketType } from "@/pages/admin/new-event";
+import { BaceTicketType } from "@/pages/admin/new-event";
 import { createContext, Dispatch, SetStateAction } from "react";
 
 
 interface TicketContextType {
-    tickets:BaceTIcketType[]
-    setTickets:Dispatch<SetStateAction<BaceTIcketType[]>>
+    tickets:BaceTicketType[]
+    setTickets:Dispatch<SetStateAction<BaceTicketType[]>>
 
 }
 
 
 export default createContext<TicketContextType>({
     tickets:[],
-    setTickets: function (value: SetStateAction<BaceTIcketType[]>): void {
+    setTickets: function (value: SetStateAction<BaceTicketType[]>): void {
         throw new Error("Function not implemented.");
     }
 

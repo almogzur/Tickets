@@ -1,4 +1,4 @@
-import ControledLabel from "@/components/controled-form-label";
+import ControledLabel from "@/components/gen/controled-form-label";
 import { Typography, useTheme } from "@mui/material";
 import {
   MenuButtonAddTable,

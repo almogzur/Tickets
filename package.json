@@ -33,6 +33,7 @@
     "@tiptap/react": "^2.10.3",
     "@tiptap/starter-kit": "^2.10.3",
     "@tomtom-international/web-sdk-maps": "6.23.0",
+    "autosuggest-highlight": "^3.3.4",
     "axios": "^1.7.7",
     "bcrypt": "^5.1.1",
     "cookie": "^1.0.2",

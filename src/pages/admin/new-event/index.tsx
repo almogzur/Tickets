@@ -8,9 +8,8 @@ import { z }  from 'zod'
 
 //components
 import Head from 'next/head'
-import {Typography  , Stack as Flex,  useTheme, Button} from '@mui/material'
+import { Stack as Flex,  useTheme, Button} from '@mui/material'
 import AdminLayout from '@/Layouts/admin-layout'
-import { DateTimeValidationError, PickerChangeHandlerContext } from '@mui/x-date-pickers'
 import TabsWraper from '@/components/admin/newEvent/tabs/tabs-wraper'
 import TheaterComponent from '@/components/admin/newEvent/theater/theater'
 
@@ -25,18 +24,16 @@ import SingleTipContext from '@/context/admin/new-event/map/single-tip-context';
 import MultiSelectContext from '@/context/admin/new-event/map/multi-select-context';
 import { Positions } from '@/pages/_app'
 import AdminTransformContext  from '@/context/admin/new-event/map/admin-map-positions-context'
-import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next'
-
 ///////
 
 // validate schimas 
 export const BaceTicketVS = z.object({
   eventName : z.string().min(3).max(20),
   location: z.string().min(3).max(20),
-  cat: z.union([z.string().min(3).max(20),z.undefined()]),
+  cat: z.string(),
   Date: z.date(),
   EndSealesDate: z.date(),
-  selectedType:z.union([z.literal("normal"),z.literal("discount"),z.literal("citizen")]),
+  selectedType:z.union([z.literal("normal"),z.literal("discount"),z.literal("citizen"), z.literal("approachable")]),
   priceInfo:z.string().min(3),
   price: z
      .string()
@@ -45,8 +42,8 @@ export const BaceTicketVS = z.object({
 })  
 
 export type  BaceTicketType  = z.infer<typeof BaceTicketVS> 
-export interface BaceTIcketStateType extends Omit<BaceTicketType, "selectedType"> {
-  selectedType: "normal" | "discount" | "citizen" | undefined; 
+export interface BaceTicketStateType extends Omit<BaceTicketType, "selectedType"> {
+  selectedType: "normal" | "discount" | "citizen" | "approachable" | undefined; 
 }
 
 export const MinValusForDb = z.object({
@@ -68,6 +65,13 @@ export interface InfoFormType  {
    preview:string
    isEventClosedForSeal:boolean
    Date:Date,
+   OpenDorHour:Date
+}
+export interface TheaterLocationType {
+  alt:string
+  lot:string
+  city:string
+  address:string
 }
 export interface TheaterType {
   mainSeats:Seats 
@@ -75,6 +79,8 @@ export interface TheaterType {
   textsStyle:SeatStyles
   styles:SeatStyles
   ThaeaterName:string
+  TheaterLocation:TheaterLocationType
+  TheaterMainPhone:string
 }
 export interface TipinfoType {
 initValue:number
@@ -97,13 +103,13 @@ const NewEventPage=()=>{
   const { data: session ,status ,update} = useSession()
   const theme = useTheme()
 
-    // AdminSingleTipState 
+    // TipState 
     const [ singleTipPositions, setSingleTipPositions]=useState<Positions>({x:0,y:0})
     const [ seatTipInfo , setSeatTipInfo ] = useState<TipinfoType>({initValue:0,row:"",seatNumber:0})
-    const resetSingleTip  = () :void=> { setSingleTipPositions({x:0,y:0}) ; setSeatTipInfo({initValue:0, row:"" , seatNumber:0}) }
+    const resetSingleTip =() :void=> { setSingleTipPositions({x:0,y:0}) ; setSeatTipInfo({initValue:0, row:"" , seatNumber:0}) }
     const [AdminMapPositions , setAdminMapPositions] = useState<Positions>({x:0,y:0,Scale:0,disabled:false})
 
-    //AdminMiltiTipState
+    //MiltiTipState
     const [multiTipInfo, setMultiTipInfo]=useState<MultiTipeInfoType>({
         first:undefined, 
         second:undefined,
@@ -119,7 +125,7 @@ const NewEventPage=()=>{
   
   
 
-  // G Info Filed 
+  // db Fileds
   const [infoFileds,setInfoFileds]=useState<InfoFormType>({
      eventName:"",
      location:"",
@@ -127,6 +133,7 @@ const NewEventPage=()=>{
      Theater:undefined,
      TheaterName:undefined,
      Date:new Date(),
+     OpenDorHour:new Date(),
      isEventClosedForSeal:false,
      pre:"",
      image:undefined,

@@ -45,10 +45,11 @@ export const FullDateOptions :Intl.DateTimeFormatOptions = {
   minute:"2-digit",
 };
 export const samiDateOptions :Intl.DateTimeFormatOptions = {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
+        weekday: 'narrow',
+        month: 'short',
         day: 'numeric',
+        hour:"2-digit",
+        minute:"2-digit"
 };
 
 export interface Positions {
@@ -120,11 +121,7 @@ const theme  = createTheme({
            root:{  
 
 
-            "&.Mui-focused": {},
-            "&:hover": {},
-            "& .MuiOutlinedInput-notchedOutline": {},
-            "&.Mui-focused .MuiOutlinedInput-notchedOutline": { },
-            "& input::placeholder": {},
+  
            },    
          }
        },
