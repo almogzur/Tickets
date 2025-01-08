@@ -8,7 +8,7 @@ const SettingTab= ()=>{
   return (
     <Container  sx={{ m:2, p:1 }}   >
      <InputWrap label={"שם באתר "} helpText={" שם :  /https://domain.co.il/event"} value={""} onChangeHndler={() =>{}} labelPositioin={"top"} />
-     <InputWrap label={"פרטים ליצירת קשר "} value={""} onChangeHndler={()=>{} } labelPositioin={"top"}/>
+     <InputWrap label={"פרטים ליצירת קשר "} value={""} onChangeHndler={() => { } } labelPositioin={"top"} helpText={""}/>
   </Container>)
  }
 
