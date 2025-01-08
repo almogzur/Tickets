@@ -155,7 +155,8 @@ const theme  = createTheme({
             fontSize:"1em",
             fontWeight:700,
             boxShadow:"none",
-            borderRadius:0
+            borderRadius:0,
+            p:0
             
             
           },

@@ -51,16 +51,17 @@ interface ControledLabelType {
                   p:1
                 }
                ,{
-                opacity:0.7,
-                fontSize:18
-                }
+              
+                fontSize:!sm? 14:18,
+              }
                 ]      
                 :
                 {
                  width:fullWidth,
-                 opacity:0.6,
-                 fontSize:18,
+      
+                 fontSize:!sm? 14:18,
                  position:"relative",
+                 opacity:1,
                 
                  }
                 }

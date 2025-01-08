@@ -97,12 +97,8 @@ const Theater = ({TheaterDate}:{TheaterDate:TheaterType}) => {
       })
 
     return (
-
-      <>
-        
-       
-   
-            <SingleSelectTip 
+      <>  
+          <SingleSelectTip 
               theaterDate={  TheaterDate}
                setTheater={setInfoFileds}
            /> 
@@ -114,8 +110,6 @@ const Theater = ({TheaterDate}:{TheaterDate:TheaterType}) => {
           />
       
             
-
-
          <AdminNewEventTheatherMap // style in children 
            isMultiSelect={isMultiSelect}  
            setIsMultiSelect={setIsMultiSelect}

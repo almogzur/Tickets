@@ -57,7 +57,7 @@ const AdminNewEventTheatherMap = ({children, isMultiSelect,setIsMultiSelect ,mul
       >
         {({ zoomIn, zoomOut, resetTransform, ...rest }) =>  {
           return   (
-            <Flex    > 
+            <Flex  > 
               <MovmentControls/>   
             
                   <Flex direction={"row"} justifyContent={"center"} mb={2}  >
@@ -75,7 +75,8 @@ const AdminNewEventTheatherMap = ({children, isMultiSelect,setIsMultiSelect ,mul
 
                  </Flex>
       
-              <ColorIndexDial />
+               <ColorIndexDial />
+
               < SeatControls isMuiltiSelct={isMultiSelect} setIsMultiSelect={setIsMultiSelect} multiSelectBadgeInfo={multiSelectBadgeInfo}   />
              
 
@@ -100,6 +101,7 @@ const AdminNewEventTheatherMap = ({children, isMultiSelect,setIsMultiSelect ,mul
     const { resetSingleTip}=useContext(SingleTipContext)
     const {resetMultiTip} = useContext(MutiTipContext)
     const theme = useTheme()
+    const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
 
   
 
@@ -118,21 +120,29 @@ const AdminNewEventTheatherMap = ({children, isMultiSelect,setIsMultiSelect ,mul
     const { zoomIn, zoomOut, resetTransform } = useControls();
   
     return (
-        <>
-      <Flex direction={'row'} justifyContent={"space-between"} p={2} sx={{  color:theme.palette.primary.main}} >
+      
+      <Flex direction={'row'} justifyContent={"space-around"} p={2} sx={{  color:theme.palette.primary.main}} >
   
-        <Button sx={{height:'60px',   }} disabled={AdminMapPositions.disabled}  variant='contained'  onClick={   (e) => { zoomIn()}}>
+        <Button 
+          disabled={AdminMapPositions.disabled}
+          variant='contained' 
+          onClick={   (e) => { zoomIn()}}>
           <FaPlus  size={"2em"} />
         </Button>
   
-        <Button    sx={{height:'60px'  }} disabled={AdminMapPositions.disabled}  variant='contained'  onClick={    (e) =>{ zoomOut() } }>
-          <FaMinus size={"2em"}/>
+        <Button 
+          disabled={AdminMapPositions.disabled}
+          variant='contained' 
+          onClick={    (e) =>{ zoomOut() } }>
+          <FaMinus  size={"2em"} />
         </Button>
-        <Button sx={{height:'60px',  }} disabled={AdminMapPositions.disabled}    variant='contained'  onClick={     (e) => { resetTransform() ; resetSingleTip() ; resetContext() ;resetMultiTip() } }>
-          <LuRefreshCcw size={"2em"}/>
+        <Button
+          disabled={AdminMapPositions.disabled}
+          variant='contained'  
+          onClick={     (e) => { resetTransform() ; resetSingleTip() ; resetContext() ;resetMultiTip() } }>
+          <LuRefreshCcw   size={"2em"}/>
           </Button>
       </Flex>
-      </>
     );
   };
   

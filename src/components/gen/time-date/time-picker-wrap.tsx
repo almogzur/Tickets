@@ -7,13 +7,14 @@ import { FcAbout } from "react-icons/fc"
 
 import  ControledLabel  from "@/components/gen/controled-form-label"
 import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
+import ControledHelperText from "../controled-helper-text"
 
 
 
 interface TimePickerWrapType  {
     label:string
     variant?:TextFieldVariants
-    value:Date
+    value:Date|null
     minDate? : Date 
     maxTIme? :Date
     isEroor?:boolean
@@ -25,6 +26,7 @@ interface TimePickerWrapType  {
     color?:TextFieldProps['color']
     helpText?:string,
     disablePast?:boolean
+    helpTextPotionsEnd?:boolean
 }
 
 const TimePickerWrap =({ 
@@ -39,9 +41,10 @@ const TimePickerWrap =({
           helpText,
           minDate,
           disablePast,
-          onAcceptHendler  ,
+          helpTextPotionsEnd,
+          onAcceptHendler,
           onEroorHndler,
-          onChangeHendler
+          onChangeHendler,
         
          }:TimePickerWrapType)=>{
 
@@ -50,17 +53,17 @@ const TimePickerWrap =({
 
     return    ( 
 
-    <TimePicker                 
-            desktopModeMediaQuery={MediaQuery??theme.breakpoints.up("lg")}
-            value={ dayjs(value) }
+    <TimePicker                
+    orientation='portrait'
+ 
+            desktopModeMediaQuery={MediaQuery??theme.breakpoints.up("md")}
+            value={ value? dayjs(value) :null }
             closeOnSelect={false}
-            disablePast={disablePast??true}
             // tryed not working curenntly
             // minTime ={}
             // minDateTime={} 
             // maxDate={} 
             // maxTime ={}
-            maxTime={maxTIme?dayjs(maxTIme).subtract(0.5,"hour"):undefined} //  time select
             onError={onEroorHndler}
             label={<ControledLabel labelPositioin={labelPositioin} label={label} />}
             sx={{  m:0.5 }}       
@@ -75,7 +78,7 @@ const TimePickerWrap =({
                     textField:{
                         variant:variant??"outlined" ,
                         color:color,
-                        helperText:helpText? helpText :undefined
+                        helperText:helpText?  <ControledHelperText text={helpText} helpTextPotionsEnd={helpTextPotionsEnd?? false}/> : undefined
                     }
                         
             }}

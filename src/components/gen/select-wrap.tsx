@@ -1,15 +1,14 @@
-import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextFieldVariants, Typography, useTheme } from "@mui/material"
+import { FormControl, FormHelperText, InputLabel, MenuItem, Select, SelectChangeEvent, SxProps, TextFieldVariants, Typography, useFormControl, useTheme } from "@mui/material"
 import {  CSSProperties, ReactElement, useContext, useState } from "react"
 
 import WidthContext from "@/context/WidthContext";
-import { FaCartArrowDown } from "react-icons/fa6";
-import ControledLabel from "./controled-form-label";
+import ControledHelperText from "./controled-helper-text";
+
 
 interface SelectIemType {
     value:any
     label:string
   }
-
 
 interface SelectWrapType {
     items:SelectIemType[]
@@ -21,24 +20,44 @@ interface SelectWrapType {
     variant?:TextFieldVariants
     labelPositioin:"top"|"end"
     isShrinkTitelBold?:boolean
+    isValueBold?:boolean
+    isListItemBold?:boolean
     isTitelBold?:boolean
-    isItemBold?:boolean
     Fgrow?:number
     hoverColor?:CSSProperties['color']
     m?:number|"auto"
     bg?:CSSProperties['color']
-
-
+    helpText:string
+    helpTextPotionsEnd?:boolean
 }
 
-const SelectWrap = ({ items, changeHndler,m,hoverColor ,bg,styles, label, icon, variant, labelPositioin, value, isShrinkTitelBold,isItemBold,isTitelBold, Fgrow }:SelectWrapType)=>{
+const SelectWrap = ({ 
+    helpText,
+    items,
+    changeHndler,
+    m,
+    hoverColor ,
+    bg,
+    styles,
+    label,
+    icon, 
+    variant,
+    labelPositioin,
+    value,
+    isShrinkTitelBold,
+    isListItemBold,
+    isValueBold,
+    isTitelBold,
+    Fgrow ,
+    helpTextPotionsEnd,
+    }:SelectWrapType)=>{
 
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
 
 
 const theme = useTheme()
     return (
-            <FormControl  >
+            <FormControl fullWidth  variant={variant} >
               <InputLabel 
               
               sx={{ 
@@ -48,52 +67,59 @@ const theme = useTheme()
                   display:"flex",
                   justifyContent:"end",
                   top:2,
-                  fontSize:18,
-
+                  fontSize:!sm? 14:18,
+                  color:"black",
+                  mx:-0.5,
+                  fontWeight:isTitelBold ? 'bold': null
                 },
                  "&.MuiInputLabel-shrink":{ 
                     width: 
-                        labelPositioin === "top" ? "133%" 
+                        labelPositioin === "top" ? "130%" 
                         :
                         labelPositioin === "end" ? 130 
                         :
                         null,
                     top: 
-                       labelPositioin === "top" && !xs ? 15
+                       labelPositioin === "top" && variant ==="outlined" ? 15  
                        :
-                       labelPositioin === "top" && xs ? 15
+                       labelPositioin === "top" && variant !=="outlined" ? 2
+                       :  
+                       labelPositioin === "end" && variant ==="outlined" ? 13
                        :
-                       labelPositioin === "end" && !xs ? 11
-                       :
-                       labelPositioin === "end" && xs ? 11
-                       :
-                       null,
-                       fontWeight: isShrinkTitelBold ? "bold" : null,
-                       mx:0
+                       labelPositioin === "top" && variant !=="outlined"? 2
+                      :null,
+                      fontWeight: isShrinkTitelBold ? "bold" : 400,
+                      mx:labelPositioin === 'top'? 0 : -1
+                   
 
                 },
              }}
               >
                 {label}
               </InputLabel>  
-              <Select
-               
-               value={value}
+
+               <Select
+                
+               value={value??""}
                onChange={changeHndler }
-               variant={ variant? variant: "standard"}
+               variant={ variant}
                endAdornment={labelPositioin === "top" ? icon : null}
                startAdornment={labelPositioin === "end"?   icon : null}
-               label      
-                style={{ fontWeight: isTitelBold ? "bold" : undefined, ...styles }}
-                 sx={{ 
+               label={label}      
+               // selected item 
+               style={{ fontWeight: isValueBold ? "bold" : undefined, ...styles,fontSize: !sm? 14:18,  }} 
+               sx={{ 
                    // add icon postion add option baced on top and end titile postions
                    flexGrow:Fgrow?? null,
                    bgcolor:bg,
                     m: m?m:0.5,
+                    p:0,
+                    
                    '.MuiSelect-icon':{
                       position:"relative" ,
                       top:-1,
-                      right:-10
+                      right:-10,
+                      
                     },
                     '&:hover': {
                      backgroundColor:hoverColor ,
@@ -102,11 +128,14 @@ const theme = useTheme()
                     
            
                  }}
-                 
                >
                 {items.map(({label,value},i)=>{
                   return <MenuItem 
-                     sx={{ fontWeight: isItemBold? "bold":null }} 
+                     sx={{ 
+                      fontWeight: isListItemBold? "bold":null,
+                      fontSize: !sm? 13:18,
+                     }} 
+                     
                      key={label}  
                      value={value}  
                      >
@@ -114,8 +143,91 @@ const theme = useTheme()
 
                      </MenuItem>
                 })}
+                
                </Select>
-               </FormControl>
+               {helpText && <SelectHelpText helpText={helpText} helpTextPotionsEnd={helpTextPotionsEnd?? false} /> }
+             </FormControl>
     )
 }
+
+
+interface SelectHelpTextType {
+  helpText:string
+  helpTextPotionsEnd:boolean
+}
+
+export function SelectHelpText ({helpText,helpTextPotionsEnd}:SelectHelpTextType){
+
+    const { focused , filled, variant, required ,error,color, ...rest } = useFormControl() || {};
+    const theme = useTheme()
+
+
+  const outlineStyle:SxProps = {
+      position:"relative",
+      top:-22,
+      right:helpTextPotionsEnd? -35:27,
+      textAlign: helpTextPotionsEnd? "end": "start",
+      height:0,
+      m:0,
+      mx:helpTextPotionsEnd ? 0:  -2,
+       
+  }
+  const standardStyle : SxProps = {
+      m:0,
+      textAlign: helpTextPotionsEnd ? "end":  "start",
+      position:"relative",
+      top:-5,
+      mx:1,
+      
+  }
+  const filledStyle : SxProps = {
+      textAlign: helpTextPotionsEnd ? "end":  "start",
+      m:0 ,
+      mx:1,
+      position:"relative",
+      top:-5,
+  }
+  return <FormHelperText
+     sx={ 
+          
+    focused?
+        [ 
+        variant === 'outlined'? outlineStyle
+         :
+        variant === "filled"?filledStyle
+        :
+         standardStyle,
+          
+         {   
+          color:error? "red" : color?theme.palette[`${color}`].main : null,           
+         }
+         ]
+         :
+    filled ?
+         [
+        variant === 'outlined'? outlineStyle
+            :
+         variant === "filled" ? filledStyle
+            :
+         standardStyle
+         ]      
+         :
+    [
+      variant === 'outlined'? outlineStyle
+        :
+      variant === "filled"?filledStyle
+        :
+        variant==="standard"?
+        standardStyle
+        :
+      null
+    ]
+      
+        }
+  >{helpText}
+        </FormHelperText>
+}
+
+
+
 export default SelectWrap

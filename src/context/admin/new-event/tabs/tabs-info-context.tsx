@@ -21,8 +21,9 @@ export default createContext<InfoTabContextType>(
             image: undefined,
             preview: "",
             isEventClosedForSeal: false,
-            Date: new Date,
-            OpenDorHour: new Date
+            Date: null,
+            Hour:null,
+            OpenDorHour: null
 },
         setInfoFileds: function (value: SetStateAction<InfoFormType>): void {
             throw new Error("Function not implemented.");

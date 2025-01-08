@@ -19,6 +19,7 @@ import DOMPurify from "isomorphic-dompurify";
 
 import { RiSave3Fill } from "react-icons/ri";
 import { FaEye } from "react-icons/fa";
+import WidthContext from "@/context/WidthContext";
 
 
 function fileListToImageFiles(fileList: FileList): File[] {
@@ -35,13 +36,14 @@ export default function Editor() {
 
   const theme  = useTheme()
   const extensions = useExtensions({
-    placeholder: "הוסף טקסט על האירוע",
+    placeholder: "הוסף טקסט",
   });
   const rteRef = useRef<RichTextEditorRef>(null);
   const [isEditable, setIsEditable] = useState(true);
   const [showMenuBar, setShowMenuBar] = useState(true);
   const {infoFileds,setInfoFileds}= useContext(TabsInfoContext)
   const [submittedContent, setSubmittedContent] = useState("");
+     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
 
 
   const handleNewImageFiles = useCallback(
@@ -136,11 +138,15 @@ export default function Editor() {
           // scroll margin isn't built in since it will likely vary depending on
           // where the editor itself is rendered (e.g. if there's a sticky nav
           // bar on your site).
-            background:"#fff",
-            
+            "& .MuiCollapse-root":{
+              background:grey[200]
+            }, 
+            "& .MuiBox-root":{},
+
             "& .MuiTiptap-RichTextContent-root":{
                 color:'black',
-               
+                
+
           
                 
               "& p.is-editor-empty:first-child::before":{ 
@@ -148,10 +154,10 @@ export default function Editor() {
                 width:"100%" , 
                 fontWeight:"700",
                 fontSize:20,
+                
                 }
              },
             "& .MuiTiptap-RichTextField-content":{ 
-                 
 
              },
             "& .MuiTiptap-RichTextContent-editable":{
@@ -160,7 +166,7 @@ export default function Editor() {
             
             "& .MuiSvgIcon-root":{
                 color:theme.palette.primary.main,
-                 scale:1.3
+                 scale:sm?1.3:1
                 },
             "& .ProseMirror": {
               "& h1, & h2, & h3, & h4, & h5, & h6": {
@@ -180,22 +186,20 @@ export default function Editor() {
             handleDrop: handleDrop,
             handlePaste: handlePaste,
           }}
-         content={infoFileds.pre}
-         onUpdate={({editor,transaction})=>{
-            
-           const cleanEditorContent = DOMPurify.sanitize(editor.getHTML(),{})
-           setInfoFileds(p => ({ ...p, pre: cleanEditorContent }));
-           
-              
-
-        }}
-          renderControls={() => <Box sx={{  p:1, m:0 ,borderRadius:1,  background:grey[200]  }}><EditorMenuControls  /> </Box> }
+          
+          content={infoFileds.pre}
+          onUpdate={({editor,transaction})=>{
+            const cleanEditorContent = DOMPurify.sanitize(editor.getHTML(),{})
+            setInfoFileds(p => ({ ...p, pre: cleanEditorContent }));
+          }}
+          
+          renderControls={() => <Box sx={{  p:1, m:0 ,borderRadius:1,   }}><EditorMenuControls  /> </Box> }
           RichTextFieldProps={{
             // The "outlined" variant is the default (shown here only as
 
             // example), but can be changed to "standard" to remove the outlined
             // field border from the editor
-            variant: 'standard',
+            variant: 'outlined',
             
             
             MenuBarProps: {
@@ -263,8 +267,6 @@ export default function Editor() {
                   selected={!isEditable}
                   IconComponent={isEditable ? Lock : LockOpen}
                   style={{color:theme.palette.primary.main, background:grey[200]}}
-
-                  
                 />
 
       

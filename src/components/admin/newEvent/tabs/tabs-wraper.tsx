@@ -1,5 +1,5 @@
 //Cmponents
-import {  Stack as Flex ,useTheme, Box, Tabs, Tab} from "@mui/material"
+import {  Stack as Flex ,useTheme, Box, Tabs, Tab, Button, SpeedDial} from "@mui/material"
 
 import {  CSSProperties,  useContext, useState } from "react"
 
@@ -23,6 +23,11 @@ import InfoFormTab from "./info-form-tab/Info-form-tab"
 import PrevieTab from "./preview-tab"
 import { IoTicket } from "react-icons/io5";
 
+
+import { SlOptions, SlOptionsVertical } from "react-icons/sl";
+
+import { FaCompassDrafting, FaFirstdraft } from "react-icons/fa6";
+import SpeedDialWrap from '@/components/gen/speed-dail-wrap'
 //Types
 
 
@@ -35,7 +40,11 @@ const TabsWraper = ({ }:TabFormPropsType)=>{
     const [pageVale, setPageVale] = useState(0);
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
 
-
+    const TabsActions = [
+      { icon: <FaFirstdraft size={"2em"} />, name: 'שמור טיוטה' },
+    
+    ];
+    
     const TabComonStyleAttribute :CSSProperties = {
        color:"#fff",
        fontWeight:700,
@@ -47,11 +56,11 @@ const TabsWraper = ({ }:TabFormPropsType)=>{
     
     return (
 
-      <Box  
+       <Box  
         sx={{ 
              height:!sm?550:850 ,
              direction:"rtl",
-             boxShadow:theme.shadows[10]
+             boxShadow:theme.shadows[3]
            }}   
         >
         <Tabs
@@ -75,8 +84,15 @@ const TabsWraper = ({ }:TabFormPropsType)=>{
 
        </Tabs>
   
- 
-      {
+       <Flex  
+           direction={"row"} 
+           justifyContent={"center"}   
+           height={'calc(100% - 80px)'} 
+           overflow={"auto"} 
+           minWidth={"100%"} // dont remove ***
+
+      >
+        {
         pageVale=== 0 ?
         <InfoFormTab/>
         :
@@ -96,7 +112,17 @@ const TabsWraper = ({ }:TabFormPropsType)=>{
        <AdOptionsTab/>
        :null
       }
-       
+   
+      </Flex>
+      <SpeedDialWrap
+                  actions={TabsActions}
+                  mainIcon={<SlOptions size={"2em"} />}
+                  openToolTip
+                  openToolTipPlacement="right"
+                  direction={"up"}
+                  positions={!sm?{ bottom: 0,left:0 }:{bottom:16,left:10}}       
+                  
+                  />
       </Box>
 
     )
@@ -104,13 +130,4 @@ const TabsWraper = ({ }:TabFormPropsType)=>{
   }
 
 export default TabsWraper
-
-import type { InferGetServerSidePropsType, GetServerSideProps } from 'next'
-
-export const getServerSideProps = (async (context) => {
-  const nonce = context.res?.getHeader("x-nonce")
-  return { props: { nonce } }
-
-}) satisfies GetServerSideProps<{ nonce: string | number | string[] | undefined }>
-
 

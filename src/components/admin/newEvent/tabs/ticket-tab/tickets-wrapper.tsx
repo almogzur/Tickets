@@ -28,9 +28,6 @@ import Eilat_2 from "@/constants/theathers/eilat_2";
 import TabsInfoContext from "@/context/admin/new-event/tabs/tabs-info-context"
 import SelectWrap from "@/components/gen/select-wrap"
 import { IoTicket } from "react-icons/io5"
-import { X } from "@mui/icons-material"
-
-
 
 
 interface TicketsTabPropsType {  setTabPage : Dispatch<SetStateAction<number>>}
@@ -58,76 +55,63 @@ interface TicketsTabPropsType {  setTabPage : Dispatch<SetStateAction<number>>}
 
 
    return (
-<>
-  <Head>
-   <meta name="viewport" content="width=device-width, user-scalable=no"/>
-  </Head>
-    <Flex
-      height={'calc(100% - 80px)'}
-        overflow={"auto"}
-        width={"100%"}
-        direction={"row"}
-        justifyContent={"center"}
-    >
-          <Container sx={{ m:2, p:1 }}  >
+    <Container  sx={{ mt:2 }}   >
+      <Flex>
         {/* Seats Amount */}
-        <Flex width={"50%"} >
+         <Flex>
            <SelectWrap
-              label={"אולם"}
-              items={[{ label: Eilat_1.ThaeaterName, value: Eilat_1 }, { label: Eilat_2.ThaeaterName, value: Eilat_2 }]}
-              changeHndler={(e) => setInfoFileds(p => ({ ...p, Theater: e.target.value  , TheaterName:e.target.value}))} 
-              labelPositioin={"top"} 
-              value={infoFileds.TheaterName}  
-              variant='standard'
-              isShrinkTitelBold
-              isTitelBold
-            />
-            </Flex>
-
-        { infoFileds.Theater &&
-    
-         <Flex position={"sticky"} top={0}  zIndex={2} bgcolor={"#fff"}>
-          
-          <Flex direction={"row"} p={0.5}  gap={2} alignItems={"center"} >
-            <IoTicket size={"2em"} color={theme.palette.primary.main}  />
-            <Flex>
-              <Typography   fontWeight={'bold'}  fontSize={!xs?13:18} >מספר כרטיסים זמינים למכירה : {100} </Typography >
-              <Typography   fontSize={!xs?11:15}  >מסיר את המושבים המסומנים כחסומים</Typography>
-       
-            </Flex>
+             label={"אולם"}
+             items={[{ label: Eilat_1.ThaeaterName, value: Eilat_1 }, { label: Eilat_2.ThaeaterName, value: Eilat_2 }]}
+             changeHndler={(e) => setInfoFileds(p => ({ ...p, Theater: e.target.value, TheaterName: e.target.value }))}
+             labelPositioin={"top"}
+             value={infoFileds.TheaterName}
+             variant='outlined'
+             isValueBold 
+             isTitelBold
+             
+             helpText={""}
+             />
          </Flex>
-              
+        { 
+         infoFileds.Theater &&
+         <Flex  bgcolor={"#fff"}>
 
-               <Flex p={0.5} gap={2} direction={"row"} alignItems={"center"}   >
-               <IoMdAddCircle color={theme.palette.primary.main} size={"2.5em"}   />
-               <Flex direction={"row"} alignItems={"center"} justifyContent={"space-between"} width={"100%"}  gap={2} >              
-                 <Flex  flexGrow={1}>
-                   <Typography fontWeight={'bold'} fontSize={!xs?12:18}>  הוסף סוגי כרטיסים</Typography>
-                   <Typography fontSize={!xs ? 11 : 15} > סוג הכרטיס ו הפרטים יוצגו ללקוח בעת הרכישה  </Typography>     
+              <Flex direction={"row"} p={0.5}  gap={1} alignItems={"center"} >
+                   <IoTicket size={"2em"} color={theme.palette.primary.main}  />
+                   <Flex>
+                   <Typography  fontWeight={'bold'}  fontSize={!xs?13:18} >מספר כרטיסים זמינים למכירה : {100} </Typography >
+                   <Typography   fontSize={!xs?11:15}  >מסיר את המושבים המסומנים כחסומים</Typography>
+                </Flex>
+              </Flex>
+              
+              <Flex p={0.5} gap={1} direction={"row"} alignItems={"center"}   >
+                <IoMdAddCircle color={theme.palette.primary.main} size={"2.5em"}   />
+                 <Flex direction={"row"} alignItems={"center"} justifyContent={"space-between"} width={"100%"}  gap={2} >              
+                     <Flex  flexGrow={1}>
+                       <Typography fontWeight={'bold'} fontSize={!xs?12:18}>  הוסף סוגי כרטיסים</Typography>
+                       <Typography fontSize={!xs ? 11 : 15} > סוג הכרטיס ו הפרטים יוצגו ללקוח בעת הרכישה  </Typography>     
+                    </Flex>
                 </Flex>
               </Flex>
 
-          </Flex>
-
-             <Flex display={"row"} alignSelf={"center"} m={1} >
-               <MakeNewTickit setTabPage={setTabPage} />
-             </Flex>
+              <Flex display={"row"} alignSelf={"center"} m={1} >
+                <MakeNewTickit setTabPage={setTabPage} />
+              </Flex>
          </Flex>
-
          }
-          {/* loop over tickits tikits.map....  */}
-          {tickets.map((ticket,i)=>{
-              return <TicketComponent key={"ticket" + i + ticket.selectedType} {...ticket} index={i}/>
-          })}
-  
-          </Container>
-
-          
-    </Flex>
-     </>
+         {/* loop over tickits tikits.map....  */}
+         {tickets.map((ticket,i) => 
+           <TicketComponent 
+              key={"ticket" + i + ticket.selectedType} 
+              {...ticket} 
+              index={i}
+           />
+          )}
+      </Flex>
+    </Container>
      )
    }
-        // price={ticket.price} eventName={ticket.eventName} location={ticket.location} cat={ticket.cat} Date={ticket.Date} EndSealesDate={ticket.EndSealesDate} selectedType={ticket.selectedType} priceInfo={""}
+   // price={ticket.price} eventName={ticket.eventName} location={ticket.location} cat={ticket.cat} Date={ticket.Date} EndSealesDate={ticket.EndSealesDate} selectedType={ticket.selectedType} priceInfo={""}
 
 
 

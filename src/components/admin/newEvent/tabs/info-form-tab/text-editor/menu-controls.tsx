@@ -31,7 +31,7 @@ export default function EditorMenuControls() {
   const theme = useTheme();
   return (
  
-    <MenuControlsContainer debounced={true }  >
+    <MenuControlsContainer debounced={true}  >
 
         
       <MenuSelectFontFamily

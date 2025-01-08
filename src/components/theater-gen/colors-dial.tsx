@@ -22,7 +22,7 @@ export default function ColorIndexDial() {
     <Box sx={{  transform: 'translateZ(0px)', flexGrow: 1 }}>
 
       <SpeedDial
-        sx={{ position: 'absolute', bottom: 40, right: !xs ? "10%" : "7%" }}
+        sx={{ position: 'absolute', bottom: !xs? -20: 40, right: !xs ? "10%" : "7%" , scale:!xs? 0.7:1}}
         icon={< HiOutlineColorSwatch size={"2em"} />}
         ariaLabel="SpeedDial basic example"
         direction='up'

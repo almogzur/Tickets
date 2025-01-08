@@ -1,5 +1,5 @@
 import WidthContext from "@/context/WidthContext";
-import { FormControl, Grid, InputBase, InputLabel, MenuItem, OutlinedInput, StandardTextFieldProps, TextField, TextFieldProps, TextFieldVariants, Typography } from "@mui/material"
+import { FormControl, FormHelperText, Grid, InputBase, InputLabel, MenuItem, OutlinedInput, StandardTextFieldProps, TextField, TextFieldProps, TextFieldVariants, Typography } from "@mui/material"
 import { error } from "console";
 import { ChangeEvent, ChangeEventHandler, CSSProperties, Dispatch, ReactNode, SetStateAction, SyntheticEvent, useContext, useState } from "react";
 import { TiArrowUpThick } from "react-icons/ti";
@@ -9,6 +9,7 @@ import { IconType } from "react-icons";
 import { MdArrowBack, MdCabin } from "react-icons/md";
 import ControledLabel from "@/components/gen/controled-form-label";
 import Autocomplete from '@mui/material/Autocomplete';
+import ControledHelperText from "./controled-helper-text";
 
 type HTMLInputTypes = 
   | "button"
@@ -40,7 +41,7 @@ type HTMLInputTypes =
     label:string
   }
 
-interface InputWrapType   {
+export interface InputWrapType   {
     
     stateName?:string // the name of the state to update in the event 
     label:string
@@ -57,14 +58,14 @@ interface InputWrapType   {
     Fgrow?:number
     error?:boolean
     m?:number|"auto"
-    helpText? :string
+
+    helpText:string
+    helpTextPotionsEnd?:boolean
+
     isDisabled?:boolean
     customStyle?:CSSProperties
-    isSelect?:boolean
-    selectItems?:SelectIemType[]
     icon?:ReactNode
     labelPositioin:"top"|"end"
-    AutocompleteOptionArray?:string[]
 }
 
 
@@ -85,68 +86,19 @@ const InputWrap = ({
      error,
      m,
      helpText,
+     helpTextPotionsEnd,
      isDisabled,
      customStyle,
-     isSelect,
-     selectItems=[],
      hoverColor,
      icon,
      labelPositioin,
-     AutocompleteOptionArray
     }:InputWrapType)=>{
 
 
 
     return   (
      
-      
-    AutocompleteOptionArray ?
-    <Autocomplete
-      freeSolo
-      slotProps={{listbox:{}}}
-      options={AutocompleteOptionArray??[]}     
-      sx={{
-        flexGrow: Fgrow ?? null,
-        bgcolor: bg,
-        m: m ? m : 0.5,
-        ...customStyle,
-
-        '&:hover': {
-          backgroundColor: hoverColor,
-        },
-       }}
-       autoHighlight
-      clearOnEscape
-      disableClearable
-      openOnFocus
-      renderInput={(params) =>  
-       <TextField
-         {...params}
-         id={label}
-         type={inputType} //defult to text
-         value={value ?? ""}
-         onChange={onChangeHndler}
-         required={isRequired}
-         disabled={isDisabled}
-         name={stateName}
-         helperText={helpText ? <Typography variant='subtitle2'>{helpText}</Typography> : null}
-         variant={variant ?? 'standard'}
-         label={<ControledLabel labelPositioin={labelPositioin} label={label} />}
-         error={error}
-         select={isSelect && selectItems.length !== 0}
-       />
-       }
-      renderOption={(props, option) => {
-        const { key, ...optionProps } = props;
-
-        return (
-          <MenuItem key={key} {...optionProps} style={{width:"100%" , direction:"rtl"}}>
-                {option}
-          </MenuItem>
-        );
-      }}
-      />  
-      :
+    
      <TextField
       sx={{
       flexGrow: Fgrow ?? null,
@@ -164,17 +116,14 @@ const InputWrap = ({
       required={isRequired}
       disabled={isDisabled}
       name={stateName}
-      helperText={helpText ? <Typography variant='subtitle2'>{helpText}</Typography> : null}
+      helperText={helpText && <ControledHelperText text={helpText} helpTextPotionsEnd={helpTextPotionsEnd??false} />}
       variant={variant ?? 'standard'}
       label={<ControledLabel labelPositioin={labelPositioin} label={label} />}
       error={error}
-      select={isSelect && selectItems.length !== 0}
+  
      />
      
-     
-  
-
-
+    
 
     )
 }

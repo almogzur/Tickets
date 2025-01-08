@@ -18,6 +18,10 @@ import TabsTickets from '@/context/admin/new-event/tabs/tabs-ticket-context'
 import TabInfoContext from '@/context/admin/new-event/tabs/tabs-info-context'
 import { Seats, SeatStyles } from '@/constants/models/Events'
 
+// Ions 
+
+
+
 
 ///////
 import SingleTipContext from '@/context/admin/new-event/map/single-tip-context';
@@ -27,11 +31,7 @@ import AdminTransformContext  from '@/context/admin/new-event/map/admin-map-posi
 ///////
 
 // validate schimas 
-export const BaceTicketVS = z.object({
-  eventName : z.string().min(3).max(20),
-  location: z.string().min(3).max(20),
-  cat: z.string(),
-  Date: z.date(),
+export const BaceTicketValidationSchema = z.object({
   EndSealesDate: z.date(),
   selectedType:z.union([z.literal("normal"),z.literal("discount"),z.literal("citizen"), z.literal("approachable")]),
   priceInfo:z.string().min(3),
@@ -41,9 +41,11 @@ export const BaceTicketVS = z.object({
     .or(z.number().nonnegative().min(1))
 })  
 
-export type  BaceTicketType  = z.infer<typeof BaceTicketVS> 
-export interface BaceTicketStateType extends Omit<BaceTicketType, "selectedType"> {
+export type  BaceTicketType  = z.infer<typeof BaceTicketValidationSchema> 
+export interface BaceTicketStateType extends Omit<BaceTicketType, "selectedType" | "Date" | "EndSealesDate"> {
   selectedType: "normal" | "discount" | "citizen" | "approachable" | undefined; 
+  EndSealesDate: Date | null
+
 }
 
 export const MinValusForDb = z.object({
@@ -64,8 +66,9 @@ export interface InfoFormType  {
    image:File|undefined
    preview:string
    isEventClosedForSeal:boolean
-   Date:Date,
-   OpenDorHour:Date
+   Date:Date|null,
+   Hour:Date|null
+   OpenDorHour:Date|null
 }
 export interface TheaterLocationType {
   alt:string
@@ -117,7 +120,7 @@ const NewEventPage=()=>{
          row:"" ,
          err:"" ,
          seatNumber:undefined  ,
-        selectdir:undefined
+         selectdir:undefined
          })
     const [ multiTipPositions , setMutiTipPositions ]= useState<Positions>({x:0,y:0})
     const resetMultiTip = ():void=>{ setMutiTipPositions({x:0,y:0}) ; setMultiTipInfo(p=>({first:undefined, second:undefined,totalselected:0 , row:"" ,err:"" ,seatNumber:undefined  , selectdir:undefined})  ) }
@@ -132,8 +135,9 @@ const NewEventPage=()=>{
      cat:"",
      Theater:undefined,
      TheaterName:undefined,
-     Date:new Date(),
-     OpenDorHour:new Date(),
+     Date:null,
+     OpenDorHour:null,
+     Hour:null,
      isEventClosedForSeal:false,
      pre:"",
      image:undefined,
@@ -145,6 +149,10 @@ const NewEventPage=()=>{
 
   // Seats Amount 
   const [totalSeats ,setTotalSeats]= useState<number>(0)
+
+
+
+
 
   // useEffect(() => {
     // console.log(infoFileds);
@@ -162,12 +170,13 @@ return (
   </Head>
      <AdminLayout>
        <form>  
-
+  
          <TabInfoContext.Provider value={{infoFileds,setInfoFileds}}>
 
          <TabsTickets.Provider  value={{tickets ,setTickets}} >
             <TabsWraper />
          </TabsTickets.Provider>
+        
 
           {  infoFileds.Theater &&
              <AdminTransformContext.Provider value={{AdminMapPositions,setAdminMapPositions}}>   
@@ -182,11 +191,7 @@ return (
          </TabInfoContext.Provider> 
 
 
-        <Flex p={4} alignItems={"center"} gap={4} direction={"row"} justifyContent={"center"} >
-        <Button disabled   sx={{height:50 ,width:100,background:"black"}} > פרסם </Button>
-        <Button disabled   sx={{height:50 ,width:100,background:"black"}}>טויוטה</Button>
-
-      </Flex>
+    
       </form>
 
      </AdminLayout>

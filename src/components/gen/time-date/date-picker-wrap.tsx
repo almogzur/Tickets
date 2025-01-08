@@ -2,23 +2,25 @@ import { DatePicker, DateTimeValidationError, PickerChangeHandlerContext } from 
 import dayjs from "dayjs"
 import { TextFieldVariants, useTheme , TextFieldProps  } from "@mui/material"
 import  ControledLabel  from "@/components/gen/controled-form-label"
+import ControledHelperText from "../controled-helper-text"
 
 
 interface DatePickerWrapType  {
     label:string
-    variant?:TextFieldVariants
-    value:Date
-    minDate? : Date 
-    maxDate? :Date
-    isEroor?:boolean
-    onAcceptHendler: (value: dayjs.Dayjs | null, context: PickerChangeHandlerContext<DateTimeValidationError>) => void
-    onChangeHendler?: (value: dayjs.Dayjs | null, context: PickerChangeHandlerContext<DateTimeValidationError>) => void
-    onEroorHndler: (e:DateTimeValidationError, context:dayjs.Dayjs|null )=>void
+    value: Date|null
+    helpText:string,
     labelPositioin:"top"|"end"
-    MediaQuery?:string 
-    color?:TextFieldProps['color']
-    helpText?:string,
+    onAcceptHendler: (value: dayjs.Dayjs | null, context: PickerChangeHandlerContext<DateTimeValidationError>) => void
+    onChangeHendler: (value: dayjs.Dayjs | null, context: PickerChangeHandlerContext<DateTimeValidationError>) => void
+    onEroorHndler: (e:DateTimeValidationError, context:dayjs.Dayjs|null )=>void
     disablePast?:boolean
+    maxDate? :Date
+    minDate? : Date 
+    isEroor?:boolean
+    MediaQuery?:string 
+    helpTextPotionsEnd?:boolean
+    variant?:TextFieldVariants
+    color?:TextFieldProps['color']
 }
 
 const DatePickerWrap =({ 
@@ -35,7 +37,8 @@ const DatePickerWrap =({
           disablePast,
           onAcceptHendler  ,
           onEroorHndler,
-          onChangeHendler
+          onChangeHendler,
+          helpTextPotionsEnd,
         
          }:DatePickerWrapType)=>{
 
@@ -45,8 +48,8 @@ const DatePickerWrap =({
     return    ( 
 
     <DatePicker                 
-            desktopModeMediaQuery={MediaQuery??theme.breakpoints.up("lg")}
-            value={ dayjs(value) }
+            desktopModeMediaQuery={MediaQuery??theme.breakpoints.up("sm")}
+            value={ value? dayjs(value) :null }
             closeOnSelect={false}
             disablePast={disablePast??true}
             // tryed not working curenntly
@@ -58,16 +61,15 @@ const DatePickerWrap =({
             onError={onEroorHndler}
             label={<ControledLabel labelPositioin={labelPositioin} label={label} />}
             sx={{  m:0.5 }}       
+            
             onAccept={onAcceptHendler}
             onChange={onChangeHendler}
-
-
             slotProps={{
-                    textField:{
-                        variant:variant??"outlined" ,
-                        color:color,
-                        helperText:helpText? helpText :undefined
-                    }
+                textField:{
+                  variant:variant??"outlined" ,
+                  color:color,
+                  helperText: helpText?  <ControledHelperText text={helpText} helpTextPotionsEnd={helpTextPotionsEnd??false}/> : undefined
+                  }
                         
             }}
    />
