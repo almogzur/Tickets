@@ -1,6 +1,5 @@
 import {createContext, Dispatch, SetStateAction} from "react";
 import { Event } from "../constants/models/Events";
-import { events } from "../constants/event";
 
 
 /* Since setEvents is a required function, you must provide a placeholder value during the context creation.

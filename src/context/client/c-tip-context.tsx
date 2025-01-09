@@ -1,14 +1,14 @@
+import { Positions, TheaterTipinfoType } from '@/types/Thearer/theater-types'
 import { createContext, SetStateAction } from 'react'
-import {  Positions } from '@/pages/_app'
-import { TipinfoType } from '@/pages/admin/new-event'
+
 
 
 
 interface ClinetTipContenxtType {
      clientTipPosition:Positions
-     clinetTipInfo: TipinfoType
+     clinetTipInfo: TheaterTipinfoType
      setClientTipPosition:React.Dispatch<React.SetStateAction<Positions>>
-     setClinetTipInfo :React.Dispatch<React.SetStateAction<TipinfoType>>
+     setClinetTipInfo :React.Dispatch<React.SetStateAction<TheaterTipinfoType>>
      resetClinetTip:()=> void
 }
 
@@ -25,7 +25,7 @@ export default createContext<ClinetTipContenxtType>({
      setClientTipPosition: function (value: SetStateAction<Positions>): void {
           throw new Error('Function not implemented.')
      },
-     setClinetTipInfo: function (value: SetStateAction<TipinfoType>): void {
+     setClinetTipInfo: function (value: SetStateAction<TheaterTipinfoType>): void {
           throw new Error('Function not implemented.')
      },
      resetClinetTip: function (): void {

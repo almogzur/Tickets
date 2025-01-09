@@ -19,8 +19,8 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import TooltipButton from './client-seat-btn';
 import ClientTheaterMap from './client-theater-map';
-import { TheaterType } from '@/pages/admin/new-event';
 import {Event} from '@/constants/models/Events'
+import { TheaterType } from '@/types/Thearer/theater-types';
 
 interface ClientTheaterType {
   theater:TheaterType

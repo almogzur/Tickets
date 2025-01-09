@@ -1,7 +1,6 @@
-import * as React from 'react';
+import {useContext, useState} from 'react';
 import Box from '@mui/material/Box';
 import SpeedDial from '@mui/material/SpeedDial';
-import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
 
 import { IconType } from 'react-icons';
@@ -13,6 +12,7 @@ import WidthContext from '@/context/WidthContext';
 interface ActionType {
     icon:React.ReactElement,
     name:string
+    ClickHendler:(e:React.MouseEvent<HTMLDivElement>) => void
 }
 
 type SpeedDailPositionsType = 
@@ -35,7 +35,7 @@ interface SpeedDialWrapPropsType {
 
 
 export default function SpeedDialWrap({mainIcon,itemSize,actions,positions,direction,openToolTip,openToolTipPlacement}:SpeedDialWrapPropsType) {
-     const {xxl,xl,lg,md,sm,xs,xxs} = React.useContext(WidthContext)
+     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
   
   return (
     <Box>
@@ -63,6 +63,7 @@ export default function SpeedDialWrap({mainIcon,itemSize,actions,positions,direc
             tooltipPlacement={openToolTipPlacement}
             slotProps={{tooltip:{style:{background:"gray"}}}}
             FabProps={{size:itemSize?? 'large'}}
+            onClick={action.ClickHendler}
           />
         ))}
       </SpeedDial>

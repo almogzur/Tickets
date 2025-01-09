@@ -1,15 +1,15 @@
-import { Positions,  } from '@/pages/_app'
-import { TipinfoType } from '@/pages/admin/new-event'
+
+import { Positions, TheaterTipinfoType } from '@/types/Thearer/theater-types'
 import { createContext, SetStateAction } from 'react'
 
 
 
 interface SingleTipContenxtType {
      singleTipPositions:Positions
-     seatTipInfo: TipinfoType
+     seatTipInfo: TheaterTipinfoType
      resetSingleTip:()=>void
      setSingleTipPositions:React.Dispatch<React.SetStateAction<Positions>>
-     setSeatTipInfo :React.Dispatch<React.SetStateAction<TipinfoType>>
+     setSeatTipInfo :React.Dispatch<React.SetStateAction<TheaterTipinfoType>>
 }
 
 export default createContext<SingleTipContenxtType>(
@@ -26,6 +26,6 @@ export default createContext<SingleTipContenxtType>(
           resetSingleTip:():void=>{},
           
           setSingleTipPositions: function (value: SetStateAction<Positions>): void {          },
-          setSeatTipInfo: function (value: SetStateAction<TipinfoType>): void {          },
+          setSeatTipInfo: function (value: SetStateAction<TheaterTipinfoType>): void {          },
      }
 )

@@ -6,13 +6,14 @@ import ControledHelperText from "./controled-helper-text";
 
 
 interface SelectIemType {
-    value:any
+    value: string | number | readonly string[] 
     label:string
+  
   }
 
 interface SelectWrapType {
     items:SelectIemType[]
-    value:string|undefined,
+    value:string,
     changeHndler:(event: SelectChangeEvent<any>) => void
     styles?:CSSProperties
     label:string
@@ -29,6 +30,9 @@ interface SelectWrapType {
     bg?:CSSProperties['color']
     helpText:string
     helpTextPotionsEnd?:boolean
+    error?:boolean
+
+    
 }
 
 const SelectWrap = ({ 
@@ -50,6 +54,7 @@ const SelectWrap = ({
     isTitelBold,
     Fgrow ,
     helpTextPotionsEnd,
+    error
     }:SelectWrapType)=>{
 
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
@@ -57,7 +62,7 @@ const SelectWrap = ({
 
 const theme = useTheme()
     return (
-            <FormControl fullWidth  variant={variant} >
+             <FormControl fullWidth  variant={variant} >
               <InputLabel 
               
               sx={{ 
@@ -99,7 +104,7 @@ const theme = useTheme()
               </InputLabel>  
 
                <Select
-                
+                error={error}
                value={value??""}
                onChange={changeHndler }
                variant={ variant}
@@ -170,6 +175,7 @@ export function SelectHelpText ({helpText,helpTextPotionsEnd}:SelectHelpTextType
       height:0,
       m:0,
       mx:helpTextPotionsEnd ? 0:  -2,
+      color:theme.palette.error.dark
        
   }
   const standardStyle : SxProps = {
@@ -178,7 +184,7 @@ export function SelectHelpText ({helpText,helpTextPotionsEnd}:SelectHelpTextType
       position:"relative",
       top:-5,
       mx:1,
-      
+      color:theme.palette.error.dark
   }
   const filledStyle : SxProps = {
       textAlign: helpTextPotionsEnd ? "end":  "start",
@@ -186,6 +192,7 @@ export function SelectHelpText ({helpText,helpTextPotionsEnd}:SelectHelpTextType
       mx:1,
       position:"relative",
       top:-5,
+      color:theme.palette.error.dark
   }
   return <FormHelperText
      sx={ 

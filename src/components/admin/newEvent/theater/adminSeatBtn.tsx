@@ -5,7 +5,7 @@ import { green, orange, pink } from '@mui/material/colors';
 import SingleTipontext from '@/context/admin/new-event/map/single-tip-context'
 import MultiSelectContext from '@/context/admin/new-event/map/multi-select-context';
 import React from 'react';
-import { Positions } from '@/pages/_app';
+import { Positions } from '@/types/Thearer/theater-types';
 
 
 /*

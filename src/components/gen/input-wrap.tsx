@@ -1,7 +1,7 @@
 import WidthContext from "@/context/WidthContext";
 import { FormControl, FormHelperText, Grid, InputBase, InputLabel, MenuItem, OutlinedInput, StandardTextFieldProps, TextField, TextFieldProps, TextFieldVariants, Typography } from "@mui/material"
 import { error } from "console";
-import { ChangeEvent, ChangeEventHandler, CSSProperties, Dispatch, ReactNode, SetStateAction, SyntheticEvent, useContext, useState } from "react";
+import { ChangeEvent, ChangeEventHandler, CSSProperties, Dispatch, ReactNode, RefObject, SetStateAction, SyntheticEvent, useContext, useState } from "react";
 import { TiArrowUpThick } from "react-icons/ti";
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import { blue } from "@mui/material/colors";
@@ -66,6 +66,7 @@ export interface InputWrapType   {
     customStyle?:CSSProperties
     icon?:ReactNode
     labelPositioin:"top"|"end"
+    ref?:RefObject<HTMLInputElement>
 }
 
 
@@ -92,6 +93,7 @@ const InputWrap = ({
      hoverColor,
      icon,
      labelPositioin,
+     ref
     }:InputWrapType)=>{
 
 
@@ -120,6 +122,9 @@ const InputWrap = ({
       variant={variant ?? 'standard'}
       label={<ControledLabel labelPositioin={labelPositioin} label={label} />}
       error={error}
+      ref={ref}
+      
+      
   
      />
      

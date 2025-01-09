@@ -3,13 +3,14 @@ import { motion ,AnimatePresence } from "framer-motion"
 import { CSSProperties, Dispatch, SetStateAction, useContext } from "react"
 import MultiSelectContext from "@/context/admin/new-event/map/multi-select-context"
 import { grey, orange, pink } from "@mui/material/colors"
-import {TheaterType } from "@/pages/admin/new-event"
-import { InfoFormType } from "@/pages/admin/new-event"
+import { TheaterType } from "@/types/Thearer/theater-types"
+import { infoFiledsType } from "@/types/admin/new-event/new-event-types"
+
 
     interface MultiSelectTipType {
         isMultiSelect: boolean
         theaterDate:TheaterType
-        setTheater:Dispatch<SetStateAction<InfoFormType>>
+        setTheater:Dispatch<SetStateAction<infoFiledsType>>
     }
 
   const MuliSelectTip =({theaterDate,setTheater}:MultiSelectTipType)=>{

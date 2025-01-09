@@ -3,7 +3,7 @@ import type { AppProps } from 'next/app'
 // 
 import { useMediaQuery } from 'usehooks-ts';
 import { useState } from 'react';
-import { Event, Seats, SeatStyles } from '../constants/models/Events';
+import { Event} from '../constants/models/Events';
 import '../styles/global.css'
 
 //Context
@@ -12,14 +12,13 @@ import MoviesContext from '../context/Events'
 import WidthContext from '../context/WidthContext';
 /////
 import ClineTransformContext from '@/context/client/client-map-positions-context'
-
 import ClientTipContext from '@/context/client/c-tip-context'
 //Auth 
 import { SessionProvider } from "next-auth/react"
 
 //MUI ------
-import { Color, createTheme, ThemeProvider } from '@mui/material/styles';
-import { blue, grey } from '@mui/material/colors';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { blue } from '@mui/material/colors';
 
 //Day JS
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -33,7 +32,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 // Geo Location  Map  Css
 import '@tomtom-international/web-sdk-maps/dist/maps.css'
-import { TipinfoType } from './admin/new-event';
+import { Positions, TheaterTipinfoType } from '@/types/Thearer/theater-types';
 
 
 export const FullDateOptions :Intl.DateTimeFormatOptions = {
@@ -52,12 +51,6 @@ export const samiDateOptions :Intl.DateTimeFormatOptions = {
         minute:"2-digit"
 };
 
-export interface Positions {
-  x:number ,
-  y:number ,
-  Scale?:number ,
-  disabled? :boolean
-}
 
 
 const theme  = createTheme({    
@@ -176,19 +169,17 @@ const theme  = createTheme({
 )
 
 
-
 const MyApp = ({ Component, pageProps: { nonce, session, ...pageProps } }: AppProps)=> {
 
   const [events, setEvents] = useState<Event[]>(eventData);
   //const [cachedNonce] = useState(nonce);
-
 
   // client map
   const [ClientMapPositions , setClientMapPositions] =useState<Positions>({ x:0 ,y:0 ,Scale:undefined})
 
   //Clinet SingleTip
   const [clientTipPosition,setClientTipPosition]=useState<Positions>({x:0,y:0})
-  const [clinetTipInfo , setClinetTipInfo]=useState<TipinfoType>({initValue:0,row:"",seatNumber:0})
+  const [clinetTipInfo , setClinetTipInfo]=useState<TheaterTipinfoType>({initValue:0,row:"",seatNumber:0})
   const resetClinetTip = ():void =>{ setClinetTipInfo({seatNumber:0,row:"",initValue:0}); setClientTipPosition({x:0,y:0}) }
 
   // media qurys

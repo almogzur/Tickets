@@ -6,7 +6,6 @@ import { ReactEventHandler, useContext} from "react";
 import WidthContext from "@/context/WidthContext";
 
 // Types 
-import { BaceTicketType } from "@/pages/admin/new-event";
 
 //Components 
 import { useTheme , Stack as Flex , Container, Divider, Button, Box } from "@mui/material";
@@ -20,9 +19,10 @@ import { FaFilePdf } from "react-icons/fa6";
 import { grey } from "@mui/material/colors";
 import { FullDateOptions } from "@/pages/_app";
 import tabsTicketContext from "@/context/admin/new-event/tabs/tabs-ticket-context";
+import { TicketType } from "@/types/admin/new-event/new-event-types";
 
 
-interface TicketComponentPropsType extends BaceTicketType {
+interface TicketComponentPropsType extends TicketType {
   index:number 
     }
 

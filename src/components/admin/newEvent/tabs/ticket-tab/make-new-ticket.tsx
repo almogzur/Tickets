@@ -21,8 +21,6 @@ import TabsTicketContext from '@/context/admin/new-event/tabs/tabs-ticket-contex
 import TabsInfoContext from '@/context/admin/new-event/tabs/tabs-info-context';
 
 // Types 
-import { BaceTicketValidationSchema, BaceTicketStateType, BaceTicketType, } from '@/pages/admin/new-event'
-import { samiDateOptions} from '@/pages/_app'
 
 //Colors
 import {  red } from '@mui/material/colors';
@@ -32,18 +30,19 @@ import SelectWrap from '@/components/gen/select-wrap';
 import DateTimePickerWrap from '@/components/gen/time-date/date-time-picker-wrap';
 import { SafeParseError, SafeParseSuccess, ZodError } from 'zod';
 import { IoMdAddCircle } from 'react-icons/io';
+import { TicketStateType, TicketType, TicketValidationSchema } from '@/types/admin/new-event/new-event-types';
 
 
 interface TicketOptionType {
-   value: "normal" | "discount" | "citizen" | "approachable" ;
+   value: "normal" | "discount" | "citizen" | "approachable" | "";
    label: string;
 }
 interface MakeNewTicketType {
-  setTabPage:Dispatch<SetStateAction<number>>
+  setTabValue:Dispatch<SetStateAction<number>>
 
 }
 
-export default function MakeNewTicket({setTabPage}:MakeNewTicketType) {
+export default function MakeNewTicket({setTabValue}:MakeNewTicketType) {
   
   const theme = useTheme()
   const [open, setOpen] = useState(false);
@@ -52,14 +51,14 @@ export default function MakeNewTicket({setTabPage}:MakeNewTicketType) {
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
   const [formErrors,setFormErrors ]= useState(false)
 
-  const [Ticket, setTicket] = useState<BaceTicketStateType>({
+  const [Ticket, setTicket] = useState<TicketStateType>({
       EndSealesDate :null  ,
-      selectedType:undefined,
+      selectedType:'',
       priceInfo:"",
       price:"", 
   }) 
 
-  const generateTickitOptions = (tickets: BaceTicketStateType[]): TicketOptionType[] => {
+  const generateTickitOptions = (tickets: TicketStateType[]): TicketOptionType[] => {
 
   const TicketOptions: TicketOptionType[] = [
     { value: "normal", label: "מחיר מלא" },
@@ -81,7 +80,7 @@ export default function MakeNewTicket({setTabPage}:MakeNewTicketType) {
   const resetTicketPricesForm =( ):void=>{
       setTicket(p=>({
            EndSealesDate :null  ,
-           selectedType:undefined,
+           selectedType:"",
            priceInfo:"",
            price:"", 
           }))
@@ -99,12 +98,9 @@ export default function MakeNewTicket({setTabPage}:MakeNewTicketType) {
     resetTicketPricesForm()
     handleClose()
   }
-  const validateFileds = ( State: BaceTicketStateType ) : { result:boolean,data:BaceTicketType|undefined , errors: ZodError<BaceTicketType> | undefined }=>{
-         const result =  BaceTicketValidationSchema.safeParse(State)
-
-                console.log(result);
-
-   return {result :result.success , data:result.data  , errors:result.error}
+  const validateFileds = ( State: TicketStateType ) : { result:boolean,data:TicketType|undefined , errors: ZodError<TicketType> | undefined }=>{
+    const result =  TicketValidationSchema.safeParse(State)
+        return {result:result.success , data:result.data  , errors:result.error}
 
   }
 
@@ -239,19 +235,17 @@ export default function MakeNewTicket({setTabPage}:MakeNewTicketType) {
                onEroorHndler={(e: DateTimeValidationError, context: dayjs.Dayjs | null): void => { } }
                 />
           </Flex>
-         </DialogContent>
+        </DialogContent>
 
 
         <DialogActions  >
             <Flex direction={"row"} width={"100%"} justifyContent={"space-between"} gap={2} mx={1}  >
 
-                <Button 
-                     
-                    disabled={!validateFileds(Ticket).result} 
-                    onClick={addTicket}
-                    sx={{borderRadius:0}}
-                  >צור</Button>
-
+             <Button  
+                 disabled={!validateFileds(Ticket).result} 
+                 onClick={addTicket}
+                 sx={{borderRadius:0}}
+               >צור</Button>
                 <Button  sx={{bgcolor:"black",borderRadius:0}} onClick={handleClose}>בטל</Button>
           </Flex>
         </DialogActions>
@@ -260,48 +254,6 @@ export default function MakeNewTicket({setTabPage}:MakeNewTicketType) {
     </>
   );
 }
-interface TicketChipType {
-    text:string|undefined
-    placeholder:string
-    newTab:number
-    setTabPage:Dispatch<SetStateAction<number>>
-    icon?:ReactElement<unknown, string | JSXElementConstructor<any>>,
-    p?:CSSProperties['padding'] ,
-    m?:CSSProperties['margin'],
-    br?:CSSProperties['borderRadius'],
-    styleProps?:CSSProperties,
-    grow?:CSSProperties['flexGrow']
-    w?:CSSProperties['width']
-    v?:"filled"|"outlined"
-    Scale?:number 
-    
-
-    
-}
-
-const TicketChip =  ({text, icon , p, m,br,styleProps , grow , w ,v,Scale,setTabPage,newTab,placeholder}:TicketChipType):JSX.Element=>{
-    const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
-        return  <Chip 
-                     onClick={ !text? ()=>setTabPage(newTab) :undefined }
-                     avatar={icon}
-                     label={<Typography>{text?text:placeholder}</Typography>} 
-                     sx={{
-                        m:m?? 1, 
-                        p:p?? 1, 
-                        justifyContent:"start", 
-                        borderRadius:br?? 0,
-                        fontSize:!xs? 14: 16 ,
-                        '& .MuiChip-label': {},
-                        '& .MuiChip-avatar':{ scale:Scale?? 1.3 } ,
-                        bgcolor: !text ? red[50] : "#fff",
-                        width: w? w:  !sm? "100%":null
-                      }}
-                      variant= {v? v: 'filled'  }
-                      style={{...styleProps}}
-                        />
-}
-
-
 
 
 

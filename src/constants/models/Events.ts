@@ -1,4 +1,4 @@
-import { TheaterType } from "@/pages/admin/new-event"
+import { TheaterType } from "@/types/Thearer/theater-types"
 import { StaticImageData } from "next/image"
 import { CSSProperties, ReactNode } from "react"
 

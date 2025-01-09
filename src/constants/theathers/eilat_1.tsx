@@ -1,6 +1,6 @@
 import { CSSProperties } from "react"
 import {Seats, SeatStyles} from '@/constants/models/Events'
-import { TheaterType } from "@/pages/admin/new-event"
+import { TheaterLocationType, TheaterType } from "@/types/Thearer/theater-types"
 
 const positionAtr : CSSProperties = { 
    position:"relative",
@@ -139,14 +139,14 @@ const positionAtr : CSSProperties = {
 
 
 }
-const ThaeaterName="תיאטראות אילת"
-const TheaterLocation = {alt:"",lot:"",city:"אילת", address:"שדרות התמרים הקניון האדום" }
-const TheaterMainPhone = '09-8888888'
+const ThaeaterName :string = "תיאטראות אילת"
+const TheaterLocation : TheaterLocationType = {alt:"",lot:"",city:"אילת", address:"שדרות התמרים הקניון האדום" }
+const TheaterMainPhone : string = '09-8888888'
 
 const Eilat_1 :  TheaterType ={ 
-   mainSeats: Eilat1_mainSeats ,
-    sideSeats: Eilat1_sideSeats,
-     textsStyle: Eilat1_sideTextStyles ,
+      mainSeats: Eilat1_mainSeats ,
+      sideSeats: Eilat1_sideSeats,
+      textsStyle: Eilat1_sideTextStyles ,
       styles:  Eilat1_sideStyles,
       ThaeaterName,
       TheaterLocation,

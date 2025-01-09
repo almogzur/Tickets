@@ -1,15 +1,15 @@
+import { Positions, TheaterMultiTipeInfoType } from '@/types/Thearer/theater-types'
 import { createContext, Dispatch, SetStateAction } from 'react'
 
 
-import { Positions  } from '@/pages/_app'
-import { MultiTipeInfoType } from '@/pages/admin/new-event'
+
 
 interface MultiTipContenxtType {
      multiTipPositions:Positions
-     multiTipInfo: MultiTipeInfoType
+     multiTipInfo: TheaterMultiTipeInfoType
      setMutiTipPositions:Dispatch<React.SetStateAction<Positions>>
      resetMultiTip:()=> void
-     setMultiTipInfo:Dispatch<React.SetStateAction<MultiTipeInfoType>>
+     setMultiTipInfo:Dispatch<React.SetStateAction<TheaterMultiTipeInfoType>>
      resetErr: () => void
 }
 
@@ -20,7 +20,7 @@ export default createContext<MultiTipContenxtType>({
      resetMultiTip: function (): void {
           throw new Error('Function not implemented.')
      },
-     setMultiTipInfo: function (value: SetStateAction<MultiTipeInfoType>): void {
+     setMultiTipInfo: function (value: SetStateAction<TheaterMultiTipeInfoType>): void {
           throw new Error('Function not implemented.')
      },
      resetErr: function (): void {

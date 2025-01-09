@@ -1,7 +1,7 @@
 //Cmponents
 import {  Stack as Flex ,useTheme, Box, Tabs, Tab, Button, SpeedDial} from "@mui/material"
 
-import {  CSSProperties,  useContext, useState } from "react"
+import {  CSSProperties,  RefObject,  useContext, useState } from "react"
 
 // Context Useg
 import WidthContext from "@/context/WidthContext"
@@ -22,36 +22,32 @@ import AdOptionsTab from "./ad-options-tab"
 import InfoFormTab from "./info-form-tab/Info-form-tab"
 import PrevieTab from "./preview-tab"
 import { IoTicket } from "react-icons/io5";
+import tabsPageContext from "@/context/admin/new-event/tabs/tabs-page-context";
 
 
-import { SlOptions, SlOptionsVertical } from "react-icons/sl";
 
-import { FaCompassDrafting, FaFirstdraft } from "react-icons/fa6";
-import SpeedDialWrap from '@/components/gen/speed-dail-wrap'
 //Types
 
 
 
-interface TabFormPropsType {  }
+interface TabFormPropsType { 
+  eventNameRef: RefObject<HTMLInputElement>
+ }
 
-const TabsWraper = ({ }:TabFormPropsType)=>{
+const TabsWraper = ({eventNameRef }:TabFormPropsType)=>{
 
     const theme = useTheme()
-    const [pageVale, setPageVale] = useState(0);
+    const {tabValue, setTabValue} = useContext(tabsPageContext);
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
 
-    const TabsActions = [
-      { icon: <FaFirstdraft size={"2em"} />, name: 'שמור טיוטה' },
-    
-    ];
-    
+
     const TabComonStyleAttribute :CSSProperties = {
        color:"#fff",
        fontWeight:700,
     }
 
     const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
-      setPageVale(newValue);
+      setTabValue(newValue);
     };
     
     return (
@@ -64,7 +60,7 @@ const TabsWraper = ({ }:TabFormPropsType)=>{
            }}   
         >
         <Tabs
-          value={pageVale}
+          value={tabValue}
           onChange={handleTabChange}
           textColor='primary'
           indicatorColor='primary'
@@ -93,36 +89,27 @@ const TabsWraper = ({ }:TabFormPropsType)=>{
 
       >
         {
-        pageVale=== 0 ?
-        <InfoFormTab/>
+        tabValue=== 0 ?
+        <InfoFormTab   eventNameRef={eventNameRef} />
         :
-       pageVale === 1?
-       <TicketsTab setTabPage={setPageVale} />
+        tabValue === 1?
+       <TicketsTab setTabValue={setTabValue} />
        :
-       pageVale === 2 ?
+       tabValue === 2 ?
        <SettingTab/>
        :
-       pageVale === 3 ?
+       tabValue === 3 ?
        <ColorTab/>
        :
-       pageVale === 4 ?
+       tabValue === 4 ?
        <PrevieTab/>
        :
-       pageVale=== 5?
+       tabValue=== 5?
        <AdOptionsTab/>
        :null
       }
    
       </Flex>
-      <SpeedDialWrap
-                  actions={TabsActions}
-                  mainIcon={<SlOptions size={"2em"} />}
-                  openToolTip
-                  openToolTipPlacement="right"
-                  direction={"up"}
-                  positions={!sm?{ bottom: 0,left:0 }:{bottom:16,left:10}}       
-                  
-                  />
       </Box>
 
     )

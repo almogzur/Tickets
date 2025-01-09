@@ -4,7 +4,7 @@ import TabsInfoContext from '@/context/admin/new-event/tabs/tabs-info-context'
 
 //Components
 import {  Box, Container, Divider, Stack as Flex , Typography, useTheme } from "@mui/material"
-import { ChangeEvent, useContext, useEffect, useState } from "react"
+import { ChangeEvent, RefObject, useContext, useEffect, useState } from "react"
 import Image from "next/image"
 
 
@@ -12,20 +12,26 @@ import CoverUpload from "./cover-upload"
 import Editor from "./text-editor/editor"
 import dayjs from "dayjs"
 import InputWrap from "@/components/gen/input-wrap"
-import { DateTimeValidationError, PickerChangeHandlerContext } from "@mui/x-date-pickers"
+import { DateTimeValidationError} from "@mui/x-date-pickers"
 import TimePickerWrap from "@/components/gen/time-date/time-picker-wrap"
 import SelectWrap from "@/components/gen/select-wrap"
 import DatePickerWrap from "@/components/gen/time-date/date-picker-wrap"
-import AutoCompliteInputWrap from "@/components/gen/auto-complite-input-wrap"
-import DateTimePickerWrap from "@/components/gen/time-date/date-time-picker-wrap"
+import tabsEroorsContext from "@/context/admin/new-event/tabs/tabs-eroors-context"
 
-const InfoForm =()=>{
+
+interface InfoFormType {
+    eventNameRef: RefObject<HTMLInputElement>
+  
+}
+
+const InfoForm =({eventNameRef}:InfoFormType)=>{
 
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
   const {infoFileds,setInfoFileds}= useContext(TabsInfoContext)
   const theme = useTheme()
-  const [dateEroor,setDateEroor ]= useState(false)    
-
+  const [dateEroor,setDateEroor ]= useState(false)
+  const {findValidationEroor} =  useContext(tabsEroorsContext)
+  
 
 const ErrorHndler = (e:DateTimeValidationError, context:dayjs.Dayjs|null ):void=>{}
 
@@ -65,19 +71,24 @@ return(
                   value={infoFileds.eventName}
                   onChangeHndler={(e) => { setInfoFileds(p => ({ ...p, eventName: e.target.value })) } }
                   labelPositioin={"end"} 
-                  helpText={""}
+                  helpText={findValidationEroor("eventName")?? ""}
                   helpTextPotionsEnd
+                  ref={eventNameRef}
+                  error={findValidationEroor("eventName")? true: false}
+                  
                  />
        
              
                  <SelectWrap 
-                  items={EventCategories} 
-                  value={infoFileds.cat} 
-                  changeHndler={(e)=>{setInfoFileds(p=>({...p,cat:e.target.value}))} }
-                  label={"קטגוריה"}
-                  labelPositioin={"end"}
-                  variant='outlined'
-                  helpText={""}
+                    items={EventCategories}
+                    value={infoFileds.cat}
+                    changeHndler={(e) => { setInfoFileds(p => ({ ...p, cat: e.target.value })) } }
+                    label={"קטגוריה"}
+                    labelPositioin={"end"}
+                    variant='outlined' 
+                    helpTextPotionsEnd
+                    helpText={findValidationEroor("cat")?? ""}
+                    error={findValidationEroor("cat")?true:false}
                 />
      
              </Flex>
@@ -90,7 +101,7 @@ return(
                MediaQuery={theme.breakpoints.up("sm")}
                value={infoFileds.Date}
                variant='outlined'
-               helpText={""} 
+               helpText={findValidationEroor("Date")?? ""}
                helpTextPotionsEnd
                label={"בחר תאריך"}
                labelPositioin={'end'}
@@ -113,7 +124,7 @@ return(
             <TimePickerWrap                 
                 MediaQuery={theme.breakpoints.up("sm")}
                 value={infoFileds.Hour}
-                helpText={""}
+                helpText={findValidationEroor("Hour")?? ""}
                 variant='outlined'
                 helpTextPotionsEnd
                 onAcceptHendler={(e)=> e!==null ?
@@ -140,8 +151,8 @@ return(
                   :
                   null
                }
-                helpText={""}
-                label={"פתיחת דלתות"} 
+               helpText={findValidationEroor("OpenDorHour")?? ""}
+               label={"פתיחת דלתות"} 
                 labelPositioin={'end'}
                 color='secondary'
                 onEroorHndler={ErrorHndler}
@@ -163,6 +174,7 @@ return(
         <Flex  alignItems={"center"} >
 
          <Image 
+           fetchPriority='high'
            src={infoFileds.preview} 
            alt={infoFileds.image.name} 
            width={!xs?260 : !sm?400 : !md? 500 : 600}

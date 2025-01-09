@@ -1,18 +1,14 @@
 import { useSession } from 'next-auth/react'
-import {Dispatch, MouseEventHandler , useContext, useRef} from 'react'
+import { MouseEventHandler , useContext, useRef} from 'react'
 import { useRouter } from 'next/router'
 import {Typography , Stack as Flex ,useTheme , Box, Button, Chip, Tooltip } from '@mui/material'
 
-import Image from 'next/image'
 import WidthContext from '@/context/WidthContext'
-import { FcAddImage } from "react-icons/fc";
-import { FcRemoveImage } from "react-icons/fc";
+
 import TabsInfoContext from '@/context/admin/new-event/tabs/tabs-info-context'
 
 
-import SpeedDial from '@mui/material/SpeedDial';
-import SpeedDialIcon from '@mui/material/SpeedDialIcon';
-import SpeedDialAction from '@mui/material/SpeedDialAction';
+
 import { grey } from '@mui/material/colors'
 import { RiImageAddFill } from 'react-icons/ri'
 import { LuImageMinus } from 'react-icons/lu'

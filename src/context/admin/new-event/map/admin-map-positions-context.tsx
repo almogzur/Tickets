@@ -1,6 +1,6 @@
+import { Positions } from "@/types/Thearer/theater-types";
 import { createContext, SetStateAction } from "react";
 
-import { Positions } from "@/pages/_app";
 
 interface AdminTransformContext {
     AdminMapPositions:Positions
