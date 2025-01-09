@@ -8,7 +8,6 @@ import Link from 'next/link';
 
 import { Event, Seats } from '../../constants/models/Events'
 
-import styles from './Payment.module.scss'
 
 import MoviesContext from '../../context/Events';
 import ClientLayout from '../../Layouts/client-layout';
@@ -29,11 +28,11 @@ const Tickets = () => {
 
   const SeatDetails = ({selectedSeats}: {selectedSeats: string[]}) => {
     return (
-      <div className={styles.seatDetailsContainer}>
-        <div className={styles.seatDetails}>
+      <div >
+        <div >
           {selectedSeats.join(', ')} ({selectedSeats.length} כרטיסים)
         </div>
-        <div className={styles.seatCost}>
+        <div >
           שח.{}
         </div>
       </div>
@@ -41,11 +40,11 @@ const Tickets = () => {
 
   const TotalCharge = ({selectedSeats}: {selectedSeats: string[]}) => {
     return (
-      <div className={styles.seatDetailsContainer}>
-        <div className={styles.seatDetails}>
+      <div >
+        <div >
           Total
         </div>
-        <div className={styles.seatCost}>
+        <div >
           שח.{}
         </div>
       </div>
@@ -78,8 +77,8 @@ const Tickets = () => {
 
   const ConfirmButton = () => {
     return (
-      <div className={styles.paymentButtonContainer}>
-        <Button   className={styles.paymentButton} > {/*onClick={ confirm   }*/}
+      <div >
+        <Button    > {/*onClick={ confirm   }*/}
          { `Confirm Booking ()` }
         </Button>
       </div>
@@ -91,16 +90,16 @@ const Tickets = () => {
     
     if (!event) return <div>loading...</div>
     return (
-    <div className={styles.card}>
-      <div className={styles.cardTitleContainer}>
+    <div >
+      <div >
         <Link href={{ pathname: `/details/${event?.id}`, query: { seats:  JSON.stringify(selectedSeats) }}}><FaArrowRight /></Link>
-        <div className={styles.cardTitle}>
+        <div >
             סיכום הזמנה 
         </div>
       </div>
-        <p className={styles.movieName}>{event.name}</p>
+        <p> </p>
       <SeatDetails selectedSeats={selectedSeats}/>
-      <hr className={styles.hrStyle}/>
+      <hr />
       <TotalCharge selectedSeats={selectedSeats}/>
       <ConfirmButton />
     </div>
@@ -113,7 +112,7 @@ const Tickets = () => {
         <title>דף תשלום</title>
       </Head>
       <ClientLayout>
-      <div className={styles.container}>
+      <div >
         <Card />
       </div>
       </ClientLayout>
