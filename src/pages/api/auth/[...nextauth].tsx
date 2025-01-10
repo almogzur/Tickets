@@ -1,6 +1,6 @@
 import NextAuth, { User } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
-import client from '@/lib/CRUD_db'
+import client from '@/lib/DB/CRUD_Calls_Mongo'
 import { MongoDBAdapter } from "@auth/mongodb-adapter"
 
 

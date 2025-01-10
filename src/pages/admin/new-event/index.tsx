@@ -113,18 +113,19 @@ const NewEventPage=()=>{
 
 
         // Form Validations Saving Options 
-        const TempInfoFiledsIssues = TempInfoFiledsValidationSchema.safeParse(infoFileds).error?.issues
-        const ProductionInfoFiledsIssues= ProductionInfoFiledsValidtinSchema.safeParse(infoFileds).error?.issues
+     
 
-         const findValidationEroor= ( value:string   ): string | undefined  => {  
-        
-                   const issue  = ReqestStatus === 'Temp'? TempInfoFiledsIssues?.find(item => item.path.join("") === value)
-                                  :
-                                  ReqestStatus === 'Production' ? ProductionInfoFiledsIssues?.find(item => item.path.join("") === value)
-                                  :
-                                  undefined
-                     return issue?.message
-                  }
+         const findValidationEroor= ( value:string ): string | undefined  => {  
+          const TempInfoFiledsIssues = TempInfoFiledsValidationSchema.safeParse(infoFileds).error?.issues
+          const ProductionInfoFiledsIssues= ProductionInfoFiledsValidtinSchema.safeParse(infoFileds).error?.issues      
+          const issue  =
+                        ReqestStatus === 'Temp' ? TempInfoFiledsIssues?.find(item => item.path.join("") === value)
+                        :
+                        ReqestStatus === 'Production' ? ProductionInfoFiledsIssues?.find(item => item.path.join("") === value)
+                         :
+                       undefined
+            return issue?.message
+           }
 
         // Requests 
         const saveTempEvent = async (infoFileds:TempInfoType, tickets: TicketType[]):Promise<NextResponse|undefined> => {
@@ -151,6 +152,8 @@ const NewEventPage=()=>{
                     }
                    else{
                       setTabValue(0)
+                      console.log('no ref');
+                      
                       
                   }
                return undefined
