@@ -5,14 +5,14 @@ console.log(isProduction);
 
 
 const cspHeader = `
-    default-src 'self';
-    script-src 'self' ${isProduction ? "" : "'unsafe-eval' 'unsafe-inline'"};
+    default-src 'self' res.cloudinary.com ;
+    script-src 'self' ${isProduction ? "" : "'unsafe-eval' 'unsafe-inline'"}  res.cloudinary.com ;
     style-src 'self' 'unsafe-inline';
     img-src 'self' res.cloudinary.com;
     font-src 'self';
     object-src 'none';
     base-uri 'self';
-    form-action 'self';
+    form-action 'self'  res.cloudinary.com;
     frame-ancestors 'none';
     upgrade-insecure-requests;
 `.replace(/\n/g, ''); // Remove newlines for compatibility
