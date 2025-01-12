@@ -25,8 +25,8 @@ import Eilat_2 from "@/constants/theathers/eilat_2";
 import TabsInfoContext from "@/context/admin/new-event/tabs/tabs-info-context"
 import SelectWrap from "@/components/gen/select-wrap"
 import { IoTicket } from "react-icons/io5"
-import { infoFiledsType } from "@/types/admin/new-event/new-event-types"
-import { TheaterType } from "@/types/Thearer/theater-types"
+import { infoFiledsType } from "@/components/admin/newEvent/types/new-event-types"
+import { TheaterType } from "@/components/admin/newEvent/theater/types/theater-types"
 
 
 

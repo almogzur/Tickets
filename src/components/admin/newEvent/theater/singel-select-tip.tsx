@@ -5,8 +5,8 @@ import { motion ,AnimatePresence } from "framer-motion"
 import { CSSProperties, Dispatch, MouseEventHandler, SetStateAction, useContext, useEffect, useState } from "react"
 import {  Button, Stack as Flex, Typography, useTheme } from "@mui/material"
 import {  grey, orange, pink } from "@mui/material/colors"
-import { TheaterType } from "@/types/Thearer/theater-types"
-import { infoFiledsType } from "@/types/admin/new-event/new-event-types"
+import { TheaterType } from "@/components/admin/newEvent/theater/types/theater-types"
+import { infoFiledsType } from "@/components/admin/newEvent/types/new-event-types"
  
 
 

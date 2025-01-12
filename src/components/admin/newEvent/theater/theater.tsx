@@ -13,7 +13,7 @@ import AdminNewEventTheatherMap from './new-event-theather-map';
 // Context 
 import WidthContext from '@/context/WidthContext';
 import TabsInfoContest from '@/context/admin/new-event/tabs/tabs-info-context'
-import { TheaterType } from '@/types/Thearer/theater-types';
+import { TheaterType } from '@/components/admin/newEvent/theater/types/theater-types';
  
 const Theater = ({TheaterDate}:{TheaterDate:TheaterType}) => {
 

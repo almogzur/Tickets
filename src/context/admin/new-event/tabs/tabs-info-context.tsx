@@ -1,4 +1,4 @@
-import { infoFiledsType } from "@/types/admin/new-event/new-event-types";
+import { infoFiledsType } from "@/components/admin/newEvent/types/new-event-types";
 import dayjs from "dayjs";
 import { createContext, Dispatch, SetStateAction } from "react";
 

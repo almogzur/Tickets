@@ -1,5 +1,5 @@
 
-import { Positions, TheaterTipinfoType } from '@/types/Thearer/theater-types'
+import { Positions, TheaterTipinfoType } from '@/components/admin/newEvent/theater/types/theater-types'
 import { createContext, SetStateAction } from 'react'
 
 

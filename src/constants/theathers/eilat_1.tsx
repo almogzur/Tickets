@@ -1,6 +1,6 @@
 import { CSSProperties } from "react"
 import {Seats, SeatStyles} from '@/constants/models/Events'
-import { TheaterLocationType, TheaterType } from "@/types/Thearer/theater-types"
+import { TheaterLocationType, TheaterType } from "@/components/admin/newEvent/theater/types/theater-types"
 
 const positionAtr : CSSProperties = { 
    position:"relative",

@@ -1,4 +1,4 @@
-import { Positions } from "@/types/Thearer/theater-types";
+import { Positions } from "@/components/admin/newEvent/theater/types/theater-types";
 import { createContext } from "react";
 
 

@@ -1,96 +1,67 @@
 
 const isProduction = process.env.NODE_ENV === 'production';
+console.log(isProduction);
+
 
 
 const cspHeader = `
     default-src 'self';
     script-src 'self' ${isProduction ? "" : "'unsafe-eval' 'unsafe-inline'"};
     style-src 'self' 'unsafe-inline';
-    img-src 'self' blob: data:;
+    img-src 'self' res.cloudinary.com;
     font-src 'self';
     object-src 'none';
     base-uri 'self';
     form-action 'self';
     frame-ancestors 'none';
     upgrade-insecure-requests;
-`
+`.replace(/\n/g, ''); // Remove newlines for compatibility
 
 const ProdObject = {
     async headers() {
-      return [{
-          source: '/(.*)',
-          headers: [
-                         {
-                             key: 'Content-Security-Policy',
-                             value: cspHeader.replace(/\n/g, ''),
-                         },
-                         {
-                             key: 'Referrer-Policy',
-                             value: 'strict-origin-when-cross-origin'
-                         },
-                         {
-                             key: "X-Content-Type-Options",
-                             value: "nosniff"
-                         },
-                         {
-                             key: "Cross-Origin-Resource-Policy",
-                             value: 'same-origin'
-                         }
-                    // key : "Subresource Integrity", 
-                    /* 
-                     Explane : importing CDN Scrips bresource Integrity feature by specifying a base64-encoded cryptographic hash of a
-                     resource (file) you're telling the browser to fetch,
-                    */
-                    // Test Result: Subresource Integrity (SRI) not implemented, but all scripts are loaded from a similar origin.
-
-                  ],
-        }
-    ]},
+        return [
+            {
+                source: '/(.*)',
+                headers: [
+                    { key: 'Content-Security-Policy', value: cspHeader },
+                    { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+                    { key: 'X-Content-Type-Options', value: 'nosniff' },
+                    { key: 'Cross-Origin-Resource-Policy', value: 'same-origin' },
+                ],
+            },
+        ];
+    },
     reactStrictMode: true,
     poweredByHeader: false,
     output: 'standalone',
     experimental: {
-        webVitalsAttribution: ['CLS', 'LCP']
+        webVitalsAttribution: ['CLS', 'LCP'],
     },
-        // See --> https:mongoosejs.com/docs/nextjs.html
-    //TypeError: Cannot read properties of undefined (reading 'prototype')
-    experimental: {
-        esmExternals: "loose", // <-- add this
-        serverComponentsExternalPackages: ["mongoose"] // <-- and this
-        
-      },
-    webpack: (config) => {
-        config.experiments = {
-          topLevelAwait: true ,
-          layers: true
-        };
-        return config;
-      },
-}
+    images: {
+        remotePatterns: [
+            { protocol: 'https', hostname: 'res.cloudinary.com' }, // Ensure correct domain
+        ],
+    },
+};
+
+
+
 const DevObject = {
+    images: {
+        remotePatterns: [
+          {
+            protocol:'https',
+            hostname:'**.cloudinary.com',
+          },
+        ],
+      },
 
     reactStrictMode: true,
     poweredByHeader: false,
-    output: 'standalone',
-    experimental: {
-        webVitalsAttribution: ['CLS', 'LCP']
-    },
 
-    // See --> https:mongoosejs.com/docs/nextjs.html
-    //TypeError: Cannot read properties of undefined (reading 'prototype')
-    experimental: {
-        esmExternals: "loose", // <-- add this
-        serverComponentsExternalPackages: ["mongoose"] // <-- and this
-        
-      },
-    webpack: (config) => {
-        config.experiments = {
-          topLevelAwait: true ,
-          layers: true
-        };
-        return config;
-      },
+
 }
+
 
 module.exports = isProduction? ProdObject : DevObject
 

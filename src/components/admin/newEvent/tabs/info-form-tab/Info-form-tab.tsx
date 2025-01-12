@@ -18,6 +18,10 @@ import SelectWrap from "@/components/gen/select-wrap"
 import DatePickerWrap from "@/components/gen/time-date/date-picker-wrap"
 import tabsEroorsContext from "@/context/admin/new-event/tabs/tabs-eroors-context"
 
+import { CldImage } from 'next-cloudinary';
+import { getCldImageUrl } from 'next-cloudinary';
+
+
 
 interface InfoFormType {
     eventNameRef: RefObject<HTMLInputElement>
@@ -33,7 +37,7 @@ const InfoForm =({eventNameRef}:InfoFormType)=>{
   const {findValidationEroor} =  useContext(tabsEroorsContext)
   
 
-const ErrorHndler = (e:DateTimeValidationError, context:dayjs.Dayjs|null ):void=>{}
+  const ErrorHndler = (e:DateTimeValidationError, context:dayjs.Dayjs|null ):void=>{}
 
 
 
@@ -169,29 +173,22 @@ return(
         <Editor />       
         <CoverUpload  />
          
-         { infoFileds.preview && infoFileds.image &&
 
-        <Flex  alignItems={"center"} >
 
-         <Image 
-           fetchPriority='high'
-           src={infoFileds.preview} 
-           alt={infoFileds.image.name} 
-           width={!xs?260 : !sm?400 : !md? 500 : 600}
-           height={!sm?300:400}
-           style={{ objectFit:'contain', marginTop:20}} 
-           />
-         <Typography   
-             sx={{color:"black" , m:.5}}
-              fontWeight={700} 
-               textAlign={'center'}
-                variant='body2'
-                 >
-                  שם הקובץ :  {infoFileds.image.name.toLocaleUpperCase()}
-         </Typography>
+ { infoFileds.preview &&      
+  <Flex justifyContent={"center"} direction={"row"}   >
+          
+    <CldImage
+        alt={"תמונה ראשית"}
+        width={!xs?260 : !sm?400 : !md? 500 : 600}
+        height={!sm?300:400}
+        src={infoFileds.preview}       
+        style={{marginBottom:55}} 
+          />
 
-       </Flex>  
-}
+
+       </Flex>  }
+
      </Container>  
      )
   

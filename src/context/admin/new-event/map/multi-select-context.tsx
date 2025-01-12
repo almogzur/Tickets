@@ -1,4 +1,4 @@
-import { Positions, TheaterMultiTipeInfoType } from '@/types/Thearer/theater-types'
+import { Positions, TheaterMultiTipeInfoType } from '@/components/admin/newEvent/theater/types/theater-types'
 import { createContext, Dispatch, SetStateAction } from 'react'
 
 

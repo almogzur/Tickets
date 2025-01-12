@@ -28,8 +28,8 @@ import { FaFirstdraft } from 'react-icons/fa6'
 import { NextResponse } from 'next/server'
 
 ///// Types 
-import { infoFiledsType, ProductionInfoFiledsValidtinSchema, TempInfoFiledsValidationSchema, TempInfoType, TicketType,  } from '@/types/admin/new-event/new-event-types'
-import { TheaterMultiTipeInfoType, Positions, TheaterTipinfoType, RefsType } from '@/types/Thearer/theater-types'
+import { infoFiledsType, ProductionInfoFiledsValidtinSchema, TempInfoFiledsValidationSchema, TempInfoType, TicketType,  } from '@/components/admin/newEvent/types/new-event-types'
+import { TheaterMultiTipeInfoType, Positions, TheaterTipinfoType, RefsType } from '@/components/admin/newEvent/theater/types/theater-types'
 
 
 /////// Use Context 
@@ -115,7 +115,7 @@ const NewEventPage=()=>{
         // Form Validations Saving Options 
      
 
-         const findValidationEroor= ( value:string ): string | undefined  => {  
+        const findValidationEroor= ( value:string ): string | undefined  => {  
           const TempInfoFiledsIssues = TempInfoFiledsValidationSchema.safeParse(infoFileds).error?.issues
           const ProductionInfoFiledsIssues= ProductionInfoFiledsValidtinSchema.safeParse(infoFileds).error?.issues      
           const issue  =
@@ -128,20 +128,22 @@ const NewEventPage=()=>{
            }
 
         // Requests 
-        const saveTempEvent = async (infoFileds:TempInfoType, tickets: TicketType[]):Promise<NextResponse|undefined> => {
+        const saveTempEvent = async (infoFileds:infoFiledsType, tickets: TicketType[]):Promise<NextResponse|undefined> => {
 
             setReqestStatus('Temp')
-            console.log("sending req" ,);
+            console.log("sending req" ,infoFileds.image);
             const TempResult =  TempInfoFiledsValidationSchema.safeParse(infoFileds);
 
+ 
             try {
               if(TempResult.success){
-                setIsLoading(true)
-                setTimeout(()=>{setIsLoading(false)},2000)
+                //setIsLoading(true)
+               //      setTimeout(()=>{setIsLoading(false)},2000)
               // Make the POST request
-              // const response = await axios.post("/api/admin/save-temp-event", { infoFileds,tickets },{} );
+              
+                const response = await axios.post("/api/admin/new-event/save/save-temp-event", { infoFileds,tickets },{} );
               // Handle response
-              // return response.data;
+                return response.data;
               }
               else{
                 // focuse name 
@@ -194,45 +196,43 @@ const NewEventPage=()=>{
         }
         
 
-       return (
-        <>
-         <Head>
-         <meta name="viewport" content="width=device-width, user-scalable=no"/>
-        </Head>
-        <AdminLayout>
-             <TabsEroorsContext.Provider value={{findValidationEroor}}>
-             <TabsPageContext.Provider value={{tabValue,setTabValue}}>
-             <TabInfoContext.Provider value={{infoFileds,setInfoFileds}}>
-             <TabsTickets.Provider  value={{tickets ,setTickets}} >
-               <TabsWraper eventNameRef={eventNameRef} />
-            
-              {  infoFileds.Theater &&
-                <AdminTransformContext.Provider value={{AdminMapPositions,setAdminMapPositions}}>   
-                <MultiSelectContext.Provider value={{multiTipPositions,setMutiTipPositions,resetMultiTip , multiTipInfo, setMultiTipInfo ,resetErr }} >
-                <SingleTipContext.Provider value={{ singleTipPositions, setSingleTipPositions, seatTipInfo, setSeatTipInfo , resetSingleTip }}>
-                   <TheaterComponent  TheaterDate={infoFileds.Theater}  /> 
-              </SingleTipContext.Provider>
-              </MultiSelectContext.Provider>
-              </AdminTransformContext.Provider> 
-            
+   return (
+    <>
+     <Head>
+     <meta name="viewport" content="width=device-width, user-scalable=no"/>
+    </Head>
+    <AdminLayout>
+      <TabsEroorsContext.Provider value={{findValidationEroor}}>
+      <TabsPageContext.Provider value={{tabValue,setTabValue}}>
+      <TabInfoContext.Provider value={{infoFileds,setInfoFileds}}>
+      <TabsTickets.Provider  value={{tickets ,setTickets}} >
+          <TabsWraper eventNameRef={eventNameRef} />
+          { 
+           infoFileds.Theater &&
+          <AdminTransformContext.Provider value={{AdminMapPositions,setAdminMapPositions}}>   
+            <MultiSelectContext.Provider value={{multiTipPositions,setMutiTipPositions,resetMultiTip , multiTipInfo, setMultiTipInfo ,resetErr }} >
+            <SingleTipContext.Provider value={{ singleTipPositions, setSingleTipPositions, seatTipInfo, setSeatTipInfo , resetSingleTip }}>
+               <TheaterComponent  TheaterDate={infoFileds.Theater}  /> 
+          </SingleTipContext.Provider>
+          </MultiSelectContext.Provider>
+         </AdminTransformContext.Provider>    
           }
+     </TabsTickets.Provider>
+     </TabInfoContext.Provider> 
+     </TabsPageContext.Provider>
+     </TabsEroorsContext.Provider>
+     <SpeedDialWrap
+              actions={QuickActions}
+              mainIcon={<SlOptions size={"2em"} />}
+              openToolTip
+              openToolTipPlacement="right"
+              direction={"up"}
+              positions={!sm?{ bottom: 0,left:0 }:{bottom:16,left:10}}       
+              
+              />
 
-         </TabsTickets.Provider>
-         </TabInfoContext.Provider> 
-         </TabsPageContext.Provider>
-         </TabsEroorsContext.Provider>
-         <SpeedDialWrap
-                  actions={QuickActions}
-                  mainIcon={<SlOptions size={"2em"} />}
-                  openToolTip
-                  openToolTipPlacement="right"
-                  direction={"up"}
-                  positions={!sm?{ bottom: 0,left:0 }:{bottom:16,left:10}}       
-                  
-                  />
-    
 
-       </AdminLayout>
+    </AdminLayout>
         </>
 ) 
 }

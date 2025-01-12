@@ -32,7 +32,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 // Geo Location  Map  Css
 import '@tomtom-international/web-sdk-maps/dist/maps.css'
-import { Positions, TheaterTipinfoType } from '@/types/Thearer/theater-types';
+import { Positions, TheaterTipinfoType } from '@/components/admin/newEvent/theater/types/theater-types';
 
 
 export const FullDateOptions :Intl.DateTimeFormatOptions = {

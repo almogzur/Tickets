@@ -20,7 +20,7 @@ import Select from '@mui/material/Select';
 import TooltipButton from './client-seat-btn';
 import ClientTheaterMap from './client-theater-map';
 import {Event} from '@/constants/models/Events'
-import { TheaterType } from '@/types/Thearer/theater-types';
+import { TheaterType } from '@/components/admin/newEvent/theater/types/theater-types';
 
 interface ClientTheaterType {
   theater:TheaterType

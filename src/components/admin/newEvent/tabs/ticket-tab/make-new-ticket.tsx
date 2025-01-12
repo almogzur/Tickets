@@ -30,7 +30,7 @@ import SelectWrap from '@/components/gen/select-wrap';
 import DateTimePickerWrap from '@/components/gen/time-date/date-time-picker-wrap';
 import { SafeParseError, SafeParseSuccess, ZodError } from 'zod';
 import { IoMdAddCircle } from 'react-icons/io';
-import { TicketStateType, TicketType, TicketValidationSchema } from '@/types/admin/new-event/new-event-types';
+import { TicketStateType, TicketType, TicketValidationSchema } from '@/components/admin/newEvent/types/new-event-types';
 
 
 interface TicketOptionType {
