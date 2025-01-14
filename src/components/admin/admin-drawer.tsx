@@ -1,79 +1,112 @@
 import  {  ReactNode, useState   } from 'react';
-import { styled, useTheme } from '@mui/material/styles';
-import {Box , Stack as Flex } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import { Accordion, AccordionDetails, AccordionSummary, Box , Stack as Flex, Typography } from '@mui/material';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import { Button } from '@mui/material'
-import { signOut } from 'next-auth/react'
-import { RiArchiveDrawerFill } from "react-icons/ri";
-import { FcPuzzle } from "react-icons/fc";
-import { FcHome } from "react-icons/fc";
-import { FcBusinessman } from "react-icons/fc";
-import { FcCancel } from "react-icons/fc";
+
+import { signOut, useSession } from 'next-auth/react'
+import { FcBullish, FcCalculator,  FcDataSheet, FcExpired, FcFilingCabinet, FcPuzzle, FcSettings,FcHome,FcCancel } from "react-icons/fc";
 
 import Link from 'next/link';
 
 import { FcPrevious } from "react-icons/fc";
+import { IoTicketSharp } from 'react-icons/io5';
+import { blue, grey } from '@mui/material/colors';
+
+import { DrawerLinkType, ItemPropsType } from './admin-drawer-types';
+import { useRouter } from 'next/router';
 
 const DRAWER_OPEN_WIDTH = 200;
 
 
-const links  = [
-  {text:'ראשי' , Icon:<FcHome size={"1.5em"} /> , link:"/admin" },
-  {text:'צור אירוע' , Icon:<FcPuzzle size={"1.5em"} /> , link:"/admin/new-event" },
-  {text:'ניהול אירועים ' , Icon:<FcBusinessman size={"1.5em"} /> , link:"/admin/manage-events" }
-
-]
-const subLinks = [
-  {text:"" , Icon:"" , link:"" },
-
-
-]
-
 export default function TemporaryDrawer() {
-
   const [ open, setOpen ] = useState<boolean>(false);
-
   const theme = useTheme()
+  const { data: session ,status ,update} = useSession()
+  const router = useRouter()
+  
+  const links :DrawerLinkType[]  = [
+    {text:'ראשי' , Icon:<FcHome size={"1.5em"} /> , link:"/admin" },
+    {text:'צור אירוע' , Icon:<FcPuzzle size={"1.5em"} /> , link:"/admin/new-event", },
+    {text:"טיוטות",Icon:<FcExpired size={"1.5em"}/> , link:"/admin/drafts",},
+    {text:"סטטיסטיקה", Icon:<FcBullish size={"1.5em"} />,link:"/admin/statistics"},
+    {text:'אירועים ' , Icon:<FcDataSheet size={"1.5em"} /> , link:"/admin/events" },
+    {text:"מימוש כרטיסים",Icon:<FcFilingCabinet size={"1.5em"}  />,link:"/admin/ticket-actions"},
+    {text:"קופאי",Icon:<IoTicketSharp size={"1.5em"} color={blue[700]}  /> , link:"/admin/regester"},
+    {text:"כספים", Icon:<FcCalculator size={"1.5em"} /> , link:"/admin/finance"},
+    {text:"הגדרות", Icon:<FcSettings size={"1.5em"}/> , link:"/admin/settings" },
+  ]
+  
+  const translatePathToHeb =( path : string ):string=>{
+    console.log(path);
+    switch(path){
+      case "/admin": return "אדמין ראשי" ;
+      break;
+      case "/admin/new-event": return "צור אירוע" ;
+      break;
+      case "/admin/statistics": return "סטטיסטיקה" ;
+      break;
+      case "/admin/events": return "אירועים" ;
+      break;
+      case "/admin/regester": return "קופאי" ;
+      break;
+      case "/admin/ticket-actions": return "מימוש כרטיסים" ;
+      break;
+      case "/admin/finance": return "כספים" ;
+     break;
+     case "/admin/settings": return "הגדרות" ;
+     break;
+     case "/admin/drafts": return "טיוטות"
+
+      default :  return "" ;
+    }
+    
+  }
+
+  const subLinks = [
+    {text:"" , Icon:"" , link:"" },
+   ]
+
   const toggleDrawer = (newOpen:boolean) => () => {
     setOpen(newOpen);
   };
 
-
   return (
     <>
     <nav dir='rtl' style={{ height:60 , background:"black" , display:"flex", flexDirection:"row"  , }   }  >
+      <Flex direction={"row"} alignItems={'center'}>
         <FcPrevious size={'1.5em'}  onClick={toggleDrawer(true)} style={{padding:10 , margin:10 , cursor:'pointer'}}/>
+        <Typography variant='h6' sx={{color:"#ddd"}}>{translatePathToHeb(router.pathname)}</Typography>
+        </Flex>
     </nav>
-
-
-      <Drawer
-       open={open}
+       <Drawer
+        open={open}
         onClose={toggleDrawer(false)} 
         anchor='right'
         SlideProps={{ direction:"left" }}
+        ModalProps={{sx:{}}}
+        PaperProps={{sx:{background:"black"}}}
          >
-        <DrawerList/>
-
-        <ListItem sx={{background:"gray"}}>
-          <ListItemButton  onClick={()=>signOut({callbackUrl:"/"})}>
-            <ListItemIcon
-                 sx={{ } }
-              >
+          <Flex>
+            <Typography sx={{mt:2, mx:"auto",color:"#fff"}}>{session?.user?.name}</Typography>
+          </Flex>
+            <DrawerList links={links}/>
+        
+            <ListItem sx={{background:grey[700],boxShadow:theme.shadows[10]}}>
+          <ListItemButton 
+            onClick={()=>signOut({callbackUrl:"/"})}
+           >
+            <ListItemIcon>
               <FcCancel size={"2em"}/>
             </ListItemIcon>  
 
-            <ListItemText
-             primary={'התנתק'}
-             sx={ {textAlign:"start"}}
-             />
+            <Typography>התנתק</Typography>
          </ListItemButton>
-       </ListItem>
+            </ListItem>
 
       </Drawer>
       </>
@@ -83,13 +116,13 @@ export default function TemporaryDrawer() {
 
 
 
-const DrawerList = ()=>{
+const DrawerList = ({links}:{links:DrawerLinkType[]})=>{
  
 return (
   <Box sx={{ width: DRAWER_OPEN_WIDTH, direction: "rtl" }} role="presentation" >
     <List>
-      {links.map(({ text, Icon, link }, index) => (
-        <DrawerItem text={text} Icon={Icon} link={link} index={index} key={text} />
+      {links.map(({ text, Icon, link, isExpandable }, index) => (
+        <DrawerItem text={text} Icon={Icon} link={link} index={index} key={text} isExpandable={isExpandable} />
       ))}
     </List>
     <Divider />
@@ -101,33 +134,57 @@ return (
 )
 }
 
+const DrawerItem  = ({text, Icon ,link , index, isExpandable} :ItemPropsType)=>{
 
-interface ItemPropsType  {text: string ,Icon :ReactNode , link:string,index:number }
-
-const DrawerItem  = ({text, Icon ,link , index} :ItemPropsType)=>{
-  return    (  
-   
-<Link href={link} style={{textDecoration:'none'  , color:"black" }}  >
-  <ListItem  disablePadding sx={{}} >
-   <ListItemButton
-       
+ return isExpandable  ?
+  <Accordion key={text}
+    sx={{background:'black',color:"#fff"}}
+    
   >
-     <ListItemText
-        primary={text}
-        sx={ {textAlign:"start"}}
-      />
+    <AccordionSummary
+     sx={{p:1.5,gap:1}}
+   >
+    <Flex direction={"row"} justifyContent={"space-between"} width={"100%"} >
+    {text}
+    {Icon}
+    </Flex>
+   </AccordionSummary>
 
-      <ListItemIcon
-        sx={{ minWidth: 0, justifyContent: 'center', padding:0.5 } }
-       >
-      {Icon}
-     </ListItemIcon>
+  <AccordionDetails>
+      {[1,2,3].map((data,i)=>{
+        return <Link key={data} href={link} style={{textDecoration:'none'  , color:"black" }}  >
+          <ListItem  disablePadding sx={{p:1.5,color:"#fff", "&:hover":{background:"#fff",color:"black"}}} >
+       
+           <Flex
+            direction={"row"} 
+            justifyContent={"space-between"} 
+            width={DRAWER_OPEN_WIDTH}
+             >  
+           {text}
+           {Icon}
+            </Flex>
+       
+         </ListItem>
+         </Link>
+      })}
+  </AccordionDetails>
+  </Accordion>
+  :  
+  <Link href={link} style={{textDecoration:'none'  , color:"black" }}  >
+   <ListItem  disablePadding sx={{p:1.5,color:"#fff", "&:hover":{background:"#fff",color:"black"}}} >
 
- 
-
-   </ListItemButton>
+    <Flex
+     direction={"row"} 
+     justifyContent={"space-between"} 
+     width={DRAWER_OPEN_WIDTH}
+      >  
+    {text}
+    {Icon}
+     </Flex>
 
   </ListItem>
- </Link>
-  )
+  </Link>
+  
+ 
+  
 }

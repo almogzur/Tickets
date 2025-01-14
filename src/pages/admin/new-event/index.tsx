@@ -114,7 +114,6 @@ const NewEventPage=()=>{
 
         // Form Validations Saving Options 
      
-
         const findValidationEroor= ( value:string ): string | undefined  => {  
           const TempInfoFiledsIssues = TempInfoFiledsValidationSchema.safeParse(infoFileds).error?.issues
           const ProductionInfoFiledsIssues= ProductionInfoFiledsValidtinSchema.safeParse(infoFileds).error?.issues      
@@ -126,7 +125,6 @@ const NewEventPage=()=>{
                        undefined
             return issue?.message
            }
-
         // Requests 
         const saveTempEvent = async (infoFileds:infoFiledsType, tickets: TicketType[]):Promise<NextResponse|undefined> => {
 
@@ -138,12 +136,17 @@ const NewEventPage=()=>{
             try {
               if(TempResult.success){
                 //setIsLoading(true)
-               //      setTimeout(()=>{setIsLoading(false)},2000)
+               //   setTimeout(()=>{setIsLoading(false)},2000)
               // Make the POST request
               
                 const response = await axios.post("/api/admin/new-event/save/save-temp-event", { infoFileds,tickets },{} );
               // Handle response
-                return response.data;
+              console.log(response);
+              
+                  if(response.statusText==="OK"){
+                    router.push("/admin")
+                  }
+                
               }
               else{
                 // focuse name 
@@ -177,20 +180,20 @@ const NewEventPage=()=>{
 
         }
 
-        if (status === 'loading'  || isLoading  ) {
+   if (status === 'loading'  || isLoading  ) {
 
-           return (
-            <Backdrop
-               sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 , padding:10 , background:grey[200]})}
-               open={isLoading}
-              >
-                <Flex width={"100%"} alignItems={'center'}>
-                   <LinearBufferLoading/>
-                  <Typography variant='h4'  >שמור: אירוע חדש...</Typography>
-                  <Typography> כותרת :  {infoFileds.eventName}</Typography>
-                 </Flex>
-           </Backdrop>
-           )
+    return (
+     <Backdrop
+        sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 , padding:10 , background:grey[200]})}
+        open={isLoading}
+       >
+         <Flex width={"100%"} alignItems={'center'}>
+            <LinearBufferLoading/>
+           <Typography variant='h4'  >שמור: אירוע חדש...</Typography>
+           <Typography> כותרת :  {infoFileds.eventName}</Typography>
+          </Flex>
+    </Backdrop>
+    )
   
 
         }
@@ -203,7 +206,7 @@ const NewEventPage=()=>{
     </Head>
     <AdminLayout>
       <TabsEroorsContext.Provider value={{findValidationEroor}}>
-      <TabsPageContext.Provider value={{tabValue,setTabValue}}>
+      <TabsPageContext.Provider value={{tabValue,setTabValue, isLoading, setIsLoading}}>
       <TabInfoContext.Provider value={{infoFileds,setInfoFileds}}>
       <TabsTickets.Provider  value={{tickets ,setTickets}} >
           <TabsWraper eventNameRef={eventNameRef} />

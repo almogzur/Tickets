@@ -1,5 +1,5 @@
 import type { AppProps } from 'next/app'
-
+import { CloudinaryUploadWidgetOptions } from 'next-cloudinary';
 // 
 import { useMediaQuery } from 'usehooks-ts';
 import { useState } from 'react';
@@ -167,6 +167,7 @@ const theme  = createTheme({
    datePikerHeb,
 
 )
+
 
 
 const MyApp = ({ Component, pageProps: { nonce, session, ...pageProps } }: AppProps)=> {

@@ -1,10 +1,7 @@
 
 import { TheaterType } from '@/components/admin/newEvent/theater/types/theater-types';
 import { nullable, z }  from 'zod'
-import mongoose from 'mongoose';
-const { Schema } = mongoose;
 
-// Validation Shema Zod 
 export const TicketValidationSchema = z.object({
   EndSealesDate: z.date(),
   selectedType:z.union([z.literal("normal"),z.literal("discount"),z.literal("citizen"), z.literal("approachable")]),
@@ -16,7 +13,7 @@ export const TicketValidationSchema = z.object({
 })  
 
 export const ProductionInfoFiledsValidtinSchema = z.object({
-  eventName: z.string().min(3, " לפחות 3 תווים"),
+  eventName: z.string().min(3, " לפחות 3 תווים").max(30),
   cat: z.string().min(1,{message:"בחר קטגוריה"}),
   TheaterName: z.string({message:"בחר אולם"}),
   availableSeatsAmount: z.number(),
@@ -32,18 +29,15 @@ export const ProductionInfoFiledsValidtinSchema = z.object({
 });
 
 export const TempInfoFiledsValidationSchema = z.object({
-  eventName: z.string().min(3, "שם צריך להיות לפחות  3  תווים"),
+  eventName: z.string().min(3, "שם צריך להיות לפחות  3  תווים").max(20),
 });
 
-// Derived Types From Zod Schemas 
 export type TicketType  = z.infer<typeof TicketValidationSchema> 
 export interface TicketStateType extends Omit<TicketType, "selectedType" | "Date" | "EndSealesDate" > {
   selectedType: "normal" | "discount" | "citizen" | "approachable" | ""; 
   EndSealesDate: Date | null
 }
-
 export type TempInfoType = z.infer<typeof TempInfoFiledsValidationSchema>
-
 export interface infoFiledsType  {
   eventName:string ,
   cat:string
@@ -58,34 +52,7 @@ export interface infoFiledsType  {
   Hour:Date|null
   OpenDorHour:Date|null
 }
-
-// Db Schema Mongoosee
-
-const TempNewEventSchemaDefinition = {
-  eventName:{type: String , require:true},
-  cat:{type:String , require:false},
-  TheaterName:{type:String , require:false},
-  availableSeatsAmount:{type:Number, require:false},
-  Date: { type: Date , require:false},
-  OpenDorHour:{ type: Date , require:false},
-  Hour:{ type: Date , require:false},
-  isEventClosedForSeal: { type: Boolean , require:false},
-  pre: {type:String , require:false},
-  image: { type: Buffer, required: false }, // Store image data as binary
-}
-const TempNewEventSchemaOptions = {}
-const TempNewEventSchema = new Schema<infoFiledsType & TicketType>(TempNewEventSchemaDefinition,TempNewEventSchemaOptions)
-
-export const  TmepDbEventModle =   mongoose.models?.Temp_DB_NewEvent ||mongoose.model('Temp_DB_NewEvent', TempNewEventSchema) 
-
-
-const ProductionNewEventSchemaDefinition ={}
-const ProductionNewEventSchemaOptions ={}
- const ProductionNewEventSchema = new Schema(ProductionNewEventSchemaDefinition,ProductionNewEventSchemaOptions)
-//export const EventMongoseeModle = ('Production_Event', ProductionNewEventSchema)
-
-    
-interface LogType {  
+export interface LogType {  
   
   time_stemp : Date ,
   user : string ,
@@ -93,10 +60,3 @@ interface LogType {
   JWT_string:string,
 
 }
-
-const NewEventLogsModleShemaDefinition ={}
-const NewEventLogsModleShemaOptions = {}
-
-export const NewEventLogsModleShema = new Schema<LogType>(  NewEventLogsModleShemaDefinition,NewEventLogsModleShemaOptions)
-export const NewEventLogsModle = mongoose.models?.New_Event_Logs || mongoose.model('New_Event_Logs', NewEventLogsModleShema) 
-

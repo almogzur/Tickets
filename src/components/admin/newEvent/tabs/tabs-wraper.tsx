@@ -23,6 +23,7 @@ import InfoFormTab from "./info-form-tab/Info-form-tab"
 import PrevieTab from "./preview-tab"
 import { IoTicket } from "react-icons/io5";
 import tabsPageContext from "@/context/admin/new-event/tabs/tabs-page-context";
+import { blue, green, grey } from "@mui/material/colors";
 
 
 
@@ -63,11 +64,21 @@ const TabsWraper = ({eventNameRef }:TabFormPropsType)=>{
           value={tabValue}
           onChange={handleTabChange}
           textColor='primary'
-          indicatorColor='primary'
-          sx={{ background:"black", position:'sticky',top:0,zIndex:100}}
+          sx={{ 
+              background:"black",
+               position:'sticky',
+               top:0,
+               zIndex:100,
+               ".MuiTabs-indicator":{
+                backgroundColor:theme.palette.warning.main,
+                boxShadow:` 0 15px 60px  1.1em ${blue[700]} `,
+                borderRadius:45
+              },
+              }}
           scrollButtons
           allowScrollButtonsMobile        
           variant='scrollable'
+          
           
          >
         <Tab value={0} label="מידע כללי"  sx={{...TabComonStyleAttribute}}  icon={<FcInfo size={"2em"} />}    /> 

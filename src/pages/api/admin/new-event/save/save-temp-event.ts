@@ -1,8 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from "next-auth/next";
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
-import {  connection, disconnectFromDb } from '@/lib/DB/Mongosee_Connection';
-import  {TmepDbEventModle  } from '@/components/admin/newEvent/types/new-event-types';
+import {  CreateDynamicConnection, disconnectFromDb } from '@/lib/DB/Mongosee_Connection';
+import mongoose from 'mongoose';
+import { getDynamicModel, TempNewEventSchema } from '@/components/admin/newEvent/types/new-event-db-schema';
 
  
 type ResponseData = {
@@ -26,13 +27,21 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse<R
     return res.status(401).json({ message: 'Your Shell Not Pass' });
   }
 
-  if(connection.connection.db){
+ const connectionStatus = await CreateDynamicConnection(session)
+
+  if(connectionStatus.connection.db){
     const body = req.body;
-    console.log(body,body.infoFileds.image);
-    
-    const doc = new TmepDbEventModle(body.infoFileds,body.tickets); // Pass body to the model
-    await doc.save(); // Save to the database
-    console.log("saved new modle");
+    console.log(body,body.infoFileds);
+
+     const TempModel = getDynamicModel("temp_events",TempNewEventSchema)
+     const doc = new TempModel({...body.infoFileds,...body.tickets}) // Pass body to the model
+     const result =   await doc.save(); // Save to the database
+
+      if(result instanceof mongoose.Error){
+          console.log("Doc Err");
+          res.status(400).json({ message: 'Save Err' });
+      }
+    console.log("saved new modle",result);
     
     res.status(200).json({ message: 'Hello from Next.js!' });
   }
