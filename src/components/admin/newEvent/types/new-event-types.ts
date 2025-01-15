@@ -32,6 +32,8 @@ export const TempInfoFiledsValidationSchema = z.object({
   eventName: z.string().min(3, "שם צריך להיות לפחות  3  תווים").max(20),
 });
 
+export type RequestStatusType ="Temp"|"Production"|undefined
+
 export type TicketType  = z.infer<typeof TicketValidationSchema> 
 export interface TicketStateType extends Omit<TicketType, "selectedType" | "Date" | "EndSealesDate" > {
   selectedType: "normal" | "discount" | "citizen" | "approachable" | ""; 

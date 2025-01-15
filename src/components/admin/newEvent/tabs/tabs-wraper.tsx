@@ -16,7 +16,7 @@ import { FcInfo } from "react-icons/fc";
 
 // Tabs 
 import TicketsTab from './ticket-tab/tickets-wrapper'
-import SettingTab from "./settings-tab"
+import SettingTab from "./settings-tab/settings-tab-wraper"
 import ColorTab from "./colors-tab"
 import AdOptionsTab from "./ad-options-tab"
 import InfoFormTab from "./info-form-tab/Info-form-tab"

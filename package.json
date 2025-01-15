@@ -15,6 +15,7 @@
     "@mui/icons-material": "^6.1.9",
     "@mui/material": "^6.1.9",
     "@mui/styled-engine-sc": "^6.1.8",
+    "@mui/x-data-grid": "^7.23.6",
     "@mui/x-date-pickers": "^7.23.0",
     "@tiptap/core": "^2.10.3",
     "@tiptap/extension-color": "^2.10.3",

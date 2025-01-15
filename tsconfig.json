@@ -21,9 +21,8 @@
     "typeRoots": ["./typings", "./vendor/types"],
 
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"],
+      "@/public/*": ["./public/*"]
     },
     "module": "esnext"
   },
@@ -31,7 +30,9 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "src/components/tom-map.js"
+    "src/components/tom-map.js",
+    
+    
   ],
   "exclude": [
     "node_modules"

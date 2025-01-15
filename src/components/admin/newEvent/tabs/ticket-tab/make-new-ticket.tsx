@@ -8,7 +8,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Typography,Stack as Flex, useTheme, Chip, } from '@mui/material';
-import InputWrap from '@/components/gen/input-wrap';
+import InputWrap from '@/components/gen/TeextFiledWrpa/input-wrap';
 
 //Icons
 import { FcBusinessman, FcPlanner, FcViewDetails } from "react-icons/fc";

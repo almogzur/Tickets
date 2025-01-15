@@ -2,7 +2,8 @@ import WidthContext from "@/context/WidthContext"
 import SwitchWrap, { SwitchWrapType } from "./switch-wrap"
 import {Stack as Flex, TextFieldVariants, Typography } from '@mui/material'
 import { green, grey, red } from "@mui/material/colors"
-import { ChangeEvent, useContext } from "react"
+import { ChangeEvent, Dispatch, SetStateAction, useContext } from "react"
+import { RequestStatusType } from "../admin/newEvent/types/new-event-types"
 
 
 interface  SwitchWithTextWrapType extends SwitchWrapType {
@@ -10,15 +11,13 @@ interface  SwitchWithTextWrapType extends SwitchWrapType {
     subMainText?:string
     subText:string
     variant?:TextFieldVariants
-    
 }
 
 const SwitchWithTextWrap =({mainText,subText,switchValue,switchOnChangeHendler,switchWrpaerSize,variant,subMainText}:SwitchWithTextWrapType)=>{
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
 
     return (
-            <Flex 
-                
+            <Flex   
                 alignItems={"center"}
                 pt={2}
                 pb={2}
@@ -38,7 +37,7 @@ const SwitchWithTextWrap =({mainText,subText,switchValue,switchOnChangeHendler,s
                         borderColor:'black',
                         background:variant==='filled'? grey[300]:undefined,
                     },
-                      }}
+                    }}
                  >
                 <SwitchWrap switchValue={switchValue} switchOnChangeHendler={switchOnChangeHendler} switchWrpaerSize={md?'large':'medium'} />
                 <Flex>

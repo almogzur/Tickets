@@ -11,7 +11,7 @@ import ImageUploaderHebtexts from '@/components/admin/newEvent/tabs/info-form-ta
 
 import Editor from "./text-editor/editor"
 import dayjs from "dayjs"
-import InputWrap from "@/components/gen/input-wrap"
+import InputWrap from "@/components/gen/TeextFiledWrpa/input-wrap"
 import { DateTimeValidationError} from "@mui/x-date-pickers"
 import TimePickerWrap from "@/components/gen/time-date/time-picker-wrap"
 import SelectWrap from "@/components/gen/select-wrap"
@@ -25,6 +25,7 @@ import { grey } from "@mui/material/colors"
 import { useSession } from "next-auth/react"
 import axios from "axios"
 import tabsPageContext from "@/context/admin/new-event/tabs/tabs-page-context"
+import { TempInfoFiledsValidationSchema } from "../../types/new-event-types"
 
 
 interface InfoFormType {
@@ -38,14 +39,14 @@ const InfoForm =({eventNameRef}:InfoFormType)=>{
   const {infoFileds,setInfoFileds}= useContext(TabsInfoContext)
   const theme = useTheme()
   const [dateEroor,setDateEroor ]= useState(false)
-  const {findValidationEroor} =  useContext(tabsEroorsContext)
-  const {isLoading,setIsLoading,tabValue,setTabValue}= useContext(tabsPageContext)
+  const {newEventValidateFiled} =  useContext(tabsEroorsContext)
+  const {setIsLoading,setTabValue,setLoadingScrenText,setSaevNewEventReqestStatus}= useContext(tabsPageContext)
   
   const removeImageFromCloudinary = async (Public_id:string)=>{
-    console.log(Public_id);
-      setIsLoading(true)
-      const response = await axios.post("/api/admin/new-event/remove/remove-event-image", { Public_id  } );
 
+      setIsLoading(true)
+      setLoadingScrenText("מסיר תמונה")
+      const response = await axios.post("/api/admin/new-event/remove/remove-event-image", { Public_id  } );
       if(response.status){
         setIsLoading(false)
           if(response.data.result === 'ok'){
@@ -92,9 +93,10 @@ const EventCategories: EventCategoryType[] = [
 
 
 return(
-      <Container  sx={{ m:2, p:1 }}  >
+     <Container  sx={{ m:2, p:1 }}  >
         <Typography sx={{color:'black'}} variant="h6" > פרטים כללים </Typography>
-        <Flex direction={!sm? "column": "row"}     >
+        
+         <Flex direction={!sm? "column": "row"}     >
 
              <Flex  flexGrow={1} > 
                 <InputWrap 
@@ -103,10 +105,10 @@ return(
                   value={infoFileds.eventName}
                   onChangeHndler={(e) => { setInfoFileds(p => ({ ...p, eventName: e.target.value })) } }
                   labelPositioin={"end"} 
-                  helpText={findValidationEroor("eventName")?? ""}
+                  helpText={newEventValidateFiled("eventName")?? ""}
                   helpTextPotionsEnd
                   ref={eventNameRef}
-                  error={findValidationEroor("eventName")? true: false}
+                  error={newEventValidateFiled("eventName")? true: false}
                   
                  />
        
@@ -119,8 +121,8 @@ return(
                     labelPositioin={"end"}
                     variant='outlined' 
                     helpTextPotionsEnd
-                    helpText={findValidationEroor("cat")?? ""}
-                    error={findValidationEroor("cat")?true:false}
+                    helpText={newEventValidateFiled("cat")?? ""}
+                    error={newEventValidateFiled("cat")?true:false}
                 />
      
              </Flex>
@@ -133,7 +135,7 @@ return(
                MediaQuery={theme.breakpoints.up("sm")}
                value={infoFileds.Date}
                variant='outlined'
-               helpText={findValidationEroor("Date")?? ""}
+               helpText={newEventValidateFiled("Date")?? ""}
                helpTextPotionsEnd
                label={"בחר תאריך"}
                labelPositioin={'end'}
@@ -148,15 +150,11 @@ return(
                  null
                }         
                onEroorHndler={ErrorHndler} 
-
-
-                
-
                   />
             <TimePickerWrap                 
                 MediaQuery={theme.breakpoints.up("sm")}
                 value={infoFileds.Hour}
-                helpText={findValidationEroor("Hour")?? ""}
+                helpText={newEventValidateFiled("Hour")?? ""}
                 variant='outlined'
                 helpTextPotionsEnd
                 onAcceptHendler={(e)=> e!==null ?
@@ -183,7 +181,7 @@ return(
                   :
                   null
                }
-               helpText={findValidationEroor("OpenDorHour")?? ""}
+               helpText={newEventValidateFiled("OpenDorHour")?? ""}
                label={"פתיחת דלתות"} 
                 labelPositioin={'end'}
                 color='secondary'
@@ -195,13 +193,15 @@ return(
 
              </Flex>
 
-        </Flex>
-        <Divider sx={{borderWidth:1,mt:2,mb:2}} />
-        <Editor />     
+         </Flex>
+
+         <Divider sx={{borderWidth:1,mt:2,mb:2}} />
+
+         <Editor />     
      
         { !infoFileds.preview &&
-       
-       <CldUploadWidget
+         <CldUploadWidget
+          
           uploadPreset="fx9hpz2j"
           onQueuesStart={()=>{console.log("q start");
           }}
@@ -227,6 +227,7 @@ return(
         } 
           }}
           options={{
+            
             sources:["local","google_drive","dropbox"], 
             defaultSource:'local',       
             maxFiles:1,
@@ -263,17 +264,20 @@ return(
              return (
                <Button 
                  sx={{ gap:1, p:0.5 , boxShadow:0, background:grey[200], mt:3,mb:3}} 
-                 onClick={() => {open()}}
+                 onClick={() => {
+                  TempInfoFiledsValidationSchema.safeParse(infoFileds).success? 
+                  open()
+                  :
+                  setSaevNewEventReqestStatus("Temp")
+                }}
                  variant='text'
                  >הוסף תמונה 
                 <RiImageAddFill size={"2em"}   />
               </Button>
              );
              }}
-       </CldUploadWidget>
-        
+         </CldUploadWidget>
         }
-  
         { infoFileds.preview &&      
         <>
         <Button
@@ -291,8 +295,7 @@ return(
                 />
         </Flex>  
         </>
-         }
-         
+        }
      </Container>  
      )
   

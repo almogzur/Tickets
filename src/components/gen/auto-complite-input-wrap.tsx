@@ -1,10 +1,13 @@
 import { Autocomplete, MenuItem, TextField, Typography } from "@mui/material";
-import InputWrap, { InputWrapType } from "./input-wrap";
-import ControledLabel from "./controled-form-label";
+import { InputWrapType }  from "./TeextFiledWrpa/input-wrap";
+import ControledLabel from "./TeextFiledWrpa/controled-form-label";
 import { ChangeEvent } from "react";
-import ControledHelperText from "./controled-helper-text";
+import ControledHelperText from "./TeextFiledWrpa/controled-helper-text";
+import { SingleLineProps } from "./TeextFiledWrpa/input-wrap";
 
-interface AutoCompliteInputWrapPropsType extends InputWrapType {
+
+interface AutoCompliteInputWrapPropsType  extends Omit<InputWrapType, 'multiline'>    {
+  
     AutocompleteOptionArray:string[]
     
 }
@@ -31,6 +34,10 @@ export default function AutoCompliteInputWrap ({
        hoverColor,
        icon,
        labelPositioin,
+       
+       
+       
+       
 
          }:AutoCompliteInputWrapPropsType){
     return(    

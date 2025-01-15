@@ -28,7 +28,7 @@ import { FaFirstdraft } from 'react-icons/fa6'
 import { NextResponse } from 'next/server'
 
 ///// Types 
-import { infoFiledsType, ProductionInfoFiledsValidtinSchema, TempInfoFiledsValidationSchema, TempInfoType, TicketType,  } from '@/components/admin/newEvent/types/new-event-types'
+import { infoFiledsType, ProductionInfoFiledsValidtinSchema, RequestStatusType, TempInfoFiledsValidationSchema, TempInfoType, TicketType,  } from '@/components/admin/newEvent/types/new-event-types'
 import { TheaterMultiTipeInfoType, Positions, TheaterTipinfoType, RefsType } from '@/components/admin/newEvent/theater/types/theater-types'
 
 
@@ -37,6 +37,7 @@ import WidthContext from '@/context/WidthContext'
 import { MdPublic } from 'react-icons/md'
 import LinearBufferLoading from '@/components/gen/lineare-buffer-loading'
 import { grey } from '@mui/material/colors'
+import LoadingScreen from '@/components/gen/loading'
 
 
 ///////
@@ -66,11 +67,11 @@ const NewEventPage=()=>{
         const theme = useTheme()
         const {data: session ,status ,update} = useSession()
 
-
         // Page State 
         ///////////////////
-        const [ReqestStatus, setReqestStatus] = useState<"Temp"|"Production"|undefined>(undefined)
+        const [SaevNewEventReqestStatus, setSaevNewEventReqestStatus] = useState<RequestStatusType>(undefined)
         const [isLoading, setIsLoading ] = useState<boolean>(false)
+        const [loadingScrenText ,setLoadingScrenText] =useState<string|undefined>(undefined)
         const eventNameRef = useRef<HTMLInputElement>(null);
         ////////////////////
         ////////////////////
@@ -111,32 +112,31 @@ const NewEventPage=()=>{
          /////////////////////
         ////////////////////
 
-
         // Form Validations Saving Options 
-     
-        const findValidationEroor= ( value:string ): string | undefined  => {  
+        const newEventValidateFiled = ( filed:string ): string | undefined  => {  
           const TempInfoFiledsIssues = TempInfoFiledsValidationSchema.safeParse(infoFileds).error?.issues
           const ProductionInfoFiledsIssues= ProductionInfoFiledsValidtinSchema.safeParse(infoFileds).error?.issues      
-          const issue  =
-                        ReqestStatus === 'Temp' ? TempInfoFiledsIssues?.find(item => item.path.join("") === value)
+          
+           const issue  =
+                        SaevNewEventReqestStatus === 'Temp' ? TempInfoFiledsIssues?.find(item => item.path.join("") === filed)
                         :
-                        ReqestStatus === 'Production' ? ProductionInfoFiledsIssues?.find(item => item.path.join("") === value)
-                         :
+                        SaevNewEventReqestStatus === 'Production' ? ProductionInfoFiledsIssues?.find(item => item.path.join("") === filed)
+                        :
                        undefined
             return issue?.message
-           }
+        }
         // Requests 
         const saveTempEvent = async (infoFileds:infoFiledsType, tickets: TicketType[]):Promise<NextResponse|undefined> => {
 
-            setReqestStatus('Temp')
+          setSaevNewEventReqestStatus('Temp')
             console.log("sending req" ,infoFileds.image);
             const TempResult =  TempInfoFiledsValidationSchema.safeParse(infoFileds);
 
  
             try {
               if(TempResult.success){
-                //setIsLoading(true)
-               //   setTimeout(()=>{setIsLoading(false)},2000)
+                setIsLoading(true)
+                  setTimeout(()=>{setIsLoading(false)},2000)
               // Make the POST request
               
                 const response = await axios.post("/api/admin/new-event/save/save-temp-event", { infoFileds,tickets },{} );
@@ -153,7 +153,6 @@ const NewEventPage=()=>{
                    if(eventNameRef.current){
                      eventNameRef.current.scrollIntoView({block:'end',behavior:'smooth'})
                      console.log(eventNameRef);
-
                     }
                    else{
                       setTabValue(0)
@@ -176,27 +175,14 @@ const NewEventPage=()=>{
         };
 
         const saveProductionEvent = async () =>{
-          setReqestStatus('Production')
+          setSaevNewEventReqestStatus('Production')
 
         }
 
    if (status === 'loading'  || isLoading  ) {
 
-    return (
-     <Backdrop
-        sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 , padding:10 , background:grey[200]})}
-        open={isLoading}
-       >
-         <Flex width={"100%"} alignItems={'center'}>
-            <LinearBufferLoading/>
-           <Typography variant='h4'  >שמור: אירוע חדש...</Typography>
-           <Typography> כותרת :  {infoFileds.eventName}</Typography>
-          </Flex>
-    </Backdrop>
-    )
-  
-
-        }
+      return <LoadingScreen text={loadingScrenText} />
+   }
         
 
    return (
@@ -205,8 +191,8 @@ const NewEventPage=()=>{
      <meta name="viewport" content="width=device-width, user-scalable=no"/>
     </Head>
     <AdminLayout>
-      <TabsEroorsContext.Provider value={{findValidationEroor}}>
-      <TabsPageContext.Provider value={{tabValue,setTabValue, isLoading, setIsLoading}}>
+      <TabsEroorsContext.Provider value={{newEventValidateFiled}}>
+      <TabsPageContext.Provider value={{tabValue,setTabValue, isLoading, setIsLoading, SaevNewEventReqestStatus, setSaevNewEventReqestStatus ,loadingScrenText ,setLoadingScrenText }}>
       <TabInfoContext.Provider value={{infoFileds,setInfoFileds}}>
       <TabsTickets.Provider  value={{tickets ,setTickets}} >
           <TabsWraper eventNameRef={eventNameRef} />
@@ -234,8 +220,7 @@ const NewEventPage=()=>{
               
               />
 
-
-    </AdminLayout>
+   </AdminLayout>
         </>
 ) 
 }

@@ -19,6 +19,7 @@ import { blue, grey } from '@mui/material/colors';
 
 import { DrawerLinkType, ItemPropsType } from './admin-drawer-types';
 import { useRouter } from 'next/router';
+import { RiDraftFill } from 'react-icons/ri';
 
 const DRAWER_OPEN_WIDTH = 200;
 
@@ -32,7 +33,7 @@ export default function TemporaryDrawer() {
   const links :DrawerLinkType[]  = [
     {text:'ראשי' , Icon:<FcHome size={"1.5em"} /> , link:"/admin" },
     {text:'צור אירוע' , Icon:<FcPuzzle size={"1.5em"} /> , link:"/admin/new-event", },
-    {text:"טיוטות",Icon:<FcExpired size={"1.5em"}/> , link:"/admin/drafts",},
+    {text:"טיוטות",Icon:<RiDraftFill size={"1.5em"} color={theme.palette.warning.main} /> , link:"/admin/drafts",},
     {text:"סטטיסטיקה", Icon:<FcBullish size={"1.5em"} />,link:"/admin/statistics"},
     {text:'אירועים ' , Icon:<FcDataSheet size={"1.5em"} /> , link:"/admin/events" },
     {text:"מימוש כרטיסים",Icon:<FcFilingCabinet size={"1.5em"}  />,link:"/admin/ticket-actions"},

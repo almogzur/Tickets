@@ -5,9 +5,9 @@ import { CSSProperties, useContext, useEffect, useMemo } from "react"
 import { TextFieldVariants, Typography, useTheme , Stack as Flex, TextFieldProps  } from "@mui/material"
 import { FcAbout } from "react-icons/fc"
 
-import  ControledLabel  from "@/components/gen/controled-form-label"
+import  ControledLabel  from "@/components/gen/TeextFiledWrpa/controled-form-label"
 import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
-import ControledHelperText from "../controled-helper-text"
+import ControledHelperText from "../TeextFiledWrpa/controled-helper-text"
 
 
 
