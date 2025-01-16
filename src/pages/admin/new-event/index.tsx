@@ -35,8 +35,8 @@ import { TheaterMultiTipeInfoType, Positions, TheaterTipinfoType, RefsType } fro
 /////// Use Context 
 import WidthContext from '@/context/WidthContext'
 import { MdPublic } from 'react-icons/md'
-import LinearBufferLoading from '@/components/gen/lineare-buffer-loading'
-import { grey } from '@mui/material/colors'
+
+
 import LoadingScreen from '@/components/gen/loading'
 
 
@@ -57,8 +57,6 @@ const NewEventPage=()=>{
            ClickHendler:(e:React.MouseEvent<HTMLDivElement>)=>{saveProductionEvent()} 
          },
          ];
-
-
         //Global State 
 
         const [tabValue, setTabValue] = useState(0);
@@ -66,6 +64,8 @@ const NewEventPage=()=>{
         const router = useRouter()
         const theme = useTheme()
         const {data: session ,status ,update} = useSession()
+
+        const sessionStatus = status
 
         // Page State 
         ///////////////////
@@ -179,13 +179,13 @@ const NewEventPage=()=>{
 
         }
 
-   if (status === 'loading'  || isLoading  ) {
+      if (sessionStatus === 'loading'  || isLoading  ) {
 
       return <LoadingScreen text={loadingScrenText} />
-   }
+      }
         
 
-   return (
+      return (
     <>
      <Head>
      <meta name="viewport" content="width=device-width, user-scalable=no"/>
@@ -222,7 +222,7 @@ const NewEventPage=()=>{
 
    </AdminLayout>
         </>
-) 
+      ) 
 }
 
 export default NewEventPage

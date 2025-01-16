@@ -5,11 +5,12 @@ import { CSSProperties, useContext } from "react"
 interface ControledLabelType {
     labelPositioin:"top"|"end"
     label:string
-    themeColor?:CSSProperties['color']
+    isLabelBold?:boolean
+    labelTextcolor:CSSProperties['color']
 
 
 }
- const ControledLabel =({labelPositioin,label }:ControledLabelType)=>{
+ const ControledLabel =({labelPositioin,label ,isLabelBold  ,labelTextcolor}:ControledLabelType)=>{
     const theme = useTheme()
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
 
@@ -25,7 +26,9 @@ interface ControledLabelType {
                 [ {   
                  width:labelPositioin==="end"? fullWidth*0.11 : fullWidth,
                  color:error? "red" : color?theme.palette[`${color}`].main : null,
-                  
+
+                 fontWeight: isLabelBold? "bold": null,
+
                   },
                  variant==="outlined"&&
                   {
@@ -43,6 +46,8 @@ interface ControledLabelType {
                  {
                   width:labelPositioin==="end"? fullWidth*0.11 : fullWidth,
                   color:error? "red":undefined,
+                  fontWeight: isLabelBold? "bold": null,
+
                  },
                  variant==="outlined"&&
                  {
@@ -58,11 +63,12 @@ interface ControledLabelType {
                 :
                 {
                  width:fullWidth,
-      
+                 fontWeight: isLabelBold? "bold": null,
                  fontSize:!sm? 14:18,
                  position:"relative",
                  opacity:1,
-                
+                 color:labelTextcolor?? null
+                 
                  }
                 }
             >

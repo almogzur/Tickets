@@ -28,51 +28,76 @@ type HTMLInputTypes =
   | "week";
 
 
-  export type MultilineProps = {
-    isMultiline: true;
-    rows: number;
-  };
+
   
-  export type SingleLineProps = {
-    isMultiline?: false;
-    rows?: never;
-  };
 
-  export type InputWrapType = ( MultilineProps | SingleLineProps) & BaseInputProps;
+  export type InputWrapPropsType =  {
 
-  export type BaseInputProps =  {
-    stateName?:string // the name of the state to update in the event 
+  /** Requierd Fileds  */    
+    
     label:string
     value:string|number|undefined
     onChangeHndler:ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement|HTMLSelectElement>
-    textColorStateFocused?:CSSProperties['color']
-    textColorStateFilled?:CSSProperties['color']    
-    textColor?:CSSProperties['color']
-    hoverColor?:CSSProperties['color']
-    inputType?: HTMLInputTypes
-    isRequired?:boolean
-    bg?:CSSProperties['color']
-    variant?:TextFieldVariants
-    Fgrow?:number
-    error?:boolean
-    m?:number|"auto"
     helpText:string
-    helpTextPotionsEnd?:boolean
-    isDisabled?:boolean
-    customStyle?:CSSProperties
-    icon?:ReactNode
-    labelPositioin:"top"|"end"
-    ref?:RefObject<HTMLInputElement>
-    isFullWidth?:boolean
-    styles?:CSSProperties
+
+  /** util  */
+     inputType?: HTMLInputTypes
+     isRequired?:boolean
+     error?:boolean
+     isDisabled?:boolean
+     ref?:RefObject<HTMLInputElement>
+     icon?:ReactNode
+
+  // if provided alone will use lable and place holder 
+     placeholder?:string
+     placeholderStyle?:CSSProperties
+
+  // if provided will remove label and only display placeholder 
+     placeholderMode?:boolean
+
+  /** !!! this is extiontion for Text-atea-wrap . if you chanfe this also change the ref wraper  */
+     multiline?: true;
+     rows?: number;
+  /** !!! this is extiontion for Text-atea-wrap . if you chanfe this also change the ref wraper  */
+
+ 
+     /** Styles Options  */
+
+     styles?:CSSProperties
+
+      /*Labels*/
+      isLabelBold?:boolean
+      labelTextcolor?:CSSProperties['color']
+      
+
+      isValueBold?:boolean
+      valueTextColor?:CSSProperties['color']
+
+
+     hoverColor?:CSSProperties['color']
+     bg?:CSSProperties['color']
+
+     variant?:TextFieldVariants
+     Fgrow?:number
+     m?:number|"auto"
+    
+
+     
+    
+    /**   Style Positions */
+     helpTextPotionsEnd?:boolean
+     labelPositioin?:"top"|"end"
+
+
+
+     stateName?:string // the name of the state to update in the event 
+  
   }
 
 
 const InputWrap = ({
      inputType,
      label,
-     textColor,
-     textColorStateFilled,
      value, 
      onChangeHndler,
      isRequired,
@@ -85,20 +110,25 @@ const InputWrap = ({
      helpText,
      helpTextPotionsEnd,
      isDisabled,
-     customStyle,
      hoverColor,
      icon,
      labelPositioin,
      ref,
-     isMultiline,
+     styles,
      rows,
-     styles
-
+     multiline,
+     placeholder,
+     placeholderMode,
+     isLabelBold,
+     placeholderStyle,
+     valueTextColor,
+     isValueBold,
+     labelTextcolor
      
-    }:InputWrapType)=>{
+    }:InputWrapPropsType)=>{
 
 
-    return   (
+    return(
      
     
      <TextField
@@ -106,10 +136,10 @@ const InputWrap = ({
       flexGrow: Fgrow ?? null,
       bgcolor: bg,
       m: m ? m : 0.5,
-      ...customStyle,
       '&:hover': {
         backgroundColor: hoverColor,
       },
+      "& .MuiInputBase-input::placeholder":placeholderStyle
     }}
       id={label}
       type={inputType} //defult to text
@@ -120,12 +150,14 @@ const InputWrap = ({
       name={stateName}
       helperText={helpText && <ControledHelperText text={helpText} helpTextPotionsEnd={helpTextPotionsEnd??false} />}
       variant={variant ?? 'standard'}
-      label={<ControledLabel labelPositioin={labelPositioin} label={label} />}
+      label={ placeholderMode ? null : <ControledLabel labelPositioin={labelPositioin?? "top"} label={label} isLabelBold={isLabelBold} labelTextcolor={labelTextcolor}/>}
       error={error}
       ref={ref}
-      rows={rows}
-      multiline={isMultiline}
       style={{...styles}}
+      multiline={multiline}
+      rows={rows}
+      placeholder={placeholder} // string can't extedn with ReactNode in SxProps
+      slotProps={{input:{placeholder,style:{fontWeight:isValueBold?"bold":undefined, color:valueTextColor}}}}
      />
      
     

@@ -31,10 +31,9 @@ export default function TemporaryDrawer() {
   const router = useRouter()
   
   const links :DrawerLinkType[]  = [
-    {text:'ראשי' , Icon:<FcHome size={"1.5em"} /> , link:"/admin" },
+    {text:"סטטיסטיקה", Icon:<FcBullish size={"1.5em"} />,link:"/admin/statistics"},
     {text:'צור אירוע' , Icon:<FcPuzzle size={"1.5em"} /> , link:"/admin/new-event", },
     {text:"טיוטות",Icon:<RiDraftFill size={"1.5em"} color={theme.palette.warning.main} /> , link:"/admin/drafts",},
-    {text:"סטטיסטיקה", Icon:<FcBullish size={"1.5em"} />,link:"/admin/statistics"},
     {text:'אירועים ' , Icon:<FcDataSheet size={"1.5em"} /> , link:"/admin/events" },
     {text:"מימוש כרטיסים",Icon:<FcFilingCabinet size={"1.5em"}  />,link:"/admin/ticket-actions"},
     {text:"קופאי",Icon:<IoTicketSharp size={"1.5em"} color={blue[700]}  /> , link:"/admin/regester"},
@@ -45,7 +44,7 @@ export default function TemporaryDrawer() {
   const translatePathToHeb =( path : string ):string=>{
     console.log(path);
     switch(path){
-      case "/admin": return "אדמין ראשי" ;
+      case "/admin": return "ראשי" ;
       break;
       case "/admin/new-event": return "צור אירוע" ;
       break;
@@ -78,7 +77,7 @@ export default function TemporaryDrawer() {
 
   return (
     <>
-    <nav dir='rtl' style={{ height:60 , background:"black" , display:"flex", flexDirection:"row"  , }   }  >
+    <nav dir='rtl' style={{ height:60 , background:"black" , display:"flex", flexDirection:"row"  , }   }  >8
       <Flex direction={"row"} alignItems={'center'}>
         <FcPrevious size={'1.5em'}  onClick={toggleDrawer(true)} style={{padding:10 , margin:10 , cursor:'pointer'}}/>
         <Typography variant='h6' sx={{color:"#ddd"}}>{translatePathToHeb(router.pathname)}</Typography>

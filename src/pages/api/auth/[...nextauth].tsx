@@ -2,6 +2,16 @@ import NextAuth, { User } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import client from '@/lib/DB/CRUD_Calls_Mongo'
 import { MongoDBAdapter } from "@auth/mongodb-adapter"
+import { z } from 'zod'
+import { MongoClient } from "mongodb"
+
+const SingInValidationSchema = z.object({
+  name:z.string(),
+  password:z.string(),
+  role: z.union([z.literal("admin"),z.literal("user"),z.literal("")])
+})
+
+export type singInUserType = z.infer<typeof SingInValidationSchema>
 
 
 
@@ -17,35 +27,56 @@ export const authOptions = {
       // You can pass any HTML attribute to the <input> tag through the object.
       id: "credentials",
 
-      credentials: { 
-        id:{ label:"id", type:"text"},
+      credentials:  { 
         name:{ label:"name" , type:"text"},
         password: { label: "password", type: "password" },
+        role: {label:"role", type:"text",} 
       },
+
+
       async authorize(credential, req) {
-        console.log("inv");
+        console.log("Authorize -- invoked");
+
+        const FormValidation = SingInValidationSchema.safeParse(credential)
+
+        if(FormValidation.error?.issues.length){
+           console.log(FormValidation.error.issues);
+          
+              return null 
+        }
         
-       await client.connect()
-       const database = client.db('Ticket'); // Replace 'yourDatabaseName' with your actual database name
-       const collection = database.collection('Admins'); // Replace 'yourCollectionName' with the collection name you want to target
+       const conectionStatus : MongoClient = await client.connect()
+
+          if(!conectionStatus){
+            console.log("No Conection");
+            
+           return null
+     }
+
+
+      const DbName = credential?.role === 'admin' ? "Admins" : "Users" 
+      
+       const database = client.db(DbName); 
+       const collection = database.collection("Active"); // Replace 'yourCollectionName' with the collection name you want to target
 
         // Add logic here to look up the user from the credentials supplied
 
           let DbUser  = await collection.findOne({ "name"  : credential?.name })
            
           if(!DbUser){ 
-            console.log("auth return null from find user");  
+            console.log("auth return null from find user",DbUser);  
             return null 
-          }
+          }          
 
-           if(credential?.password === DbUser.password){
+         if(credential?.password === DbUser.password){
+
             const user = { id:DbUser._id.toString(), name:DbUser.name  }
            // console.log("auth return user session ", user);
             
             return user
            }
-           console.log("auth return bad cerdential");
-           
+
+           console.log("auth return bad cerdential" , );
            client.close()
           
            

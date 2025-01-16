@@ -3,10 +3,10 @@ import { Session } from 'next-auth';
 
 
 
-export const CreateDynamicConnection = async (session?: Session) :Promise<typeof mongoose> => {
+ export const CreateDynamicConnection = async (session?: Session) :Promise<typeof mongoose> => {
   try {
     const connection = await mongoose.connect(process.env.MONGODB_URI as string, {
-      dbName: session?.user?.name ||undefined,
+      dbName:`${session?.user?.name ||undefined}`,
       tls: true,
       ssl: true,
     });
@@ -16,6 +16,8 @@ export const CreateDynamicConnection = async (session?: Session) :Promise<typeof
     throw error;
   }
 };
+
+
 
 export async function disconnectFromDb(): Promise<void> {
   try {

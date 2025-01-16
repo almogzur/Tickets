@@ -196,7 +196,7 @@ const MyApp = ({ Component, pageProps: { nonce, session, ...pageProps } }: AppPr
 return (
 
 
-  <SessionProvider  >
+  <SessionProvider session={session}>
   <ThemeProvider theme={theme}>
   <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='he'  >
   <ClineTransformContext.Provider value={{ClientMapPositions ,setClientMapPositions}}>

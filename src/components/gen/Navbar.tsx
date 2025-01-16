@@ -33,9 +33,13 @@ const theme = useTheme()
    
           <Button variant='contained'  
             sx={{ height:50 ,m:2,bgcolor:theme.palette.secondary.main}} 
-            onClick={()=>{router.push("/auth/singin")}}
+
+            onClick={()=>{
+              const path = session?.user?.name ? "/admin" : "/auth/singin"
+              router.push( path )
+              }}
 >
-            <Typography variant='subtitle2' >התחברות למערכת </Typography>
+            <Typography variant='subtitle2' >{session?.user?.name ?? "התחברות למערכת "}</Typography>
 
             
 

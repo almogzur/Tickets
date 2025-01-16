@@ -18,17 +18,17 @@ const ColumnB = Flex
         <Flex direction={!xs? 'column': "row"} justifyContent={"center"} >
 
         <ColumnA p={1}  width={!xs? undefined: "50%"} alignItems={"center"} >
-        <SwitchWithTextWrap variant='outlined' mainText={""} subText={""} switchValue={false} switchOnChangeHendler={()=>{}} switchWrpaerSize='large' />
-        <SwitchWithTextWrap variant='outlined' mainText={""} subText={""} switchValue={false} switchOnChangeHendler={()=>{}}/>
-        <SwitchWithTextWrap  variant='outlined' mainText={""} subText={""} switchValue={false} switchOnChangeHendler={()=>{}}/>
+        <SwitchWithTextWrap variant='outlined'  mainText={"  טקסט ראשי"} subText={"טקסט משני טקסט משניטקסט משניטקסט משניטקסט משני  "} switchValue={now} switchOnChangeHendler={()=>{setNow(!now)} } />
+        <SwitchWithTextWrap variant='outlined'  mainText={"  טקסט ראשי"} subText={"טקסט משני טקסט משניטקסט משניטקסט משניטקסט משני  "} switchValue={now} switchOnChangeHendler={()=>{setNow(!now)} } />
+        <SwitchWithTextWrap variant='outlined'  mainText={"  טקסט ראשי"} subText={"טקסט משני טקסט משניטקסט משניטקסט משניטקסט משני  "} switchValue={now} switchOnChangeHendler={()=>{setNow(!now)} } />
 
          <SwitchWithTextWrap variant='outlined'  mainText={"  טקסט ראשי"} subText={"טקסט משני טקסט משניטקסט משניטקסט משניטקסט משני  "} switchValue={now} switchOnChangeHendler={()=>{setNow(!now)} } />
     
         </ColumnA>
         <ColumnB p={1}  width={!xs? undefined: "50%"}  alignItems={"center"}  >
-        <SwitchWithTextWrap variant='outlined'  mainText={" "} subText={" "} switchValue={now} switchOnChangeHendler={()=>{setNow(!now)} } />
-        <SwitchWithTextWrap variant='outlined'  mainText={"  גדשגדשגגשדגשדגדשגשדגשדגד ראשי"} subText={"טקסט משני טקסט משניטקסט משניטקסט משניטקסט משני  "} switchValue={now} switchOnChangeHendler={()=>{setNow(!now)} } />
-        <SwitchWithTextWrap variant='outlined'  mainText={"  גדשגשדגשדגדשגשד ראשי"} subText={"טקסט משני טקסט משניטקסט משניטקסט משניטקסט משני  "} switchValue={now} switchOnChangeHendler={()=>{setNow(!now)} } />
+        <SwitchWithTextWrap variant='outlined'  mainText={"  טקסט ראשי"} subText={"טקסט משני טקסט משניטקסט משניטקסט משניטקסט משני  "} switchValue={now} switchOnChangeHendler={()=>{setNow(!now)} } />
+        <SwitchWithTextWrap variant='outlined'  mainText={"  טקסט ראשי"} subText={"טקסט משני טקסט משניטקסט משניטקסט משניטקסט משני  "} switchValue={now} switchOnChangeHendler={()=>{setNow(!now)} } />
+        <SwitchWithTextWrap variant='outlined'  mainText={"  טקסט ראשי"} subText={"טקסט משני טקסט משניטקסט משניטקסט משניטקסט משני  "} switchValue={now} switchOnChangeHendler={()=>{setNow(!now)} } />
         <SwitchWithTextWrap variant='outlined'  mainText={"  טקסט ראשי"} subText={"טקסט משני טקסט משניטקסט משניטקסט משניטקסט משני  "} switchValue={now} switchOnChangeHendler={()=>{setNow(!now)} } />
     
         </ColumnB>    

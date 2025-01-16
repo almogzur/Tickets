@@ -10,24 +10,24 @@ import { Cancel, Delete, Edit, Save } from '@mui/icons-material';
 
 
 const rowsData :GridRowsProp = [
-  { id: 1, lastName: 'אלמוג', firstName: 'Jon', age: 14 },
-  { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 31 },
-  { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 31 },
-  { id: 4, lastName: 'Stark', firstName: 'Arya', age: 11 },
-  { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-  { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-  { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-  { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-  { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
+  { id: 1, eventName: 'אלמוג', date: 'Jon', price: 14 },
+  { id: 2, eventName: 'Lannister', date: 'Cersei', price: 31 },
+  { id: 3, eventName: 'Lannister', date: 'Jaime', price: 31 },
+  { id: 4, eventName: 'Stark', date: 'Arya', price: 11 },
+  { id: 5, eventName: 'Targaryen', date: 'Daenerys', price: null },
+  { id: 6, eventName: 'Melisandre', date: null, price: 150 },
+  { id: 7, eventName: 'Clifford', date: 'Ferrara', price: 44 },
+  { id: 8, eventName: 'Frances', date: 'Rossini', price: 36 },
+  { id: 9, eventName: 'Roxie', date: 'Harvey', price: 65 },
 
 ];
 
 
 
 const columns: GridColDef[] = [
-    { field: 'lastName', headerName: 'תור 1', align:'right' , width: 150  },
-    { field: 'firstName', headerName: 'תור 2', align:'right', width: 150 },
-    { field: 'age', headerName: 'תור 3', align:'right', width: 150 },
+    { field: 'eventName', headerName: 'שם', align:'right' , width: 150  },
+    { field: 'date', headerName: 'תאריך', align:'right', width: 150 },
+    { field: 'price', headerName: 'מחיר', align:'right', width: 150 },
     //{
     //    field: 'actions',
     //    type: 'actions',

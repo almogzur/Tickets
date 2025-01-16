@@ -21,19 +21,22 @@ export default function ControledHelperText ({text , helpTextPotionsEnd}:Control
       height:0,
       m:0,
       mx:helpTextPotionsEnd ? 0:  -2,
-      color:theme.palette.error.dark
+      color:theme.palette.error.dark,
+
        
   }
   const standardStyle : SxProps = {
       m:0,
       textAlign: helpTextPotionsEnd ? "end":  "start",
-      color:theme.palette.error.dark
+      color:theme.palette.error.dark,
+
   }
   const filledStyle : SxProps = {
       textAlign: helpTextPotionsEnd ? "end":  "start",
       m:0 ,
       mx:-1.6,
-      color:theme.palette.error.dark
+      color:theme.palette.error.dark,
+
   }
 
     

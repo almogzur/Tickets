@@ -12,12 +12,16 @@ import Typography from '@mui/material/Typography';
 import {useGetEvents} from '../services/events'
 import { Event } from '../constants/models/Events';
 import ClientLayout from '../Layouts/client-layout';
+import { useSession } from 'next-auth/react';
 
 
 
-export default function Home({nonce}:{nonce:string}) {
+export default function Home() {
+
+
 
   const { events, isLoading, isError } = useGetEvents();
+  
 
   const MoviesList = () => {
     if (events) {
@@ -61,7 +65,6 @@ export default function Home({nonce}:{nonce:string}) {
     <  >
       <Head >
         <title>הזמנות כרטיסים  | בית</title>
-
       </Head>
 
       <ClientLayout>

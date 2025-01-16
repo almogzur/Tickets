@@ -1,5 +1,5 @@
 import { FormControl, FormHelperText, InputLabel, MenuItem, Select, SelectChangeEvent, SxProps, TextFieldVariants, Typography, useFormControl, useTheme } from "@mui/material"
-import {  CSSProperties, ReactElement, useContext, useState } from "react"
+import {  CSSProperties, ReactElement, useContext, useEffect, useState } from "react"
 
 import WidthContext from "@/context/WidthContext";
 import ControledHelperText from "./TeextFiledWrpa/controled-helper-text";
@@ -12,27 +12,46 @@ interface SelectIemType {
   }
 
 interface SelectWrapType {
+   
+  /** Required Items  */
+
+    label:string
     items:SelectIemType[]
     value:string,
     changeHndler:(event: SelectChangeEvent<any>) => void
-    styles?:CSSProperties
-    label:string
+    helpText:string
+    
+    /** Util  */
+    isError?:boolean
     icon?:ReactElement<any>
+
+
+
+    /** Style */
     variant?:TextFieldVariants
-    labelPositioin:"top"|"end"
-    isShrinkTitelBold?:boolean
+    styles?:CSSProperties
+
+    //Value 
     isValueBold?:boolean
+    valueColor?:CSSProperties['color']
+
+
+    //Label
+    labelColor?:CSSProperties["color"]
+    isLabelBold?:boolean
+
+    // Item list 
     isListItemBold?:boolean
-    isTitelBold?:boolean
+
     Fgrow?:number
     hoverColor?:CSSProperties['color']
     m?:number|"auto"
     bg?:CSSProperties['color']
-    helpText:string
-    helpTextPotionsEnd?:boolean
-    error?:boolean
 
-    
+    /** Labels - Style Positions */
+    labelPositioin:"top"|"end"
+    helpTextPotionsEnd?:boolean
+
 }
 
 const SelectWrap = ({ 
@@ -48,16 +67,21 @@ const SelectWrap = ({
     variant,
     labelPositioin,
     value,
-    isShrinkTitelBold,
     isListItemBold,
     isValueBold,
-    isTitelBold,
+    isLabelBold,
     Fgrow ,
     helpTextPotionsEnd,
-    error
+    isError,
+    valueColor,
+    labelColor
+
+    
     }:SelectWrapType)=>{
 
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
+
+
 
 
 const theme = useTheme()
@@ -66,53 +90,60 @@ const theme = useTheme()
               <InputLabel 
               
               sx={{ 
-                 "&.MuiInputLabel-root":{
+                color:labelColor?? "black",
+                fontWeight:isLabelBold ? 'bold': null, 
+                fontSize:!sm? 14:18,
+
+
+                "&.MuiInputLabel-root":{
                   width: "100%" ,
                   direction:"ltr",
                   display:"flex",
                   justifyContent:"end",
                   top:2,
-                  fontSize:!sm? 14:18,
-                  color:"black",
                   mx:-0.5,
-                  fontWeight:isTitelBold ? 'bold': null
+                  
                 },
-                 "&.MuiInputLabel-shrink":{ 
-                    width: 
-                        labelPositioin === "top" ? "130%" 
-                        :
-                        labelPositioin === "end" ? 130 
-                        :
-                        null,
-                    top: 
-                       labelPositioin === "top" && variant ==="outlined" ? 15  
-                       :
-                       labelPositioin === "top" && variant !=="outlined" ? 2
-                       :  
-                       labelPositioin === "end" && variant ==="outlined" ? 13
-                       :
-                       labelPositioin === "top" && variant !=="outlined"? 2
-                      :null,
-                      fontWeight: isShrinkTitelBold ? "bold" : 400,
-                      mx:labelPositioin === 'top'? 0 : -1
-                   
 
-                },
+                 "&.Mui-focused":{ 
+                  width: 
+                     labelPositioin === "top" ? "130%" 
+                     :
+                     labelPositioin === "end" ? 130 
+                     :
+                    null,
+                 top: 13,
+                 mx:labelPositioin === 'top'? 0 : -1 ,
+                 fontWeight:isLabelBold ? 'bold': null, 
+        
+                 },
+                  "&.MuiFormLabel-filled":{
+                    width: 
+                       labelPositioin === "top" ? "130%" 
+                        :
+                       labelPositioin === "end" ? 130 
+                        :
+                       null,
+                   top: 13,
+                   mx:labelPositioin === 'top'? 0 : -1 ,
+ 
+                  }
+                
+
              }}
               >
                 {label}
               </InputLabel>  
 
-               <Select
-                error={error}
+              <Select
                value={value??""}
-               onChange={changeHndler }
+               onChange={changeHndler}
                variant={ variant}
                endAdornment={labelPositioin === "top" ? icon : null}
                startAdornment={labelPositioin === "end"?   icon : null}
-               label={label}      
+               label={label}
                // selected item 
-               style={{ fontWeight: isValueBold ? "bold" : undefined, ...styles,fontSize: !sm? 14:18,  }} 
+               style={{ fontWeight: isValueBold ? "bold" : undefined, ...styles, color:valueColor  }} 
                sx={{ 
                    // add icon postion add option baced on top and end titile postions
                    flexGrow:Fgrow?? null,
@@ -130,7 +161,7 @@ const theme = useTheme()
                      backgroundColor:hoverColor ,
                     },
                     ".MuiInputBase-input":{textAlign:"start",mx:-2},
-                    
+
            
                  }}
                >
@@ -174,7 +205,7 @@ export function SelectHelpText ({helpText,helpTextPotionsEnd}:SelectHelpTextType
       textAlign: helpTextPotionsEnd? "end": "start",
       height:0,
       m:0,
-      mx:helpTextPotionsEnd ? 0:  -2,
+      mx:helpTextPotionsEnd ? 0:-2,
       color:theme.palette.error.dark
        
   }
@@ -224,7 +255,7 @@ export function SelectHelpText ({helpText,helpTextPotionsEnd}:SelectHelpTextType
         :
       variant === "filled"?filledStyle
         :
-        variant==="standard"?
+     variant==="standard"?
         standardStyle
         :
       null

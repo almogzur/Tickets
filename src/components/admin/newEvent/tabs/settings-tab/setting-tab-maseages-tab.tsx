@@ -1,4 +1,5 @@
 import InputWrap from "@/components/gen/TeextFiledWrpa/input-wrap";
+import TextAreaWrap from "@/components/gen/TeextFiledWrpa/text-area-wrap";
 import WidthContext from "@/context/WidthContext";
 import { Container, Stack as Flex } from '@mui/material'
 import { useContext, useState } from "react";
@@ -20,38 +21,38 @@ return (
 
       <ColumnA direction={!xs?"column":"row"}   >
 
-      <InputWrap
+      <TextAreaWrap
            variant='outlined'
            label={"הודעה 1 "}
            value={x}
            onChangeHndler={(e) => { setX(e.target.value) } }
            labelPositioin={"top"} 
            helpText={""} 
-           isMultiline
+           multiline
            rows={6}
            Fgrow={1}
  
           />
-         <InputWrap
+         <TextAreaWrap
            variant='outlined'
            label={"הודעה 2 "}
            value={x}
            onChangeHndler={(e) => { setX(e.target.value) } }
            labelPositioin={"top"} 
            helpText={"kjhgkj"} 
-           isMultiline
+           multiline
            rows={6}
            Fgrow={1}
       
           />
-         <InputWrap
+         <TextAreaWrap
            variant='outlined'
            label={"הודעה 2 "}
            value={x}
            onChangeHndler={(e) => { setX(e.target.value) } }
            labelPositioin={"top"} 
            helpText={"kjhgkj"} 
-           isMultiline
+           multiline
            rows={6}
            Fgrow={1}
 
@@ -60,25 +61,25 @@ return (
       
       <ColumnB direction={!xs?"column":"row"}   >
      
-        <InputWrap
+        <TextAreaWrap
            variant='outlined'
            label={"הודעה 3 "}
            value={x}
            onChangeHndler={(e) => { setX(e.target.value) } }
            labelPositioin={"top"} 
            helpText={""} 
-           isMultiline
+           multiline
            rows={6}
            Fgrow={1}
           />
-        <InputWrap
+        <TextAreaWrap
            variant='outlined'
            label={"הודעה 4 "}
            value={x}
            onChangeHndler={(e) => { setX(e.target.value) } }
            labelPositioin={"top"} 
            helpText={""} 
-           isMultiline
+           multiline
            rows={6}
            Fgrow={1}
           />

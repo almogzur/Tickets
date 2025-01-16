@@ -23,8 +23,8 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse<R
   }
 
   if (!session) {
-    console.log(API_NAME, 'Your Shell Not Pass');
-    return res.status(401).json({ message: 'Your Shell Not Pass' });
+    console.log(API_NAME, 'You Shell Not Pass');
+    return res.status(401).json({ message: 'You Shell Not Pass' });
   }
 
  const connectionStatus = await CreateDynamicConnection(session)
@@ -37,13 +37,13 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse<R
      const doc = new TempModel({...body.infoFileds,...body.tickets}) // Pass body to the model
      const result =   await doc.save(); // Save to the database
 
-      if(result instanceof mongoose.Error){
-          console.log("Doc Err");
+      if(result.errors){
+          console.log("Doc Err",result.errors);
           res.status(400).json({ message: 'Save Err' });
       }
     console.log("saved new modle",result);
     
-    res.status(200).json({ message: 'Hello from Next.js!' });
+    res.status(200).json({ message: "Saved New Modle" });
   }
   else{
       console.log("no db");

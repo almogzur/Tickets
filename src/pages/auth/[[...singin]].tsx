@@ -1,11 +1,15 @@
 import { signIn, useSession } from 'next-auth/react'
-import {ChangeEventHandler, FormEvent, useEffect,useState} from 'react'
+import {ChangeEvent, ChangeEventHandler, FormEvent, useEffect,useState} from 'react'
 import { useRouter } from 'next/router'
-import { Stack as Flex , Box, Typography, FormControl, InputLabel , TextField, Paper, Button, Container, Alert } from '@mui/material'
+import { Stack as Flex , Box, Typography, FormControl, InputLabel , TextField, Paper, Button, Container, Alert, SelectChangeEvent } from '@mui/material'
 import Image from 'next/image'
 import Logo from '../../../public/logo.png'
 import { useTheme } from '@mui/material/styles';
 import { MdOutlineCancelPresentation } from "react-icons/md";
+import InputWrap from '@/components/gen/TeextFiledWrpa/input-wrap'
+import SelectWrap from '@/components/gen/select-wrap'
+import TextAreaWrap from '@/components/gen/TeextFiledWrpa/text-area-wrap'
+import { singInUserType } from '../api/auth/[...nextauth]'
 
 
 interface errorMessagesType{
@@ -28,9 +32,10 @@ export default function SingInPage(){
   };
 
  
-  const [ formData ,setFormData ] = useState({
+  const [ formData ,setFormData ] = useState<singInUserType>({
     name:"",
-    password:""
+    password:"",
+    role:""
   })
 
 
@@ -39,16 +44,13 @@ export default function SingInPage(){
     console.log(e);
     
 
-    signIn('credentials' ,{ name: formData.name, password: formData.password ,callbackUrl:"/admin" }  )}
-
-  const handleChange = (e:FormEvent<HTMLInputElement | HTMLTextAreaElement> ) => {
+    signIn(
+      'credentials' ,
+      { name: formData.name, password: formData.password , role:formData.role ,callbackUrl:"/admin" },
     
-     const {name, value } = e.currentTarget
-      setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-      }));
-  };
+      )}
+
+
 
 //     if (status === 'loading') {
 //      return <h1 style={{textAlign:'center'}}>Loading...</h1>
@@ -71,8 +73,13 @@ return (
           />
        
 
-          <Typography p={2}  color={theme.palette.secondary.main} 
- textAlign={"center"}  variant='h3' > התחברות למערכת </Typography>
+          <Typography 
+              p={2}  
+              color={theme.palette.secondary.main} 
+              textAlign={"center"} 
+              variant='h3' >
+                התחברות למערכת 
+           </Typography>
 
            <Flex direction={'row'} justifyContent={"center"} >
              <Image src={Logo} height={0} width={0}  alt=""></Image>
@@ -84,43 +91,56 @@ return (
          <Flex direction={"row"} justifyContent={"center"}   >
 
              <Flex>
-               <TextField 
-                name='name'
-                placeholder='שם משתמש'
-                 variant='outlined' 
-                 
-                 
-              
-                 value={formData.name}
-                 onChange={handleChange}
-                  required={true}
-                 sx={{
-                  direction:"rtl",
-                   m:1,
-                   
-                
-                 '& .MuiInputBase-input':{ fontWeight:900 , width:"210px" , },
-                 '& .MuiInputBase-input::placeholder': {color: theme.palette.secondary.main , opacity:0.8},
-                }}
+               <InputWrap 
+      
+                  placeholder='שם משתמש'
+                  variant='outlined'
+                  value={formData.name} 
+                  label={'שם משתמש '} 
+                  onChangeHndler={(e)=>{setFormData(p=>({...p,name:e.target.value}))} } 
+                  helpText={''}        
+                  isLabelBold
+                  
+                  
+                  isValueBold
+                  
+                  
+                  placeholderStyle={{color:theme.palette.primary.main,fontWeight:"bold", opacity:1}}
                />
 
-               <TextField 
-               name='password'
-               placeholder='סיסמה'
-               variant='outlined' 
-               color='info' 
-               type='password'
-               value={formData.password}
-               onChange={handleChange}
-               required
-               sx={{ direction:"rtl" , m:1,
-                '& .MuiInputBase-input':{ fontWeight:900 ,},
-                '& .MuiInputBase-input::placeholder': {color: theme.palette.secondary.main , opacity:0.8},
-               }}
+                 <InputWrap  
+                  value={formData.password} 
+                  onChangeHndler={(e)=>{setFormData(p=>({...p,password:e.target.value}))}}
+                  inputType='password'
+                  variant='outlined'
+                  label={'סיסמה'} 
+                   helpText={''} 
+                   isLabelBold
+
+                  placeholder={'סיסמה'}
+                  placeholderStyle={{color:theme.palette.primary.main,fontWeight:"bold", opacity:1}}
+                   
+                     />
+
+              <SelectWrap 
+                  label={'אפשריות התחברות'}  
+                  items={[{value:"admin",label:"מנהל מערכת"},{value:"user",label:"משתמש"}]}
+                  value={formData.role}
+                  changeHndler={(e)=>{setFormData(p=>({...p,role:e.target.value}))} } 
+                  labelPositioin={'top'}
+                  helpText={''}
+                  isValueBold
+                  isLabelBold
+
+                  
+    
+                  
                  />
-             </Flex>
+          
+               </Flex>
 
           </Flex>
+          {/* !!!!!!! text new p;lace holder // aply changfets go select  */}
 
 
             <Flex direction={'row'} justifyContent={"center"}  >

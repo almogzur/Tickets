@@ -21,6 +21,10 @@ export function getDynamicModel<T extends unknown>(
          // Return an existing model or create a new one
          return mongoose.models?.collectionName || model<T>(name, Dschema);
 }
+
+
+
+
 export const TicketSchema = new Schema<TicketType>({})
 
 const TempNewEventSchemaDefinition = {
