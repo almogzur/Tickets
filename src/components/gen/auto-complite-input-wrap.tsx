@@ -1,12 +1,11 @@
 import { Autocomplete, MenuItem, TextField, Typography } from "@mui/material";
-import { InputWrapType }  from "./TeextFiledWrpa/input-wrap";
 import ControledLabel from "./TeextFiledWrpa/controled-form-label";
 import { ChangeEvent } from "react";
 import ControledHelperText from "./TeextFiledWrpa/controled-helper-text";
-import { SingleLineProps } from "./TeextFiledWrpa/input-wrap";
+import { InputWrapPropsType } from "./TeextFiledWrpa/input-wrap";
 
 
-interface AutoCompliteInputWrapPropsType  extends Omit<InputWrapType, 'multiline'>    {
+interface AutoCompliteInputWrapPropsType  extends Omit<InputWrapPropsType, 'multiline'>    {
   
     AutocompleteOptionArray:string[]
     
@@ -16,8 +15,7 @@ export default function AutoCompliteInputWrap ({
        AutocompleteOptionArray , 
        inputType,
        label,
-       textColor,
-       textColorStateFilled,
+       labelTextcolor,
        value, 
        onChangeHndler,
        isRequired,
@@ -30,7 +28,6 @@ export default function AutoCompliteInputWrap ({
        helpText,
        helpTextPotionsEnd,
        isDisabled,
-       customStyle,
        hoverColor,
        icon,
        labelPositioin,
@@ -38,7 +35,6 @@ export default function AutoCompliteInputWrap ({
        
        
        
-
          }:AutoCompliteInputWrapPropsType){
     return(    
     <Autocomplete
@@ -49,7 +45,6 @@ export default function AutoCompliteInputWrap ({
           flexGrow: Fgrow ?? null,
           bgcolor: bg,
           m: m ? m : 0.5,
-          ...customStyle,
   
           '&:hover': {
             backgroundColor: hoverColor,
@@ -65,7 +60,6 @@ export default function AutoCompliteInputWrap ({
             sx={{
             flexGrow: Fgrow ?? null,
             bgcolor: bg,
-            ...customStyle,
             '&:hover': {
               backgroundColor: hoverColor,
             },

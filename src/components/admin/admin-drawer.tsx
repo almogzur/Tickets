@@ -42,7 +42,7 @@ export default function TemporaryDrawer() {
   ]
   
   const translatePathToHeb =( path : string ):string=>{
-    console.log(path);
+  //  console.log(path);
     switch(path){
       case "/admin": return "ראשי" ;
       break;

@@ -86,7 +86,7 @@ type HTMLInputTypes =
     
     /**   Style Positions */
      helpTextPotionsEnd?:boolean
-     labelPositioin?:"top"|"end"
+     labelPositioin:"top"|"end"
 
 
 

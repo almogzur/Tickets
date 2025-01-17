@@ -1,12 +1,16 @@
+import assert from 'assert';
 import mongoose from 'mongoose';
 import { Session } from 'next-auth';
 
 
 
- export const CreateDynamicConnection = async (session?: Session) :Promise<typeof mongoose> => {
+ export const CreateConectionFronSesttion = async (session?: Session) :Promise<typeof mongoose> => {
+  
+  assert(session , "sesstion assertion ")
+
   try {
     const connection = await mongoose.connect(process.env.MONGODB_URI as string, {
-      dbName:`${session?.user?.name ||undefined}`,
+      dbName:`${session?.user?.name}_Data`,
       tls: true,
       ssl: true,
     });

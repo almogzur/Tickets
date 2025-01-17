@@ -122,7 +122,7 @@ return(
                     variant='outlined' 
                     helpTextPotionsEnd
                     helpText={newEventValidateFiled("cat")?? ""}
-                    error={newEventValidateFiled("cat")?true:false}
+                    isError={newEventValidateFiled("cat")?true:false}
                 />
      
              </Flex>

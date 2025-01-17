@@ -40,13 +40,17 @@ export default function SingInPage(){
 
 
   const submit = (e: FormEvent<HTMLFormElement> )=>{
-    e.preventDefault();
-    console.log(e);
+   // console.log(e);
     
 
     signIn(
       'credentials' ,
-      { name: formData.name, password: formData.password , role:formData.role ,callbackUrl:"/admin" },
+       {
+       name: formData.name,
+       password: formData.password ,
+       role:formData.role,
+       callbackUrl:"/admin"
+        }
     
       )}
 
@@ -95,31 +99,29 @@ return (
       
                   placeholder='שם משתמש'
                   variant='outlined'
-                  value={formData.name} 
-                  label={'שם משתמש '} 
-                  onChangeHndler={(e)=>{setFormData(p=>({...p,name:e.target.value}))} } 
-                  helpText={''}        
+                  value={formData.name}
+                  label={'שם משתמש '}
+                  onChangeHndler={(e) => { setFormData(p => ({ ...p, name: e.target.value })) } }
+                  helpText={''}
                   isLabelBold
-                  
-                  
+
+
                   isValueBold
-                  
-                  
-                  placeholderStyle={{color:theme.palette.primary.main,fontWeight:"bold", opacity:1}}
-               />
+
+
+                  placeholderStyle={{ color: theme.palette.primary.main, fontWeight: "bold", opacity: 1 }} labelPositioin={'top'}               />
 
                  <InputWrap  
-                  value={formData.password} 
-                  onChangeHndler={(e)=>{setFormData(p=>({...p,password:e.target.value}))}}
+                  value={formData.password}
+                  onChangeHndler={(e) => { setFormData(p => ({ ...p, password: e.target.value })) } }
                   inputType='password'
                   variant='outlined'
-                  label={'סיסמה'} 
-                   helpText={''} 
-                   isLabelBold
+                  label={'סיסמה'}
+                  helpText={''}
+                  isLabelBold
 
                   placeholder={'סיסמה'}
-                  placeholderStyle={{color:theme.palette.primary.main,fontWeight:"bold", opacity:1}}
-                   
+                  placeholderStyle={{ color: theme.palette.primary.main, fontWeight: "bold", opacity: 1 }} labelPositioin={'end'}                   
                      />
 
               <SelectWrap 
@@ -140,11 +142,18 @@ return (
                </Flex>
 
           </Flex>
-          {/* !!!!!!! text new p;lace holder // aply changfets go select  */}
 
 
             <Flex direction={'row'} justifyContent={"center"}  >
-               <Button type='submit'  sx={{bgcolor:theme.palette.secondary.main, color:"#fff" , width:"40%" , height:60 ,fontSize:20, fontWeight:"bold" }}  >התחבר</Button>
+               <Button type='submit'  
+               sx={{
+                  bgcolor:theme.palette.secondary.main, color:"#fff" ,
+                  width:"40%" ,
+                  height:60 ,
+                  fontSize:20,
+                  fontWeight:"bold",
+                 }}  >התחבר
+              </Button>
            </Flex>
 
          </form>

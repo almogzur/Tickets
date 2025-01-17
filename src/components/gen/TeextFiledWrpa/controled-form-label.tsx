@@ -6,7 +6,7 @@ interface ControledLabelType {
     labelPositioin:"top"|"end"
     label:string
     isLabelBold?:boolean
-    labelTextcolor:CSSProperties['color']
+    labelTextcolor?:CSSProperties['color']
 
 
 }

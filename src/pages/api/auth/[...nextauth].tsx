@@ -35,38 +35,46 @@ export const authOptions = {
 
 
       async authorize(credential, req) {
-        console.log("Authorize -- invoked");
+    
+      console.log("Authorize -- invoked");
 
-        const FormValidation = SingInValidationSchema.safeParse(credential)
+      const FormValidation = SingInValidationSchema.safeParse(credential)
 
         if(FormValidation.error?.issues.length){
            console.log(FormValidation.error.issues);
           
               return null 
         }
+        console.log("validation pass");
         
-       const conectionStatus : MongoClient = await client.connect()
+        
+      const conectionStatus : MongoClient = await client.connect()
 
           if(!conectionStatus){
             console.log("No Conection");
             
            return null
-     }
+         }
 
-
-      const DbName = credential?.role === 'admin' ? "Admins" : "Users" 
-      
+       console.log("conected to db");
+       
+       const DbName = credential?.role === 'admin' ? "Admins" : "Users" 
        const database = client.db(DbName); 
        const collection = database.collection("Active"); // Replace 'yourCollectionName' with the collection name you want to target
 
         // Add logic here to look up the user from the credentials supplied
 
+        console.log("looking fot user ");
+        
           let DbUser  = await collection.findOne({ "name"  : credential?.name })
            
           if(!DbUser){ 
             console.log("auth return null from find user",DbUser);  
             return null 
           }          
+
+          console.log(DbUser);
+          
 
          if(credential?.password === DbUser.password){
 

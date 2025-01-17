@@ -107,9 +107,7 @@ interface TicketsTabPropsType {  setTabValue : Dispatch<SetStateAction<number>>}
               setInfoFileds(p=>({...p,TheaterName:e.target.value , Theater:selectTheater(e.target.value) }))} }
              labelPositioin={"top"}
              variant='outlined'
-             isValueBold 
-             isTitelBold
-             
+             isValueBold              
              helpText={""}
              />
          </Flex>
