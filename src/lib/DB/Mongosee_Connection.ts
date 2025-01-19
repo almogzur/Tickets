@@ -4,6 +4,8 @@ import { Session } from 'next-auth';
 
 
 
+// add public adccsess ip for domain
+
  export const CreateConectionFronSesttion = async (session?: Session) :Promise<typeof mongoose> => {
   
   assert(session , "sesstion assertion ")

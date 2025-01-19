@@ -4,6 +4,7 @@ import client from '@/lib/DB/CRUD_Calls_Mongo'
 import { MongoDBAdapter } from "@auth/mongodb-adapter"
 import { z } from 'zod'
 import { MongoClient } from "mongodb"
+import { error } from "console"
 
 const SingInValidationSchema = z.object({
   name:z.string(),
@@ -115,6 +116,7 @@ export const authOptions = {
   },
   pages: {
      signIn: '/auth/signin',
+     error: "/auth/signin"
 },
 // in production set seesstion 2 hours for a re loge
 //session:{

@@ -26,6 +26,7 @@ export default function SingInPage(){
   const {error }  =  router.query
 
   const errorMessages :errorMessagesType  = {
+     error:"שגיאה כללית ",
      Callback: "Error in the OAuth callback handler route.",
      CredentialsSignin: "שם משתמש או סמסמה לא קיימים במערכת ",
      Default: "שגיאה במערכת נסה שנית ",
