@@ -10,7 +10,7 @@ type ResponseData = {
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ResponseData>) {
-  const API_NAME = "Remove Event Image";
+  const API_NAME = "DELETE Event Image";
   console.log(`${API_NAME} - Request Received`);
 
   // Cloudinary Configuration

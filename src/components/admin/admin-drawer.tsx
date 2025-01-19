@@ -77,7 +77,7 @@ export default function TemporaryDrawer() {
 
   return (
     <>
-    <nav dir='rtl' style={{ height:60 , background:"black" , display:"flex", flexDirection:"row"  , }   }  >8
+    <nav dir='rtl' style={{ height:60 , background:"black" , display:"flex", flexDirection:"row"  , }   }  >
       <Flex direction={"row"} alignItems={'center'}>
         <FcPrevious size={'1.5em'}  onClick={toggleDrawer(true)} style={{padding:10 , margin:10 , cursor:'pointer'}}/>
         <Typography variant='h6' sx={{color:"#ddd"}}>{translatePathToHeb(router.pathname)}</Typography>

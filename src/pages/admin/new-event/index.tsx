@@ -130,16 +130,17 @@ const NewEventPage=()=>{
 
           setSaevNewEventReqestStatus('Temp')
             console.log("sending req" ,infoFileds.image);
-            const TempResult =  TempInfoFiledsValidationSchema.safeParse(infoFileds);
+            const ValidationResult =  TempInfoFiledsValidationSchema.safeParse(infoFileds);
 
  
             try {
-              if(TempResult.success){
-                setIsLoading(true)
-                  setTimeout(()=>{setIsLoading(false)},2000)
-              // Make the POST request
-              
-                const response = await axios.post("/api/admin/new-event/save/save-temp-event", { infoFileds,tickets },{} );
+
+              if(ValidationResult.success){
+                   setIsLoading(true)
+                   setTimeout(()=>{setIsLoading(false)},2000)
+                 // Make the POST request
+                 const response = await axios.post("/api/admin/drafts/C/draft", { infoFileds,tickets },{} );
+
               // Handle response
               console.log(response);
               

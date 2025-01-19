@@ -23,7 +23,7 @@ export default function SingInPage(){
   const { data: session ,status ,update } = useSession()
   const theme = useTheme()
 
-  const {error }  =  router.query
+  const { error }  =  router.query
 
   const errorMessages :errorMessagesType  = {
      error:"שגיאה כללית ",
@@ -45,15 +45,15 @@ export default function SingInPage(){
     
 
     signIn(
-      'credentials' ,
-       {
-       name: formData.name,
-       password: formData.password ,
-       role:formData.role,
-       callbackUrl:"/admin"
-        }
-    
-      )}
+      'credentials' ,{
+         name: formData.name,
+         password: formData.password ,
+         role:formData.role,
+         callbackUrl:"/admin"
+        },
+      )
+
+    }
 
 
 
@@ -77,40 +77,37 @@ return (
           style={{margin:5}}
           />
        
-
-          <Typography 
+         <Typography 
               p={2}  
               color={theme.palette.secondary.main} 
               textAlign={"center"} 
               variant='h3' >
                 התחברות למערכת 
-           </Typography>
+         </Typography>
 
-           <Flex direction={'row'} justifyContent={"center"} >
+         <Flex direction={'row'} justifyContent={"center"} >
              <Image src={Logo} height={0} width={0}  alt=""></Image>
-           </Flex>
+         </Flex>
 
          <form onSubmit={e=>{e.preventDefault();  submit(e)}}  >
      
-
          <Flex direction={"row"} justifyContent={"center"}   >
 
-             <Flex>
+            <Flex>
                <InputWrap 
       
                   placeholder='שם משתמש'
                   variant='outlined'
                   value={formData.name}
-                  label={'שם משתמש '}
+                  label={'שם משתמש'}
                   onChangeHndler={(e) => { setFormData(p => ({ ...p, name: e.target.value })) } }
                   helpText={''}
                   isLabelBold
-
-
                   isValueBold
-
-
-                  placeholderStyle={{ color: theme.palette.primary.main, fontWeight: "bold", opacity: 1 }} labelPositioin={'top'}               />
+                  placeholderStyle={ {color: theme.palette.primary.main, fontWeight: "bold", opacity: 1 }} 
+                  labelPositioin={'top'} 
+                  
+                  />
 
                  <InputWrap  
                   value={formData.password}
@@ -120,9 +117,13 @@ return (
                   label={'סיסמה'}
                   helpText={''}
                   isLabelBold
+                  labelPositioin={'top'}        
+                                        
+
+
 
                   placeholder={'סיסמה'}
-                  placeholderStyle={{ color: theme.palette.primary.main, fontWeight: "bold", opacity: 1 }} labelPositioin={'end'}                   
+                  placeholderStyle={{ color: theme.palette.primary.main, fontWeight: "bold", opacity: 1 }}
                      />
 
               <SelectWrap 
@@ -134,15 +135,11 @@ return (
                   helpText={''}
                   isValueBold
                   isLabelBold
+               />
 
-                  
-    
-                  
-                 />
-          
-               </Flex>
+            </Flex>
 
-          </Flex>
+         </Flex>
 
 
             <Flex direction={'row'} justifyContent={"center"}  >

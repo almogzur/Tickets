@@ -34,6 +34,7 @@ interface InfoFormType {
 }
 
 const InfoForm =({eventNameRef}:InfoFormType)=>{
+
   const { data: session ,status ,update} = useSession()
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
   const {infoFileds,setInfoFileds}= useContext(TabsInfoContext)
@@ -46,20 +47,33 @@ const InfoForm =({eventNameRef}:InfoFormType)=>{
 
       setIsLoading(true)
       setLoadingScrenText("מסיר תמונה")
-      const response = await axios.post("/api/admin/new-event/remove/remove-event-image", { Public_id  } );
-      if(response.status){
-        setIsLoading(false)
-          if(response.data.result === 'ok'){
-              console.log(response.data.result);
-          }
-          else{
+      
+      try {
+        const response = await axios.post("/api/admin/new-event/D/event-image", { Public_id  } );
 
+      if( response.status === 200 ){
+          console.log(response.data.result);
+          setIsLoading(false)
+          setInfoFileds(p=>({...p,preview:''}))
+          }
+      else{
+          console.log("Status not Ok err ", response.status);
+          setIsLoading(false)
+          console.log(" Try Block Err" , response.status);
+          alert(response.status)  
           }
       }
-
-      setInfoFileds(p=>({...p,preview:''}))
       
-     console.log(response);
+      catch (error) {
+  
+        setIsLoading(false)
+        console.log(" Try Block Err" , error);
+        alert(error)
+
+      }
+      
+
+
 
      
 
@@ -111,8 +125,6 @@ return(
                   error={newEventValidateFiled("eventName")? true: false}
                   
                  />
-       
-             
                  <SelectWrap 
                     items={EventCategories}
                     value={infoFileds.cat}

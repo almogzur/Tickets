@@ -1,10 +1,11 @@
-import NextAuth, { User } from "next-auth"
+import NextAuth, { Awaitable, User } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import client from '@/lib/DB/CRUD_Calls_Mongo'
 import { MongoDBAdapter } from "@auth/mongodb-adapter"
 import { z } from 'zod'
 import { MongoClient } from "mongodb"
-import { error } from "console"
+import { AuthOptions } from "next-auth"
+import {  AdapterUser } from "next-auth/adapters"
 
 const SingInValidationSchema = z.object({
   name:z.string(),
@@ -15,8 +16,9 @@ const SingInValidationSchema = z.object({
 export type singInUserType = z.infer<typeof SingInValidationSchema>
 
 
+const NODE_ENV = process.env.NODE_ENV
 
-export const authOptions = {
+export const authOptions :AuthOptions = {
   // Configure one or more authentication providers
   providers: [
     CredentialsProvider({
@@ -27,14 +29,14 @@ export const authOptions = {
       // e.g. domain, username, password, 2FA token, etc.
       // You can pass any HTML attribute to the <input> tag through the object.
       id: "credentials",
+      type:"credentials",
 
       credentials:  { 
         name:{ label:"name" , type:"text"},
         password: { label: "password", type: "password" },
         role: {label:"role", type:"text",} 
       },
-
-
+      
       async authorize(credential, req) {
     
       console.log("Authorize -- invoked");
@@ -91,10 +93,11 @@ export const authOptions = {
            
           return null  
           
-      }
+      },
+      
+      
     })
   ],
-  
   callbacks: { 
     // invoke after provider return  
     
@@ -118,11 +121,37 @@ export const authOptions = {
      signIn: '/auth/signin',
      error: "/auth/signin"
 },
+ useSecureCookies: NODE_ENV === 'production' ? true :false,
+
+ 
+
 // in production set seesstion 2 hours for a re loge
+
 //session:{
 //
  // maxAge: 2 * 60 * 60
 //}
+
+
+
+// adapter:{
+//   createUser:(user:unknown)=>{},
+//   getUser:(id:string):Awaitable<AdapterUser | null>=>{
+
+//     return {
+//       id:"",
+//       email:"",
+//       name:"",
+//       emailVerified:null  
+//     }
+//   }
+  
+
+// }
+
+
+
+
 
   
 }

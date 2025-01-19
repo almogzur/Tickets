@@ -12,7 +12,7 @@ type ResponseData = {
  
 export default async function handler(req: NextApiRequest,res: NextApiResponse<ResponseData>) {
 
-  const API_NAME = "SAVE TEMP EVENT";
+  const API_NAME = "Creating NEW DRAFT";
   const session = await getServerSession(req, res, authOptions);
 
 
@@ -34,23 +34,23 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse<R
     res.status(4001).json({ message: "no db" });
 
   }
-      
-  const body = req.body;
+  
+    const body = req.body;
+    const TempModel = getDynamicModel("temp_events",TempNewEventSchema)
+    const doc = new TempModel({...body.infoFileds,...body.tickets}) // Pass body to the model
+    const result =   await doc.save(); // Save to the database
+    
+    console.log(body,body.infoFileds);
 
-  console.log(body,body.infoFileds);
-
-   const TempModel = getDynamicModel("temp_events",TempNewEventSchema)
-
-   const doc = new TempModel({...body.infoFileds,...body.tickets}) // Pass body to the model
-   const result =   await doc.save(); // Save to the database
-
-  if(result.errors){
+   if(result.errors){
         console.log("Doc Err",result.errors);
         res.status(400).json({ message: 'Save Err' });
-   }
+      }
 
-  console.log("saved new modle",result);
-  
-  res.status(200).json({ message: "Saved New Modle" });
-  
+    console.log("saved new modle",result); 
+
+    await disconnectFromDb() 
+
+    res.status(200).json({ message: "Saved New Modle" });
+ 
 }
