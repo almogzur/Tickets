@@ -29,11 +29,11 @@ import { TempInfoFiledsValidationSchema } from "../../types/new-event-types"
 
 
 interface InfoFormType {
-    eventNameRef: RefObject<HTMLInputElement>
+   
   
 }
 
-const InfoForm =({eventNameRef}:InfoFormType)=>{
+const InfoForm =({}:InfoFormType)=>{
 
   const { data: session ,status ,update} = useSession()
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
@@ -121,7 +121,7 @@ return(
                   labelPositioin={"end"} 
                   helpText={newEventValidateFiled("eventName")?? ""}
                   helpTextPotionsEnd
-                  ref={eventNameRef}
+              
                   error={newEventValidateFiled("eventName")? true: false}
                   
                  />

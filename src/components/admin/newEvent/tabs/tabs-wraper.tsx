@@ -32,10 +32,10 @@ import { blue, green, grey } from "@mui/material/colors";
 
 
 interface TabFormPropsType { 
-  eventNameRef: RefObject<HTMLInputElement>
+
  }
 
-const TabsWraper = ({eventNameRef }:TabFormPropsType)=>{
+const TabsWraper = ({ }:TabFormPropsType)=>{
 
     const theme = useTheme()
     const {tabValue, setTabValue} = useContext(tabsPageContext);
@@ -101,7 +101,7 @@ const TabsWraper = ({eventNameRef }:TabFormPropsType)=>{
       >
         {
         tabValue=== 0 ?
-        <InfoFormTab   eventNameRef={eventNameRef} />
+        <InfoFormTab    />
         :
         tabValue === 1?
        <TicketsTab setTabValue={setTabValue} />

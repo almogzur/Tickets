@@ -1,5 +1,6 @@
 
 import { TheaterType } from '@/components/admin/newEvent/theater/types/theater-types';
+import { ObjectId } from 'mongoose';
 import { nullable, z }  from 'zod'
 
 export const TicketValidationSchema = z.object({
@@ -32,15 +33,15 @@ export const TempInfoFiledsValidationSchema = z.object({
   eventName: z.string().min(3, "שם צריך להיות לפחות  3  תווים").max(20),
 });
 
+export type TempInfoType = z.infer<typeof TempInfoFiledsValidationSchema>
 export type RequestStatusType ="Temp"|"Production"|undefined
-
-export type TicketType  = z.infer<typeof TicketValidationSchema> 
 export interface TicketStateType extends Omit<TicketType, "selectedType" | "Date" | "EndSealesDate" > {
   selectedType: "normal" | "discount" | "citizen" | "approachable" | ""; 
   EndSealesDate: Date | null
 }
-export type TempInfoType = z.infer<typeof TempInfoFiledsValidationSchema>
-export interface infoFiledsType  {
+export type TicketType  = z.infer<typeof TicketValidationSchema> 
+
+export interface infoFiledsType {
   eventName:string ,
   cat:string
   pre:string
@@ -54,11 +55,14 @@ export interface infoFiledsType  {
   Hour:Date|null
   OpenDorHour:Date|null
 }
+export interface EventMongoseeDraftType extends infoFiledsType {
+  tickets?: TicketType[];
+  _id:''
+}
+
 export interface LogType {  
-  
   time_stemp : Date ,
   user : string ,
   ip :string,
-  JWT_string:string,
-
 }
+

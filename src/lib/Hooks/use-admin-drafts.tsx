@@ -1,29 +1,28 @@
-import { infoFiledsType, TicketType } from "@/components/admin/newEvent/types/new-event-types";
+import { EventMongoseeDraftType } from "@/components/admin/newEvent/types/new-event-types";
+import {  getAdminDraftsApiReturndType } from "@/pages/api/admin/drafts/R/get-drafts";
 import axios, { AxiosRequestConfig } from "axios";
 import { Session } from "next-auth";
 import useSWR, { Fetcher, Key as SWRKey , KeyedMutator, SWRConfiguration} from "swr";
 
-type DataType = unknown
+type DataType = EventMongoseeDraftType[]
 
 
 type ReturendFetcherType<T> = {
-  Data: T | undefined; // Allow `undefined` for when data is not yet loaded
+  Drafts: DataType | undefined; // Allow `undefined` for when data is not yet loaded
   isUserValidating: boolean;
   isUserError: unknown;
   updateUser: KeyedMutator<T>;
 };
 
 
-export const useAdminData  = (session:Session|null) : ReturendFetcherType<DataType>=> { 
+export const useAdminDrafts  = (session:Session|null) : ReturendFetcherType<DataType>=> { 
 
-    const fetcherKey : SWRKey = ()=> session?.user?.name? '/api/admin/get-admin-data' : null // will not fetch if no session
+     const fetcherKey : SWRKey = ()=> session?.user?.name? '/api/admin/drafts/R/get-drafts' : null // will not fetch if no session
 
      const fetcher : Fetcher<DataType> = async ( key: string ) : Promise<DataType> => {
 
        const params : any = {
          name: session?.user?.name,
-         a:"dsadsa"
-        
         }
 
 
@@ -45,7 +44,7 @@ export const useAdminData  = (session:Session|null) : ReturendFetcherType<DataTy
     const { data, error, isValidating , mutate } = useSWR(fetcherKey, fetcher , SWRconfig)
    
     return {
-      Data: data,
+      Drafts: data,
       isUserValidating: isValidating,
       isUserError: error,
       updateUser: mutate,

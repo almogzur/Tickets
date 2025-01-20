@@ -1,6 +1,6 @@
 import  {  ReactNode, useState   } from 'react';
 import { useTheme } from '@mui/material/styles';
-import { Accordion, AccordionDetails, AccordionSummary, Box , Stack as Flex, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Box , Button, Stack as Flex, Typography } from '@mui/material';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
@@ -77,11 +77,17 @@ export default function TemporaryDrawer() {
 
   return (
     <>
-    <nav dir='rtl' style={{ height:60 , background:"black" , display:"flex", flexDirection:"row"  , }   }  >
-      <Flex direction={"row"} alignItems={'center'}>
+    <nav dir='rtl' style={{ height:60 , background:"black" , display:"flex", flexDirection:"row"  , width:"100%" }   }  >
+      <>
+      <Flex direction={"row"} alignItems={'center'} width={"20%"} >
         <FcPrevious size={'1.5em'}  onClick={toggleDrawer(true)} style={{padding:10 , margin:10 , cursor:'pointer'}}/>
         <Typography variant='h6' sx={{color:"#ddd"}}>{translatePathToHeb(router.pathname)}</Typography>
-        </Flex>
+      
+      </Flex>
+      <Flex   width={"inherit"} direction={"row"} justifyContent={"end"} alignItems={"center"} >
+          <Button  sx={{justifySelf:"start" ,mx:2}} onClick={()=>{router.push('/')}} > חזרה לעמוד ראשי </Button>
+      </Flex>
+      </>
     </nav>
        <Drawer
         open={open}

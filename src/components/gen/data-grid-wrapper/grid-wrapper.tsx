@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import { DataGrid, GridActionsCellItem, GridColDef , GridRowModes, GridRowsProp, GridValidRowModel} from '@mui/x-data-grid';
 import { Container } from '@mui/material';
@@ -6,53 +5,19 @@ import { grey } from '@mui/material/colors';
 import { GRID_DEFAULT_HEBROW_TEXT} from './grid-loc-texts';
 import WidthContext from '@/context/WidthContext';
 import { Cancel, Delete, Edit, Save } from '@mui/icons-material';
+import { useContext,useState } from 'react';
 
 
-
-const rowsData :GridRowsProp = [
-  { id: 1, eventName: 'אלמוג', date: 'Jon', price: 14 },
-  { id: 2, eventName: 'Lannister', date: 'Cersei', price: 31 },
-  { id: 3, eventName: 'Lannister', date: 'Jaime', price: 31 },
-  { id: 4, eventName: 'Stark', date: 'Arya', price: 11 },
-  { id: 5, eventName: 'Targaryen', date: 'Daenerys', price: null },
-  { id: 6, eventName: 'Melisandre', date: null, price: 150 },
-  { id: 7, eventName: 'Clifford', date: 'Ferrara', price: 44 },
-  { id: 8, eventName: 'Frances', date: 'Rossini', price: 36 },
-  { id: 9, eventName: 'Roxie', date: 'Harvey', price: 65 },
-
-];
-
-
-
-const columns: GridColDef[] = [
-    { field: 'eventName', headerName: 'שם', align:'right' , width: 150  },
-    { field: 'date', headerName: 'תאריך', align:'right', width: 150 },
-    { field: 'price', headerName: 'מחיר', align:'right', width: 150 },
-    //{
-    //    field: 'actions',
-    //    type: 'actions',
-    //    headerName: 'Actions',
-    //    width: 100,
-    //    cellClassName: 'actions',
-    //   getActions: ({ id }) => {[]},
-    //},
-
-  ];
 interface DataGridWrapType  {
-    columnsData?:GridColDef
+    columnsData?:GridColDef[] |undefined
     rowsData?:  GridRowsProp 
 }
 
-export default function DataGridWrap({}:DataGridWrapType) {
+const DataGridWrap = ({columnsData,rowsData}:DataGridWrapType) => {
 
-            const {xxl,xl,lg,md,sm,xs,xxs} = React.useContext(WidthContext)
-            const [rows, setRows] = React.useState(rowsData);
-            const [rowModesModel, setRowModesModel] = React.useState({});
-
-
-
+      const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
+      const [rowModesModel, setRowModesModel] = useState({});
   
-    
   return (
     <Container>
     <Box 
@@ -60,8 +25,8 @@ export default function DataGridWrap({}:DataGridWrapType) {
       <DataGrid 
         sx={{direction:'rtl' , fontSize:!sm? 11 :14}}
         localeText={GRID_DEFAULT_HEBROW_TEXT}
-        rows={ rows}
-        columns={columns}
+        rows={rowsData}
+        columns={columnsData?? []}
         initialState={{
           pagination: {
             paginationModel: {
@@ -69,13 +34,20 @@ export default function DataGridWrap({}:DataGridWrapType) {
             },
           },
         }}
-
         pageSizeOptions={[5]}
-        checkboxSelection
         disableRowSelectionOnClick
-
+        rowSelection={false}
+        showCellVerticalBorder={true}
+        showColumnVerticalBorder={true}
+        isCellEditable={(params)=> false}
+        isRowSelectable={(params)=>false}
+        hideFooterSelectedRowCount
+        disableColumnSelector
+        
+ 
       />
     </Box>
     </Container>
   );
 }
+export default DataGridWrap

@@ -1,31 +1,31 @@
 
-import { Session } from 'next-auth';
-import mongoose, { model,MongooseOptions,SchemaDefinition, SchemaDefinitionType,   } from 'mongoose';
-import { infoFiledsType, LogType, TicketType } from './new-event-types';
+import mongoose, { model,SchemaDefinition,   } from 'mongoose';
+import { EventMongoseeDraftType, LogType, TicketType } from './new-event-types';
 
 const { Schema } = mongoose;
 
 
-export function getDynamicModel<T extends unknown>( 
-      name:string,
-      schemaDefinition: SchemaDefinition<T>,
-    )
-        : mongoose.Model<T> {
-          if (!name) {
-          throw new Error("Session user name is required to  create a model");
-         }
-
-         // Dynamically create the schema and model
-         const Dschema = new Schema<T>(schemaDefinition);
-         
-         // Return an existing model or create a new one
-         return mongoose.models?.collectionName || model<T>(name, Dschema);
+export const createDynamicModel = <T extends unknown>  ( name:string, schemaDefinition: SchemaDefinition<T> ) : mongoose.Model<T> => {
+  if (!name) {
+     throw new Error("Name is required to create a model");
+    }
+    // Dynamically create the schema and model
+    const Dschema = new Schema<T>(schemaDefinition, {
+     collection: name, // Specify the exact collection name
+   });
+    // Return an existing model or create a new one
+    return mongoose.models[`${name}`] || model<T>(name, Dschema);
 }
 
+const TicketSchema = new Schema<TicketType>({
+    EndSealesDate: { type:Date ,required:true},
+    selectedType:{ type:String , required:true },
+    priceInfo:{type:String ,required:false},
+    price:{type:Number ,required:true}  
+},
+{id:false,versionKey:false}
+)
 
-
-
-export const TicketSchema = new Schema<TicketType>({})
 
 const TempNewEventSchemaDefinition = {
   eventName:{type: String , require:true},
@@ -39,18 +39,18 @@ const TempNewEventSchemaDefinition = {
   pre: {type:String , require:false},
   preview: { type: String, required: false }, // Store image data as binary
   Theater :{type : Object ,required:false},
-  ticket:[TicketSchema]
+  tickets: { type: [TicketSchema], required: false }
 }
 
 const ProductionNewEventSchemaDefinition ={}
 
-    
-
-  const NewEventLogsModleShemaDefinition ={}
+const NewEventLogsModleShemaDefinition ={}
   
 
 
-export const TempNewEventSchema = new Schema<infoFiledsType & {tickets:TicketType[]}>(TempNewEventSchemaDefinition)
+export const TempNewEventSchema = new Schema<EventMongoseeDraftType>(TempNewEventSchemaDefinition,{versionKey:false})
+
+
 export const ProductionNewEventSchema = new Schema(ProductionNewEventSchemaDefinition)
 export const NewEventLogsModleShema = new Schema<LogType>(  NewEventLogsModleShemaDefinition)
 

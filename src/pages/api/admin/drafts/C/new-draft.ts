@@ -1,9 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from "next-auth/next";
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
-import {  CreateConectionFronSesttion, disconnectFromDb } from '@/lib/DB/Mongosee_Connection';
-import mongoose from 'mongoose';
-import { getDynamicModel, TempNewEventSchema } from '@/components/admin/newEvent/types/new-event-db-schema';
+import {  CreateConectionFronSession, disconnectFromDb } from '@/lib/DB/Mongosee_Connection';
+import { createDynamicModel, TempNewEventSchema } from '@/components/admin/newEvent/types/new-event-db-schema';
+import { EventMongoseeDraftType } from '@/components/admin/newEvent/types/new-event-types';
 
  
 type ResponseData = {
@@ -27,30 +27,31 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse<R
     return res.status(401).json({ message: 'You Shell Not Pass' });
   }
 
- const connectionStatus = await CreateConectionFronSesttion(session)
+ const connection = await CreateConectionFronSession(session)
 
-  if(!connectionStatus.connection.db){
+  if(!connection.connection.db){
     console.log("no db");
     res.status(4001).json({ message: "no db" });
 
   }
-  
     const body = req.body;
-    const TempModel = getDynamicModel("temp_events",TempNewEventSchema)
-    const doc = new TempModel({...body.infoFileds,...body.tickets}) // Pass body to the model
-    const result =   await doc.save(); // Save to the database
+    console.log(body)
+    const TempModel = createDynamicModel<EventMongoseeDraftType>("Drafts",TempNewEventSchema)
+    const doc = new TempModel(body) // Pass body to the model
+    const saveResult =  await doc.save(); // Save to the database
     
-    console.log(body,body.infoFileds);
+   // console.log(body,body.infoFileds);
 
-   if(result.errors){
-        console.log("Doc Err",result.errors);
+   if(saveResult.errors){
+        console.log("Doc Err",saveResult.errors);
         res.status(400).json({ message: 'Save Err' });
       }
 
-    console.log("saved new modle",result); 
+    console.log("saved new modle",saveResult); 
 
-    await disconnectFromDb() 
+    await disconnectFromDb(connection) 
 
     res.status(200).json({ message: "Saved New Modle" });
  
 }
+

@@ -6,7 +6,7 @@ import { Session } from 'next-auth';
 
 // add public adccsess ip for domain
 
- export const CreateConectionFronSesttion = async (session?: Session) :Promise<typeof mongoose> => {
+ export const CreateConectionFronSession = async (session?: Session) :Promise<typeof mongoose> => {
   
   assert(session , "sesstion assertion ")
 
@@ -25,17 +25,13 @@ import { Session } from 'next-auth';
 
 
 
-export async function disconnectFromDb(): Promise<void> {
+export async function disconnectFromDb(con:typeof mongoose): Promise<void> {
   try {
-    if (mongoose.connection.db){
-  
-      mongoose.connection.close()
-      console.log("Disconnected from the database successfully.");
-    }
+     con.connection.close()
+     console.log("disconected from db");
+     
   } catch (error) {
     console.error("Error while disconnecting from the database:", error);
-    console.log(error);
-      
   }
 }
 

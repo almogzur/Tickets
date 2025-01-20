@@ -5,7 +5,7 @@ export const GRID_DEFAULT_HEBROW_TEXT: GridLocaleText = {
     // Root
     noRowsLabel: 'אין שורות',
     noResultsOverlayLabel: 'לא נמצאו תוצאות.',
-  
+    
     toolbarDensity: 'צפיפות',
     toolbarDensityLabel: 'צפיפות',
     toolbarDensityCompact: 'דחוס',
