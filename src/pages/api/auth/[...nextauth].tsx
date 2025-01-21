@@ -1,11 +1,9 @@
 import NextAuth, { Awaitable, User } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import client from '@/lib/DB/CRUD_Calls_Mongo'
-import { MongoDBAdapter } from "@auth/mongodb-adapter"
 import { z } from 'zod'
 import { MongoClient } from "mongodb"
 import { AuthOptions } from "next-auth"
-import {  AdapterUser } from "next-auth/adapters"
 
 const SingInValidationSchema = z.object({
   name:z.string(),
@@ -38,6 +36,8 @@ export const authOptions :AuthOptions = {
       },
       
       async authorize(credential, req) {
+        console.log(req.headers);
+        
     
       console.log("Authorize -- invoked");
 
