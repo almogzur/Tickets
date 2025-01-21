@@ -19,7 +19,7 @@ export type getAdminDraftsApiReturndType = EventMongoseeDraftType[] |  Message
 
 export default async function handler(req: NextApiRequest,res: NextApiResponse<getAdminDraftsApiReturndType>) {
 
-  const API_NAME = "GET ADMIN DATA";
+  const API_NAME = "GET ADMIN Drafts Api";
   console.log(API_NAME);
   
   const session = await getServerSession(req, res, authOptions);

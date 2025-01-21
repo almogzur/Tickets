@@ -7,8 +7,8 @@ if (!process.env.MONGODB_URI) {
  
 const uri = process.env.MONGODB_URI
 const options : MongoClientOptions= {
-  ssl:process.env.NODE_ENV === 'production' ? true : false,
-  tls:process.env.NODE_ENV === 'production' ? true : false,
+  ssl : process.env.NODE_ENV === 'development'? undefined :true,
+  tls : process.env.NODE_ENV === 'development'? undefined :true,
   
   serverApi: {
     version: ServerApiVersion.v1,

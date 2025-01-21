@@ -11,10 +11,12 @@ import { Session } from 'next-auth';
   assert(session , "sesstion assertion ")
 
   try {
+    console.log(process.env.NODE_ENV);
+    
     const connection = await mongoose.connect(process.env.MONGODB_URI as string, {
       dbName:`${session?.user?.name}_Data`,
-      tls: process.env.NODE_ENV === 'production' ? true : false,
-      ssl: process.env.NODE_ENV === 'production' ? true : false,
+      ssl : process.env.NODE_ENV === 'development'? undefined :true,
+      tls : process.env.NODE_ENV === 'development'? undefined :true
     });
     return connection;
   } catch (error) {

@@ -17,7 +17,7 @@ type ReturendFetcherType<T> = {
 
 export const useAdminDrafts  = (session:Session|null) : ReturendFetcherType<DataType>=> { 
 
-     const fetcherKey : SWRKey = ()=> session?.user?.name? '/api/admin/drafts/R/get-admin-data' : null // will not fetch if no session
+     const fetcherKey : SWRKey = ()=> session?.user?.name? '/api/admin/drafts/R/get-drafts' : null // will not fetch if no session
 
      const fetcher : Fetcher<DataType> = async ( key: string ) : Promise<DataType> => {
 
