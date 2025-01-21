@@ -11,6 +11,7 @@ import { useContext,useState } from 'react';
 interface DataGridWrapType  {
     columnsData?:GridColDef[] |undefined
     rowsData?:  GridRowsProp 
+    
 }
 
 const DataGridWrap = ({columnsData,rowsData}:DataGridWrapType) => {

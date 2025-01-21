@@ -18,7 +18,7 @@ interface TimePickerWrapType  {
     minDate? : Date 
     maxTIme? :Date
     isEroor?:boolean
-    onAcceptHendler: (value: dayjs.Dayjs | null, context: PickerChangeHandlerContext<DateTimeValidationError>) => void
+    onAcceptHendler?: (value: dayjs.Dayjs | null, context: PickerChangeHandlerContext<DateTimeValidationError>) => void
     onChangeHendler?: (value: dayjs.Dayjs | null, context: PickerChangeHandlerContext<DateTimeValidationError>) => void
     onEroorHndler: (e:DateTimeValidationError, context:dayjs.Dayjs|null )=>void
     labelPositioin:"top"|"end"

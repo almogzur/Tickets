@@ -17,22 +17,24 @@ export const createDynamicModel = <T extends unknown>  ( name:string, schemaDefi
     return mongoose.models[`${name}`] || model<T>(name, Dschema);
 }
 
+
+
+
+
 const TicketSchema = new Schema<TicketType>({
-    EndSealesDate: { type:Date ,required:true},
+    EndSealesDate: { type:String ,required:false},
     selectedType:{ type:String , required:true },
     priceInfo:{type:String ,required:false},
-    price:{type:Number ,required:true}  
+    price:{type:String ,required:true}  
 },
-{id:false,versionKey:false}
+{_id:false,versionKey:false}
 )
-
-
 const TempNewEventSchemaDefinition = {
   eventName:{type: String , require:true},
   cat:{type:String , require:false},
   TheaterName:{type:String , require:false},
   availableSeatsAmount:{type:Number, require:false},
-  Date: { type: Date , require:false},
+  Date: { type: String , require:false},
   OpenDorHour:{ type: Date , require:false},
   Hour:{ type: Date , require:false},
   isEventClosedForSeal: { type: Boolean , require:false},
@@ -49,10 +51,12 @@ const NewEventLogsModleShemaDefinition ={}
 
 
 export const TempNewEventSchema = new Schema<EventMongoseeDraftType>(TempNewEventSchemaDefinition,{versionKey:false})
-
-
 export const ProductionNewEventSchema = new Schema(ProductionNewEventSchemaDefinition)
 export const NewEventLogsModleShema = new Schema<LogType>(  NewEventLogsModleShemaDefinition)
+
+//Db Modoles 
+
+export const DraftModle = createDynamicModel<EventMongoseeDraftType>("Drafts",TempNewEventSchema)
 
 
 

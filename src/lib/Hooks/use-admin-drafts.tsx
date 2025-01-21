@@ -9,9 +9,9 @@ type DataType = EventMongoseeDraftType[]
 
 type ReturendFetcherType<T> = {
   Drafts: DataType | undefined; // Allow `undefined` for when data is not yet loaded
-  isUserValidating: boolean;
-  isUserError: unknown;
-  updateUser: KeyedMutator<T>;
+  isDraftsValidating: boolean;
+  isDraftsError: unknown;
+  updateDrafts: KeyedMutator<T>;
 };
 
 
@@ -32,8 +32,9 @@ export const useAdminDrafts  = (session:Session|null) : ReturendFetcherType<Data
         //withXSRFToken:true
       }
           
-       const response = await  axios.get( key , FatchConfig )
+       const response = await  axios.get<DataType>( key , FatchConfig )
         // return the response to SWR Hook 
+        
        return response.data
       
      }
@@ -45,9 +46,9 @@ export const useAdminDrafts  = (session:Session|null) : ReturendFetcherType<Data
    
     return {
       Drafts: data,
-      isUserValidating: isValidating,
-      isUserError: error,
-      updateUser: mutate,
+      isDraftsValidating: isValidating,
+      isDraftsError: error,
+      updateDrafts: mutate,
     }
 }
 

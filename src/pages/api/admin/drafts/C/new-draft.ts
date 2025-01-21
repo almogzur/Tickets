@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from "next-auth/next";
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import {  CreateConectionFronSession, disconnectFromDb } from '@/lib/DB/Mongosee_Connection';
-import { createDynamicModel, TempNewEventSchema } from '@/components/admin/newEvent/types/new-event-db-schema';
+import { createDynamicModel, DraftModle, TempNewEventSchema } from '@/components/admin/newEvent/types/new-event-db-schema';
 import { EventMongoseeDraftType } from '@/components/admin/newEvent/types/new-event-types';
 
  
@@ -29,16 +29,19 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse<R
 
  const connection = await CreateConectionFronSession(session)
 
-  if(!connection.connection.db){
-    console.log("no db");
-    res.status(4001).json({ message: "no db" });
 
+ if(!connection.connection.db){
+  const reTryConnection =   await CreateConectionFronSession(session)
+  if(!reTryConnection.connection.db){
+      console.log("no db");
+      res.status(4001).json({ message: "no db" });
   }
-    const body = req.body;
+}
+      const body = req.body
     console.log(body)
-    const TempModel = createDynamicModel<EventMongoseeDraftType>("Drafts",TempNewEventSchema)
-    const doc = new TempModel(body) // Pass body to the model
-    const saveResult =  await doc.save(); // Save to the database
+     const Model = DraftModle
+      const doc = new Model(body) // Pass body to the model
+      const saveResult =  await doc.save(); // Save to the database
     
    // console.log(body,body.infoFileds);
 
@@ -49,7 +52,7 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse<R
 
     console.log("saved new modle",saveResult); 
 
-    await disconnectFromDb(connection) 
+    await disconnectFromDb(connection,API_NAME) 
 
     res.status(200).json({ message: "Saved New Modle" });
  

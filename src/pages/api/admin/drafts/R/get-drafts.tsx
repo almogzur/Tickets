@@ -1,12 +1,9 @@
 import { CreateConectionFronSession , disconnectFromDb} from "@/lib/DB/Mongosee_Connection";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../../auth/[...nextauth]";
-import { FindOptions, ListCollectionsOptions } from "mongodb";
-import mongoose from "mongoose";
+import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import {  EventMongoseeDraftType } from "@/components/admin/newEvent/types/new-event-types";
-import { createDynamicModel, TempNewEventSchema } from "@/components/admin/newEvent/types/new-event-db-schema";
-
+import { DraftModle } from "@/components/admin/newEvent/types/new-event-db-schema";
 
  // findOne(filter: Filter<TSchema>, options: FindOptions): Promise<WithId<TSchema> | null>;
 
@@ -19,7 +16,7 @@ export type getAdminDraftsApiReturndType = EventMongoseeDraftType[] |  Message
 
 export default async function handler(req: NextApiRequest,res: NextApiResponse<getAdminDraftsApiReturndType>) {
 
-  const API_NAME = "GET ADMIN Drafts Api";
+  const API_NAME = "Get All Drafts Api (Hook)";
   console.log(API_NAME);
   
   const session = await getServerSession(req, res, authOptions);
@@ -38,28 +35,30 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse<g
 
  const connection = await CreateConectionFronSession(session)
 
-  if(!connection.connection.db){
-    console.log("no db");
-    res.status(4001).json({ message: "no db" });
 
+ if(!connection.connection.db){
+  const reTryConnection =   await CreateConectionFronSession(session)
+  if(!reTryConnection.connection.db){
+      console.log("no db");
+      res.status(4001).json({ message: "no db" });
   }
-  const quary = req.query
+}
 
-     const TempModel = createDynamicModel<EventMongoseeDraftType>("Drafts",TempNewEventSchema)
+     const Model = DraftModle
 
-     const Collections  = await TempModel.find({})
+     const Drafts  = await Model.find({},{},{lean:true})
   
-    if(!Collections.length){
+    if(!Drafts.length){
       res.status(200).json({message:"No Data"}) 
     }
 
-    res.send(Collections)
+    res.send(Drafts)
 
   
   //console.log(RsolveCollection);
 
 
 
-  disconnectFromDb(connection)
+  disconnectFromDb(connection,API_NAME)
   
 }

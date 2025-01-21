@@ -39,7 +39,7 @@ export const authOptions :AuthOptions = {
         console.log(req.headers);
         
     
-      console.log("Authorize -- invoked");
+          console.log("Authorize -- invoked");
 
       const FormValidation = SingInValidationSchema.safeParse(credential)
 

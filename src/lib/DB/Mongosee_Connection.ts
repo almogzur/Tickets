@@ -10,9 +10,7 @@ import { Session } from 'next-auth';
   
   assert(session , "sesstion assertion ")
 
-  try {
-    console.log(process.env.NODE_ENV);
-    
+  try {    
     const connection = await mongoose.connect(process.env.MONGODB_URI as string, {
       dbName:`${session?.user?.name}_Data`,
       ssl : process.env.NODE_ENV === 'development'? undefined :true,
@@ -27,10 +25,10 @@ import { Session } from 'next-auth';
 
 
 
-export async function disconnectFromDb(con:typeof mongoose): Promise<void> {
+export async function disconnectFromDb(con:typeof mongoose,API_NAME?:string): Promise<void> {
   try {
      con.connection.close()
-     console.log("disconected from db");
+     console.log("DB _ Disconected : ",  API_NAME);
      
   } catch (error) {
     console.error("Error while disconnecting from the database:", error);

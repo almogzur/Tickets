@@ -1,7 +1,8 @@
-import { FormControlLabel } from "@mui/material"
-import { ChangeEvent, ReactNode, useState } from "react"
+import { FormControlLabel, Typography } from "@mui/material"
+import { ChangeEvent, ReactNode, useContext, useState } from "react"
 import { styled } from '@mui/material/styles';
 import Switch, { switchClasses } from "@mui/material/Switch";
+import WidthContext from "@/context/WidthContext";
 
 
 export interface  SwitchTextTrackStylePropsType {
@@ -10,6 +11,8 @@ export interface  SwitchTextTrackStylePropsType {
 export interface SwitchWrapType extends SwitchTextTrackStylePropsType {
     switchValue:boolean
     switchOnChangeHendler:(e:ChangeEvent<HTMLInputElement>)=>void
+  
+    
   }
 
   export const SwitchTextTrack = styled(Switch)<SwitchTextTrackStylePropsType>( 
@@ -198,14 +201,104 @@ export interface SwitchWrapType extends SwitchTextTrackStylePropsType {
   
   
 
-
-
-  const SwitchWrap = ({switchValue,switchOnChangeHendler,switchWrpaerSize}:SwitchWrapType)=>{
-      return <RSwitchTextTrack
-               value={switchValue}
+  const SwitchWrap = ({switchValue,switchOnChangeHendler,switchWrpaerSize }:SwitchWrapType)=>{
+ 
+        return <RSwitchTextTrack
+               value={  switchValue}
                onChange={switchOnChangeHendler}  
                inputProps={{ 'aria-label': 'controlled', }}
                switchWrpaerSize={switchWrpaerSize?? "large"} // sise it taken
                />
+      
+
     } 
-    export default SwitchWrap
+
+
+
+  export default SwitchWrap
+
+
+  export interface NormalSwitchWrapPropsType extends SwitchTextTrackStylePropsType {
+    switchValue:boolean
+    switchOnChangeHendler:(e :React.SyntheticEvent, checked:boolean)=>void
+    title:string
+    labelPlacement:"bottom" | "top" | "end" | "start" 
+  }
+
+  const IOSSwitch = styled((props) => (
+    <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
+  ))(({ theme }) => ({
+    width: 42,
+    height: 26,
+    padding: 0,
+    '& .MuiSwitch-switchBase': {
+      padding: 0,
+      margin: 2,
+      transitionDuration: '300ms',
+      '&.Mui-checked': {
+        transform: 'translateX(16px)',
+        color: '#fff',
+        '& + .MuiSwitch-track': {
+          backgroundColor: theme.palette.primary.main,
+          opacity: 1,
+          border: 0,
+          ...theme.applyStyles('dark', {
+            backgroundColor: theme.palette.primary.main,
+          }),
+        },
+        '&.Mui-disabled + .MuiSwitch-track': {
+          opacity: 0.5,
+        },
+      },
+      '&.Mui-focusVisible .MuiSwitch-thumb': {
+        color: '#33cf4d',
+        border: '6px solid #fff',
+      },
+      '&.Mui-disabled .MuiSwitch-thumb': {
+        color: theme.palette.grey[100],
+        ...theme.applyStyles('dark', {
+          color: theme.palette.grey[600],
+        }),
+      },
+      '&.Mui-disabled + .MuiSwitch-track': {
+        opacity: 0.7,
+        ...theme.applyStyles('dark', {
+          opacity: 0.3,
+        }),
+      },
+    },
+    '& .MuiSwitch-thumb': {
+      boxSizing: 'border-box',
+      width: 22,
+      height: 22,
+    },
+    '& .MuiSwitch-track': {
+      borderRadius: 26 / 2,
+      backgroundColor: '#E9E9EA',
+      opacity: 1,
+      transition: theme.transitions.create(['background-color'], {
+        duration: 500,
+      }),
+      ...theme.applyStyles('dark', {
+        backgroundColor: '#39393D',
+      }),
+    },
+  }));
+
+
+  export const NormalSwitchWrap = ({switchValue,switchOnChangeHendler,title, labelPlacement }:NormalSwitchWrapPropsType)=>{
+    const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
+
+    return (
+      <FormControlLabel
+          value={switchValue}
+          onChange={switchOnChangeHendler}
+          control={<IOSSwitch   />}
+          label={<Typography sx={{color:"#ddd" , fontWeight:"bold"  ,textAlign:"center"}} >{title}</Typography>}
+          labelPlacement={labelPlacement?? "end"}
+          sx={{scale:!xs? 0.8:1,gap:1}}
+          
+        />
+    )
+
+  }

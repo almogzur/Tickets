@@ -7,10 +7,10 @@ import ControledHelperText from "../TeextFiledWrpa/controled-helper-text"
 
 interface DatePickerWrapType  {
     label:string
-    value: Date|null
+    value: string|null
     helpText:string,
     labelPositioin:"top"|"end"
-    onAcceptHendler: (value: dayjs.Dayjs | null, context: PickerChangeHandlerContext<DateTimeValidationError>) => void
+    onAcceptHendler?: (value: dayjs.Dayjs | null, context: PickerChangeHandlerContext<DateTimeValidationError>) => void
     onChangeHendler: (value: dayjs.Dayjs | null, context: PickerChangeHandlerContext<DateTimeValidationError>) => void
     onEroorHndler: (e:DateTimeValidationError, context:dayjs.Dayjs|null )=>void
     disablePast?:boolean

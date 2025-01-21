@@ -1,4 +1,4 @@
-import  {  ReactNode, useState   } from 'react';
+import  {  ReactNode, useContext, useState   } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { Accordion, AccordionDetails, AccordionSummary, Box , Button, Stack as Flex, Typography } from '@mui/material';
 import List from '@mui/material/List';
@@ -20,6 +20,7 @@ import { blue, grey } from '@mui/material/colors';
 import { DrawerLinkType, ItemPropsType } from './admin-drawer-types';
 import { useRouter } from 'next/router';
 import { RiDraftFill } from 'react-icons/ri';
+import WidthContext from '@/context/WidthContext';
 
 const DRAWER_OPEN_WIDTH = 200;
 
@@ -27,6 +28,8 @@ const DRAWER_OPEN_WIDTH = 200;
 export default function TemporaryDrawer() {
   const [ open, setOpen ] = useState<boolean>(false);
   const theme = useTheme()
+    const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
+  
   const { data: session ,status ,update} = useSession()
   const router = useRouter()
   
@@ -85,7 +88,7 @@ export default function TemporaryDrawer() {
       
       </Flex>
       <Flex   width={"inherit"} direction={"row"} justifyContent={"end"} alignItems={"center"} >
-          <Button  sx={{justifySelf:"start" ,mx:2}} onClick={()=>{router.push('/')}} > חזרה לעמוד ראשי </Button>
+          <Button variant='text' size={!xs?'small':"large"}  sx={{justifySelf:"start" ,mx:2}} onClick={()=>{router.push('/')}} > <FcHome size={ "2em"}  /></Button>
       </Flex>
       </>
     </nav>

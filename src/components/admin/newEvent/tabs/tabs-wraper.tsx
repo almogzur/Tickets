@@ -24,6 +24,7 @@ import PrevieTab from "./preview-tab"
 import { IoTicket } from "react-icons/io5";
 import tabsPageContext from "@/context/admin/new-event/tabs/tabs-page-context";
 import { blue, green, grey } from "@mui/material/colors";
+import { RiDraftFill } from "react-icons/ri";
 
 
 
@@ -31,11 +32,11 @@ import { blue, green, grey } from "@mui/material/colors";
 
 
 
-interface TabFormPropsType { 
-
+interface TabsWraperPropsType { 
+  EventId?:string
  }
 
-const TabsWraper = ({ }:TabFormPropsType)=>{
+const TabsWraper = ({ EventId}:TabsWraperPropsType)=>{
 
     const theme = useTheme()
     const {tabValue, setTabValue} = useContext(tabsPageContext);
@@ -87,7 +88,6 @@ const TabsWraper = ({ }:TabFormPropsType)=>{
         <Tab value={3} label="צבעים"  sx={{...TabComonStyleAttribute}} icon={<FcStackOfPhotos size={"2em"} />}  />
         <Tab value={4} label="תצוגה מקדימה "  sx={{...TabComonStyleAttribute}} icon={<FcBinoculars size={"2em"}/>} />
         <Tab value={5} label="פירסום"  sx={{...TabComonStyleAttribute}} icon={<FcIntegratedWebcam size={"2em"}/>}  />
-        <Tab value={6} label="שמור"  sx={{...TabComonStyleAttribute}} />
 
        </Tabs>
   

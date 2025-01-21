@@ -79,7 +79,9 @@ const InfoForm =({}:InfoFormType)=>{
 
   }
 
-  const ErrorHndler = (e:DateTimeValidationError, context:dayjs.Dayjs|null ):void=>{}
+  const ErrorHndler = (e:DateTimeValidationError, context:dayjs.Dayjs|null ):void=>{
+//    console.log(e,context)
+  }
 
 
 
@@ -152,12 +154,8 @@ return(
                label={"בחר תאריך"}
                labelPositioin={'end'}
                color='secondary'
-               onAcceptHendler={(e) => e !== null ?
-                 setInfoFileds(p => ({ ...p, Date: e.toDate() }))
-                 :
-                 null}
                onChangeHendler={(e) => e !== null ?
-                 setInfoFileds(p => ({ ...p, Date: e.toDate() }))
+                 setInfoFileds(p => ({ ...p, Date: e.toDate().toLocaleDateString() }))
                  :
                  null
                }         
@@ -188,11 +186,20 @@ return(
                 helpTextPotionsEnd    
                 MediaQuery={theme.breakpoints.up("sm")}
                 value={infoFileds.OpenDorHour}
-                onAcceptHendler={(e)=> e!==null ?
-                  setInfoFileds(p => ({ ...p, OpenDorHour: e.toDate() })) 
-                  :
-                  null
-               }
+                
+               onChangeHendler={(value):null=>{
+                if(value){
+
+                  console.log(value);
+                  
+                 setInfoFileds(p => ({ ...p, OpenDorHour: value.toDate() })) 
+                 return null
+                }
+                return null
+                
+              
+              
+            }}
                helpText={newEventValidateFiled("OpenDorHour")?? ""}
                label={"פתיחת דלתות"} 
                 labelPositioin={'end'}
@@ -274,7 +281,8 @@ return(
            >
            {({ open }) => {
              return (
-               <Button 
+               <Button
+                
                  sx={{ gap:1, p:0.5 , boxShadow:0, background:grey[200], mt:3,mb:3}} 
                  onClick={() => {
                   TempInfoFiledsValidationSchema.safeParse(infoFileds).success? 

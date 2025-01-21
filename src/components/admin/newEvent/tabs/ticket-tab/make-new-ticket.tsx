@@ -24,13 +24,15 @@ import TabsInfoContext from '@/context/admin/new-event/tabs/tabs-info-context';
 
 //Colors
 import {  red } from '@mui/material/colors';
-import { DateTimeValidationError } from '@mui/x-date-pickers';
+import { DateTimeValidationError, PickerChangeHandlerContext } from '@mui/x-date-pickers';
 import dayjs, { Dayjs } from 'dayjs';
 import SelectWrap from '@/components/gen/select-wrap';
-import DateTimePickerWrap from '@/components/gen/time-date/date-time-picker-wrap';
 import { SafeParseError, SafeParseSuccess, ZodError } from 'zod';
 import { IoMdAddCircle } from 'react-icons/io';
 import { TicketStateType, TicketType, TicketValidationSchema } from '@/components/admin/newEvent/types/new-event-types';
+import DatePickerWrap from '@/components/gen/time-date/date-picker-wrap';
+import { samiDateOptions } from '@/pages/_app';
+import SwitchWrap, { NormalSwitchWrap } from '@/components/gen/switch-wrap';
 
 
 interface TicketOptionType {
@@ -49,6 +51,7 @@ export default function MakeNewTicket({setTabValue}:MakeNewTicketType) {
   const {tickets ,setTickets} =useContext(TabsTicketContext)
   const {infoFileds,setInfoFileds} = useContext(TabsInfoContext)
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
+  const [isClosingDate,setIsClosingDate]=useState(false)
   const [formErrors,setFormErrors ]= useState(false)
 
   const [Ticket, setTicket] = useState<TicketStateType>({
@@ -84,12 +87,14 @@ export default function MakeNewTicket({setTabValue}:MakeNewTicketType) {
            priceInfo:"",
            price:"", 
           }))
+         
   }
   const handleClickOpen = () => {
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
+    setIsClosingDate(false)
    // resetTicketPricesForm()
   };
   const addTicket = (e:React.MouseEvent<HTMLButtonElement>):void=>{
@@ -106,17 +111,17 @@ export default function MakeNewTicket({setTabValue}:MakeNewTicketType) {
 
  // useEffect(()=>{    console.log(Ticket ,infoFileds)},[Ticket,infoFileds])
 
+
+ const
+     HaderWrapper = Flex,
+     HaderA = Flex, 
+     HaderB = Flex
+
+
+
   return (
     <>
-      <Button 
-         variant='contained' 
-         color='primary' 
-         onClick={handleClickOpen}
-         endIcon={<IoMdAddCircle  style={{paddingRight:10}}/>} 
-         sx={{ fontSize:!xs?13:null ,borderRadius:0 }}  
-         >
-         כרטיס חדש 
-      </Button>
+      <IoMdAddCircle  size={"2.5em"} color={theme.palette.primary.main}  style={{paddingRight:0}}  onClick={handleClickOpen}  />
 
       <Dialog
         open={open}
@@ -125,17 +130,28 @@ export default function MakeNewTicket({setTabValue}:MakeNewTicketType) {
         fullScreen={!xs}
        >
      
-        <DialogTitle style={{padding:2   , background:"black"}} >  
+        <DialogTitle style={{ padding:4, background:"black"}}  >  
         
 
-          <Flex  direction={"row"} alignItems={"center"} gap={2} mx={1} p={2} >
-             <IoTicket  size={!sm?"1.5em":"1.7em"} color={theme.palette.primary.main}  />        
-             <Typography variant='body1' sx={{color:"#fff" ,fontWeight:800}}  >{"כרטיס חדש"} </Typography> 
-      
-    
+          <HaderWrapper  direction={"row"} alignItems={"center"}   width={"100%"} mx={-1}>
+            
+             <HaderA  alignItems={"center"}  sx={{scale:!sm?0.9:1}} >
+              <IoTicket  size={!sm?"1.5em":"1.7em"} color={theme.palette.primary.main}  />        
+              <Typography variant='body1' sx={{color:"#fff" ,fontWeight:800}} textAlign={"center"}  >{"כרטיס חדש"} </Typography> 
+             </HaderA>
 
-         </Flex>
+             <HaderB   direction={"row"} justifyContent={"end"} width={"inherit"}  >
+               <NormalSwitchWrap 
+                 switchValue={isClosingDate}
+                 switchOnChangeHendler={(e) => setIsClosingDate(!isClosingDate)  }
+                 switchWrpaerSize='large'
+                 title={'תאריך סגירת מכירות ?'} 
+                 labelPlacement='bottom'
+                   />
+             </HaderB>
 
+         </HaderWrapper>
+ 
         </DialogTitle>
 
 
@@ -219,21 +235,24 @@ export default function MakeNewTicket({setTabValue}:MakeNewTicketType) {
                           />
                     }
 
-            <DateTimePickerWrap    
-               value={ Ticket.EndSealesDate}
-               minDate={new Date()}
-               maxTIme={dayjs(infoFileds.Date).toDate()}
-               variant='outlined'
-               label={"סגירת מכירות לכרטיס זה"}
-               helpText={""}
-               onAcceptHendler={(e) => e !== null ?
-                setTicket(p => ({ ...p, EndSealesDate: e.toDate() }))
-                :
-               null
-                }
-               labelPositioin={'top'}
-               onEroorHndler={(e: DateTimeValidationError, context: dayjs.Dayjs | null): void => { } }
-                />
+          {  isClosingDate && 
+            <DatePickerWrap    
+              value={Ticket.EndSealesDate}
+              minDate={new Date()}
+              variant='outlined'
+              label={"סגירת מכירות לכרטיס זה"}
+              helpText={""}
+         
+              labelPositioin={'top'}
+              onEroorHndler={() => { } } 
+              onChangeHendler={ (e)=>{ e !== null ?
+                setTicket(p => ({ ...p, EndSealesDate: e.toDate().toLocaleDateString() }))
+                :null
+              }} 
+              />
+            }
+
+
           </Flex>
         </DialogContent>
 

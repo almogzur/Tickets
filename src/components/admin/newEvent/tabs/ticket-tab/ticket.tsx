@@ -1,6 +1,6 @@
 
 // React 
-import { ReactEventHandler, useContext} from "react";
+import { ReactEventHandler, useContext, useEffect} from "react";
 
 //Context 
 import WidthContext from "@/context/WidthContext";
@@ -29,6 +29,7 @@ interface TicketComponentPropsType extends TicketType {
 
 
 const TicketComponent = ({ EndSealesDate,price,priceInfo,selectedType ,index }:TicketComponentPropsType) => {
+
     const theme = useTheme()
    const {tickets,setTickets}= useContext(tabsTicketContext)
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
@@ -105,14 +106,13 @@ const TicketComponent = ({ EndSealesDate,price,priceInfo,selectedType ,index }:T
                     <MyChip text={  priceInfo}   m={0.5} grow={0}  /> 
                   }
                
+               <Flex direction={ !xs? "column": "row"}  flexWrap={"wrap"}  alignContent={"center"} >
+            
+               { EndSealesDate&&   <MyChip text={ "  סגירת קופות : " +  EndSealesDate}  m={0.5} grow={0}  /> }
+            </Flex>
              </Flex>
 
-             <Flex direction={ !xs? "column": "row"} flexWrap={"wrap"} alignContent={"center"}    >
-             </Flex>
-             <Flex direction={ !xs? "column": "row"}  flexWrap={"wrap"}  alignContent={"center"} >
-            
-               <MyChip text={ "  סגירת קופות : " +  EndSealesDate.toLocaleDateString("he-Il",FullDateOptions)}  m={0.5} grow={0}  /> 
-             </Flex>
+          
           </Box>
             
       </Flex>

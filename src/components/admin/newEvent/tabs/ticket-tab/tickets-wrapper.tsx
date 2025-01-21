@@ -117,6 +117,7 @@ interface TicketsTabPropsType {  setTabValue : Dispatch<SetStateAction<number>>}
 
               <Flex direction={"row"} p={0.5}  gap={1} alignItems={"center"} >
                    <IoTicket size={"2em"} color={theme.palette.primary.main}  />
+             
                    <Flex>
                    <Typography  fontWeight={'bold'}  fontSize={!sm?13:18} >מספר מושבים זמינים למכירה : {availableSeatsAmount} </Typography >
                    <Typography   fontSize={!sm?11:15}  >מסיר את המושבים המסומנים כחסומים</Typography>
@@ -124,18 +125,20 @@ interface TicketsTabPropsType {  setTabValue : Dispatch<SetStateAction<number>>}
               </Flex>
               
               <Flex p={0.5} gap={1} direction={"row"} alignItems={"center"}   >
-                <IoMdAddCircle color={theme.palette.primary.main} size={"2.5em"}   />
-                 <Flex direction={"row"} alignItems={"center"} justifyContent={"space-between"} width={"100%"}  gap={2} >              
+           
+                <MakeNewTickit setTabValue={setTabValue} />
+
+                 <Flex direction={"row"} alignItems={"center"} justifyContent={"space-between"} width={"100%"}  gap={2} >
                      <Flex  flexGrow={1}>
-                       <Typography fontWeight={'bold'} fontSize={!sm?12:18}>  הוסף סוגי כרטיסים</Typography>
+                       <Typography fontWeight={'bold'} fontSize={!sm?12:18}>  הוסף כרטיסים</Typography>
                        <Typography fontSize={!sm ? 11 : 15} > סוג הכרטיס ו הפרטים יוצגו ללקוח בעת הרכישה  </Typography>     
                     </Flex>
                 </Flex>
+                
               </Flex>
 
-              <Flex display={"row"} alignSelf={"center"} m={1} >
-                <MakeNewTickit setTabValue={setTabValue} />
-              </Flex>
+               
+          
          </Flex>
          }
          {/* loop over tickits tikits.map....  */}

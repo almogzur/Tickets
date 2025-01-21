@@ -4,13 +4,12 @@ import { ObjectId } from 'mongoose';
 import { nullable, z }  from 'zod'
 
 export const TicketValidationSchema = z.object({
-  EndSealesDate: z.date(),
+  EndSealesDate: z.string().nullable(),
   selectedType:z.union([z.literal("normal"),z.literal("discount"),z.literal("citizen"), z.literal("approachable")]),
   priceInfo:z.string().min(3),
   price: z
      .string()
      .regex(/^(?!0$)(?:[1-9]\d*|0?\.\d{1,2})$/g,{message:"not valid number"})
-     .or(z.number().nonnegative().min(1))
 })  
 
 export const ProductionInfoFiledsValidtinSchema = z.object({
@@ -18,9 +17,9 @@ export const ProductionInfoFiledsValidtinSchema = z.object({
   cat: z.string().min(1,{message:"בחר קטגוריה"}),
   TheaterName: z.string({message:"בחר אולם"}),
   availableSeatsAmount: z.number(),
-  Date: z.date({message:"בחר תאריך לאירוע"}),
-  OpenDorHour: z.date({message:"בחר שעת פתחיחת דלתות"}),
-  Hour: z.date({message:"בחר שעה לאירוע"}),
+  Date: z.string({message:"בחר תאריך לאירוע"}),
+  OpenDorHour: z.string({message:"בחר שעת פתחיחת דלתות"}),
+  Hour: z.string({message:"בחר שעה לאירוע"}),
   isEventClosedForSeal: z.boolean().optional(),
   pre: z.string().min(5,"הוסף תוכן או פרטים  על האירוע"),
   image: z.instanceof(File,{message:"בחר קובץ"}).refine(
@@ -37,7 +36,7 @@ export type TempInfoType = z.infer<typeof TempInfoFiledsValidationSchema>
 export type RequestStatusType ="Temp"|"Production"|undefined
 export interface TicketStateType extends Omit<TicketType, "selectedType" | "Date" | "EndSealesDate" > {
   selectedType: "normal" | "discount" | "citizen" | "approachable" | ""; 
-  EndSealesDate: Date | null
+  EndSealesDate: string | null
 }
 export type TicketType  = z.infer<typeof TicketValidationSchema> 
 
@@ -51,7 +50,7 @@ export interface infoFiledsType {
   image:File|undefined
   preview:string
   isEventClosedForSeal:boolean
-  Date:Date|null,
+  Date:string|null,
   Hour:Date|null
   OpenDorHour:Date|null
 }
@@ -61,7 +60,7 @@ export interface EventMongoseeDraftType extends infoFiledsType {
 }
 
 export interface LogType {  
-  time_stemp : Date ,
+  time_stemp : string ,
   user : string ,
   ip :string,
 }

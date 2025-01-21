@@ -13,7 +13,7 @@ interface ActionType {
     icon:React.ReactElement,
     name:string
     ClickHendler:(e:React.MouseEvent<HTMLDivElement>) => void
-}
+} 
 
 type SpeedDailPositionsType = 
   | { top: CSSProperties['top']; bottom?: CSSProperties['bottom']; left: CSSProperties['left']; right?: CSSProperties['right'] }
