@@ -1,12 +1,15 @@
 // This approach is taken from https://github.com/vercel/next.js/tree/canary/examples/with-mongodb
-import { MongoClient, ServerApiVersion } from "mongodb"
+import { MongoClient, ServerApiVersion , MongoClientOptions } from "mongodb"
  
 if (!process.env.MONGODB_URI) {
   throw new Error('Invalid/Missing environment variable: "MONGODB_URI"')
 }
  
 const uri = process.env.MONGODB_URI
-const options = {
+const options : MongoClientOptions= {
+  ssl:process.env.NODE_ENV === 'production' ? true : false,
+  tls:process.env.NODE_ENV === 'production' ? true : false,
+  
   serverApi: {
     version: ServerApiVersion.v1,
     strict: true, // Enforce strict compliance with API version 1

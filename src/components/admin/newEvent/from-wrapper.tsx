@@ -48,6 +48,7 @@ const NewEventFormWraper = ({id}:NewEventFormWraperType)=>{
         if(id && typeof id === 'string' && session?.user?.name ){
             const Items = Drafts?.filter((draft)=> draft._id === id )
             console.log(Items);
+          
             
         }
     },[])

@@ -13,8 +13,8 @@ import { Session } from 'next-auth';
   try {
     const connection = await mongoose.connect(process.env.MONGODB_URI as string, {
       dbName:`${session?.user?.name}_Data`,
-      tls: true,
-      ssl: true,
+      tls: process.env.NODE_ENV === 'production' ? true : false,
+      ssl: process.env.NODE_ENV === 'production' ? true : false,
     });
     return connection;
   } catch (error) {
