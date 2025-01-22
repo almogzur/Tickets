@@ -34,31 +34,34 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse<g
   }
 
  const connection = await CreateConectionFronSession(session)
+ 
 
+ if(!connection?.connection.db){
 
- if(!connection.connection.db){
-  const reTryConnection =   await CreateConectionFronSession(session)
-  if(!reTryConnection.connection.db){
       console.log("no db");
       res.status(4001).json({ message: "no db" });
+ 
   }
-}
 
      const Model = DraftModle
 
-     const Drafts  = await Model.find({},{},{lean:true})
-  
-    if(!Drafts.length){
-      res.status(200).json({message:"No Data"}) 
-    }
+     try{ 
+       const Drafts  = await Model.find({},{},{lean:true})
+       console.log(API_NAME,"Succsess")
+       res.send(Drafts)
 
-    res.send(Drafts)
+      }
+     catch (err){
+       res.status(200).json({message:"Faled Finding Image, No Changes Made"})
+       }
+     
+    
 
   
   //console.log(RsolveCollection);
 
 
 
-  disconnectFromDb(connection,API_NAME)
-  
+  await disconnectFromDb(connection,API_NAME) 
+
 }

@@ -31,15 +31,12 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse<M
  const connection = await CreateConectionFronSession(session)
 
 
- if(!connection.connection.db){
+ if(!connection?.connection.db){
   console.log("No Connection re trying...");
   
-  const reTryConnection =   await CreateConectionFronSession(session)
 
-  if(!reTryConnection.connection.db){
       console.log("no db");
       res.status(4001).json({ message: "no db" });
-  }
 }
   const id = req.body.id
   console.log(id);
@@ -52,7 +49,7 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse<M
          res.status(200).json({message:`Draft ${id} Removed` })
        }
        
-       res.status(200).json({message:"No Draft Removed "})
+     
   
       // const TempModel = createDynamicModel<EventMongoseeDraftType>("Drafts",TempNewEventSchema)
 
@@ -63,6 +60,7 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse<M
 
 
 
-  disconnectFromDb(connection,API_NAME)
+   await disconnectFromDb(connection,API_NAME) 
+  res.status(200).json({message:"No Draft Removed "})
   
 }

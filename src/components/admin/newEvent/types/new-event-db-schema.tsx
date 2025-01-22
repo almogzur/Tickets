@@ -30,7 +30,7 @@ const TicketSchema = new Schema<TicketType>({
 {_id:false,versionKey:false}
 )
 const TempNewEventSchemaDefinition = {
-  eventName:{type: String , require:true},
+  eventName: { type: String, required: true, unique: true },
   cat:{type:String , require:false},
   TheaterName:{type:String , require:false},
   availableSeatsAmount:{type:Number, require:false},
@@ -39,7 +39,7 @@ const TempNewEventSchemaDefinition = {
   Hour:{ type: Date , require:false},
   isEventClosedForSeal: { type: Boolean , require:false},
   pre: {type:String , require:false},
-  preview: { type: String, required: false }, // Store image data as binary
+  preview: { type: String, required: false }, 
   Theater :{type : Object ,required:false},
   tickets: { type: [TicketSchema], required: false }
 }

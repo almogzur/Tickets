@@ -1,4 +1,4 @@
-import {  Button, Container ,Stack as Flex ,  Typography as Heading  } from '@mui/material'
+import {  Button, Container ,Stack as Flex ,  Typography as Heading , Box } from '@mui/material'
 
 import Head from 'next/head'
 import Link from 'next/link';
@@ -13,17 +13,15 @@ import {useGetEvents} from '../services/events'
 import { Event } from '../constants/models/Events';
 import ClientLayout from '../Layouts/client-layout';
 import { useSession } from 'next-auth/react';
-
+import Placeholder from '@tiptap/extension-placeholder';
 
 
 export default function Home() {
 
-
-
   const { events, isLoading, isError } = useGetEvents();
   
-
   const MoviesList = () => {
+    
     if (events) {
       return events.map((movie: Event) => (
      
@@ -60,19 +58,32 @@ export default function Home() {
       return <>אין תוצאות </>
     }
   }
-  
+   const
+     PageWrapper = Flex,
+     Placeholder = Box
+
   return (
     <  >
       <Head >
         <title>הזמנות כרטיסים  | בית</title>
       </Head>
 
-      <ClientLayout>
+   <ClientLayout>
+
+     <PageWrapper bgcolor={"black"} height={'100%'}>
         <Heading variant='h3' textAlign={"center"} >ההופעות שלנו</Heading>
+
          <Flex direction={'row'} flexWrap={'wrap'}  >
           <MoviesList/>
         </Flex>
-      </ClientLayout>
+
+        <Placeholder height={400} />
+        
+      </PageWrapper>
+
+      
+
+   </ClientLayout>
     </>
   )
 }

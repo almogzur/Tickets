@@ -4,7 +4,7 @@ import TabsInfoContext from '@/context/admin/new-event/tabs/tabs-info-context'
 
 //Components
 import {  Box, Button, Container, Divider, Stack as Flex , Typography, useTheme } from "@mui/material"
-import { ChangeEvent, RefObject, useContext, useEffect, useState } from "react"
+import { ChangeEvent, RefObject, useContext, useEffect, useMemo, useState } from "react"
 import Image from "next/image"
 
 import ImageUploaderHebtexts from '@/components/admin/newEvent/tabs/info-form-tab/image-uploader-heb-text'
@@ -28,10 +28,7 @@ import tabsPageContext from "@/context/admin/new-event/tabs/tabs-page-context"
 import { TempInfoFiledsValidationSchema } from "../../types/new-event-types"
 
 
-interface InfoFormType {
-   
-  
-}
+interface InfoFormType {}
 
 const InfoForm =({}:InfoFormType)=>{
 
@@ -82,13 +79,19 @@ const InfoForm =({}:InfoFormType)=>{
   const ErrorHndler = (e:DateTimeValidationError, context:dayjs.Dayjs|null ):void=>{
 //    console.log(e,context)
   }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+
+  
+  // return live ver of infoFiled.event value see -> https://react.dev/learn/state-as-a-snapshot
+//  const folderName = useMemo(() => getFolderName(infoFileds.eventName), [getFolderName, infoFileds.eventName]) 
+
 
 
 
 interface EventCategoryType {
   value: string;
   label: string;
-}
+} 
 
 const EventCategories: EventCategoryType[] = [
   { value: "אקשן", label: "אקשן" },
@@ -109,7 +112,7 @@ const EventCategories: EventCategoryType[] = [
 
 
 return(
-     <Container  sx={{ m:2, p:1 }}  >
+      <Container  sx={{ m:2, p:1 }}  >
         <Typography sx={{color:'black'}} variant="h6" > פרטים כללים </Typography>
         
          <Flex direction={!sm? "column": "row"}     >
@@ -219,11 +222,12 @@ return(
          <Editor />     
      
         { !infoFileds.preview &&
+          // when this render its get snepshot depending on its rendreing values 
+          // so when folderName update the component will know 
          <CldUploadWidget
           
           uploadPreset="fx9hpz2j"
-          onQueuesStart={()=>{console.log("q start");
-          }}
+          onQueuesStart={(e)=>{console.log("q start", e.event , e.info );}} // event &&  strings are strings 
           onQueuesEnd={(result,)=>{
                if(result.info && typeof result.info !=='string'){
                  const files = result.info.files as unknown
@@ -254,11 +258,8 @@ return(
             showPoweredBy:false,
             showUploadMoreButton:false,
             showAdvancedOptions:false,
-            folder : `${session?.user?.name?.toString() || "אורח"}`,
             text:{...ImageUploaderHebtexts},
-            
             styles:{
-            
                 palette: {
                     window: "#F5F5F5",
                     sourceBg: "#FFFFFF",
@@ -273,10 +274,7 @@ return(
                     error: "#c43737",
                     textDark: "#000000",
                     textLight: "#FFFFFF"
-                },
-            }
-            
-            
+                },}
           }}
            >
            {({ open }) => {
@@ -305,14 +303,17 @@ return(
                 onClick={()=>removeImageFromCloudinary(infoFileds.preview)}
             >החלף תמונה 
         </Button>
-        <Flex justifyContent={"center"} direction={"row"}   >        
-          <CldImage
-              alt={"תמונה ראשית"}
-              width={!xs?260 : !sm?400 : !md? 500 : 600}
-              height={!sm?300:400}
-              src={infoFileds.preview}       
-              style={{marginBottom:55}} 
-                />
+
+        <Flex justifyContent={"center"} direction={"row"}   > 
+
+            {/*  eslint-disable-next-line @next/next/no-img-element */}
+       <CldImage alt={""} src={infoFileds.preview}              
+            width={!xs?260 : !sm?400 : !md? 450 : 600}
+            height={!sm?300:400}
+            unoptimized
+            style={{  }} // DONT APLLAY ANY SCRIPT STYLE !!!! 
+         />
+         
         </Flex>  
         </>
         }

@@ -91,7 +91,7 @@ const eventNameRef = useRef<HTMLInputElement>(null);
                 const {tickets, ...InfoFileds} = Draft // Sparating 
                 
                   setInfoFileds(InfoFileds)
-                
+           
                 if(tickets){
                  setTickets(tickets)
                 }
@@ -138,7 +138,6 @@ const eventNameRef = useRef<HTMLInputElement>(null);
       return issue?.message
   }
 
-
   const updateDraft = async (EventId:string, infoFileds:infoFiledsType, tickets: TicketType[])=>{
 
 
@@ -168,13 +167,7 @@ const eventNameRef = useRef<HTMLInputElement>(null);
       console.log("sending req" ,infoFileds.image);
       setSaevNewEventReqestStatus('Temp')
       const ValidationResult =  TempInfoFiledsValidationSchema.safeParse(infoFileds);
-        
-     
-
-
-
-          try {
-  
+        try {
             if(ValidationResult.success){
                  setIsLoading(true)
                  setTimeout(()=>{setIsLoading(false)},2000)
@@ -215,7 +208,6 @@ const eventNameRef = useRef<HTMLInputElement>(null);
            console.error("API Error:", error);
           console.log("Failed to save the event");
          }
-          
     };
   
   const saveProductionEvent = async () =>{

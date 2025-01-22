@@ -10,6 +10,7 @@ import InputWrap from '@/components/gen/TeextFiledWrpa/input-wrap'
 import SelectWrap from '@/components/gen/select-wrap'
 import TextAreaWrap from '@/components/gen/TeextFiledWrpa/text-area-wrap'
 import { singInUserType } from '../api/auth/[...nextauth]'
+import SingInButton from '@/components/admin/sing-in-button'
 
 
 interface errorMessagesType{
@@ -143,15 +144,14 @@ return (
 
 
             <Flex direction={'row'} justifyContent={"center"}  >
-               <Button type='submit'  
+               <SingInButton type='submit'  
                sx={{
                   bgcolor:theme.palette.secondary.main, color:"#fff" ,
-                  width:"40%" ,
-                  height:60 ,
+               
                   fontSize:20,
                   fontWeight:"bold",
                  }}  >התחבר
-              </Button>
+              </SingInButton>
            </Flex>
 
          </form>

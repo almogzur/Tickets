@@ -44,7 +44,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
   // Validate and Sanitize Input
   const Public_id = req.body.Public_id;
-  if (!Public_id || typeof Public_id !== 'string' || !/^[\w\-\/]+$/.test(Public_id)) {
+  if (
+    !Public_id 
+    ||
+    typeof Public_id !== 'string' 
+    ||
+      /[<>`"'&\\]/.test(Public_id)  // Prevent dangerous characters
+    ) {
     console.warn(`[SECURITY] Invalid Public_id: ${Public_id} from IP: ${req.headers['x-forwarded-for'] || req.connection.remoteAddress}`);
     return res.status(400).json({ message: "Invalid or missing Public_id" });
   }

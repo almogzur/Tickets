@@ -37,16 +37,8 @@ const AdminDrafts=()=>{
 
 // Table Data 
   const ColData : GridColDef[] =  [
-    { field: 'eventName', headerName: 'שם האירוע', align:'right' , width: 100  },
-    { field: 'price', headerName: 'מחיר מלא', align:'right', width: 70 },
-    { field:  "eventId" , headerName:"סידורי",align:"right" , width:200},
-    { field: "cat", headerName: "קטגוריה" , align:"right" , width:100},
-    { field: 'date', headerName: 'תאריך', align:'right', width: 150 },
-    { field: "hour", headerName: "שעה" , align:"right" , width:150},
-    { field: "location", headerName: "מיקום" , align:"right" , width:110},
     { field: 'actions', type:'actions', headerName: 'פעולות',width: 170,
       getActions: ({ id , row }:GetActionsProps)=> {
-         
            return [
             <Button  
               key={row.eventId}   
@@ -57,8 +49,12 @@ const AdminDrafts=()=>{
            ]
       
       }
-
     },
+    { field: 'eventName', headerName: 'שם האירוע', align:'right' , width: 150  },
+    { field: 'price', headerName: 'מחיר מלא', align:'right', width: 150 },
+    { field: 'date', headerName: 'תאריך', align:'right', width: 150 },
+    { field: "hour", headerName: "שעה" , align:"right" , width:150},
+    { field: "location", headerName: "מיקום" , align:"right" , width:110},
     ]
   const Rows : GridRowsProp = 
     ! Drafts
@@ -70,9 +66,8 @@ const AdminDrafts=()=>{
             eventName:draft.eventName,
             date:draft.Date ??  Na ,
             hour:draft.Hour ?? Na,
-            cat: draft.cat ? draft.cat: Na,
             price:draft.tickets?.map((ticket)=> ticket.selectedType ==='normal' ? ticket.price : null ),
-            eventId:draft._id,
+            eventId:draft._id, // this value dose NOT ! have a vlue on Cloumns , its for config the button key 
             location:draft.TheaterName?? Na,
             }
           ]
