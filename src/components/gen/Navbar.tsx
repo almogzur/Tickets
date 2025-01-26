@@ -6,40 +6,68 @@ import { useRouter } from 'next/router';
 import { signIn } from "next-auth/react"
 
 
-const Navbar = () => {
+const ClientNavbar = () => {
   const { data: session, status } = useSession()
   const router =useRouter()
-const theme = useTheme()
-  const linkStyle = {textDecoration:'none'   } 
+ const theme = useTheme()
 
   return (
-    <Flex direction={"row"} justifyContent={"center"} bgcolor={"black"} >
-    <Container sx={{p:0,m:0, direction:"rtl" }} >
-    <Flex direction={'row'} justifyContent={"space-between"} mb={3} boxShadow={' 0px 4px  0.2em #fff'} height={80} alignItems={"center"} >
-
-      
-        <Button variant='contained'   sx={{  height:50, m:2 , bgcolor:theme.palette.secondary.main}} 
-            onClick={() => { router.push("/",undefined,{shallow:false,}) }}  
+    <Flex direction={"row"}  bgcolor={"black"}  width={"100%"} >
+    
+       <Flex
+            m={1}
+            direction={'row'}
+            justifyContent={"space-between"}
+            boxShadow={`0px 1px 40px  0.2em ${theme.palette.secondary.dark}`}
+            height={80} 
+            alignItems={"center"}
+            width={"inherit"}
+            borderRadius={"10px"}
+            sx={{}}
+           >
+            { router.pathname !== '/' &&
+            <Button 
+              variant='contained'
+                 sx={{
+                    height:50, m:2 , 
+                    bgcolor:theme.palette.secondary.main,
+                  "&:hover":{
+                    boxShadow:`0px 1px 50px  0.2em ${theme.palette.secondary.light}`,
+                    scale:1.03,
+                    transform: 'scale(0.98)', // Use transform instead of scale
+                  }
+                 }} 
+                onClick={() => { router.push("/",undefined,{shallow:false,}) }}  
          >
         
-          <Image src="/logo.png" alt="site logo" width={50} height={30} />
-          <Typography variant='subtitle2' >הזמנת כרטיסים  דף הבית </Typography>
+          <Typography variant='subtitle2' > דף הבית </Typography>
+           </Button>
+        }
 
-        </Button>
- 
-
-
-
-   
-          <Button variant='contained'  
-            sx={{ height:50 ,m:2,bgcolor:theme.palette.secondary.main}} 
+           <Button variant='contained'  
+              sx={{
+                 height:50 ,
+                 m:2,
+                 bgcolor:theme.palette.secondary.main,
+                   "&:hover":{
+                      boxShadow:`0px 1px 20px  0.2em ${theme.palette.secondary.dark}`,
+                      scale:1.03,
+                      transform: 'scale(0.98)', // Use transform instead of scale
+                }
+                }} 
 
             onClick={()=>{
               const path = session?.user?.name ? "/admin" : "/auth/singin"
               router.push( path )
               }}
 >
-            <Typography variant='subtitle2' >{session?.user?.name ?? "התחברות למערכת "}</Typography>
+            <Typography variant='subtitle2' >{
+             session?.user?.displayName
+                   ?  session.user.displayName 
+            : session?.user?.name
+                   ?  session?.user.name
+                   :   "התחברות למערכת "
+                  }</Typography>
 
             
 
@@ -47,10 +75,10 @@ const theme = useTheme()
           
         
 
-    </Flex>
-    </Container>
+      </Flex>
+
     </Flex>
 );
 }
  
-export default Navbar;
+export default ClientNavbar;

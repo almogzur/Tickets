@@ -1,8 +1,9 @@
-import { createDynamicModel, DraftModle } from "@/components/admin/newEvent/types/new-event-db-schema";
-import { CreateConectionFronSession, disconnectFromDb } from "@/lib/DB/Mongosee_Connection";
+import { ModleDbNamedConnction, disconnectFromDb } from "@/lib/DB/Mongosee_Connection";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
+import { createSchmaAndModel, DraftSchemaDefinition } from "@/components/admin/newEvent/types/new-event-db-schema";
+import { EventMongoseeDraftType } from "@/components/admin/newEvent/types/new-event-types";
 
 
 type Message = {
@@ -28,10 +29,10 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse<M
     return res.status(401).json({ message: 'You Shell Not Pass' });
   }
 
- const connection = await CreateConectionFronSession(session)
+  const isConnected  = await ModleDbNamedConnction(session)
 
 
- if(!connection?.connection.db){
+ if(!isConnected){
   console.log("No Connection re trying...");
   
 
@@ -41,26 +42,24 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse<M
   const id = req.body.id
   console.log(id);
 
-       const Model = DraftModle
-  
-       const Drafts  = await Model.findOneAndDelete({_id:id})
 
-       if(Drafts){
-         res.status(200).json({message:`Draft ${id} Removed` })
+      // calling the Molde Only on Api call prevanting un wanted folder saves 
+
+       const DraftModle = createSchmaAndModel<EventMongoseeDraftType>("Drafts",DraftSchemaDefinition)
+  
+  
+       const Drafts  = await DraftModle.findOneAndDelete({_id:id})
+
+       if(!Drafts){
+        res.status(401).json({message:`No Draft Removed`})
+
        }
+       res.status(200).json({message:`Draft ${id} Removed`})
+
+
        
-     
-  
-      // const TempModel = createDynamicModel<EventMongoseeDraftType>("Drafts",TempNewEventSchema)
 
-     // const Collections  = await TempModel.find({})
-  
-
-  //console.log(RsolveCollection);
-
-
-
-   await disconnectFromDb(connection,API_NAME) 
+   await disconnectFromDb(isConnected,API_NAME) 
   res.status(200).json({message:"No Draft Removed "})
   
 }

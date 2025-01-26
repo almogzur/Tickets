@@ -9,6 +9,7 @@ import LoadingScreen from '@/components/gen/loading'
 import {  GridActionsCellItem, GridColDef, GridRowsProp } from '@mui/x-data-grid'
 import NewEventFormWraper from '@/components/admin/newEvent/from-wrapper'
 import axios, { AxiosRequestConfig } from 'axios'
+import { ImRedo2 } from "react-icons/im";
 
 
 
@@ -118,9 +119,10 @@ if(status==="loading" || isLoading){
 return (
 
   <AdminLayout >
-     { draftId && <Button sx={{position:"absolute" , top:10 ,left:90 , zIndex:300}}  onClick={()=>{setDraftId(undefined)}} >
-        בטל וחזור לרשימה  
-      </Button>}
+     { draftId &&
+      <Button variant='text' sx={{position:"absolute" , top:10 ,left:90 , zIndex:300}}  onClick={()=>{setDraftId(undefined)}} >
+      <ImRedo2  size={'2em'} />
+     </Button>}
     { !draftId
        ? <DataGridWrap columnsData={ColData} rowsData={Rows} />
        : <NewEventFormWraper EventId={draftId} setEventId={setDraftId} />

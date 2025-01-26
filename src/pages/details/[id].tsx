@@ -11,11 +11,7 @@ import { Container , Typography as Heading , Stack as Flex  , Button } from '@mu
 import Map from '../../components/client/tom-map'
 import ClientLayout from '../../Layouts/client-layout';
 
-
-
 import   Eilat_1   from '../../constants/theathers/eilat_1'
-
-
 
 
 const DetailsPage = ({}) => {  
@@ -46,7 +42,6 @@ const DetailsPage = ({}) => {
     </>
   );
 }
-
 
 const ShowCover =({imageSrc,name}:{imageSrc:any, name:string})=>{
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)

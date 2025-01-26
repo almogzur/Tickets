@@ -1,10 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from "next-auth/next";
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
-import {  CreateConectionFronSession, disconnectFromDb } from '@/lib/DB/Mongosee_Connection';
-import {  DraftModle } from '@/components/admin/newEvent/types/new-event-db-schema';
-
-import { v2 as cloudinary ,UploadApiErrorResponse, UploadApiResponse} from 'cloudinary';
+import {  ModleDbNamedConnction, disconnectFromDb } from '@/lib/DB/Mongosee_Connection';
+import { moveToEventNameFolder } from '../cloudinary_helper_functions';
+import { createSchmaAndModel, DraftSchemaDefinition } from '@/components/admin/newEvent/types/new-event-db-schema';
+import { EventMongoseeDraftType } from '@/components/admin/newEvent/types/new-event-types';
 
  
 type ResponseData = {
@@ -13,20 +13,16 @@ type ResponseData = {
  
 export default async function handler(req: NextApiRequest,res: NextApiResponse<ResponseData>) {
 
-  const API_NAME = "Creating NEW DRAFT";
+  const API_NAME = "CREATE NEW DRAFT API";
 
   if (!process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 
       !process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY || 
       !process.env.CLOUDINARY_API_SECRET) {
        console.error("Cloudinary configuration is missing");
-       return res.status(500).json({ message: "Server configuration error" });
+       return res.status(401).json({ message: "Server configuration error" });
     }
 
-cloudinary.config({ 
-  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME, 
-  api_key: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY, 
-  api_secret: process.env.CLOUDINARY_API_SECRET 
-});
+
 
   const session = await getServerSession(req, res, authOptions);
 
@@ -42,64 +38,41 @@ cloudinary.config({
     return res.status(401).json({ message: 'You Shell Not Pass' });
   }
 
- const connection = await CreateConectionFronSession(session)
+  const isConnected  = await ModleDbNamedConnction(session)
 
-    if(!connection){
+    if(!isConnected){
       console.log("no db");
       res.status(4001).json({ message: "no db" });
   
    }
-
-      
      const body = req.body
-     const Model = DraftModle
-     const doc = new Model(body) // Pass body to the model
+
+         // calling the Molde Only on Api call prevanting un wanted folder saves 
+
+     const DraftModle = createSchmaAndModel<EventMongoseeDraftType>("Drafts",DraftSchemaDefinition)
+     const doc = new DraftModle(body) // Pass body to the model
       
-   //  console.log(body)
-   const preview = body.preview
-   const eventName = body.eventName
+     //console.log(body)
+     const preview = body.preview
+     const eventName = body.eventName
  
 
    //Stage 1  -- move image to folder baced on event name 
-   if(!preview){
+   if(!preview){}
 
-      }
-      console.log(preview);
-      const createFolderName = (name: string): string => {
-      const sanitizedName = name.replace(/\s+/g, "_"); // Replace spaces with underscores
-      // console.log(`${session?.user?.name}/${sanitizedName}`);
-        return `${session?.user?.name}/${sanitizedName}`;
-      };
-      const MoveToEventNameFolder = async (publicId:string  , eventName :string):Promise<UploadApiResponse|UploadApiErrorResponse>=>{
-          const data : UploadApiResponse|UploadApiErrorResponse  = await cloudinary.uploader.explicit(
-               publicId,
-              {
-                type:'upload',
-                resource_type:'image',
-                asset_folder: createFolderName(eventName),
-              }
-            );
-          return data
-      }
-      const MoveFile= async()=>{
-       try{ 
-         const result = await MoveToEventNameFolder(preview,eventName)
+   try{ 
+      const result = await moveToEventNameFolder(preview,eventName,session,API_NAME)
+        if(result){
           console.log(API_NAME,"MoveFile Succsess");
-          return true
+         }
       }
-       catch (err){
-       console.log(err  ,"Faled Finding Image, No Changes Made" );
-       return false
-
-      }
-      } 
-
-      MoveFile()
+   catch (err){
+      console.log(API_NAME, " Falied MoveFile" , err );
+ }
   
 
-
    //Stage 2 
-   const saveResult =  await doc.save(); // Save to the database
+   const saveResult =  await doc.save(); 
 
     if(saveResult.errors){
         console.log("Doc Err",saveResult.errors);
@@ -111,9 +84,10 @@ cloudinary.config({
    res.status(200).json({ message: "Saved New Modle" });
      
  
-     await disconnectFromDb(connection,API_NAME) 
+     await disconnectFromDb(isConnected,API_NAME) 
 
   // Stage 2 on file re-location continue saving 
 
 
 }
+

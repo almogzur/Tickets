@@ -18,10 +18,9 @@ const NewEventPage=()=>{
 
 
    // Page State 
-   const [isLoading, setIsLoading ] = useState<boolean>(false)
    const [loadingScrenText ,setLoadingScrenText] =useState<string|undefined>(undefined)
 
-       if (sessionStatus === 'loading'  || isLoading  ) {
+       if (sessionStatus === 'loading'  ) {
 
       return <LoadingScreen text={loadingScrenText} />
       }

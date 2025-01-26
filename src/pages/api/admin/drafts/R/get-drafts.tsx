@@ -1,9 +1,9 @@
-import { CreateConectionFronSession , disconnectFromDb} from "@/lib/DB/Mongosee_Connection";
+import { ModleDbNamedConnction , disconnectFromDb} from "@/lib/DB/Mongosee_Connection";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import {  EventMongoseeDraftType } from "@/components/admin/newEvent/types/new-event-types";
-import { DraftModle } from "@/components/admin/newEvent/types/new-event-db-schema";
+import { createSchmaAndModel, DraftSchemaDefinition } from "@/components/admin/newEvent/types/new-event-db-schema";
 
  // findOne(filter: Filter<TSchema>, options: FindOptions): Promise<WithId<TSchema> | null>;
 
@@ -33,35 +33,31 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse<g
     return res.status(401).json({ message: 'You Shell Not Pass' });
   }
 
- const connection = await CreateConectionFronSession(session)
- 
+  const isConnected  = await ModleDbNamedConnction(session)
 
- if(!connection?.connection.db){
 
-      console.log("no db");
+ if(!isConnected){
+
+      console.log(API_NAME,"no db");
       res.status(4001).json({ message: "no db" });
  
   }
 
-     const Model = DraftModle
+      // calling the Molde Only on Api call prevanting un wanted folder saves 
 
-     try{ 
-       const Drafts  = await Model.find({},{},{lean:true})
+       const DraftModle = createSchmaAndModel<EventMongoseeDraftType>("Drafts",DraftSchemaDefinition)
+
+
+   try{ 
+       const Drafts  = await DraftModle.find({},{},{lean:true})
        console.log(API_NAME,"Succsess")
        res.send(Drafts)
-
       }
-     catch (err){
-       res.status(200).json({message:"Faled Finding Image, No Changes Made"})
+   catch (err){
+       res.status(200).json({message:`${API_NAME} Faled ${err} `})
        }
      
-    
 
-  
-  //console.log(RsolveCollection);
-
-
-
-  await disconnectFromDb(connection,API_NAME) 
+ // await disconnectFromDb(isConected,API_NAME) 
 
 }

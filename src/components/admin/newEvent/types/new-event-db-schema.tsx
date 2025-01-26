@@ -5,7 +5,7 @@ import { EventMongoseeDraftType, LogType, TicketType } from './new-event-types';
 const { Schema } = mongoose;
 
 
-export const createDynamicModel = <T extends unknown>  ( name:string, schemaDefinition: SchemaDefinition<T> ) : mongoose.Model<T> => {
+export const createSchmaAndModel = <T extends unknown>  ( name:string, schemaDefinition: SchemaDefinition<T> ) : mongoose.Model<T> => {
   if (!name) {
      throw new Error("Name is required to create a model");
     }
@@ -18,9 +18,6 @@ export const createDynamicModel = <T extends unknown>  ( name:string, schemaDefi
 }
 
 
-
-
-
 const TicketSchema = new Schema<TicketType>({
     EndSealesDate: { type:String ,required:false},
     selectedType:{ type:String , required:true },
@@ -29,7 +26,7 @@ const TicketSchema = new Schema<TicketType>({
 },
 {_id:false,versionKey:false}
 )
-const TempNewEventSchemaDefinition = {
+export const DraftSchemaDefinition = {
   eventName: { type: String, required: true, unique: true },
   cat:{type:String , require:false},
   TheaterName:{type:String , require:false},
@@ -44,19 +41,16 @@ const TempNewEventSchemaDefinition = {
   tickets: { type: [TicketSchema], required: false }
 }
 
-const ProductionNewEventSchemaDefinition ={}
+const EventSchema ={}
 
-const NewEventLogsModleShemaDefinition ={}
+const EventLogsModleShema ={}
   
 
 
-export const TempNewEventSchema = new Schema<EventMongoseeDraftType>(TempNewEventSchemaDefinition,{versionKey:false})
-export const ProductionNewEventSchema = new Schema(ProductionNewEventSchemaDefinition)
-export const NewEventLogsModleShema = new Schema<LogType>(  NewEventLogsModleShemaDefinition)
+
 
 //Db Modoles 
 
-export const DraftModle = createDynamicModel<EventMongoseeDraftType>("Drafts",TempNewEventSchema)
 
 
 

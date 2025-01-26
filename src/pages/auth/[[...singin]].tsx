@@ -7,9 +7,8 @@ import Logo from '../../../public/logo.png'
 import { useTheme } from '@mui/material/styles';
 import { MdOutlineCancelPresentation } from "react-icons/md";
 import InputWrap from '@/components/gen/TeextFiledWrpa/input-wrap'
-import SelectWrap from '@/components/gen/select-wrap'
-import TextAreaWrap from '@/components/gen/TeextFiledWrpa/text-area-wrap'
-import { singInUserType } from '../api/auth/[...nextauth]'
+import bcrypt from 'bcryptjs';
+
 import SingInButton from '@/components/admin/sing-in-button'
 
 
@@ -33,11 +32,16 @@ export default function SingInPage(){
      Default: "שגיאה במערכת נסה שנית ",
   };
 
+
+    const hashPassword = async (password:string) => {
+      const saltRounds = 10;
+      const hashedPassword = await bcrypt.hash(password, saltRounds);
+      return hashedPassword;
+    };
  
-  const [ formData ,setFormData ] = useState<singInUserType>({
+  const [ formData ,setFormData ] = useState<any>({
     name:"",
     password:"",
-    role:""
   })
 
 
@@ -48,7 +52,7 @@ export default function SingInPage(){
     signIn(
       'credentials' ,{
          name: formData.name,
-         password: formData.password ,
+         password:hashPassword(formData.password) ,
          role:formData.role,
          callbackUrl:"/admin"
         },
@@ -127,16 +131,6 @@ return (
                   placeholderStyle={{ color: theme.palette.primary.main, fontWeight: "bold", opacity: 1 }}
                      />
 
-              <SelectWrap 
-                  label={'אפשריות התחברות'}  
-                  items={[{value:"admin",label:"מנהל מערכת"},{value:"user",label:"משתמש"}]}
-                  value={formData.role}
-                  changeHndler={(e)=>{setFormData(p=>({...p,role:e.target.value}))} } 
-                  labelPositioin={'top'}
-                  helpText={''}
-                  isValueBold
-                  isLabelBold
-               />
 
             </Flex>
 

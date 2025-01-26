@@ -6,6 +6,7 @@ if (!process.env.MONGODB_URI) {
 }
  
 const uri = process.env.MONGODB_URI
+
 const options : MongoClientOptions= {
   ssl : process.env.NODE_ENV === 'development'? undefined :true,
   tls : process.env.NODE_ENV === 'development'? undefined :true,
@@ -17,24 +18,39 @@ const options : MongoClientOptions= {
   },
 }
  
-let client: MongoClient
- 
-if (process.env.NODE_ENV === "development") {
-  // In development mode, use a global variable so that the value
-  // is preserved across module reloads caused by HMR (Hot Module Replacement).
-  let globalWithMongo = global as typeof globalThis & {
-    _mongoClient?: MongoClient
-  }
- 
-  if (!globalWithMongo._mongoClient) {
-    globalWithMongo._mongoClient = new MongoClient(uri, options)
-  }
-  client = globalWithMongo._mongoClient
-} else {
-  // In production mode, it's best to not use a global variable.
-  client = new MongoClient(uri, options)
-}
+
  
 // Export a module-scoped MongoClient. By doing this in a
 // separate module, the client can be shared across functions.
-export default client
+
+
+
+export async function CRUDConnection(): Promise<MongoClient | null> {
+  let MongoCRUDClient: MongoClient;
+
+  try {
+    if (process.env.NODE_ENV === "development") {
+      // Use a global variable to preserve the connection in development mode
+      const globalWithMongo = global as typeof globalThis & { _mongoClient?: MongoClient };
+
+      if (!globalWithMongo._mongoClient) {
+        globalWithMongo._mongoClient = new MongoClient(uri, options);
+      }
+      MongoCRUDClient = globalWithMongo._mongoClient;
+    } else {
+      // Create a new client in production mode
+      MongoCRUDClient = new MongoClient(uri, options);
+    }
+
+    // Attempt to connect to MongoDB
+    await MongoCRUDClient.connect();
+
+    // Return the connected client
+    return MongoCRUDClient;
+  } catch (error) {
+    console.error("Failed to connect to MongoDB:", error);
+
+    // Return null to indicate the connection failed
+    return null;
+  }
+}

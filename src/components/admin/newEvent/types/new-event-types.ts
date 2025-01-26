@@ -33,7 +33,9 @@ export const TempInfoFiledsValidationSchema = z.object({
 });
 
 export type TempInfoType = z.infer<typeof TempInfoFiledsValidationSchema>
+
 export type RequestStatusType ="Temp"|"Production"|undefined
+
 export interface TicketStateType extends Omit<TicketType, "selectedType" | "Date" | "EndSealesDate" > {
   selectedType: "normal" | "discount" | "citizen" | "approachable" | ""; 
   EndSealesDate: string | null

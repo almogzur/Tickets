@@ -5,23 +5,17 @@ import { Button } from '@mui/material'
 import { FaArrowRight } from "react-icons/fa";
 
 import Link from 'next/link';
+import ClientLayout from '@/Layouts/client-layout';
 
-import { Event, Seats } from '../../constants/models/Events'
 
-
-import MoviesContext from '../../context/Events';
-import ClientLayout from '../../Layouts/client-layout';
 
 const Tickets = () => {
-  const { events, setEvents } = useContext(MoviesContext);
 
   const router = useRouter();
 
   const {movieId,selectedSeatsQuery}: any = router.query;
 
-  const event = events.find((mov) => mov.id === parseInt(movieId));
 
-  const [movieSeatDetails,setMovieSeatDetails]= useState(event?.theater );
 
   const selectedSeats = selectedSeatsQuery ?  JSON.parse(selectedSeatsQuery) : null
 
@@ -88,11 +82,10 @@ const Tickets = () => {
   const Card = () => {
    
     
-    if (!event) return <div>loading...</div>
     return (
     <div >
       <div >
-        <Link href={{ pathname: `/details/${event?.id}`, query: { seats:  JSON.stringify(selectedSeats) }}}><FaArrowRight /></Link>
+        <Link href={{ pathname: `/details/`, query: { seats:  JSON.stringify(selectedSeats) }}}><FaArrowRight /></Link>
         <div >
             סיכום הזמנה 
         </div>

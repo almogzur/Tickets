@@ -1,24 +1,20 @@
-import { DraftModle } from "@/components/admin/newEvent/types/new-event-db-schema";
-import { CreateConectionFronSession, disconnectFromDb } from "@/lib/DB/Mongosee_Connection";
-import { authOptions } from "@/pages/api/auth/[...nextauth]";
-import { v2 as cloudinary ,UploadApiErrorResponse, UploadApiResponse} from 'cloudinary';
 import { NextApiRequest, NextApiResponse } from "next";
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
-
+import { ModleDbNamedConnction, disconnectFromDb } from "@/lib/DB/Mongosee_Connection";
+import { createSchmaAndModel, DraftSchemaDefinition } from "@/components/admin/newEvent/types/new-event-db-schema";
+import { delFolder, findSubFolders, moveToEventNameFolder } from "../cloudinary_helper_functions";
+import { EventMongoseeDraftType } from "@/components/admin/newEvent/types/new-event-types";
 
 type ResponseData = {
   message?: string
   id?:string
 }
- 
 
 export default async function handler(req: NextApiRequest,res: NextApiResponse<ResponseData>) {
 
-  
-
   const API_NAME = "Update Draft Api (Click)";
   console.log(API_NAME);
-
 
   if (!process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 
     !process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY || 
@@ -27,11 +23,6 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse<R
      return res.status(500).json({ message: "Server configuration error" });
   }
 
-    cloudinary.config({ 
-    cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME, 
-    api_key: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY, 
-    api_secret: process.env.CLOUDINARY_API_SECRET 
-    });
   
   const session = await getServerSession(req, res, authOptions);
 
@@ -47,9 +38,9 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse<R
     return res.status(401).json({ message: 'You Shell Not Pass' });
   }
 
- const connection = await CreateConectionFronSession(session)
+  const isConnected  = await ModleDbNamedConnction(session)
 
-  if(!connection?.connection.db){
+  if(!isConnected){
 
         console.log("no db");
         res.status(4001).json({ message: "no db" });
@@ -59,100 +50,82 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse<R
   const { id, ...rest }= req.body // removing the id from the to be saved data 
 //  console.log(id);
 
-  const Model = DraftModle
+
+    // calling the Molde Only on Api call prevanting un wanted folder saves 
+  const DraftModle = createSchmaAndModel<EventMongoseeDraftType>("Drafts",DraftSchemaDefinition)
+
 
   const preview = rest.preview
   const eventName = rest.eventName
 
    if(!preview){ }
 
-   console.log(preview);
+  // console.log(preview);
   
-    const createFolderName = (name: string): string => {
-     const sanitizedName = name.replace(/\s+/g, "_"); // Replace spaces with underscores
-     // console.log(`${session?.user?.name}/${sanitizedName}`);
-       return `${session?.user?.name}/${sanitizedName}`;
-     };
-    const MoveToEventNameFolder = async (publicId:string,eventName :string):Promise<any|undefined>=>{
 
-      try{ 
-        const data = await cloudinary.uploader.explicit(
-        publicId,
-        {
-          type:'upload',
-          resource_type:'image',
-          asset_folder: createFolderName(eventName),
-        }
-          )
-        return data
-       }
-      catch (err){  
-        console.log("MoveToEventNameFolder",err)
-      }  
-     }
-     const MoveFile= async()=>{
-       try{ 
-        const result = await MoveToEventNameFolder(preview,eventName)
-         console.log(result," Move Succsess");
-         return true
-     }
-      catch (err){
-      console.log(err  ,"Faled Finding Image, No Changes Made" );
-      return false
-
-     }
-    } 
-
-    MoveFile()
-
-   const del_one_folder = async(Path:string):Promise<boolean|undefined>=>{
-    try{ 
-       const  data = await cloudinary.api.delete_folder(Path);
-       return true
-       }  
-     
-    catch (err){ 
-        console.log("del_result", err);
-     }
-   
+   try{ 
+    const result = await moveToEventNameFolder(preview,eventName,session,API_NAME)
+     console.log(" moveToEventNameFolder Succsess",  eventName , API_NAME, result);
     }
-   const find_sub_folders =  async(Path?:string)=>{
-       try {
-        // Fetch all subfolders under the root path
-         const { folders } = await cloudinary.api.sub_folders(Path??"") 
-        
-    
-         
-        return folders
-       } 
-     catch (error) {
-        console.log(`find_result  Error:`, error);
+   catch (err){
+     console.log ("moveToEventNameFolder", err , eventName, API_NAME);
+  }
+
+   const delEmptyFolders =  async (Path?:string|null):Promise<boolean>=>{
+
+    const folders = await findSubFolders(Path)
+
+     if(!folders){
+          console.log ( " delFolders Return false folders are null " )
         return false
-    
-    }
-    } 
-   const delFolders =  async (Path?:string)=>{
-         const folders = await find_sub_folders(Path)
-
-           folders.map( 
+      }
+     else if(Array.isArray(folders)){
+         folders.map( 
              async (folder: any,i:number)=>{
-                try{
-                  const del_result = await del_one_folder(folder.path)
-                  console.log(del_result,"*");
-                  }
-                catch (err){  
-                  console.log("delFolderError",err);
-                }
-                
-               
-
-      })
+                 try{
+                   const del_result = await delFolder(folder.path)
+                   console.log( " folders.map :  del_result ", del_result, "Path " , folder.path );
+                   }
+                 catch (err){  
+                   console.log("delFolders Map_Over : Del Error",err ,  "Path " , folder.path ) ;
+                 }
+            })
+            return true
+     }
+     else if(folders && !Array.isArray(folders)) {
+        try{ 
+         const del_result = await delFolder(folders.path)
+         console.log( " folders singel : del_result ", del_result, "Path " , folders.path  , "folders is not array " , );
+         if(del_result ){
+          return true
+         }
+         return false
+          
+        }
+        catch (err){
+          console.log("delFolders folders singel : Del Error",err , "Path " , folders.path , "folders is not array " );
+            return false
+         }
+     }
+     else{
+        console.log (  "delEmptyFolders  :  Return false" , typeof folders ,folders,   );
+        
+      return false
+     }
     }
-
-    delFolders(session.user?.name??"")
-     
-
-   const updatedDraft  = await Model.findOneAndUpdate({_id:id},rest,{new:true,lean:true})
+    try{
+      const data = await delEmptyFolders(session.user?.name)
+      if(data){
+        console.log(API_NAME,"delFolders","Seccsess");
+      }
+        
+     }
+    catch (err){ 
+      console.log(API_NAME,"delFolders", err);
+     }
+    
+  
+   const updatedDraft  = await DraftModle.findOneAndUpdate({_id:id},rest,{new:true,lean:true})
 
     if(!updatedDraft){
       res.status(200).json({message:"No Draft With Id",id})
@@ -163,6 +136,6 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse<R
    console.log("Draft_Updated",id);
    res.status(200).json({message:"Draft_Updated",id})
   
-   await disconnectFromDb(connection,API_NAME)
+   await disconnectFromDb(isConnected,API_NAME)
   
 }

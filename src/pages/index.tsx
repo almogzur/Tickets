@@ -1,4 +1,4 @@
-import {  Button, Container ,Stack as Flex ,  Typography as Heading , Box } from '@mui/material'
+import {  Button, Container ,Stack as Flex ,  Typography as Heading , Box, useTheme } from '@mui/material'
 
 import Head from 'next/head'
 import Link from 'next/link';
@@ -8,56 +8,22 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-
-import {useGetEvents} from '../services/events'
 import { Event } from '../constants/models/Events';
 import ClientLayout from '../Layouts/client-layout';
-import { useSession } from 'next-auth/react';
-import Placeholder from '@tiptap/extension-placeholder';
+import useClientEvents from '@/lib/client/Hooks/useGetEvents';
+import { useEffect } from 'react';
+
 
 
 export default function Home() {
 
-  const { events, isLoading, isError } = useGetEvents();
-  
-  const MoviesList = () => {
-    
-    if (events) {
-      return events.map((movie: Event) => (
-     
-          <Link href={`/details/${movie.id}`} key={movie.id} >
-     
-               <Card  sx={{ maxWidth: 345 , margin:5 }}>
-                <CardMedia
-                  sx={{ height:400 ,width:300 ,objectFit:'fill'}}
-                  image={movie.cover.src}
-                  title="green iguana"
-                      
-                      
-                />
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                    {movie.name}
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    {movie.adText }
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  <Button size="small">Share</Button>
-                  <Button size="small">Learn More</Button>
-                </CardActions>
-              </Card>
+ const theme = useTheme()
 
-          </Link>
+  const {Events,isEventsError,isEventsValidating,updateEvents} = useClientEvents()
+  useEffect(()=>{
+        console.log(Events)
+  },[Events])
 
-      ))
-    } else if (isLoading) {
-      return <>טוען...</>
-    } else {
-      return <>אין תוצאות </>
-    }
-  }
    const
      PageWrapper = Flex,
      Placeholder = Box
@@ -67,14 +33,24 @@ export default function Home() {
       <Head >
         <title>הזמנות כרטיסים  | בית</title>
       </Head>
+<ClientLayout>
 
-   <ClientLayout>
+      <PageWrapper bgcolor={"black"} height={'100%'}>
 
-     <PageWrapper bgcolor={"black"} height={'100%'}>
-        <Heading variant='h3' textAlign={"center"} >ההופעות שלנו</Heading>
+        <Heading
+            variant='h5'
+            mt={3}
+           mx={2}
+           p={2}
+            border={"none"}
+            color={theme.palette.secondary.main}
+            
+            borderRadius={"10px"}
+           
+            >אירועים</Heading>
 
          <Flex direction={'row'} flexWrap={'wrap'}  >
-          <MoviesList/>
+           {/* <MoviesList/> */}
         </Flex>
 
         <Placeholder height={400} />
@@ -86,4 +62,41 @@ export default function Home() {
    </ClientLayout>
     </>
   )
+}
+
+
+const MoviesList = ({items}:{items:any[]}) => {
+    
+
+    return items.map((movie: Event) => (
+   
+        <Link href={`/details/${movie.id}`} key={movie.id} >
+   
+             <Card  sx={{ maxWidth: 345 , margin:5 }}>
+              <CardMedia
+                sx={{ height:400 ,width:300 ,objectFit:'fill'}}
+                image={movie.cover.src}
+                title="green iguana"
+                    
+                    
+              />
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                  {movie.name}
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  {movie.adText }
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Button size="small">Share</Button>
+                <Button size="small">Learn More</Button>
+              </CardActions>
+            </Card>
+
+        </Link>
+
+    ))
+
+
 }

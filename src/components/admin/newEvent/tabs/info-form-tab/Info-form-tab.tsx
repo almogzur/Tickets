@@ -3,9 +3,8 @@ import WidthContext from "@/context/WidthContext"
 import TabsInfoContext from '@/context/admin/new-event/tabs/tabs-info-context'
 
 //Components
-import {  Box, Button, Container, Divider, Stack as Flex , Typography, useTheme } from "@mui/material"
-import { ChangeEvent, RefObject, useContext, useEffect, useMemo, useState } from "react"
-import Image from "next/image"
+import {   Button, Container, Divider, Stack as Flex , Typography, useTheme } from "@mui/material"
+import {  useContext, useState } from "react"
 
 import ImageUploaderHebtexts from '@/components/admin/newEvent/tabs/info-form-tab/image-uploader-heb-text'
 
@@ -19,13 +18,13 @@ import DatePickerWrap from "@/components/gen/time-date/date-picker-wrap"
 import tabsEroorsContext from "@/context/admin/new-event/tabs/tabs-eroors-context"
 
 import { CldImage, CldUploadWidget } from 'next-cloudinary';
-import { getCldImageUrl } from 'next-cloudinary';
 import { RiImageAddFill } from "react-icons/ri"
 import { grey } from "@mui/material/colors"
 import { useSession } from "next-auth/react"
 import axios from "axios"
 import tabsPageContext from "@/context/admin/new-event/tabs/tabs-page-context"
 import { TempInfoFiledsValidationSchema } from "../../types/new-event-types"
+import { LuImageMinus } from "react-icons/lu"
 
 
 interface InfoFormType {}
@@ -39,6 +38,7 @@ const InfoForm =({}:InfoFormType)=>{
   const [dateEroor,setDateEroor ]= useState(false)
   const {newEventValidateFiled} =  useContext(tabsEroorsContext)
   const {setIsLoading,setTabValue,setLoadingScrenText,setSaevNewEventReqestStatus}= useContext(tabsPageContext)
+    
   
   const removeImageFromCloudinary = async (Public_id:string)=>{
 
@@ -48,7 +48,7 @@ const InfoForm =({}:InfoFormType)=>{
       try {
         const response = await axios.post("/api/admin/new-event/D/event-image", { Public_id  } );
 
-      if( response.status === 200 ){
+       if( response.status === 200 ){
           console.log(response.data.result);
           setIsLoading(false)
           setInfoFileds(p=>({...p,preview:''}))
@@ -68,11 +68,6 @@ const InfoForm =({}:InfoFormType)=>{
         alert(error)
 
       }
-      
-
-
-
-     
 
   }
 
@@ -84,8 +79,6 @@ const InfoForm =({}:InfoFormType)=>{
   
   // return live ver of infoFiled.event value see -> https://react.dev/learn/state-as-a-snapshot
 //  const folderName = useMemo(() => getFolderName(infoFileds.eventName), [getFolderName, infoFileds.eventName]) 
-
-
 
 
 interface EventCategoryType {
@@ -108,8 +101,6 @@ const EventCategories: EventCategoryType[] = [
   { value: "מיוזיקל", label: "מיוזיקל" },
   { value: "ספורט", label: "ספורט" },
 ];
-
-
 
 return(
       <Container  sx={{ m:2, p:1 }}  >
@@ -220,103 +211,110 @@ return(
          <Divider sx={{borderWidth:1,mt:2,mb:2}} />
 
          <Editor />     
-     
-        { !infoFileds.preview &&
-          // when this render its get snepshot depending on its rendreing values 
-          // so when folderName update the component will know 
-         <CldUploadWidget
-          
-          uploadPreset="fx9hpz2j"
-          onQueuesStart={(e)=>{console.log("q start", e.event , e.info );}} // event &&  strings are strings 
-          onQueuesEnd={(result,)=>{
-               if(result.info && typeof result.info !=='string'){
-                 const files = result.info.files as unknown
-                   if(Array.isArray(files)){
-                       files.map((file,i)=>{
-                          const id = file?.uploadInfo?.public_id  as string
 
-                          if(id){
-                            setInfoFileds(p=>({...p,preview:id}))   
-                          }
-                          else{
-                             console.log(" שגאיה בשמירת נסה שוב ");
-                             alert(" שגאיה בשמירת נסה שוב ")
-                             
-                          }
 
-             }
-           )
-         }
-        } 
-          }}
-          options={{
-            
-            sources:["local","google_drive","dropbox"], 
-            defaultSource:'local',       
-            maxFiles:1,
-            multiple:false,
-            showPoweredBy:false,
-            showUploadMoreButton:false,
-            showAdvancedOptions:false,
-            text:{...ImageUploaderHebtexts},
-            styles:{
-                palette: {
-                    window: "#F5F5F5",
-                    sourceBg: "#FFFFFF",
-                    windowBorder: "#90a0b3",
-                    tabIcon: "#0094c7",
-                    inactiveTabIcon: "#69778A",
-                    menuIcons: theme.palette.primary.main,
-                    link: theme.palette.primary.main,
-                    action: theme.palette.primary.main,
-                    inProgress: "#0194c7",
-                    complete: "#53ad9d",
-                    error: "#c43737",
-                    textDark: "#000000",
-                    textLight: "#FFFFFF"
+          <Flex direction={!xs?"row":'column'} width={"100%"} mb={1}  gap={1} justifyContent={"space-evenly"}  >
+
+           <CldUploadWidget     
+              
+               uploadPreset="fx9hpz2j"
+               onClose={(statues,widgt)=>{
+                 
+              }}
+               onQueuesStart={(e)=>{console.log("q start", e.event , e.info );}} // event &&  strings are strings 
+               onQueuesEnd={(result,)=>{
+                    if(result.info && typeof result.info !=='string'){
+                      const files = result.info.files as unknown
+                        if(Array.isArray(files)){
+                            files.map((file,i)=>{
+                               const id = file?.uploadInfo?.public_id  as string
+                               if(id){
+                                 setInfoFileds(p=>({...p,preview:id}))   
+                               }
+                               else{
+                                  console.log(" שגאיה בשמירת נסה שוב ");
+                                  alert(" שגאיה בשמירת נסה שוב ")
+                                  }
+                     }
+                   )
+                 }
+                } 
+                    }}
+               options={{      
+                singleUploadAutoClose:true,
+                
+                autoMinimize:false,
+                 sources:["local","google_drive","dropbox"], 
+                 defaultSource:'local',       
+                 maxFiles:1,
+                 multiple:false,
+                 showPoweredBy:false,
+                 showUploadMoreButton:false,
+                 showAdvancedOptions:false,
+                 
+                 text:{...ImageUploaderHebtexts},
+                 styles:{
+                     palette: {
+                         window: "#F5F5F5",
+                         sourceBg: "#FFFFFF",
+                         windowBorder: "#90a0b3",
+                         tabIcon: "#0094c7",
+                         inactiveTabIcon: "#69778A",
+                         menuIcons: theme.palette.primary.main,
+                         link: theme.palette.primary.main,
+                         action: theme.palette.primary.main,
+                      inProgress: "#0194c7",
+                      complete: "#53ad9d",
+                      error: "#c43737",
+                      textDark: "#000000",
+                      textLight: "#FFFFFF"
                 },}
-          }}
-           >
-           {({ open }) => {
+                }}
+               >
+               {({ open }) => {
              return (
                <Button
-                
-                 sx={{ gap:1, p:0.5 , boxShadow:0, background:grey[200], mt:3,mb:3}} 
-                 onClick={() => {
+               sx={{ gap:1, p:0.5 , boxShadow:0, background:grey[200], mt:1 }} 
+               disabled={!!infoFileds.preview} // converts its to boll then if info filed it ther its flase else it true 
+               variant='text'
+               onClick={() => {
                   TempInfoFiledsValidationSchema.safeParse(infoFileds).success? 
                   open()
                   :
                   setSaevNewEventReqestStatus("Temp")
                 }}
-                 variant='text'
                  >הוסף תמונה 
                 <RiImageAddFill size={"2em"}   />
               </Button>
-             );
-             }}
-         </CldUploadWidget>
-        }
+              );
+               }}
+          </CldUploadWidget>
+          
+          <Button
+           sx={{ gap:1, p:0.5 , boxShadow:0, background:grey[200], mt:1  }} 
+           variant='text'
+           onClick={()=>removeImageFromCloudinary(infoFileds.preview)}
+           disabled={!infoFileds.preview} 
+         >הסר תמונה 
+           <LuImageMinus size={"2em"}   />
+
+         </Button>
+         </Flex>
         { infoFileds.preview &&      
-        <>
-        <Button
-              sx={{mt:3,mb:3}}
-                onClick={()=>removeImageFromCloudinary(infoFileds.preview)}
-            >החלף תמונה 
-        </Button>
+         <Flex justifyContent={"center"} direction={"row"}   > 
 
-        <Flex justifyContent={"center"} direction={"row"}   > 
-
-            {/*  eslint-disable-next-line @next/next/no-img-element */}
-       <CldImage alt={""} src={infoFileds.preview}              
+           <CldImage alt={""} src={infoFileds.preview}              
             width={!xs?260 : !sm?400 : !md? 450 : 600}
             height={!sm?300:400}
-            unoptimized
-            style={{  }} // DONT APLLAY ANY SCRIPT STYLE !!!! 
+            
+            style={{  }}
          />
          
         </Flex>  
-        </>
+        
         }
+
+
      </Container>  
      )
   

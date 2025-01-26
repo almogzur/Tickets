@@ -35,6 +35,8 @@ import { useAdminDrafts } from "@/lib/Hooks/use-admin-drafts";
 import { useSession } from "next-auth/react";
 import { RiDraftFill } from "react-icons/ri";
 import { useTheme } from "@mui/material";
+import { ImRedo2 } from "react-icons/im";
+import LoadingScreen from "@/components/gen/loading";
 
 
 type NOPropsTypeRequired ={
@@ -55,7 +57,9 @@ const NewEventFormWraper = ({EventId,setEventId}:NewEventFormWrapperProps)=>{
   
 
   const { data: session ,status ,update} = useSession()
+
   const { Drafts , isDraftsValidating, isDraftsError , updateDrafts}=useAdminDrafts(session)
+  
 
     // For DB Data 
     const [infoFileds,setInfoFileds]=useState<infoFiledsType>({
@@ -110,6 +114,7 @@ const eventNameRef = useRef<HTMLInputElement>(null);
   const [tabValue, setTabValue] = useState(0);
   const [isLoading, setIsLoading ] = useState<boolean>(false)
   const [loadingScrenText ,setLoadingScrenText] =useState<string|undefined>(undefined)
+
   const [SaevNewEventReqestStatus, setSaevNewEventReqestStatus] = useState<RequestStatusType>(undefined)
 
  // Theater State 
@@ -139,7 +144,8 @@ const eventNameRef = useRef<HTMLInputElement>(null);
   }
 
   const updateDraft = async (EventId:string, infoFileds:infoFiledsType, tickets: TicketType[])=>{
-
+    setIsLoading(true)
+    setLoadingScrenText("מעדכן")
 
     const ReqData = { ...infoFileds, tickets, id:EventId }
 
@@ -147,6 +153,7 @@ const eventNameRef = useRef<HTMLInputElement>(null);
       try{ 
         console.log("With ID")
         const response = await axios.post("/api/admin/drafts/U/update-draft",ReqData );
+
         if(response.status===200){
             
         }
@@ -158,63 +165,58 @@ const eventNameRef = useRef<HTMLInputElement>(null);
       }
       finally { 
          router.push("/admin")
+         setIsLoading(false)
+         setLoadingScrenText("")
+
        }
 
     }
   }
    // Requests 
-  const saveTempEvent = async ( infoFileds:infoFiledsType, tickets: TicketType[] , EventId?:string ):Promise<NextResponse|undefined> => {
+  const saveDraft = async ( infoFileds:infoFiledsType, tickets: TicketType[] , EventId?:string ):Promise<void>=> {
       console.log("sending req" ,infoFileds.image);
       setSaevNewEventReqestStatus('Temp')
-      const ValidationResult =  TempInfoFiledsValidationSchema.safeParse(infoFileds);
+      const ValidationResult =  TempInfoFiledsValidationSchema.safeParse(infoFileds); //validate form on click 
         try {
-            if(ValidationResult.success){
-                 setIsLoading(true)
-                 setTimeout(()=>{setIsLoading(false)},2000)
-               // Make the POST request
+               if(ValidationResult.success){
 
-                const Data ={ ...infoFileds, tickets } 
-                const response = await axios.post("/api/admin/drafts/C/new-draft",Data ,{} );
-
-            // Handle response
-            console.log(response);
+                  setIsLoading(true)
+                  setLoadingScrenText("שומר")
+                   const ReqData ={ ...infoFileds, tickets } 
+                   const response = await axios.post("/api/admin/drafts/C/new-draft",ReqData ,{} );
             
-                if(response.statusText==="OK"){
-                  router.push("/admin")
-                }
-              
-            }
-            else{
+                if(response.status === 200 ){
+                      router.push("/admin")
+                }}
+              else{
               // focuse name 
-                 if(eventNameRef.current){
-                   eventNameRef.current.scrollIntoView({block:'end',behavior:'smooth'})
-                   console.log(eventNameRef);
-                  }
-                 else{
+
                     setTabValue(0)
                     console.log('no ref');
-                    
-                    
-                }
-             return undefined
+                  
+            
             }
            }
           catch (error) {
-           if (error instanceof z.ZodError) {
-             // Handle validation errors
-             console.error("Validation Errors:", error.errors);
-             console.log("Invalid input data");
-           }
+             if (error instanceof z.ZodError) {
+               // Handle validation errors
+               console.error("Validation Errors:", error.errors);
+                console.log("Invalid input data");
+             }
            console.error("API Error:", error);
           console.log("Failed to save the event");
          }
+         finally{
+          setIsLoading(true)
+          setLoadingScrenText("שומר")
+         }
     };
   
-  const saveProductionEvent = async () =>{
+  const saveEvent = async () =>{
             setSaevNewEventReqestStatus('Production')
   
     }
-
+  
 
   const QuickActions = [
             { icon: <FaFirstdraft size={"2em"} />,
@@ -222,36 +224,41 @@ const eventNameRef = useRef<HTMLInputElement>(null);
              ClickHendler:(e:React.MouseEvent<HTMLDivElement>)=>
                 EventId
                 ? updateDraft(EventId, infoFileds,tickets) 
-                : saveTempEvent(infoFileds,tickets ,EventId)
+                : saveDraft(infoFileds,tickets ,EventId)
               
             },
             { icon: <MdPublic size={"2.5em"} />,
              name: ' פרסם ' , 
-             ClickHendler:(e:React.MouseEvent<HTMLDivElement>)=>{saveProductionEvent()} 
+             ClickHendler:(e:React.MouseEvent<HTMLDivElement>)=>{saveEvent()} 
            },
         
            ];
 
    const withIdQuickAction =[
     {
-      icon:<RiDraftFill size={"2.5em"} />,
+      icon:<ImRedo2  size={'2em'} />
+      ,
       name:"בטל וחזור",
       ClickHendler:(e:React.MouseEvent<HTMLDivElement>)=>{ setEventId? setEventId(""):null} 
     },
-    { icon: <FaFirstdraft size={"2em"} />,
+    { icon: <RiDraftFill size={"2em"} />,
     name: 'עדכן טיוטה ' , 
     ClickHendler:(e:React.MouseEvent<HTMLDivElement>)=>
        EventId
        ? updateDraft(EventId, infoFileds,tickets) 
-       : saveTempEvent(infoFileds,tickets ,EventId)
+       : saveDraft(infoFileds,tickets ,EventId)
    },
    { icon: <MdPublic size={"2.5em"} />,
    name: ' פרסם ' , 
-   ClickHendler:(e:React.MouseEvent<HTMLDivElement>)=>{saveProductionEvent()} 
+   ClickHendler:(e:React.MouseEvent<HTMLDivElement>)=>{saveEvent()} 
  },
 
    ]
 
+          if (isLoading)  {
+   
+         return <LoadingScreen text={loadingScrenText} />
+         }
 
   return(
     
@@ -259,7 +266,9 @@ const eventNameRef = useRef<HTMLInputElement>(null);
     <TabsPageContext.Provider value={{tabValue,setTabValue, isLoading, setIsLoading, SaevNewEventReqestStatus, setSaevNewEventReqestStatus ,loadingScrenText ,setLoadingScrenText }}>
     <TabInfoContext.Provider value={{infoFileds,setInfoFileds}}>
     <TabsTickets.Provider  value={{tickets ,setTickets}} >
+
            <TabsWraper EventId={EventId}  />
+
            { 
             infoFileds.Theater &&
             <AdminTransformContext.Provider value={{AdminMapPositions,setAdminMapPositions}}>   
@@ -279,7 +288,7 @@ const eventNameRef = useRef<HTMLInputElement>(null);
               direction={"up"}
               positions={!sm?{ bottom: 0,left:0 }:{bottom:16,left:10}}       
            />
-        </TabsTickets.Provider>
+   </TabsTickets.Provider>
    </TabInfoContext.Provider> 
    </TabsPageContext.Provider>
    </TabsEroorsContext.Provider>
