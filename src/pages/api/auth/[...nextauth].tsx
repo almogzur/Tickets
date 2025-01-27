@@ -6,7 +6,7 @@ import { CRUDConnection } from "@/lib/DB/CRUD_Calls_Mongo"
 import bcrypt from 'bcryptjs'
 
 import jwt from 'jsonwebtoken'
-import { NewUserSchemaDefinition, NewUserType, NewUserValidationShema, } from "@/pages/admin/supervisor/supervisor_types"
+import { NewUserSchemaDefinition, NewUserType, NewUserValidationShema, } from "@/lib/supervisor_types"
 import { createSchmaAndModel } from "@/components/admin/newEvent/types/new-event-db-schema"
 import { disconnectFromDb, ModleAuthUsersConncectin } from "@/lib/DB/Mongosee_Connection"
 

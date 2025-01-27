@@ -2,7 +2,7 @@ import { ModleDbNamedConnction , disconnectFromDb} from "@/lib/DB/Mongosee_Conne
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
-import {  EventMongoseeDraftType } from "@/components/admin/newEvent/types/new-event-types";
+import {  EventType } from "@/components/admin/newEvent/types/new-event-types";
 import { createSchmaAndModel, DraftSchemaDefinition } from "@/components/admin/newEvent/types/new-event-db-schema";
 
  // findOne(filter: Filter<TSchema>, options: FindOptions): Promise<WithId<TSchema> | null>;
@@ -12,7 +12,7 @@ type Message = {
   message:string
 }
 
-export type getAdminDraftsApiReturndType = EventMongoseeDraftType[] |  Message
+export type getAdminDraftsApiReturndType = EventType[] |  Message
 
 export default async function handler(req: NextApiRequest,res: NextApiResponse<getAdminDraftsApiReturndType>) {
 
@@ -45,7 +45,7 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse<g
 
       // calling the Molde Only on Api call prevanting un wanted folder saves 
 
-       const DraftModle = createSchmaAndModel<EventMongoseeDraftType>("Drafts",DraftSchemaDefinition)
+       const DraftModle = createSchmaAndModel<EventType>("Drafts",DraftSchemaDefinition)
 
 
    try{ 

@@ -1,11 +1,11 @@
 import InputWrap from '@/components/gen/TeextFiledWrpa/input-wrap';
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import bcrypt from 'bcryptjs';
-import { Button, SelectChangeEvent, Typography , Stack as Flex, Container } from '@mui/material';
+import { Button, Typography , Stack as Flex, Container } from '@mui/material';
 import AdminLayout from '@/Layouts/admin-layout';
-import SelectWrap from '@/components/gen/select-wrap';
+
 import axios from 'axios';
-import { NewUserType } from './supervisor_types';
+import { NewUserType } from '../../../lib/supervisor_types';
 import { grey } from '@mui/material/colors';
 
 

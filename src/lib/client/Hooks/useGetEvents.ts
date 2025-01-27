@@ -1,10 +1,12 @@
 
+import { EventsType } from "@/pages/api/client/events/R/get-events";
 import axios, { AxiosRequestConfig } from "axios";
 import useSWR, { Fetcher, Key as SWRKey , KeyedMutator, SWRConfiguration} from "swr";
 
-type T  = unknown
+type T  = EventsType[]
+
 type ReturendFetcherType<T> = {
-  Events: T | undefined; // Allow `undefined` for when data is not yet loaded
+  Events: T  // Allow `undefined` for when data is not yet loaded
   isEventsValidating: boolean;
   isEventsError: unknown;
   updateEvents: KeyedMutator<T>;

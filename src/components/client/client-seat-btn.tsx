@@ -34,7 +34,6 @@ const TooltipButton = ({ seatValue, seatnumber, row ,hendler }:ToolTipButtonType
   const {clientTipPosition, setClientTipPosition ,clinetTipInfo ,setClinetTipInfo, resetClinetTip }=useContext(ClientTipContext)
 
 
-
     const tiphndler = (xArg: number,yArg: number)=>{
       setClientTipPosition({x:xArg,y:yArg})
       
@@ -60,12 +59,9 @@ const TooltipButton = ({ seatValue, seatnumber, row ,hendler }:ToolTipButtonType
         }
         
       >
-        
+      {seatValue}  
     </div>
     
-
-
-     
   );
 };
 

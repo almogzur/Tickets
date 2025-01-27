@@ -4,7 +4,7 @@ import { getServerSession } from "next-auth";
 import { ModleDbNamedConnction, disconnectFromDb } from "@/lib/DB/Mongosee_Connection";
 import { createSchmaAndModel, DraftSchemaDefinition } from "@/components/admin/newEvent/types/new-event-db-schema";
 import { delFolder, findSubFolders, moveToEventNameFolder } from "../cloudinary_helper_functions";
-import { EventMongoseeDraftType } from "@/components/admin/newEvent/types/new-event-types";
+import { EventType } from "@/components/admin/newEvent/types/new-event-types";
 
 type ResponseData = {
   message?: string
@@ -52,7 +52,7 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse<R
 
 
     // calling the Molde Only on Api call prevanting un wanted folder saves 
-  const DraftModle = createSchmaAndModel<EventMongoseeDraftType>("Drafts",DraftSchemaDefinition)
+  const DraftModle = createSchmaAndModel<EventType>("Drafts",DraftSchemaDefinition)
 
 
   const preview = rest.preview

@@ -2,7 +2,7 @@
 
 import { createSchmaAndModel } from "@/components/admin/newEvent/types/new-event-db-schema";
 import {  ModleAuthUsersConncectin  ,disconnectFromDb} from "@/lib/DB/Mongosee_Connection";
-import { NewUserSchemaDefinition, NewUserType } from "@/pages/admin/supervisor/supervisor_types";
+import { NewUserSchemaDefinition, NewUserType } from "@/lib/supervisor_types";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";

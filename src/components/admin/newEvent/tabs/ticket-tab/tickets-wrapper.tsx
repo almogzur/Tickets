@@ -27,6 +27,7 @@ import SelectWrap from "@/components/gen/select-wrap"
 import { IoTicket } from "react-icons/io5"
 import { infoFiledsType } from "@/components/admin/newEvent/types/new-event-types"
 import { TheaterType } from "@/components/admin/newEvent/theater/types/theater-types"
+import { Seats } from "@/components/theater-gen/types/theater-types"
 
 
 
@@ -59,7 +60,7 @@ interface TicketsTabPropsType {  setTabValue : Dispatch<SetStateAction<number>>}
     let totalSeats = 0;
   
     // Combine main and side seat sections
-    const combinedTheaterSeats = [Theater.mainSeats, Theater.sideSeats];
+    const combinedTheaterSeats: Seats[]  = [Theater.mainSeats, Theater.sideSeats];
   
     // Iterate through each section (main and side seats)
     combinedTheaterSeats.forEach((section) => {

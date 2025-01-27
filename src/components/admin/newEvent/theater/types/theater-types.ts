@@ -1,4 +1,4 @@
-import { Seats, SeatStyles } from '@/constants/models/Events'
+import { Seats, SeatStyles } from '@/components/theater-gen/types/theater-types'
 import { RefObject } from 'react'
 
 export interface TheaterLocationType {

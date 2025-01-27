@@ -1,7 +1,7 @@
 
 import { TheaterType } from '@/components/admin/newEvent/theater/types/theater-types';
-import { ObjectId } from 'mongoose';
-import { nullable, z }  from 'zod'
+
+import { z }  from 'zod'
 
 export const TicketValidationSchema = z.object({
   EndSealesDate: z.string().nullable(),
@@ -56,9 +56,9 @@ export interface infoFiledsType {
   Hour:Date|null
   OpenDorHour:Date|null
 }
-export interface EventMongoseeDraftType extends infoFiledsType {
+export interface EventType extends infoFiledsType {
   tickets?: TicketType[];
-  _id:''
+  _id:string
 }
 
 export interface LogType {  

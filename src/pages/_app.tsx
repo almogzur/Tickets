@@ -1,14 +1,12 @@
 import type { AppProps } from 'next/app'
-import { CloudinaryUploadWidgetOptions } from 'next-cloudinary';
-// 
+ 
 import { useMediaQuery } from 'usehooks-ts';
 import { useState } from 'react';
-import { Event} from '../constants/models/Events';
 import '../styles/global.css'
 
+
+
 //Context
-import { events as eventData } from '../constants/event';
-import MoviesContext from '../context/Events'
 import WidthContext from '../context/WidthContext';
 /////
 import ClineTransformContext from '@/context/client/client-map-positions-context'
@@ -33,6 +31,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 // Geo Location  Map  Css
 import '@tomtom-international/web-sdk-maps/dist/maps.css'
 import { Positions, TheaterTipinfoType } from '@/components/admin/newEvent/theater/types/theater-types';
+import { EventsType } from './api/client/events/R/get-events';
 
 
 export const FullDateOptions :Intl.DateTimeFormatOptions = {
@@ -55,12 +54,21 @@ const theme  = createTheme({
     direction:"rtl",
     palette:{
       primary:{main:blue[700]},
-      secondary:{main:"#3f51b5"},
+      secondary:{main:"#fe2769"},
+      warning:{main:"#fdb931"},
+      info:{main:"#8e569f"}
+      
    
-    }
-    ,
+    },
+    typography:{
+      fontFamily:[
+        'Rubik Dirt'
+      ].join(",")
+    },
+  
 
     components: {
+    
       MuiTypography:{
         defaultProps:{},
         styleOverrides:{
@@ -170,7 +178,7 @@ const theme  = createTheme({
 
 const MyApp = ({ Component, pageProps: { nonce, session, ...pageProps } }: AppProps)=> {
 
-  const [events, setEvents] = useState<Event[]>(eventData);
+  const [events, setEvents] = useState<EventsType[]>();
   //const [cachedNonce] = useState(nonce);
 
   // client map
@@ -199,13 +207,11 @@ return (
   <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='he'  >
   <ClineTransformContext.Provider value={{ClientMapPositions ,setClientMapPositions}}>
   <ClientTipContext.Provider value={{ clientTipPosition,setClientTipPosition, clinetTipInfo ,setClinetTipInfo,resetClinetTip }} >
-  <MoviesContext.Provider value={{events, setEvents}}>
   <WidthContext.Provider value={{xxl,xl,lg,md,sm,xs,xxs}}>
  
       <Component {...pageProps} />
 
   </WidthContext.Provider>
-  </MoviesContext.Provider>
   </ClientTipContext.Provider>
   </ClineTransformContext.Provider>
   </LocalizationProvider>

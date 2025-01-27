@@ -1,7 +1,7 @@
 import {useEffect,useState , useRef, useContext} from 'react'
 import { Container, Typography } from '@mui/material'; '@mui/material'
 
-import WidthContext from '../context/WidthContext';
+import WidthContext from '@/context/WidthContext'
 
 const Map = () =>{
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)

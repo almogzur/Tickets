@@ -10,6 +10,7 @@ import InputWrap from '@/components/gen/TeextFiledWrpa/input-wrap'
 import bcrypt from 'bcryptjs';
 
 import SingInButton from '@/components/admin/sing-in-button'
+import { NewUserType } from '../../lib/supervisor_types'
 
 
 interface errorMessagesType{
@@ -33,13 +34,10 @@ export default function SingInPage(){
   };
 
 
-    const hashPassword = async (password:string) => {
-      const saltRounds = 10;
-      const hashedPassword = await bcrypt.hash(password, saltRounds);
-      return hashedPassword;
-    };
+
+
  
-  const [ formData ,setFormData ] = useState<any>({
+  const [ formData ,setFormData ] = useState<NewUserType>({
     name:"",
     password:"",
   })
@@ -52,8 +50,7 @@ export default function SingInPage(){
     signIn(
       'credentials' ,{
          name: formData.name,
-         password:hashPassword(formData.password) ,
-         role:formData.role,
+         password:formData.password,
          callbackUrl:"/admin"
         },
       )

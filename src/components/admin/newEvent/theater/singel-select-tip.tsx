@@ -181,7 +181,7 @@ const SingleSelectTip= ({theaterDate ,setTheater }:SingleSelectTipPropsType)=>{
                   sx={{borderRadius:1 , width:"60%", mt:1}} 
                   onClick={()=>resetSingleTip()} >
                   סגור
-                </Button>
+                  </Button>
            
            
         

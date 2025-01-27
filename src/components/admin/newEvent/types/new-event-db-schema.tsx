@@ -1,6 +1,6 @@
 
 import mongoose, { model,SchemaDefinition,   } from 'mongoose';
-import { EventMongoseeDraftType, LogType, TicketType } from './new-event-types';
+import {  LogType, TicketType } from './new-event-types';
 
 const { Schema } = mongoose;
 

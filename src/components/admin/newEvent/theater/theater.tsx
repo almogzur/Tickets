@@ -1,5 +1,4 @@
 import {  CSSProperties, Dispatch, SetStateAction, useContext, useState } from 'react'
-import { Seats , SeatStyles } from '@/constants/models/Events';
 import {  Stack as Flex ,  Container, Typography, useTheme, Box, Avatar, } from '@mui/material'
 import SingleSelectTip from './singel-select-tip';
 import AdminSeatBtn from './adminSeatBtn'
@@ -14,6 +13,7 @@ import AdminNewEventTheatherMap from './new-event-theather-map';
 import WidthContext from '@/context/WidthContext';
 import TabsInfoContest from '@/context/admin/new-event/tabs/tabs-info-context'
 import { TheaterType } from '@/components/admin/newEvent/theater/types/theater-types';
+import { Seats } from '@/components/theater-gen/types/theater-types';
  
 const Theater = ({TheaterDate}:{TheaterDate:TheaterType}) => {
 
@@ -25,12 +25,12 @@ const Theater = ({TheaterDate}:{TheaterDate:TheaterType}) => {
 
 
        const sideSeatsStylesObject =  Object.fromEntries(
-        Object.entries(TheaterDate.styles ).map(([row, positions]) => [row, positions])
+        Object.entries<CSSProperties>(TheaterDate.styles ).map(([row, positions]) => [row, positions])
       )
        const sideTextStylesObject =     Object.fromEntries(
-        Object.entries(TheaterDate.textsStyle).map(([row, positions]) => [row, positions])
+        Object.entries<CSSProperties>(TheaterDate.textsStyle).map(([row, positions]) => [row, positions])
       )
-       const MainSeatS  =   Object.entries(TheaterDate.mainSeats).map(([row, rowContent]) => {
+       const MainSeatS  =   Object.entries<number[]>(TheaterDate.mainSeats).map(([row, rowContent]) => {
         const colValue  = rowContent.map((seatValue: number, i: number) => {
           const textset = "מושב";
           const textrow = "שורה";
@@ -62,7 +62,7 @@ const Theater = ({TheaterDate}:{TheaterDate:TheaterType}) => {
           </Flex>
         );
       })
-       const SideSeats =   Object.entries(TheaterDate.sideSeats).map(([row, rowContent])=>{
+       const SideSeats =   Object.entries<number[]>(TheaterDate.sideSeats).map(([row, rowContent])=>{
         const colValue  = rowContent.map((seatValue: number, i: number) => {
          
         

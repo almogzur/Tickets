@@ -12,6 +12,7 @@ import { LuRefreshCcw } from "react-icons/lu";
 import WidthContext from "@/context/WidthContext";
 import { ClinetSeatColorsIndex } from "../theater-gen/seats-controls";
 import ColorIndexDial from "../theater-gen/colors-dial";
+import { grey } from "@mui/material/colors";
 
 
 interface ClientTheaterMapPropsTypes {
@@ -22,6 +23,7 @@ interface ClientTheaterMapPropsTypes {
 const ClientTheaterMap = ({children }:ClientTheaterMapPropsTypes) => {
   
     const {ClientMapPositions,setClientMapPositions} =useContext(ClientPositionContext)
+    const theme = useTheme()
     
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
 
@@ -55,21 +57,19 @@ const ClientTheaterMap = ({children }:ClientTheaterMapPropsTypes) => {
             <>
                 <Controls   />
 
-                  <Flex direction={"row"} justifyContent={"center"} mb={2}  >
+                  <Flex direction={"row"} justifyContent={"center" } >
 
                 <TransformComponent
-                  wrapperStyle={{ width:"100%" }}
+                  wrapperStyle={{ width:!xs?"85%":"90%", border:`solid 0.5px ${theme.palette.secondary.light}` ,borderRadius:15 }}
                
                  >
                  {children}     
                  
                 </TransformComponent>
 
-               </Flex>
-              <ColorIndexDial />
-             
-              
+                  </Flex>
 
+                 <ColorIndexDial />
             </>
         )
   }
@@ -91,20 +91,21 @@ const ClientTheaterMap = ({children }:ClientTheaterMapPropsTypes) => {
   
     return (
         <>
-      <Flex direction={'row'} justifyContent={"space-between"} p={2} sx={{  color:theme.palette.primary.main}} >
+      <Flex direction={'row'} justifyContent={"space-around"} p={2} sx={{  color:theme.palette.primary.main}} >
   
-        <Button sx={{height:'60px' }} color='primary' variant='contained'  onClick={(e) => {zoomIn()}}>
-          <FaPlus  color={theme.palette.secondary.main} size={"2em"} />
+        <Button  color='secondary' sx={{p:2.5}} variant='contained'  onClick={(e) => {zoomIn()}}>
+          <FaPlus />
         </Button>
   
-        <Button    sx={{height:'60px'}} color='primary' variant='contained'  onClick={(e) =>{zoomOut() }}>
-          <FaMinus color={theme.palette.secondary.main} size={"2em"}/>
+        <Button    color='secondary'variant='contained'  onClick={(e) =>{zoomOut() }}>
+          <FaMinus size={"2em"}/>
         </Button>
-        <Button sx={{height:'60px'  }} color='primary'  variant='contained'  onClick={(e) =>{resetTransform()    }}>
-          <LuRefreshCcw color={theme.palette.secondary.main} size={"2em"}/>
-          </Button>
+
+        <Button  color='secondary' variant='contained'  onClick={(e) =>{resetTransform()    }}>
+          <LuRefreshCcw  size={"2em"}/>
+       </Button>
+
       </Flex>
-      <Divider sx={{borderWidth:3 , background:theme.palette.primary.dark}} />
       </>
     );
   };

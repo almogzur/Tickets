@@ -31,7 +31,7 @@ import { FaFirstdraft } from 'react-icons/fa6'
 import { MdPublic } from "react-icons/md";
 import { useRouter } from "next/router";
 import WidthContext from "@/context/WidthContext";
-import { useAdminDrafts } from "@/lib/Hooks/use-admin-drafts";
+import { useAdminDrafts } from "@/lib/admin/Hooks/use-admin-drafts";
 import { useSession } from "next-auth/react";
 import { RiDraftFill } from "react-icons/ri";
 import { useTheme } from "@mui/material";
