@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 import ClientLayout from '../Layouts/client-layout';
 import useClientEvents from '@/lib/client/Hooks/useGetEvents';
 import {  useContext, useEffect, useRef, useState } from 'react';
-import EventCard from '@/components/client/event-card';
+import EventCard from '@/components/client/main-page/event-card';
 import Carousel from 'react-material-ui-carousel'
 import { FaCircleArrowLeft, FaCircleArrowRight } from 'react-icons/fa6';
 import zIndex from '@mui/material/styles/zIndex';
@@ -41,7 +41,7 @@ interface ItemComponentProps   {
   function Item({name,description}:ItemTye ){
     return (
         <Paper 
-          sx={{background:"black"}}
+          sx={{background:"#ddd" , mt:3 ,height:250}}
         >
             <Typography>{name}</Typography>
             <p>{description}</p>
@@ -119,11 +119,13 @@ export default function Home() {
 
   
    const
-    PageWrapper = Box,
+     PageWrapper = Container,
      Placeholder = Box,
      Scrooler = Box,
+     ScroolerConetnt=Box,
      RightArrow=Box,
-     LeftArrow =Box
+     LeftArrow =Box,
+     ArowsWrapper = Flex
 
   return (
     <>
@@ -131,10 +133,11 @@ export default function Home() {
         <title>הזמנות כרטיסים  | בית</title>
     </Head>
      <ClientLayout>
-       <PageWrapper bgcolor={"black"} height={'100%'}>
-         <Container>
+        
+       <PageWrapper maxWidth='xl'>
+
           
-            <Carousel
+             <Carousel
             sx={{background:"black"}}
             
             >
@@ -142,17 +145,19 @@ export default function Home() {
                 items.map( (item, i) => <Item key={i} {...item} /> )
               }
             </Carousel>
+ 
+            
+             <Scrooler>
 
-             <Scrooler display="flex" alignItems="center" mt={5} >
-
-              <RightArrow
-                position={"relative"}
-                right={!xs?-15 : !md?  -25 : -10}
-                zIndex={1500}
-                width={0}
-                bottom={!xs? 200:  215}
+                <ArowsWrapper direction={"row"}  justifyContent={"space-between"}  >
+                 <RightArrow
+                       position={"relative"}
+                       left={!xs?-15 : !md?  -25 :"auto"}
+                       zIndex={5}
+                       width={0}
+             
                 >
-                   <Button
+                    <Button
                      variant='text'
                     color='secondary'
                     sx={{borderRadius:45,opacity:0.7}}
@@ -163,10 +168,27 @@ export default function Home() {
                     cursor={'pointer'}
                   />
                    </Button>
-               </RightArrow>
+                 </RightArrow>
 
 
-                 <Box
+
+                  <LeftArrow>
+                <Button
+                    variant='text'
+                    color='secondary'
+                    sx={{borderRadius:45,opacity:0.7}}
+              >
+              <FaCircleArrowLeft
+                size={!md ? 40 : 50}
+                onClick={scrollLeft}
+                cursor={'pointer'}
+              />
+               </Button>    
+                  </LeftArrow>
+
+               </ArowsWrapper>
+
+                   <ScroolerConetnt
                     ref={scrollContainerRef}
                     onMouseDown={handleMouseDown}
                     onMouseMove={handleMouseMove}
@@ -176,9 +198,11 @@ export default function Home() {
                     display={"flex"}
                     flexDirection={ "row"}
                     gap={3}
-                    height={!xs? 350 : 400}
+                   
                     sx={{
-                      overflowX: "scroll",
+                      overflowX: 'auto',
+  
+     
                       '&::-webkit-scrollbar': {
                         width: '0.2em'
                       },
@@ -195,35 +219,22 @@ export default function Home() {
 
                     }}
                   >
+
+
                     {Events?.map((event) => (
                         <EventCard key={event._id} {...event} />
                     ))}
-                </Box>
 
-                <LeftArrow
-                 position={"relative"}
-                 zIndex={1500}
-                 bottom={!xs? 200:  215}
-                 width={0}
-                 right={!xs? -40 : !md? -30:  -45}
-              >
-                <Button
-              variant='text'
-              color='secondary'
-              sx={{borderRadius:45,opacity:0.7}}
-              >
-              <FaCircleArrowLeft
-                size={!md ? 40 : 50}
-                onClick={scrollLeft}
-                cursor={'pointer'}
-              />
-               </Button>    
-            </LeftArrow>
 
-         </Scrooler>           
+
+
+
+                   </ScroolerConetnt>
+             </Scrooler>
+                      
         <Placeholder height={400} />
-     </Container>
-  </PageWrapper>
+
+      </PageWrapper>
              
       
 

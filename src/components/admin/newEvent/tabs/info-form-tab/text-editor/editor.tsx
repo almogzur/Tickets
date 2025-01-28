@@ -66,7 +66,9 @@ useEffect(() => {
             "& .MuiCollapse-root":{
               background:grey[200]
             }, 
-            "& .MuiBox-root":{},
+            "& .MuiBox-root":{
+              background:grey[200]
+            },
 
             "& .MuiTiptap-RichTextContent-root":{
                 color:'black',
@@ -109,10 +111,8 @@ useEffect(() => {
           editable={isEditable}
           shouldRerenderOnTransaction
           content={infoFileds.pre }
-          onCreate={(e)=>{ 
-              const currentSelction=  e.editor.state.selection 
+          
 
-          }}
           
           onUpdate={({editor,transaction})=>{
             const cleanEditorContent = DOMPurify.sanitize(editor.getHTML(),{})
@@ -126,7 +126,7 @@ useEffect(() => {
             // example), but can be changed to "standard" to remove the outlined
             // field border from the editor
             variant: 'outlined',
-            
+          
             
             MenuBarProps: {
               hide: !showMenuBar,
@@ -142,6 +142,7 @@ useEffect(() => {
                 alignItems={"center"}
                 gap={1}
                 sx={{
+                  background:grey[200],
                   borderTopStyle: "solid",
                   borderTopWidth: 1,
                   borderTopColor: (theme) => theme.palette.divider,
@@ -204,7 +205,7 @@ useEffect(() => {
         >
           {() => (
             <>
-              <LinkBubbleMenu />
+      
               <TableBubbleMenu />
               
             </>

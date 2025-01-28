@@ -60,9 +60,9 @@ const Map = () =>{
         return (
  
         
-            <Container sx={{ height:!xs? 460:  620 ,  boxShadow:' 3px 3px 3px 2px #fff',   marginTop:5 , marginBottom:10}} >
+            <Container sx={{ m:10, boxShadow:' 3px 3px 3px 2px #fff',   marginTop:5 , marginBottom:10}} >
                 <Typography textAlign={"center"} variant='h2' > דרכי הגעה </Typography>
-               <div style={{height: !xs? 360:  500 , marginBottom:2}} ref={mapElement} className="mapDiv" />
+               <div style={{height: !xs? 360:  400 , marginBottom:2}} ref={mapElement} className="mapDiv" />
             </Container>
    
         );

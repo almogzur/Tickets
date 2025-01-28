@@ -171,15 +171,7 @@ import { infoFiledsType } from "@/components/admin/newEvent/types/new-event-type
         
 
                 <Flex  direction={'row'} flexWrap={'wrap'} justifyContent={'center'}  >
-                  <Button 
-                     variant='contained' 
-                      color='success' 
-                      sx={comonAtt} 
-                      onClick={(e)=>{ upateSeateValue( 4) }}
-                    
-                      >
-                     מוזל
-                  </Button>
+
                   {/* Bloacked */}
                   <Button
                          variant='contained' 
@@ -206,12 +198,7 @@ import { infoFiledsType } from "@/components/admin/newEvent/types/new-event-type
                    נגיש 
                
                 </Button>
-                 <Button 
-                  sx={{...comonAtt , bgcolor:pink[600]}}
-                  onClick={(e)=>{ upateSeateValue( 6) }}
-                >
-                  נגיש מוזל
-                </Button>
+
               
                 </Flex>
       

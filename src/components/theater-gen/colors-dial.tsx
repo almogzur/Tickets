@@ -1,5 +1,5 @@
 import WidthContext from "@/context/WidthContext";
-import { Box, SpeedDial, SpeedDialAction, Avatar } from "@mui/material";
+import { Box, SpeedDial, SpeedDialAction, Avatar, useTheme } from "@mui/material";
 import { blue, orange, green, pink } from "@mui/material/colors";
 import { useContext, useState } from "react";
 import { HiOutlineColorSwatch } from "react-icons/hi";
@@ -7,7 +7,7 @@ import { HiOutlineColorSwatch } from "react-icons/hi";
 
 export default function ColorIndexDial() {
    const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
-
+const theme= useTheme()
 
   const [open, setOpen] = useState(false);
   const handleClose = () => {
@@ -22,13 +22,27 @@ export default function ColorIndexDial() {
     <Box sx={{  transform: 'translateZ(0px)', flexGrow: 1 }}>
 
       <SpeedDial
-        sx={{ position: 'absolute', bottom: !xs? -20: 40, right: !xs ? "10%" : "7%" , scale:!xs? 0.7:1}}
-        icon={< HiOutlineColorSwatch size={"2em"} />}
-        ariaLabel="SpeedDial basic example"
+        sx={{ 
+            position: 'absolute',
+             bottom: !xs? -20: 40,
+              right: !xs ? "10%" : "7%" ,
+               scale:!xs? 0.7:1,
+               
+               
+               
+               
+              }}
+              FabProps={{style:{background:theme.palette.secondary.main}}}
+        
+        icon={< HiOutlineColorSwatch size={"2em"}  />}
+        
+        ariaLabel="Client Theater Dial"
         direction='up'
         onClose={handleClose}
         onOpen={handleOpen}
         open={open}
+        
+        
       >
 
 

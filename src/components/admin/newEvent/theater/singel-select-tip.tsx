@@ -138,14 +138,7 @@ const SingleSelectTip= ({theaterDate ,setTheater }:SingleSelectTipPropsType)=>{
 
 
                         {/*discount  */}
-                        <Button 
-                          variant='contained' 
-                          color='success' 
-                          sx={{...comonAtt}} 
-                          onClick={(e)=>{ upateSeateValue(4) }}
-                           >
-                         מוזל
-                        </Button>
+
 
                         {/* Bloacked */}
                         <Button
@@ -167,11 +160,9 @@ const SingleSelectTip= ({theaterDate ,setTheater }:SingleSelectTipPropsType)=>{
                         <Button
                            sx={{...comonAtt , bgcolor:orange[600]}} 
                            onClick={()=>{upateSeateValue(5)}}
-                         >נגיש</Button>
-                        <Button 
-                          sx={{...comonAtt ,bgcolor: pink[600]}} 
-                          onClick={()=>{upateSeateValue(6)}}
-                        >נגיש מוזל </Button>
+                         >נגיש
+                         </Button>
+          
    
                     </Flex>
 

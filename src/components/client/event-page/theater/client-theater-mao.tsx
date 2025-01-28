@@ -1,16 +1,14 @@
-import TooltipButton from '../client-seat-btn'
-import ClientTheaterMap from '../client-theater-map';
-import { motion ,AnimatePresence } from "framer-motion"
+import TooltipButton from './client-seat-btn'
+import ClientTheaterRTransform from '@/components/client/event-page/theater/client-theater-map'
 
 import ClientTipContext from '@/context/client/c-tip-context'
 
 import { useState, useEffect, useContext, CSSProperties, useRef, Dispatch, SetStateAction, } from 'react'
-import { ClientTheaterType } from './client-theater';
-import { useTheme , Stack as Flex, Typography } from '@mui/material';
+import { useTheme , Stack as Flex, Typography, Drawer } from '@mui/material';
 import WidthContext from '@/context/WidthContext';
 import { TheaterType } from '@/components/admin/newEvent/theater/types/theater-types';
 
-const  TheaterMap = ({theater}:ClientTheaterType) => {
+const  TheaterMap = ({theater}:{theater:TheaterType}) => {
 
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
   const[ clientEventState ,setClientEventState] = useState<TheaterType>()
@@ -22,15 +20,16 @@ const  TheaterMap = ({theater}:ClientTheaterType) => {
 
   },[theater])
 
-
-
-    const theme = useTheme()
+  
+  const theme = useTheme()
 
 const hendler = (  seatValue: number,seatNumber: number, row:string , newSeatValueArg:number ) => {
 
 // Update the selected seats array
 const inMain = theater.mainSeats.hasOwnProperty(row) 
 const inSide =  theater.sideSeats.hasOwnProperty(row) 
+
+const  SeatValueOptions = [ 0,2,3,4,5,6,7]
 
 if (inMain) {
   setClientEventState((prevState) => {
@@ -46,7 +45,8 @@ if (inMain) {
          const updatedRow = [...updatedMainSeats[row]];
 
          // Update the specific seat in the row
-         updatedRow[seatNumber] = newSeatValueArg;
+         const oldNUmber = updatedRow[seatNumber] 
+         updatedRow[seatNumber] = updatedRow[seatNumber] === 0 ?  newSeatValueArg :0
 
          // Assign the updated row back to mainSeats
          updatedMainSeats[row] = updatedRow;
@@ -174,49 +174,18 @@ const {clientTipPosition,clinetTipInfo, setClientTipPosition  ,setClinetTipInfo,
 
     
 return (
- <>
-    <AnimatePresence>
-     {clientTipPosition.x && clientTipPosition.y  && (
-    <motion.h1
-     style={{
-        background: "#fff",
-       
-        borderRadius: "4px",
-        height:"fin-content",
-        width:"fin-content",
-        position:'absolute',
-        zIndex:99,
-        top:`${clientTipPosition.y-40 }px`,
-        left:`${clientTipPosition.x-60}px`,
-        fontSize:!xs? 12 : 15,
-        padding:10,
-        textAlign:"end",
-        fontWeight:"bold"
-        
-        
-     }}
+ 
+       <ClientTheaterRTransform  >    
 
-    initial={{ opacity: 0, y: -15 }}
-    animate={{ opacity: 1, y:-23,   transition: { duration: 0.5 } }}
-     exit={{ opacity: 0, transition: { duration: 0.5 } }}
-    >
-     {clinetTipInfo.row}:{clinetTipInfo.seatNumber}
-   </motion.h1>
-    )}
-   </AnimatePresence> 
+        <Flex  sx={{direction:"ltr" }} >
+          <Stage />
+           {MainSeatS}
+           {Text}
+           {SideSeats}
+      </Flex>      
 
-
-      <ClientTheaterMap   >    
-
-       <Flex direction={"column"}    height={!xs? 300 : !md? 500 : 800}      sx={{direction:"ltr"}} >
-       <Stage />
-          {MainSeatS}
-          {Text}
-         {SideSeats}
-    </Flex>      
-
-      </ClientTheaterMap>         
-  </>
+      </ClientTheaterRTransform>         
+  
 );
 };
 

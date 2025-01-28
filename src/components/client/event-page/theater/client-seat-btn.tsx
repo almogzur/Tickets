@@ -59,7 +59,7 @@ const TooltipButton = ({ seatValue, seatnumber, row ,hendler }:ToolTipButtonType
         }
         
       >
-      {seatValue}  
+      {}  
     </div>
     
   );

@@ -23,6 +23,9 @@ const ClientNavbar = () => {
             bgcolor={theme.palette.secondary.main} 
             width={"100%"} 
             height={!xs?55: 75} 
+            position={'sticky'}
+            top={0}
+            zIndex={theme.zIndex.drawer}
             
             >
     
@@ -34,17 +37,16 @@ const ClientNavbar = () => {
                       router.push( path )
                      }}
                 > {
-                  session?.user?.displayName ?
-                  <Typography   >פורטל ניהול{}</Typography>
-                  :
+                  
+    
                   <>
-                  <Typography fontSize={!xs?12:14} >שלום לך</Typography>
+                  <Typography fontSize={!xs?12:14} >שלום {session?.user?.displayName ??""}</Typography>
                   <Typography  fontSize={!xs?12:19}  >  לאזור האישי   </Typography>
                   </>
                 }
                 
            </Box>
-           { router.pathname !== '/' &&
+            { router.pathname !== '/' &&
 
              <Box
                 
