@@ -10,33 +10,46 @@ import useClientEvents from '@/lib/client/Hooks/useGetEvents';
 import { EventsType } from '../api/client/events/R/get-events';
 import WidthContext from '@/context/WidthContext';
 
-import TheaterMap from '@/components/client/event-page/theater/client-theater-mao';
+import TheaterMap from '@/components/client/event-page/theater/client-theater-map';
 import { grey } from '@mui/material/colors';
-import ClientInfoDrawer from '@/components/client/event-page/info-drawer';
+import ClientInfoDrawer from '@/components/client/event-page/drawer/info-drawer';
 import React from 'react';
 
+import ClineTransformContext from '@/context/client/event-page/client-tranform-contenx'
 
 import { CgCalendarDates } from "react-icons/cg";
 import { FaLocationDot } from 'react-icons/fa6';
 import { TbClockHour1 } from "react-icons/tb";
 import { CldImage } from 'next-cloudinary';
-import DOMPurify from "isomorphic-dompurify";
+import { Positions } from '@/components/admin/newEvent/theater/types/theater-types';
+import DrawerContent from '@/components/client/event-page/drawer/drawer-content';
 
+// mote to theater types  after 
+export type  SeatType  = {
+      row:string,
+      seatNumber:number
+      value:number
+}
 
 const DetailsPage = ({}) => {  
 
   const router = useRouter()
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
+  const theme = useTheme()
+  const [ClientMapPositions , setClientMapPositions] =useState<Positions>({ x:0 ,y:0 ,Scale:undefined})
   
+
+
   const {Events,isEventsError,isEventsValidating,updateEvents} = useClientEvents()
   const {id}  = router.query
   const FilteredEvent = Events?.find((event)=> event._id  === id )
 
   const [eventState ,setEventState]=useState<EventsType|undefined>(undefined)
 
+  const [ eventSelectSeats, setEventSelectedSeats ] = useState<SeatType[]>([])
 
-  const   TheaterFlex = Flex,
-              Wrapper = Flex
+
+  const   TheaterFlex = Flex, Wrapper = Flex, PreBox = Box
 
      useEffect(()=>{
       setEventState(FilteredEvent)
@@ -48,31 +61,53 @@ const DetailsPage = ({}) => {
   return (
     <>
       <Head>
-        <title>{eventState?.eventName}</title>
-        <meta name="viewport" content="width=device-width, user-scalable=no"/>
+         <title>{eventState?.eventName}</title>
+         <meta name="viewport" content="width=device-width, user-scalable=no"/>
       </Head>
 
       <ClientLayout> 
 
-            <Wrapper 
-                direction={ !md ? 'column':  "row"} 
-                alignItems={!md? '': "start"}
-                width={"100%"}
-                height={"100dvh"}
+         <Wrapper 
 
+                direction={ !md ? 'column':  "row"} 
+                sx={{ 
+                  width:"100%",
+                  height:'100%',
+                  overflow:'clip',
+                  
+                 }}
               >   
-             <ClientInfoDrawer >
-                  <DrawerContent event={eventState}/>
+         
+            <ClientInfoDrawer >
+                  <DrawerContent 
+                     event={eventState}
+                     setEventState={setEventState}
+
+
+                     eventSelectSeats={eventSelectSeats}
+                     setEventSelectedSeats={setEventSelectedSeats}
+                   
+                  />
             </ClientInfoDrawer>
 
-           <TheaterFlex  
-                sx={{    width:'inherit',margin:0 , height : "inherit" }} 
-                >
-               { eventState.Theater &&   <TheaterMap theater={eventState.Theater}/> }
-              {/* <Map/>       */}
-          </TheaterFlex>
+            <ClineTransformContext.Provider value={{ClientMapPositions ,setClientMapPositions}}>
 
-          </Wrapper>
+            { eventState.Theater &&  
+             <TheaterMap 
+                theater={eventState.Theater}
+                 setEventSelectedSeats={setEventSelectedSeats} 
+                 eventSelectSeats={eventSelectSeats}
+                 
+                /> 
+             }
+
+           </ClineTransformContext.Provider>
+
+
+             {/* <Map/>*/}
+
+
+         </Wrapper>
 
       </ClientLayout>
     </>
@@ -80,85 +115,6 @@ const DetailsPage = ({}) => {
 }
 
 
-
-const DrawerContent = ({event}:{event :EventsType})=>{
-  const {xxl,xl,lg,md,sm,xs,xxs} = React.useContext(WidthContext)
-  const sanitizedHtml = DOMPurify.sanitize(event.pre);
-  const theme = useTheme()
-
-  const Pre=Typography,
-  Datas = Flex
-  const data  = false
-
-  return(
-    <Flex
-    bgcolor={"#ddd"}
-    alignItems={"center"}
-    overflow={"scroll"}
-    height={"inherit"}
-    pt={2}
-    
-   >
-    {
-      data 
-      ?
-         ""
-      :
-      < >
-      <CldImage
-            src={event.preview}
-            alt="Description of my image"
-            width={300}
-            height={!xs? 300: 400}
-            draggable={false}
-            />
-
-      <Typography 
-      color={theme.palette.common.white}
-       variant={'h4'}
-      textAlign={"center"}
-       >
-        {event.eventName}
-     </Typography>
-     <Datas alignItems={"start"}   >
-            <Chip
-            avatar={<FaLocationDot />}
-             label={<Typography sx={{color:"#ddd"}}  > מיקום : {event.TheaterName}</Typography>}
-            />
-            <Chip
-              avatar={<CgCalendarDates />}
-              label={<Typography  sx={{color:"#ddd"}}> תאריך: {event.Date}</Typography>}
-            />
-            <Chip
-             avatar={<TbClockHour1 />}
-            label={  <Typography sx={{color:"#ddd"}}  >שעה :{event.Hour}</Typography>}
-            />
-            <Chip
-            avatar={   <TbClockHour1 />}
-            label={<Typography  sx={{color:"#ddd"}}>שעת פתיחת דלתוד:{event.OpenDorHour?.toString().slice(0,10)}</Typography>}
-              />
-     </Datas>
-       <Box overflow={'scroll'} height={300}  bgcolor={"inherit"} p={2} m={2} >
-         <Pre
-             textAlign={"center"}
-             style={{background:'inherit',direction:"rtl"}}
-             dangerouslySetInnerHTML={{__html:sanitizedHtml}}
-          />
-      </Box>
-      <Box width={"inhreit"} height={100} ></Box>
-      
-      </>
-      
-    }
-
-  </Flex>
-
-  )
-
- 
-
- 
-}
 
 
 

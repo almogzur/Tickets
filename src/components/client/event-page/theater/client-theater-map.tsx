@@ -1,120 +1,214 @@
-import { TransformWrapper, TransformComponent, useControls, getTransformStyles } from "react-zoom-pan-pinch";
-import { useState, useEffect, useContext, ReactNode, SetStateAction, } from 'react'
-import ClientPositionContext from '@/context/client/client-map-positions-context'
-import { Stack as Flex , Typography as Heading , Button, Avatar , useTheme, Divider, Box} from '@mui/material'
-import { FaPlus } from "react-icons/fa6";
-import { FaMinus } from "react-icons/fa";
+import TooltipButton from './client-seat-btn'
+import ClientTheaterRTransform from '@/components/client/event-page/theater/client-theater-transformer'
 
 
+import { useState, useEffect, useContext, CSSProperties, useRef, Dispatch, SetStateAction, } from 'react'
+import { useTheme , Stack as Flex, Typography, Drawer } from '@mui/material';
+import WidthContext from '@/context/WidthContext';
+import { TheaterType } from '@/components/admin/newEvent/theater/types/theater-types';
+import { SeatType } from '@/pages/details/[id]';
 
-import { LuRefreshCcw } from "react-icons/lu";
-
-import WidthContext from "@/context/WidthContext";
-import ColorIndexDial from '@/components/theater-gen/colors-dial'
-import { grey } from "@mui/material/colors";
-import React from "react";
-
-
-interface ClientTheaterMapPropsTypes {
-   children? : ReactNode,
-
-}
-
-const ClientTheaterRTransform = ({children }:ClientTheaterMapPropsTypes) => {
-  
-    const {ClientMapPositions,setClientMapPositions} =useContext(ClientPositionContext)
-    const theme = useTheme()
-    
-    const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
-
-  // new Transform Context for client 
-  // see if need a new component or just add condition
-
-    return (
-       <TransformWrapper 
-        
-        initialScale={ClientMapPositions.Scale|| !sm? 0.50 : 1} //only reser on full app reset 
-        limitToBounds={!sm ? false: true }
-        initialPositionX={!sm? 80 : 0 }
-
-        
-      
-
-        minScale={!sm? 0.45 : !md? 0.8 : 1 }
-        smooth
-       
-        maxScale={3}
-        onPanningStop={(e)=>{
-          
-
-          //setClientMapPositions(prev=>({x:e.state.positionX,y:e.state.positionY,Scale:e.state.scale}))
-          console.log(ClientMapPositions,e);
-          
-        }}
-        onPanningStart={()=>{
-
-        }}
-        onTransformed={(e)=>{}}  
-      >
-        {({ zoomIn, zoomOut, resetTransform, ...rest }) =>  {
-          return   (
-            <Flex width={"inherit"} alignItems={"center"}  height={'inherit'}  >
-                  <Controls   />
-
-                   <TransformComponent 
-                    wrapperStyle={{  width:"inherit" ,  }}
-                    contentStyle={{ width:"inherit" , display:"flex", justifyContent:"center",height:'inherit'}}
-                   >{children} 
-                </TransformComponent>
-
-            </Flex>
-        )
+type TheaterMapType = {
+    theater:TheaterType,
+    setEventSelectedSeats:Dispatch<SetStateAction<SeatType[]>>
+    eventSelectSeats:SeatType[]
   }
+
+
+
   
-        }
-      </TransformWrapper>
-    );
-  };
 
+const  TheaterMap = ({theater, eventSelectSeats ,setEventSelectedSeats}:TheaterMapType) => {
 
-  const Controls = () => {
-    const {ClientMapPositions,setClientMapPositions} =useContext(ClientPositionContext)
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
+  const[ clientEventState ,setClientEventState] = useState<TheaterType>()
+  const [ hendlerSeatOldValue , setHendlerSeatOldValue  ] = useState<number>(0)
+
+  useEffect(()=>{
+        if(theater){
+            setClientEventState(theater)
+        }
+
+  },[theater])
+
+  
+  const theme = useTheme()
+  const MapFlexContaner = Flex
+  const [hendlerSeatOldValues, setHendlerSeatOldValues] = useState<Record<string, number>>({});
+
+  const hendler = (seatValue: number, seatNumber: number, row: string) => {
+    const inMain = theater.mainSeats.hasOwnProperty(row);
+    const inSide = theater.sideSeats.hasOwnProperty(row);
+    
+    const allowedToChangeSeatValues = [0, 2, 4, 5];
+
+    if (!allowedToChangeSeatValues.includes(seatValue)) return;
+
+    const seatKey = `${row}-${seatNumber}`;
+
+    // Toggle seat selection
+    setEventSelectedSeats((prev) =>
+        prev.some((item) => item.row === row && item.seatNumber === seatNumber)
+            ? prev.filter((item) => !(item.row === row && item.seatNumber === seatNumber))
+            : [...prev, { row, seatNumber, value: seatValue }]
+    );
+
+    const updateSeats = (prevState: TheaterType | undefined, seatCollection: "mainSeats" | "sideSeats") => {
+        if (!prevState) return prevState;
+
+        const newState = { ...prevState };
+        const updatedSeats = { ...newState[seatCollection] };
+        const updatedRow = [...updatedSeats[row]];
+
+        const oldNumber = updatedRow[seatNumber];
+
+        // Store the original seat value if not already stored
+        setHendlerSeatOldValues((prev) => ({
+            ...prev,
+            [seatKey]: prev[seatKey] ?? oldNumber,
+        }));
+
+        // Toggle between 2 and the stored original value
+        updatedRow[seatNumber] = oldNumber === 2 ? hendlerSeatOldValues[seatKey] ?? seatValue : 2;
+
+        updatedSeats[row] = updatedRow;
+        newState[seatCollection] = updatedSeats;
+
+        return newState;
+    };
+
+    if (inMain) {
+        setClientEventState((prevState) => updateSeats(prevState, "mainSeats"));
+    } else if (inSide) {
+        setClientEventState((prevState) => updateSeats(prevState, "sideSeats"));
+    } else {
+        throw new Error("Seat not found in main or side seats.");
+    }
+};
+// Reset state function
 
 
-    const theme = useTheme()
+  const sideSeatsStylesObject = clientEventState && Object.fromEntries(
+    Object.entries(clientEventState.styles).map(([row, positions]) => [row, positions])
+  )
+   const sideTextStylesObject = clientEventState && Object.fromEntries(
+        Object.entries(clientEventState.textsStyle).map(([row, positions]) => [row, positions])
+  )
 
-
-    const { zoomIn, zoomOut, resetTransform } = useControls();
+   const MainSeatS  =  clientEventState &&  Object.entries(clientEventState.mainSeats).map(([row, rowContent]) => {
+    const colValue  = rowContent.map((seatValue: number, i: number) => {
+      const textset = "מושב";
+      const textrow = "שורה";
+  
+      return (
+        <TooltipButton // uses Context
+          key={`${row}.${i}`}
+          seatValue={seatValue}
+          seatnumber={i}
+          row={row}
+           hendler={()=>
+              hendler(seatValue,i,row)
+            }
+            />
+      );
+    })
   
     return (
-        <>
-      <Flex   
-          position={'absolute'}
-           left={"1%"}
-           top={100}
-           zIndex={1}
-           gap={1} 
-           justifyContent={"space-around"}
-          
-          sx={{scale:!md ? 0.7  : 1}}
-            >
-  
-        <Button  color='secondary' sx={{p:2.5}} variant='contained'  onClick={(e) => {zoomIn()}}>
-          <FaPlus />
-        </Button>
-  
-        <Button    color='secondary'variant='contained'  onClick={(e) =>{zoomOut() }}>
-          <FaMinus size={"2em"}/>
-        </Button>
-
-        <Button  color='secondary' variant='contained'  onClick={(e) =>{resetTransform()    }}>
-          <LuRefreshCcw  size={"2em"}/>
-       </Button>
-
+      <Flex 
+        key={row}
+        justifyContent="center"
+        
+        direction={'row'}
+        sx={{direction:"ltr"}}
+        alignItems={'top'}
+      >
+        <Typography variant='subtitle2' height={0} fontWeight={800} fontSize={6} sx={{color:"#fff"}}  >{ !xs ? row.slice(5) :  row  }</Typography>
+          {colValue}
+          <Typography variant='subtitle2' height={0} fontWeight={800} fontSize={6} sx={{color:"#fff"}}  >{ !xs? row.slice(5) :  row  }</Typography>
+        
       </Flex>
-      </>
     );
-  };
+  })
+   const SideSeats = clientEventState &&     Object.entries(clientEventState.sideSeats).map(([row, rowContent])=>{
+    const colValue  = rowContent.map((seatValue: number, i: number) => {
+     
+    
+        return (
+          <TooltipButton
+            key={`${row}.${i}`}
+            seatValue={seatValue}
+            seatnumber={i}
+            row={row}
+            hendler={   ()=>hendler(seatValue,i,row)}
+              />
+        );
+      });
+    
+      return (
+        <Flex
+
+          key={row}
+          style={sideSeatsStylesObject ?sideSeatsStylesObject[row] :{} } // target by key in CSS
+          justifyContent="center"
+          direction={'row'}
+          sx={{direction:"ltr"}}
+        >
+          {colValue}
+        </Flex>
+      );
+  })
+   const Text =  Object.entries(theater.sideSeats).map(([row, rowContent])=>{
+       return <Typography key={row} sx={{color:theme.palette.secondary.main}}  height={0} style={ sideTextStylesObject?  sideTextStylesObject[row] :{}} >{row}</Typography>
+  })
+
+if(!theater){
+  return <h6>Loading</h6>
+}
+    
+return (
+ 
+       <ClientTheaterRTransform  >    
+
+          <MapFlexContaner  
+              sx={{direction:"ltr" }}
+            >
+               <Stage />
+                {MainSeatS}
+                {Text}
+                {SideSeats}
+         </MapFlexContaner>      
+
+      </ClientTheaterRTransform>         
   
-  export default ClientTheaterRTransform
+);
+};
+
+export default TheaterMap
+
+
+
+const Stage = ()=>{
+  const theme = useTheme()
+
+  const Styles :CSSProperties =  {          
+      height:40 ,
+      margin:20,
+       background:"silver",
+         color:"red",
+         width:"100%",
+         borderBottomLeftRadius: "45%",
+          borderBottomRightRadius:"45%" ,
+          display:'flex',
+          flexDirection:'row',
+          justifyContent:'center',
+          alignItems:'center',
+          alignContent:'center',
+          }
+  
+  return    <Flex direction={'row'}  justifyContent={'center'}> 
+              <div style={Styles} > 
+                <Typography variant='h6' color={theme.palette.secondary.main}>במה</Typography> 
+             </div>
+           </Flex >
+  }   
+  

@@ -36,7 +36,7 @@ export default function SingInPage(){
   };
 
 
- 
+  // password is hasheds when user created 
   const [ formData ,setFormData ] = useState<NewUserType>({
     name:"",
     password:"",

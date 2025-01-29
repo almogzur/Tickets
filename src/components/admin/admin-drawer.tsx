@@ -34,7 +34,7 @@ export default function TemporaryDrawer() {
   const router = useRouter()
   
   const links :DrawerLinkType[]  = [
-    {text:"סטטיסטיקה", Icon:<FcBullish size={"1.5em"} />,link:"/admin/statistics"},
+    {text:"סטטיסטיקה", Icon:<FcBullish size={"1.5em"} />,link:"/admin/analytics"},
     {text:'צור אירוע' , Icon:<FcPuzzle size={"1.5em"} /> , link:"/admin/new-event", },
     {text:"טיוטות",Icon:<RiDraftFill size={"1.5em"} color={theme.palette.warning.main} /> , link:"/admin/drafts",},
     {text:'אירועים ' , Icon:<FcDataSheet size={"1.5em"} /> , link:"/admin/events" },
@@ -51,7 +51,7 @@ export default function TemporaryDrawer() {
       break;
       case "/admin/new-event": return "צור אירוע" ;
       break;
-      case "/admin/statistics": return "סטטיסטיקה" ;
+      case "/admin/analytics": return "סטטיסטיקה" ;
       break;
       case "/admin/events": return "אירועים" ;
       break;

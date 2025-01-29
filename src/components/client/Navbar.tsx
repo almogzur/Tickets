@@ -30,15 +30,13 @@ const ClientNavbar = () => {
             >
     
             <Box
-            p={1}
+                 p={1}
                  sx={{cursor:"pointer"}}
-                onClick={()=>{
+                  onClick={()=>{
                       const path = session?.user?.name ? "/admin" : "/auth/singin"
                       router.push( path )
                      }}
                 > {
-                  
-    
                   <>
                   <Typography fontSize={!xs?12:14} >שלום {session?.user?.displayName ??""}</Typography>
                   <Typography  fontSize={!xs?12:19}  >  לאזור האישי   </Typography>

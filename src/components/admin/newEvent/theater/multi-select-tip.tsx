@@ -189,6 +189,14 @@ import { infoFiledsType } from "@/components/admin/newEvent/types/new-event-type
 
                 >רגיל 
                 </Button>
+                <Button    
+                  variant='contained' 
+                  sx={comonAtt}
+                  onClick={(e)=>{ upateSeateValue( 4) }}
+                  color='success'
+
+                >הנחה 
+                </Button>
 
                  <Button 
                   sx={{bgcolor: orange[600] ,  ...comonAtt}} 

@@ -1,4 +1,4 @@
-import {  Button, Container ,Stack as Flex ,  Typography as Heading , Box, useTheme, Paper } from '@mui/material'
+import {  Button, Container ,Stack as Flex ,  Typography as Heading , Box, useTheme, Paper, Drawer, CircularProgress } from '@mui/material'
 
 import Head from 'next/head'
 import Link from 'next/link';
@@ -127,120 +127,142 @@ export default function Home() {
      LeftArrow =Box,
      ArowsWrapper = Flex
 
-  return (
-    <>
-    <Head >
-        <title>הזמנות כרטיסים  | בית</title>
-    </Head>
-     <ClientLayout>
-        
-       <PageWrapper maxWidth='xl'>
 
+     if(!Events){
+      return  (
+        <ClientLayout>
+      <Flex
+         direction={"row"}
+         sx={{ display: 'flex',    width:"100%" , height:"100%" ,   }}
+         justifyContent={"center"}
+         alignItems={"center"}
+      >
+          <CircularProgress />
           
-             <Carousel
-            sx={{background:"black"}}
+    </Flex>
+    </ClientLayout>
+      )
+     }
+     else{
+      return (
+        <>
+        <Head >
+            <title>הזמנות כרטיסים  | בית</title>
+        </Head>
+         <ClientLayout>
             
-            >
-                {
-                items.map( (item, i) => <Item key={i} {...item} /> )
-              }
-            </Carousel>
- 
-            
-             <Scrooler>
-
-                <ArowsWrapper direction={"row"}  justifyContent={"space-between"}  >
-                 <RightArrow
-                       position={"relative"}
-                       left={!xs?-15 : !md?  -25 :"auto"}
-                       zIndex={5}
-                       width={0}
-             
+           <PageWrapper maxWidth='xl'>
+    
+              
+                 <Carousel
+                sx={{background:"black"}}
+                
                 >
+                    {
+                    items.map( (item, i) => <Item key={i} {...item} /> )
+                  }
+                </Carousel>
+     
+                
+                 <Scrooler>
+    
+                    <ArowsWrapper direction={"row"}  justifyContent={"space-between"}  >
+                     <RightArrow
+                           position={"relative"}
+                           left={!xs?-15 : !md?  -25 :"auto"}
+                           zIndex={5}
+                           width={0}
+                 
+                    >
+                        <Button
+                         variant='text'
+                        color='secondary'
+                        sx={{borderRadius:45,opacity:0.7}}
+                  >
+                    <FaCircleArrowRight 
+                        size={!md  ? 40: 50}
+                        onClick={scrollRight}
+                        cursor={'pointer'}
+                      />
+                       </Button>
+                     </RightArrow>
+    
+    
+    
+                      <LeftArrow>
                     <Button
-                     variant='text'
-                    color='secondary'
-                    sx={{borderRadius:45,opacity:0.7}}
-              >
-                <FaCircleArrowRight 
-                    size={!md  ? 40: 50}
-                    onClick={scrollRight}
+                        variant='text'
+                        color='secondary'
+                        sx={{borderRadius:45,opacity:0.7}}
+                  >
+                  <FaCircleArrowLeft
+                    size={!md ? 40 : 50}
+                    onClick={scrollLeft}
                     cursor={'pointer'}
                   />
-                   </Button>
-                 </RightArrow>
-
-
-
-                  <LeftArrow>
-                <Button
-                    variant='text'
-                    color='secondary'
-                    sx={{borderRadius:45,opacity:0.7}}
-              >
-              <FaCircleArrowLeft
-                size={!md ? 40 : 50}
-                onClick={scrollLeft}
-                cursor={'pointer'}
-              />
-               </Button>    
-                  </LeftArrow>
-
-               </ArowsWrapper>
-
-                   <ScroolerConetnt
-                    ref={scrollContainerRef}
-                    onMouseDown={handleMouseDown}
-                    onMouseMove={handleMouseMove}
-                    onMouseUp={handleMouseUpOrLeave}
-                    onMouseLeave={handleMouseUpOrLeave}
-                    // onWheel={handleWheel} // Attach wheel event handler
-                    display={"flex"}
-                    flexDirection={ "row"}
-                    gap={3}
-                   
-                    sx={{
-                      overflowX: 'auto',
-  
-     
-                      '&::-webkit-scrollbar': {
-                        width: '0.2em'
-                      },
-                      '&::-webkit-scrollbar-track': {
-                        boxShadow: `inset 0 0 6px rgba(0,0,0,0.00)`,
-                        webkitBoxShadow: 'inset 0 0 3px rgba(0,0,0,0.00)'
-                      },
-                      '&::-webkit-scrollbar-thumb': {
-                     
-                        outline: `0.5px solid ${theme.palette.secondary.main}`
-                      }
-            
-                      
-
-                    }}
-                  >
-
-
-                    {Events?.map((event) => (
-                        <EventCard key={event._id} {...event} />
-                    ))}
-
-
-
-
-
-                   </ScroolerConetnt>
-             </Scrooler>
-                      
-        <Placeholder height={400} />
-
-      </PageWrapper>
-             
+                   </Button>    
+                      </LeftArrow>
+    
+                   </ArowsWrapper>
+    
+                       <ScroolerConetnt
+                        ref={scrollContainerRef}
+                        onMouseDown={handleMouseDown}
+                        onMouseMove={handleMouseMove}
+                        onMouseUp={handleMouseUpOrLeave}
+                        onMouseLeave={handleMouseUpOrLeave}
+                        // onWheel={handleWheel} // Attach wheel event handler
+                        display={"flex"}
+                        flexDirection={ "row"}
+                        gap={3}
+                       
+                        sx={{
+                          overflowX: 'auto',
       
+         
+                          '&::-webkit-scrollbar': {
+                            width: '0.2em'
+                          },
+                          '&::-webkit-scrollbar-track': {
+                            boxShadow: `inset 0 0 6px rgba(0,0,0,0.00)`,
+                            webkitBoxShadow: 'inset 0 0 3px rgba(0,0,0,0.00)'
+                          },
+                          '&::-webkit-scrollbar-thumb': {
+                         
+                            outline: `0.5px solid ${theme.palette.secondary.main}`
+                          }
+                
+                          
+    
+                        }}
+                      >
+    
+    
+                        {Events?.map((event) => (
+                            <EventCard key={event._id} {...event} />
+                        ))}
+    
+    
+    
+    
+    
+                       </ScroolerConetnt>
+                 </Scrooler>
+                          
+            <Placeholder height={400} />
 
-   </ClientLayout>
-    </>
-  )
+    
+          </PageWrapper>
+                 
+          
+    
+       </ClientLayout>
+        </>
+      )
+
+     }
+
+
 }
 
 

@@ -136,9 +136,13 @@ const SingleSelectTip= ({theaterDate ,setTheater }:SingleSelectTipPropsType)=>{
                 
                     <Flex alignItems={"center"} justifyContent={"center"} direction={'row'} flexWrap={'wrap'}  >
 
-
-                        {/*discount  */}
-
+                   {/* normal */}
+                         <Button    
+                           variant='contained' 
+                            sx={{...comonAtt}} 
+                            onClick={()=>{upateSeateValue(0)}}
+                            >רגיל 
+                         </Button>
 
                         {/* Bloacked */}
                         <Button
@@ -148,14 +152,16 @@ const SingleSelectTip= ({theaterDate ,setTheater }:SingleSelectTipPropsType)=>{
                          >
                          חסום
                         </Button>
+                        <Button    
+                  variant='contained' 
+                  sx={comonAtt}
+                  onClick={(e)=>{ upateSeateValue( 4) }}
+                  color='success'
 
-                        {/* normal */}
-                         <Button    
-                           variant='contained' 
-                            sx={{...comonAtt}} 
-                            onClick={()=>{upateSeateValue(0)}}
-                            >רגיל 
-                         </Button>
+                >הנחה 
+                </Button>
+
+     
 
                         <Button
                            sx={{...comonAtt , bgcolor:orange[600]}} 

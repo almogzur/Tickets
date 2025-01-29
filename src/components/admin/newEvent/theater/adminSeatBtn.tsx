@@ -14,7 +14,8 @@ INDEX !!!!!
 1:taaken : red
 2:selected :porpole
 3:block : black
-4:Discount : green[800]
+4:accessible,
+5:discounte
 
 */
 
@@ -44,25 +45,18 @@ const AdminSeatBtn = ({ seatValue, seatnumber, row , isMultiSelect }:AdminSeatBt
 
     const styles :Record<string,CSSProperties> =  {
         seats: {
-            
           backgroundColor: theme.palette.primary.main,
           height:"7px",
           width:"7px",
           color:"black",
           margin:2 ,
-          fontWeight:"bold",
-          
-
+          border:"none",
+          padding:0,
           
         },
-        seatBooked: {backgroundColor: "brown",cursor: "not-allowed"},
-        seatSelected: {backgroundColor: theme.palette.secondary.main,},
         seatBlocked: {backgroundColor:"black"},
-        seatDiscounted:{backgroundColor:green[800]},
         seatAccsesble:{backgroundColor:orange[600]},
-        seatDisAcsses:{backgroundColor:pink[600]},
-       
-      
+        seatDiscounted:{backgroundColor:green[700]}
  };  
 
 
@@ -148,7 +142,7 @@ const AdminSeatBtn = ({ seatValue, seatnumber, row , isMultiSelect }:AdminSeatBt
       
   return (
 
-     <div
+     <button
        onClick={(e)=> { 
          !isMultiSelect?
            openTip(e.nativeEvent.pageX,e.nativeEvent.pageY , seatValue , row ,seatnumber  ) 
@@ -165,17 +159,11 @@ const AdminSeatBtn = ({ seatValue, seatnumber, row , isMultiSelect }:AdminSeatBt
        }}
 
       style={ 
-        seatValue === 1 ? { ...styles.seats, ...styles.seatBooked }
-        :
-        seatValue === 2? { ...styles.seats, ...styles.seatSelected } 
-        :
         seatValue === 3? { ...styles.seats, ...styles.seatBlocked } 
         :
         seatValue === 4? { ...styles.seats, ...styles.seatDiscounted } 
         :
         seatValue === 5? { ...styles.seats, ...styles.seatAccsesble } 
-        :
-        seatValue === 6? { ...styles.seats, ...styles.seatDisAcsses } 
         :
          styles.seats 
         }

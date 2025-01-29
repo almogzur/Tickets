@@ -9,8 +9,6 @@ import '../styles/global.css'
 //Context
 import WidthContext from '../context/WidthContext';
 /////
-import ClineTransformContext from '@/context/client/client-map-positions-context'
-import ClientTipContext from '@/context/client/c-tip-context'
 //Auth 
 import { SessionProvider } from "next-auth/react"
 
@@ -178,16 +176,7 @@ const theme  = createTheme({
 
 const MyApp = ({ Component, pageProps: { nonce, session, ...pageProps } }: AppProps)=> {
 
-  const [events, setEvents] = useState<EventsType[]>();
-  //const [cachedNonce] = useState(nonce);
 
-  // client map
-  const [ClientMapPositions , setClientMapPositions] =useState<Positions>({ x:0 ,y:0 ,Scale:undefined})
-
-  //Clinet SingleTip
-  const [clientTipPosition,setClientTipPosition]=useState<Positions>({x:0,y:0})
-  const [clinetTipInfo , setClinetTipInfo]=useState<TheaterTipinfoType>({initValue:0,row:"",seatNumber:0})
-  const resetClinetTip = ():void =>{ setClinetTipInfo({seatNumber:0,row:"",initValue:0}); setClientTipPosition({x:0,y:0}) }
 
   // media qurys
    const xxl = useMediaQuery('(min-width : 1600px)')
@@ -205,15 +194,9 @@ return (
   <SessionProvider session={session}>
   <ThemeProvider theme={theme}>
   <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='he'  >
-  <ClineTransformContext.Provider value={{ClientMapPositions ,setClientMapPositions}}>
-  <ClientTipContext.Provider value={{ clientTipPosition,setClientTipPosition, clinetTipInfo ,setClinetTipInfo,resetClinetTip }} >
   <WidthContext.Provider value={{xxl,xl,lg,md,sm,xs,xxs}}>
- 
-      <Component {...pageProps} />
-
+       <Component {...pageProps} />
   </WidthContext.Provider>
-  </ClientTipContext.Provider>
-  </ClineTransformContext.Provider>
   </LocalizationProvider>
   </ThemeProvider>
   </SessionProvider>
