@@ -9,6 +9,7 @@ import { TbClockHour1 } from "react-icons/tb";
 import DOMPurify from "isomorphic-dompurify";
 import { SeatType } from "@/pages/details/[id]";
 import ClientTikectList from "./client-tikets-list";
+import { GiTakeMyMoney } from "react-icons/gi";
 
 type DrawerContentType = {
 
@@ -40,6 +41,8 @@ const DrawerContent = ({event, eventSelectSeats , setEventState, setEventSelecte
           width={"100%"}
           pt={2}
           >
+
+      { !eventSelectSeats.length && 
         <CldImage
               src={event.preview}
               alt="Description of my image"
@@ -47,14 +50,14 @@ const DrawerContent = ({event, eventSelectSeats , setEventState, setEventSelecte
               height={!xs? 300: 400}
               draggable={false}
               />
-        <Typography 
-        color={theme.palette.common.white}
-         variant={'h4'}
-        textAlign={"center"}
+        }
+       <Typography 
+         color={theme.palette.common.white}
+          variant={'h4'}
+          textAlign={"center"}
          >
           {event.eventName}
-       </Typography>
-       
+        </Typography>
        <Datas alignItems={"start"}   >
               <Chip
               avatar={<FaLocationDot />}
@@ -72,11 +75,19 @@ const DrawerContent = ({event, eventSelectSeats , setEventState, setEventSelecte
               avatar={   <TbClockHour1 />}
               label={<Typography  sx={{color:"#ddd"}}>שעת פתיחת דלתוד:{event.OpenDorHour?.toString().slice(0,10)}</Typography>}
                 />
+               {event.tickets?.map((ticket)=>{
+               return     <Chip key={ticket.price+event.eventName} 
+                  avatar={<GiTakeMyMoney/>}
+                  label={<Typography>{ticket.price} : {ticket.selectedType}</Typography>}
+                  
+                  />
+               })}
+
        </Datas>
 
            { eventSelectSeats.length > 0   &&  
 
-            <ClientTikectList
+        <ClientTikectList
                 eventSelectSeats = {eventSelectSeats}
 
             />
@@ -85,7 +96,11 @@ const DrawerContent = ({event, eventSelectSeats , setEventState, setEventSelecte
 
       { !eventSelectSeats.length &&
       <>
+ 
 
+
+ 
+       
   
              
            <Pre

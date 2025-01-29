@@ -9,7 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import CommentIcon from '@mui/icons-material/Comment';
 import { SeatType } from '@/pages/details/[id]';
 import { Button, ListItemAvatar, Typography, useTheme } from '@mui/material';
-import { FcDeleteRow } from 'react-icons/fc';
+import { FcCancel, FcDeleteRow } from 'react-icons/fc';
 
 export default function ClientTikectList({eventSelectSeats}:{eventSelectSeats:SeatType[]}) {
   
@@ -62,7 +62,7 @@ export default function ClientTikectList({eventSelectSeats}:{eventSelectSeats:Se
              >
 
               
-                    <FcDeleteRow size={"2em"} />
+                    <FcCancel size={"2em"} />
               
   
             </Button>

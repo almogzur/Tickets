@@ -101,9 +101,10 @@ export default function ClientInfoDrawer({children}:ClientInfoDrawerType) {
         return (
 
           <ContentBox 
-             
+
              bgcolor={grey[500]}
              width={450}
+   
       
              
              >

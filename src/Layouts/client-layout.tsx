@@ -49,8 +49,8 @@ export default ClientLayout;
 const FullHeightPage = ({children}:{children:ReactNode}) => (
   <div style={{
       background:"black",
-      overflow:"clip",
-      direction:"rtl"
+      direction:"rtl",
+      overflow:"clip"
 
     }} >
     {children}

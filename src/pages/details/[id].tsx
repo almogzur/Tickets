@@ -72,8 +72,9 @@ const DetailsPage = ({}) => {
                 direction={ !md ? 'column':  "row"} 
                 sx={{ 
                   width:"100%",
-                  height:'100%',
-                  overflow:'clip',
+                  
+                  height:"100%"
+    
                   
                  }}
               >   
