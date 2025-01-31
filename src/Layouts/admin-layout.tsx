@@ -1,13 +1,21 @@
 
 import {  ReactNode, useContext, useEffect } from 'react';
 import AdminDrawer from '../components/admin/admin-drawer'
-import {Stack as Flex, Container } from '@mui/material'
+import {Stack as Flex, Container, useTheme, Box } from '@mui/material'
 import { useSession } from 'next-auth/react';
 import router from 'next/router';
 import WidthContext from '@/context/WidthContext';
+import Head from 'next/head';
 
 
-const AdminLayout = ({ children }: {children?:ReactNode}) => {
+interface AdminLayoutPropsType  {
+  children?:ReactNode,
+   noScrool?:boolean,
+   HeaderName:string
+  }
+
+
+const AdminLayout = (props: AdminLayoutPropsType ) => {
   const { data: session ,status ,update} = useSession()
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
 
@@ -19,13 +27,17 @@ useEffect(()=>{
   }
 },[session,status])
 
+const {children, noScrool, HeaderName} = props
 
   return ( 
-   <>
-    <AdminDrawer  />  
-    {children}          
-  </>
+    <>
+      <AdminDrawer  />  
+       {children}          
+    </>
   );
 }
  
 export default AdminLayout;
+
+
+ 

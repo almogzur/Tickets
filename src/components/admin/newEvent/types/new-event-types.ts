@@ -4,8 +4,9 @@ import { TheaterType } from '@/components/admin/newEvent/theater/types/theater-t
 import { z }  from 'zod'
 
 export const TicketValidationSchema = z.object({
+  EndSealesHour :z.string().nullable(), // Date Component need null do display label 
   EndSealesDate: z.string().nullable(),
-  selectedType:z.union([z.literal("normal"),z.literal("discount"),z.literal("citizen"), z.literal("approachable")]),
+  selectedType:z.union([z.literal("normal"),z.literal("discount"),z.literal("citizen"),z.literal("")]),
   priceInfo:z.string().min(3),
   price: z
      .string()
@@ -32,14 +33,18 @@ export const TempInfoFiledsValidationSchema = z.object({
   eventName: z.string().min(3, "שם צריך להיות לפחות  3  תווים").max(20),
 });
 
+
+// the massages are all optinal + boolean fileds too so ... 
+//  ther is no real need to vlidate hear
+export const EventSettingValidationSchema = z.object({
+
+}) 
+// maby santise user input will see ...
+
 export type TempInfoType = z.infer<typeof TempInfoFiledsValidationSchema>
 
 export type RequestStatusType ="Temp"|"Production"|undefined
 
-export interface TicketStateType extends Omit<TicketType, "selectedType" | "Date" | "EndSealesDate" > {
-  selectedType: "normal" | "discount" | "citizen" | "approachable" | ""; 
-  EndSealesDate: string | null
-}
 export type TicketType  = z.infer<typeof TicketValidationSchema> 
 
 export interface infoFiledsType {
@@ -53,13 +58,22 @@ export interface infoFiledsType {
   preview:string
   isEventClosedForSeal:boolean
   Date:string|null,
-  Hour:Date|null
-  OpenDorHour:Date|null
+  Hour:string|null
+  OpenDorHour:string|null
 }
-export interface EventType extends infoFiledsType {
-  tickets?: TicketType[];
-  _id:string
-}
+
+export type EventSettingType  =  {
+  canSelectNotRelatedSites:boolean,
+  limitClientTicket : boolean
+  ticketLimit:string
+  }
+
+
+  export interface EventType extends infoFiledsType {
+    _id: string;
+    tickets?: TicketType[]
+    eventSetting:EventSettingType
+  }
 
 export interface LogType {  
   time_stemp : string ,

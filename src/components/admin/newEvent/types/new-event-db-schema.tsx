@@ -1,6 +1,6 @@
 
 import mongoose, { model,SchemaDefinition,   } from 'mongoose';
-import {  LogType, TicketType } from './new-event-types';
+import {  EventSettingType, LogType, TicketType } from './new-event-types';
 
 const { Schema } = mongoose;
 
@@ -17,8 +17,22 @@ export const createSchmaAndModel = <T extends unknown>  ( name:string, schemaDef
     return mongoose.models[`${name}`] || model<T>(name, Dschema);
 }
 
+const EventSettingsShema = new Schema<EventSettingType>({
+  limitClientTicket: { type : Boolean , required : false},
+  ticketLimit:{type:String , required : false},
+  canSelectNotRelatedSites: { type :Boolean ,required :false}
+},{
+  _id:false,
+  versionKey:false
+})
+
+// end of week this just start working id remoived no dev recorde saveed
+// all db recored del .. eror on rendreing 
+
+
 
 const TicketSchema = new Schema<TicketType>({
+    EndSealesHour:{type :String , required:false },
     EndSealesDate: { type:String ,required:false},
     selectedType:{ type:String , required:true },
     priceInfo:{type:String ,required:false},
@@ -32,13 +46,14 @@ export const DraftSchemaDefinition = {
   TheaterName:{type:String , require:false},
   availableSeatsAmount:{type:Number, require:false},
   Date: { type: String , require:false},
-  OpenDorHour:{ type: Date , require:false},
-  Hour:{ type: Date , require:false},
+  OpenDorHour:{ type: String , require:false},
+  Hour:{ type: String , require:false},
   isEventClosedForSeal: { type: Boolean , require:false},
   pre: {type:String , require:false},
   preview: { type: String, required: false }, 
   Theater :{type : Object ,required:false},
-  tickets: { type: [TicketSchema], required: false }
+  tickets: { type: [TicketSchema], required: false },
+  eventSetting: {type : EventSettingsShema ,required : false }
 }
 
 const EventSchema ={}

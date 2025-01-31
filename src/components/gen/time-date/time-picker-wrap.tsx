@@ -14,7 +14,7 @@ import ControledHelperText from "../TeextFiledWrpa/controled-helper-text"
 interface TimePickerWrapType  {
     label:string
     variant?:TextFieldVariants
-    value:Date|null
+    value:string|null
     minDate? : Date 
     maxTIme? :Date
     isEroor?:boolean
@@ -57,7 +57,7 @@ const TimePickerWrap =({
     orientation='portrait'
  
             desktopModeMediaQuery={MediaQuery??theme.breakpoints.up("md")}
-            value={ value? dayjs(value) :null }
+            value={value ? dayjs(value, 'HH:mm') : null}
             closeOnSelect={false}
             // tryed not working curenntly
             // minTime ={}

@@ -16,13 +16,12 @@ interface SetingsTabPropsType {}
 
 
 const SettingTab= ()=>{
-  const [ now ,setNow] = useState(false)
   const [settingsTabsValue ,setSettingsTabsValue] =useState(0)
   const theme = useTheme()
-  const {} = useContext(tabsPageContext)
 
   
       const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
+      
           const TabComonStyleAttribute :CSSProperties = {
              color:"#fff",
              fontWeight:700,

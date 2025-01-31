@@ -11,7 +11,7 @@ import { FullDateOptions } from "@/pages/_app"
 
 // Components
 import MakeNewTickit from "./make-new-ticket"
-import { Container, Divider, Stack as Flex , Typography , useTheme} from "@mui/material"
+import { Button, Container, Divider, Stack as Flex , Typography , useTheme} from "@mui/material"
 
 //Icons 
 import TicketComponent from "./ticket"
@@ -117,8 +117,9 @@ interface TicketsTabPropsType {  setTabValue : Dispatch<SetStateAction<number>>}
          <Flex >
 
               <Flex direction={"row"} p={0.5}  gap={1} alignItems={"center"} >
+
                    <IoTicket size={"2em"} color={theme.palette.primary.main}  />
-             
+
                    <Flex>
                    <Typography  fontWeight={'bold'}  fontSize={!sm?13:18} >מספר מושבים זמינים למכירה : {availableSeatsAmount} </Typography >
                    <Typography   fontSize={!sm?11:15}  >מסיר את המושבים המסומנים כחסומים</Typography>
@@ -126,7 +127,7 @@ interface TicketsTabPropsType {  setTabValue : Dispatch<SetStateAction<number>>}
               </Flex>
               
               <Flex p={0.5} gap={1} direction={"row"} alignItems={"center"}   >
-           
+
                 <MakeNewTickit setTabValue={setTabValue} />
 
                  <Flex direction={"row"} alignItems={"center"} justifyContent={"space-between"} width={"100%"}  gap={2} >

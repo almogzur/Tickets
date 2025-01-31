@@ -22,6 +22,8 @@ const Theater = ({TheaterDate}:{TheaterDate:TheaterType}) => {
       const theme = useTheme()    
        const [isMultiSelect , setIsMultiSelect]=useState<boolean>(false)
        const [amountOfSeatsSelcted , setAmountOfSeatsSelcted] = useState<number>(0)
+       
+       const InnerMap = Flex
 
 
        const sideSeatsStylesObject =  Object.fromEntries(
@@ -115,13 +117,13 @@ const Theater = ({TheaterDate}:{TheaterDate:TheaterType}) => {
            setIsMultiSelect={setIsMultiSelect}
             multiSelectBadgeInfo={amountOfSeatsSelcted}   
              >
-             <Flex direction={"column"}    height={!xs? 320 : !sm? 400 : !md? 500 : 700}      sx={{direction:"ltr"}}  >
+             <InnerMap direction={"column"}    height={!xs? 320 : !sm? 400 : !md? 500 : 700}      sx={{direction:"ltr"}}  >
                <Stage  />
                {MainSeatS}
                {Text}
                {SideSeats}
    
-            </Flex> 
+            </InnerMap> 
      
          </AdminNewEventTheatherMap>    
   

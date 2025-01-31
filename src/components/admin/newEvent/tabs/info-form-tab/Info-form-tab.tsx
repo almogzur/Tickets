@@ -145,7 +145,7 @@ return(
                variant='outlined'
                helpText={newEventValidateFiled("Date")?? ""}
                helpTextPotionsEnd
-               label={"בחר תאריך"}
+               label={" תאריך"}
                labelPositioin={'end'}
                color='secondary'
                onChangeHendler={(e) => e !== null ?
@@ -155,19 +155,41 @@ return(
                }         
                onEroorHndler={ErrorHndler} 
                   />
+
+              <TimePickerWrap             
+                helpTextPotionsEnd    
+                MediaQuery={theme.breakpoints.up("sm")}
+                value={infoFileds.OpenDorHour}
+                
+                onAcceptHendler={(e) => {
+                  if (e !== null) {
+                      const formattedTime = dayjs(e).format('HH:mm');
+                      setInfoFileds((p) => ({ ...p, OpenDorHour: formattedTime }));
+                  }
+              }}
+               helpText={newEventValidateFiled("OpenDorHour")?? ""}
+               label={"  שעת פתיחת דלתות"} 
+                labelPositioin={'end'}
+                color='secondary'
+                onEroorHndler={ErrorHndler}
+                
+
+                  />
+
             <TimePickerWrap                 
                 MediaQuery={theme.breakpoints.up("sm")}
                 value={infoFileds.Hour}
                 helpText={newEventValidateFiled("Hour")?? ""}
                 variant='outlined'
                 helpTextPotionsEnd
-                onAcceptHendler={(e)=> e!==null ?
-                  setInfoFileds(p => ({ ...p, Hour: e.toDate() })) 
-                  :
-                  null
-               }
+                onAcceptHendler={(e) => {
+                  if (e !== null) {
+                      const formattedTime = dayjs(e).format('HH:mm');
+                      setInfoFileds((p) => ({ ...p, Hour: formattedTime }));
+                  }
+              }}
 
-                label={"בחר שעה"} 
+                label={" שעה"} 
                 labelPositioin={'end'}
                 color='secondary'
                 onEroorHndler={ErrorHndler}
@@ -176,32 +198,7 @@ return(
 
 
 
-             <TimePickerWrap             
-                helpTextPotionsEnd    
-                MediaQuery={theme.breakpoints.up("sm")}
-                value={infoFileds.OpenDorHour}
-                
-               onChangeHendler={(value):null=>{
-                if(value){
-
-                  console.log(value);
-                  
-                 setInfoFileds(p => ({ ...p, OpenDorHour: value.toDate() })) 
-                 return null
-                }
-                return null
-                
-              
-              
-            }}
-               helpText={newEventValidateFiled("OpenDorHour")?? ""}
-               label={"פתיחת דלתות"} 
-                labelPositioin={'end'}
-                color='secondary'
-                onEroorHndler={ErrorHndler}
-                
-
-                  />
+    
        
 
              </Flex>

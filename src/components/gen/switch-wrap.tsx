@@ -1,22 +1,28 @@
 import { FormControlLabel, Typography } from "@mui/material"
-import { ChangeEvent, ReactNode, useContext, useState } from "react"
+import { ChangeEvent, ReactNode, SyntheticEvent, useContext, useEffect, useState } from "react"
 import { styled } from '@mui/material/styles';
 import Switch, { switchClasses } from "@mui/material/Switch";
 import WidthContext from "@/context/WidthContext";
 
 
 export interface  SwitchTextTrackStylePropsType {
-     switchWrpaerSize?:  'medium'|'large'|undefined
+     switchSize?:  'medium'|'large'|undefined
 }
 export interface SwitchWrapType extends SwitchTextTrackStylePropsType {
-    switchValue:boolean
-    switchOnChangeHendler:(e:ChangeEvent<HTMLInputElement>)=>void
-  
-    
+    value:boolean
+    switchOnChangeHendler:(e:SyntheticEvent, checked: boolean)=>void  
   }
 
+export interface NormalSwitchWrapPropsType extends SwitchTextTrackStylePropsType {
+  switchValue:boolean|undefined
+  switchOnChangeHendler:(e :React.SyntheticEvent, checked:boolean)=>void
+  title:string
+  labelPlacement:"bottom" | "top" | "end" | "start" 
+}
+
+
   export const SwitchTextTrack = styled(Switch)<SwitchTextTrackStylePropsType>( 
-    ( {switchWrpaerSize} ) => 
+    ( {switchSize} ) => 
     {
       const sizes = {
         medium: {
@@ -35,7 +41,7 @@ export interface SwitchWrapType extends SwitchTextTrackStylePropsType {
         },
       };
   
-      const { width, height, padding, thumb, transform } =  switchWrpaerSize ==='medium'? sizes.medium : sizes.large
+      const { width, height, padding, thumb, transform } =  switchSize ==='medium'? sizes.medium : sizes.large
   
     return {
       width,
@@ -71,13 +77,13 @@ export interface SwitchWrapType extends SwitchTextTrackStylePropsType {
         },
         "&:before": {
           content: '"לא"',
-          left: switchWrpaerSize === 'medium'?  26 : 35, // Ensure the text doesn't touch the edge
+          left: switchSize === 'medium'?  26 : 35, // Ensure the text doesn't touch the edge
           width: "40%", // Adjust width for proper centering
           opacity: 1,
         },
         "&:after": {
           content: '"כן"',
-          right: switchWrpaerSize === 'medium'?  26 : 33, // Ensure the text doesn't touch the edge
+          right: switchSize === 'medium'?  26 : 33, // Ensure the text doesn't touch the edge
           width: "40%", // Adjust width for proper centering
           opacity: 0,
         },
@@ -107,7 +113,7 @@ export interface SwitchWrapType extends SwitchTextTrackStylePropsType {
   });
 
   export const RSwitchTextTrack = styled(Switch)<SwitchTextTrackStylePropsType>(
-    ({ switchWrpaerSize }) => {
+    ({ switchSize }) => {
       const sizes = {
         medium: {
           width: 64,
@@ -126,7 +132,7 @@ export interface SwitchWrapType extends SwitchTextTrackStylePropsType {
       };
   
       const { width, height, padding, thumb, transform } =
-        switchWrpaerSize === 'medium' ? sizes.medium : sizes.large;
+      switchSize === 'medium' ? sizes.medium : sizes.large;
   
       return {
         width,
@@ -162,14 +168,14 @@ export interface SwitchWrapType extends SwitchTextTrackStylePropsType {
           },
           "&:before": {
             content: '"לא"', // No on the right
-            left: switchWrpaerSize === 'medium' ? 4 : 4, // Adjust left position for proper centering
+            left: switchSize === 'medium' ? 4 : 4, // Adjust left position for proper centering
             width: "40%", // Adjust width for proper centering
             opacity: 0, // Hide "כן" by default (off state)
           },
           "&:after": {
             content: '"כן"', // Yes on the left
 
-            right: switchWrpaerSize === 'medium' ? 2 : 4, // Adjust right position for proper centering
+            right: switchSize === 'medium' ? 2 : 4, // Adjust right position for proper centering
             width: "40%", // Adjust width for proper centering
             opacity: 1, // Show "לא" by default (off state)
           },
@@ -198,32 +204,6 @@ export interface SwitchWrapType extends SwitchTextTrackStylePropsType {
       };
     }
   );
-  
-  
-
-  const SwitchWrap = ({switchValue,switchOnChangeHendler,switchWrpaerSize }:SwitchWrapType)=>{
- 
-        return <RSwitchTextTrack
-               value={  switchValue}
-               onChange={switchOnChangeHendler}  
-               inputProps={{ 'aria-label': 'controlled', }}
-               switchWrpaerSize={switchWrpaerSize?? "large"} // sise it taken
-               />
-      
-
-    } 
-
-
-
-  export default SwitchWrap
-
-
-  export interface NormalSwitchWrapPropsType extends SwitchTextTrackStylePropsType {
-    switchValue:boolean
-    switchOnChangeHendler:(e :React.SyntheticEvent, checked:boolean)=>void
-    title:string
-    labelPlacement:"bottom" | "top" | "end" | "start" 
-  }
 
   const IOSSwitch = styled((props) => (
     <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
@@ -284,7 +264,22 @@ export interface SwitchWrapType extends SwitchTextTrackStylePropsType {
       }),
     },
   }));
+  
 
+
+
+ const SwitchWrap = ({value,switchOnChangeHendler,switchSize }:SwitchWrapType)=>{
+
+        
+        return <RSwitchTextTrack
+               checked={value}
+               onChange={switchOnChangeHendler}  
+               inputProps={{ 'aria-label': 'controlled', }}
+               switchSize={switchSize?? "large"} // sise it taken
+               />
+      
+
+  } 
 
   export const NormalSwitchWrap = ({switchValue,switchOnChangeHendler,title, labelPlacement }:NormalSwitchWrapPropsType)=>{
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
@@ -302,3 +297,9 @@ export interface SwitchWrapType extends SwitchTextTrackStylePropsType {
     )
 
   }
+
+
+
+
+
+  export default SwitchWrap

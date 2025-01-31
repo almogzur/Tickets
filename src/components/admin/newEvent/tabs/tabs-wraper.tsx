@@ -25,6 +25,7 @@ import { IoTicket } from "react-icons/io5";
 import tabsPageContext from "@/context/admin/new-event/tabs/tabs-page-context";
 import { blue, green, grey } from "@mui/material/colors";
 import { RiDraftFill } from "react-icons/ri";
+import TabsEventSettingsContest from '@/context/admin/new-event/tabs/tabs-event-settings-context'
 
 
 

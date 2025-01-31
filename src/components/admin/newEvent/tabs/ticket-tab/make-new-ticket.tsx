@@ -23,16 +23,15 @@ import TabsInfoContext from '@/context/admin/new-event/tabs/tabs-info-context';
 // Types 
 
 //Colors
-import {  red } from '@mui/material/colors';
-import { DateTimeValidationError, PickerChangeHandlerContext } from '@mui/x-date-pickers';
-import dayjs, { Dayjs } from 'dayjs';
+
 import SelectWrap from '@/components/gen/select-wrap';
-import { SafeParseError, SafeParseSuccess, ZodError } from 'zod';
+import {  ZodError } from 'zod';
 import { IoMdAddCircle } from 'react-icons/io';
-import { TicketStateType, TicketType, TicketValidationSchema } from '@/components/admin/newEvent/types/new-event-types';
+import {  TicketType, TicketValidationSchema } from '@/components/admin/newEvent/types/new-event-types';
 import DatePickerWrap from '@/components/gen/time-date/date-picker-wrap';
-import { samiDateOptions } from '@/pages/_app';
-import SwitchWrap, { NormalSwitchWrap } from '@/components/gen/switch-wrap';
+import { NormalSwitchWrap } from '@/components/gen/switch-wrap';
+import TimePickerWrap from '@/components/gen/time-date/time-picker-wrap';
+
 
 
 interface TicketOptionType {
@@ -54,20 +53,20 @@ export default function MakeNewTicket({setTabValue}:MakeNewTicketType) {
   const [isClosingDate,setIsClosingDate]=useState(false)
   const [formErrors,setFormErrors ]= useState(false)
 
-  const [Ticket, setTicket] = useState<TicketStateType>({
-      EndSealesDate :null  ,
+  const [Ticket, setTicket] = useState<TicketType>({
+      EndSealesHour:"",
+      EndSealesDate :''  ,
       selectedType:'',
       priceInfo:"",
       price:"", 
   }) 
 
-  const generateTickitOptions = (tickets: TicketStateType[]): TicketOptionType[] => {
+  const generateTickitOptions = (tickets: TicketType[]): TicketOptionType[] => {
 
   const TicketOptions: TicketOptionType[] = [
     { value: "normal", label: "מחיר מלא" },
-    { value: "citizen", label: "תושב" },
-    { value: "discount", label: "הנחה" },
-    { value: "approachable", label: "נגיש" }
+    { value: "citizen", label: "  הנחת תושב " },
+    { value: "discount", label: " הנחה כללי" },
   ];
 
   if (tickets.length) {
@@ -82,6 +81,7 @@ export default function MakeNewTicket({setTabValue}:MakeNewTicketType) {
   };
   const resetTicketPricesForm =( ):void=>{
       setTicket(p=>({
+          EndSealesHour:null,
            EndSealesDate :null  ,
            selectedType:"",
            priceInfo:"",
@@ -103,7 +103,7 @@ export default function MakeNewTicket({setTabValue}:MakeNewTicketType) {
     resetTicketPricesForm()
     handleClose()
   }
-  const validateFileds = ( State: TicketStateType ) : { result:boolean,data:TicketType|undefined , errors: ZodError<TicketType> | undefined }=>{
+  const validateFileds = ( State: TicketType ) : { result:boolean,data:TicketType|undefined , errors: ZodError<TicketType> | undefined }=>{
     const result =  TicketValidationSchema.safeParse(State)
         return {result:result.success , data:result.data  , errors:result.error}
 
@@ -121,8 +121,9 @@ export default function MakeNewTicket({setTabValue}:MakeNewTicketType) {
 
   return (
     <>
+       <Button variant='outlined'>
       <IoMdAddCircle  size={"2.5em"} color={theme.palette.primary.main}  style={{paddingRight:0}}  onClick={handleClickOpen}  />
-
+      </Button>
       <Dialog
         open={open}
         onClose={handleClose}
@@ -144,7 +145,7 @@ export default function MakeNewTicket({setTabValue}:MakeNewTicketType) {
                <NormalSwitchWrap 
                  switchValue={isClosingDate}
                  switchOnChangeHendler={(e) => setIsClosingDate(!isClosingDate)  }
-                 switchWrpaerSize='large'
+                 switchSize='large'
                  title={'תאריך סגירת מכירות ?'} 
                  labelPlacement='bottom'
                    />
@@ -171,8 +172,7 @@ export default function MakeNewTicket({setTabValue}:MakeNewTicketType) {
                     :
                     e.target.value === "discount" ? setTicket(p => ({ ...p, priceInfo: '' }))
                       :
-                      e.target.value === "approachable" ? setTicket(p => ({ ...p, priceInfo: "מושב נגיש" }))
-                        : null;
+                   null;
               } } 
               helpText={''}                
                     />
@@ -192,7 +192,7 @@ export default function MakeNewTicket({setTabValue}:MakeNewTicketType) {
                 <>
             <InputWrap 
                 inputType='number'
-                label={'מחיר הנחה'}
+                label={'מחיר ההנחה'}
                 labelPositioin={'top'}
                 icon={<FcBusinessman />}
                 value={Ticket.price}
@@ -202,7 +202,7 @@ export default function MakeNewTicket({setTabValue}:MakeNewTicketType) {
             <InputWrap
                 icon={<FcBusinessman />}
                 value={Ticket.priceInfo}
-                label={'תיאור ההנחה'}
+                label={'תיאור'}
                 variant='outlined'
                 labelPositioin={'top'}
                 onChangeHndler={(e) => { setTicket(p => ({ ...p, priceInfo: e.target.value })); } } 
@@ -221,26 +221,13 @@ export default function MakeNewTicket({setTabValue}:MakeNewTicketType) {
               variant='outlined' helpText={''}
             />   
          }
-         { Ticket.selectedType==='approachable' && 
-                
-             <InputWrap 
-              stateName={''}
-              value={Ticket.price}
-              label={'* מחיר'}
-              inputType='number'
-              labelPositioin={'top'}
-              onChangeHndler={(e) => { setTicket(p => ({ ...p, price: e.target.value })); } }
-              variant='outlined'
-              helpText={''}
-                          />
-                    }
-
           {  isClosingDate && 
+          <>
             <DatePickerWrap    
               value={Ticket.EndSealesDate}
               minDate={new Date()}
               variant='outlined'
-              label={"סגירת מכירות לכרטיס זה"}
+              label={"בחר תאריך  "}
               helpText={""}
          
               labelPositioin={'top'}
@@ -250,6 +237,17 @@ export default function MakeNewTicket({setTabValue}:MakeNewTicketType) {
                 :null
               }} 
               />
+              <TimePickerWrap 
+                  label={'בחר שעה '} 
+                  value={Ticket.EndSealesHour}
+                   onEroorHndler={()=>{}}
+                   labelPositioin={'top'}
+                   onChangeHendler={ (e)=>{ e !== null ?
+                    setTicket(p => ({ ...p, EndSealesHour: e.toDate().toLocaleDateString() }))
+                    :null
+                  }} 
+                    />
+              </>
             }
 
 

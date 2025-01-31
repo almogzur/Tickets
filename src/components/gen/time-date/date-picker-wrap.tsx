@@ -62,6 +62,7 @@ const DatePickerWrap =({
             label={<ControledLabel labelPositioin={labelPositioin} label={label} />}
             sx={{  m:0.5 }}       
             
+            
             onAccept={onAcceptHendler}
             onChange={onChangeHendler}
             slotProps={{
@@ -69,7 +70,10 @@ const DatePickerWrap =({
                   variant:variant??"outlined" ,
                   color:color,
                   helperText: helpText?  <ControledHelperText text={helpText} helpTextPotionsEnd={helpTextPotionsEnd??false}/> : undefined
-                  }
+                  },
+                  actionBar: {
+                    actions: [ "accept"], // Enables Accept & Cancel buttons
+                }
                         
             }}
    />

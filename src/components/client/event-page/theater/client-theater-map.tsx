@@ -9,34 +9,42 @@ import { TheaterType } from '@/components/admin/newEvent/theater/types/theater-t
 import { SeatType } from '@/pages/details/[id]';
 
 type TheaterMapType = {
-    theater:TheaterType,
-    setEventSelectedSeats:Dispatch<SetStateAction<SeatType[]>>
     eventSelectSeats:SeatType[]
+    clientEventTheaterState:TheaterType|undefined
+
+
+    setEventSelectedSeats:Dispatch<SetStateAction<SeatType[]>>
+    setClientEventTheaterState:Dispatch<SetStateAction<TheaterType|undefined>>
+
+
+    hendlerSeatOldValues:Record<string, number>
+    setHendlerSeatOldValues:Dispatch<SetStateAction<Record<string,number>>>
   }
 
 
-
-  
-
-const  TheaterMap = ({theater, eventSelectSeats ,setEventSelectedSeats}:TheaterMapType) => {
+const  TheaterMap = ({  
+     clientEventTheaterState,
+      eventSelectSeats ,
+      hendlerSeatOldValues,
+      setHendlerSeatOldValues ,
+      setEventSelectedSeats,
+       setClientEventTheaterState
+       }:TheaterMapType) => {
 
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
-  const[ clientEventState ,setClientEventState] = useState<TheaterType>()
-  const [ hendlerSeatOldValue , setHendlerSeatOldValue  ] = useState<number>(0)
-
-  useEffect(()=>{
-        if(theater){
-            setClientEventState(theater)
-        }
-
-  },[theater])
-
-  
   const theme = useTheme()
   const MapFlexContaner = Flex
-  const [hendlerSeatOldValues, setHendlerSeatOldValues] = useState<Record<string, number>>({});
 
-  const hendler = (seatValue: number, seatNumber: number, row: string) => {
+
+
+    // to hndle remove item in sebling component in the tree 
+    // hendler function cant be exported  or made ganric  
+    // insted State is  lifted to perent 
+    
+
+     
+    const hendler = (seatValue: number, seatNumber: number, row: string,theater:TheaterType  ) => {
+    
     const inMain = theater.mainSeats.hasOwnProperty(row);
     const inSide = theater.sideSeats.hasOwnProperty(row);
     
@@ -54,6 +62,7 @@ const  TheaterMap = ({theater, eventSelectSeats ,setEventSelectedSeats}:TheaterM
     );
 
     const updateSeats = (prevState: TheaterType | undefined, seatCollection: "mainSeats" | "sideSeats") => {
+
         if (!prevState) return prevState;
 
         const newState = { ...prevState };
@@ -78,24 +87,29 @@ const  TheaterMap = ({theater, eventSelectSeats ,setEventSelectedSeats}:TheaterM
     };
 
     if (inMain) {
-        setClientEventState((prevState) => updateSeats(prevState, "mainSeats"));
+      setClientEventTheaterState((prevState) => updateSeats(prevState, "mainSeats"));
     } else if (inSide) {
-        setClientEventState((prevState) => updateSeats(prevState, "sideSeats"));
+      setClientEventTheaterState((prevState) => updateSeats(prevState, "sideSeats"));
     } else {
         throw new Error("Seat not found in main or side seats.");
     }
-};
+   };
 // Reset state function
 
 
-  const sideSeatsStylesObject = clientEventState && Object.fromEntries(
-    Object.entries(clientEventState.styles).map(([row, positions]) => [row, positions])
+  const sideSeatsStylesObject = clientEventTheaterState && Object.fromEntries(
+    Object.entries(clientEventTheaterState.styles).map(([row, positions]) => [row, positions])
   )
-   const sideTextStylesObject = clientEventState && Object.fromEntries(
-        Object.entries(clientEventState.textsStyle).map(([row, positions]) => [row, positions])
+   const sideTextStylesObject = clientEventTheaterState && Object.fromEntries(
+        Object.entries(clientEventTheaterState.textsStyle).map(([row, positions]) => [row, positions])
+        
   )
 
-   const MainSeatS  =  clientEventState &&  Object.entries(clientEventState.mainSeats).map(([row, rowContent]) => {
+  const Text =  clientEventTheaterState &&   Object.entries(clientEventTheaterState.sideSeats).map(([row, rowContent])=>{
+    return <Typography key={row} sx={{color:theme.palette.secondary.main}}  height={0} style={ sideTextStylesObject?  sideTextStylesObject[row] :{}} >{row}</Typography>
+})
+
+   const MainSeatS  =  clientEventTheaterState &&  Object.entries(clientEventTheaterState.mainSeats).map(([row, rowContent]) => {
     const colValue  = rowContent.map((seatValue: number, i: number) => {
       const textset = "מושב";
       const textrow = "שורה";
@@ -106,9 +120,7 @@ const  TheaterMap = ({theater, eventSelectSeats ,setEventSelectedSeats}:TheaterM
           seatValue={seatValue}
           seatnumber={i}
           row={row}
-           hendler={()=>
-              hendler(seatValue,i,row)
-            }
+           hendler={()=> hendler(seatValue,i,row,clientEventTheaterState)}
             />
       );
     })
@@ -129,7 +141,7 @@ const  TheaterMap = ({theater, eventSelectSeats ,setEventSelectedSeats}:TheaterM
       </Flex>
     );
   })
-   const SideSeats = clientEventState &&     Object.entries(clientEventState.sideSeats).map(([row, rowContent])=>{
+   const SideSeats = clientEventTheaterState &&     Object.entries(clientEventTheaterState.sideSeats).map(([row, rowContent])=>{
     const colValue  = rowContent.map((seatValue: number, i: number) => {
      
     
@@ -139,8 +151,8 @@ const  TheaterMap = ({theater, eventSelectSeats ,setEventSelectedSeats}:TheaterM
             seatValue={seatValue}
             seatnumber={i}
             row={row}
-            hendler={   ()=>hendler(seatValue,i,row)}
-              />
+            hendler={()=> hendler(seatValue,i,row,clientEventTheaterState)}
+            />
         );
       });
     
@@ -157,20 +169,18 @@ const  TheaterMap = ({theater, eventSelectSeats ,setEventSelectedSeats}:TheaterM
         </Flex>
       );
   })
-   const Text =  Object.entries(theater.sideSeats).map(([row, rowContent])=>{
-       return <Typography key={row} sx={{color:theme.palette.secondary.main}}  height={0} style={ sideTextStylesObject?  sideTextStylesObject[row] :{}} >{row}</Typography>
-  })
 
-if(!theater){
+
+if(!clientEventTheaterState){
   return <h6>Loading</h6>
 }
     
 return (
  
-       <ClientTheaterRTransform  >    
+       <ClientTheaterRTransform >    
 
           <MapFlexContaner  
-              sx={{direction:"ltr" }}
+              sx={{direction:"ltr" }} 
             >
                <Stage />
                 {MainSeatS}

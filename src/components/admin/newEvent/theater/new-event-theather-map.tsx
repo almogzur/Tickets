@@ -49,15 +49,14 @@ const AdminNewEventTheatherMap = ({children, isMultiSelect,setIsMultiSelect ,mul
         disabled={AdminMapPositions.disabled}
          
         onPanningStop={(e)=>{
-          
+
           setAdminMapPositions(prev=>({x:e.state.positionX,y:e.state.positionY,Scale:e.state.scale}))
         }}
-        onPanningStart={()=>{}}
-        onTransformed={(e)=>{}}  
+        onPanningStart={(e)=>{console.log(e)}}
       >
         {({ zoomIn, zoomOut, resetTransform, ...rest }) =>  {
           return   (
-            <Flex  > 
+            <Flex mb={10}  > 
               <MovmentControls/>   
             
                   <Flex direction={"row"} justifyContent={"center"} mb={2}  >
@@ -79,12 +78,6 @@ const AdminNewEventTheatherMap = ({children, isMultiSelect,setIsMultiSelect ,mul
 
               < SeatControls isMuiltiSelct={isMultiSelect} setIsMultiSelect={setIsMultiSelect} multiSelectBadgeInfo={multiSelectBadgeInfo}   />
              
-
-
-            
-             
-              
-
             </Flex>
 
         )

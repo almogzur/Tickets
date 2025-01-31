@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from "react";
-import { infoFiledsType, ProductionInfoFiledsValidtinSchema, RequestStatusType, TempInfoFiledsValidationSchema, TicketType } from "./types/new-event-types";
+import { EventSettingType, infoFiledsType, ProductionInfoFiledsValidtinSchema, RequestStatusType, TempInfoFiledsValidationSchema, TicketType } from "./types/new-event-types";
 
 //WraperContex
 import TabsTickets from '@/context/admin/new-event/tabs/tabs-ticket-context'
@@ -9,6 +9,12 @@ import MultiSelectContext from '@/context/admin/new-event/map/multi-select-conte
 import AdminTransformContext  from '@/context/admin/new-event/map/admin-map-positions-context'
 import TabsPageContext from '@/context/admin/new-event/tabs/tabs-page-context'
 import TabsEroorsContext from '@/context/admin/new-event/tabs/tabs-eroors-context'
+import TabsEventSettingsContest from '@/context/admin/new-event/tabs/tabs-event-settings-context'
+
+
+
+
+
 import { Positions, TheaterMultiTipeInfoType, TheaterTipinfoType } from "./theater/types/theater-types";
 
 
@@ -49,7 +55,7 @@ type WithIdPropsTypeRequired ={
   setEventId: Dispatch<SetStateAction<string | undefined>>;
   }
 
- type NewEventFormWrapperProps = NOPropsTypeRequired | WithIdPropsTypeRequired
+type NewEventFormWrapperProps = NOPropsTypeRequired | WithIdPropsTypeRequired
   
 
 const NewEventFormWraper = ({EventId,setEventId}:NewEventFormWrapperProps)=>{
@@ -62,6 +68,8 @@ const NewEventFormWraper = ({EventId,setEventId}:NewEventFormWrapperProps)=>{
   
 
     // For DB Data 
+        // For DB Data 
+            // For DB Data 
     const [infoFileds,setInfoFileds]=useState<infoFiledsType>({
       eventName:"",
       cat:"",
@@ -77,10 +85,17 @@ const NewEventFormWraper = ({EventId,setEventId}:NewEventFormWrapperProps)=>{
       preview:""
  })
 
-const [tickets, setTickets] =useState<TicketType[]>([])
-const [ eventSetting , setEventSetting] =useState({})
-const eventNameRef = useRef<HTMLInputElement>(null);
 
+const [tickets, setTickets] =useState<TicketType[]>([])
+const [ eventSetting , setEventSetting] =useState<EventSettingType>({
+  limitClientTicket: true, // true is disabled flase enabled
+  ticketLimit:'5', // mum start at 0 array form()
+  canSelectNotRelatedSites:true, 
+})
+
+    // For DB Data 
+        // For DB Data 
+            // For DB Data 
 
 
     useEffect(()=>{
@@ -92,9 +107,10 @@ const eventNameRef = useRef<HTMLInputElement>(null);
               if(Draft){
                 console.log(Draft);
                 
-                const {tickets, ...InfoFileds} = Draft // Sparating 
+                const { eventSetting, tickets, ...InfoFileds} = Draft // Sparating 
                 
                   setInfoFileds(InfoFileds)
+                  setEventSetting(eventSetting)
            
                 if(tickets){
                  setTickets(tickets)
@@ -103,6 +119,10 @@ const eventNameRef = useRef<HTMLInputElement>(null);
 
         }
     },[Drafts, EventId, session?.user?.name])
+
+
+    useEffect(()=>{
+      console.log(eventSetting,"form maunted  wrapper snapshot  ")},[eventSetting])
 
 
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
@@ -143,11 +163,11 @@ const eventNameRef = useRef<HTMLInputElement>(null);
       return issue?.message
   }
 
-  const updateDraft = async (EventId:string, infoFileds:infoFiledsType, tickets: TicketType[])=>{
+  const updateDraft = async (EventId:string, infoFileds:infoFiledsType, tickets: TicketType[], eventSetting : EventSettingType)=>{
     setIsLoading(true)
     setLoadingScrenText("מעדכן")
 
-    const ReqData = { ...infoFileds, tickets, id:EventId }
+    const ReqData = { ...infoFileds, tickets, eventSetting , id:EventId }
 
     if(EventId){
       try{ 
@@ -167,22 +187,24 @@ const eventNameRef = useRef<HTMLInputElement>(null);
          router.push("/admin")
          setIsLoading(false)
          setLoadingScrenText("")
-
        }
-
-    }
-  }
+  }}
    // Requests 
-  const saveDraft = async ( infoFileds:infoFiledsType, tickets: TicketType[] , EventId?:string ):Promise<void>=> {
-      console.log("sending req" ,infoFileds.image);
-      setSaevNewEventReqestStatus('Temp')
+  const saveDraft = async (
+          infoFileds:infoFiledsType,
+          tickets: TicketType[],
+          eventSetting:EventSettingType 
+         , EventId?:string 
+        ):Promise<void>=> {
+          console.log("sending req" ,infoFileds.image);
+         setSaevNewEventReqestStatus('Temp')
       const ValidationResult =  TempInfoFiledsValidationSchema.safeParse(infoFileds); //validate form on click 
-        try {
+         try {
                if(ValidationResult.success){
 
                   setIsLoading(true)
                   setLoadingScrenText("שומר")
-                   const ReqData ={ ...infoFileds, tickets } 
+                   const ReqData ={ ...infoFileds, tickets , eventSetting} 
                    const response = await axios.post("/api/admin/drafts/C/new-draft",ReqData ,{} );
             
                 if(response.status === 200 ){
@@ -197,7 +219,7 @@ const eventNameRef = useRef<HTMLInputElement>(null);
             
             }
            }
-          catch (error) {
+           catch (error) {
              if (error instanceof z.ZodError) {
                // Handle validation errors
                console.error("Validation Errors:", error.errors);
@@ -223,8 +245,8 @@ const eventNameRef = useRef<HTMLInputElement>(null);
              name: 'שמור טיוטה' , 
              ClickHendler:(e:React.MouseEvent<HTMLDivElement>)=>
                 EventId
-                ? updateDraft(EventId, infoFileds,tickets) 
-                : saveDraft(infoFileds,tickets ,EventId)
+                ? updateDraft(EventId, infoFileds,tickets,eventSetting) 
+                : saveDraft(infoFileds,tickets, eventSetting ,EventId)
               
             },
             { icon: <MdPublic size={"2.5em"} />,
@@ -245,8 +267,8 @@ const eventNameRef = useRef<HTMLInputElement>(null);
     name: 'עדכן טיוטה ' , 
     ClickHendler:(e:React.MouseEvent<HTMLDivElement>)=>
        EventId
-       ? updateDraft(EventId, infoFileds,tickets) 
-       : saveDraft(infoFileds,tickets ,EventId)
+       ? updateDraft(EventId, infoFileds,tickets,eventSetting) 
+       : saveDraft(infoFileds,tickets,eventSetting ,EventId)
    },
    { icon: <MdPublic size={"2.5em"} />,
    name: ' פרסם ' , 
@@ -261,11 +283,12 @@ const eventNameRef = useRef<HTMLInputElement>(null);
          }
 
   return(
-    
+
     <TabsEroorsContext.Provider value={{newEventValidateFiled}}>
     <TabsPageContext.Provider value={{tabValue,setTabValue, isLoading, setIsLoading, SaevNewEventReqestStatus, setSaevNewEventReqestStatus ,loadingScrenText ,setLoadingScrenText }}>
     <TabInfoContext.Provider value={{infoFileds,setInfoFileds}}>
     <TabsTickets.Provider  value={{tickets ,setTickets}} >
+    <TabsEventSettingsContest.Provider value={{ eventSetting, setEventSetting}} >
 
            <TabsWraper EventId={EventId}  />
 
@@ -288,6 +311,7 @@ const eventNameRef = useRef<HTMLInputElement>(null);
               direction={"up"}
               positions={!sm?{ bottom: 0,left:0 }:{bottom:16,left:10}}       
            />
+    </TabsEventSettingsContest.Provider>
    </TabsTickets.Provider>
    </TabInfoContext.Provider> 
    </TabsPageContext.Provider>

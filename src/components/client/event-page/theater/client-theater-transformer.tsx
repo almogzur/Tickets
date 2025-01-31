@@ -18,9 +18,12 @@ import React from "react";
 interface ClientTheaterMapPropsTypes {
    children? : ReactNode,
 
+
+
+
 }
 
-const ClientTheaterRTransform = ({children }:ClientTheaterMapPropsTypes) => {
+const ClientTheaterRTransform = ({children}:ClientTheaterMapPropsTypes) => {
   
     const {ClientMapPositions,setClientMapPositions} =useContext(ClientPositionContext)
     const theme = useTheme()
@@ -38,9 +41,7 @@ const ClientTheaterRTransform = ({children }:ClientTheaterMapPropsTypes) => {
         initialPositionX={!sm? 80 : 0 }
         minScale={!sm? 0.45 : !md? 0.8 : 1 }
         smooth
-        centerZoomedOut={ !lg? false :true}
-
-       
+ 
         maxScale={10}
         onPanningStop={(e)=>{
           
@@ -57,19 +58,25 @@ const ClientTheaterRTransform = ({children }:ClientTheaterMapPropsTypes) => {
         {({ zoomIn, zoomOut, resetTransform, ...rest }) =>  {
           return   (
             <Flex 
-                 direction={"row"}
                   width={"inherit"}
-   
+                  height={"inherit"}
+                
         
                   >
                 <Controls   />
                  <TransformComponent 
                     wrapperStyle={{  width:"100%" , height:"100% " }}
                     contentStyle={{
-                         width:"inherit" ,
-                        display:"flex",
-                        justifyContent:"center",
-     
+                         width: "inherit" ,
+                         height:  "inherit",
+                          display:"flex",
+                          justifyContent:"center",
+                          justifyItems:"center",
+                          alignContent:"start",
+                          position:"relative",
+                          top:100
+                        
+                      
           
                             }}
                    >

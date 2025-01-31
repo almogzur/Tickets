@@ -1,31 +1,48 @@
+
+
+
+
+
 import WidthContext from "@/context/WidthContext"
-import SwitchWrap, { SwitchWrapType } from "./switch-wrap"
-import {Stack as Flex, TextFieldVariants, Typography } from '@mui/material'
+import SwitchWrap, { NormalSwitchWrap, SwitchWrapType } from "./switch-wrap"
+import {Box, Stack as Flex, TextFieldVariants, Typography } from '@mui/material'
 import { green, grey, red } from "@mui/material/colors"
-import { ChangeEvent, Dispatch, SetStateAction, useContext } from "react"
-import { RequestStatusType } from "../admin/newEvent/types/new-event-types"
+import { ChangeEvent, Dispatch, ReactNode, SetStateAction, SyntheticEvent, useContext } from "react"
 
 
-interface  SwitchWithTextWrapType extends SwitchWrapType {
+
+interface  SwitchWithTextAndChildrenWrapType extends SwitchWrapType {
     mainText:string
     subMainText?:string
     subText:string
     variant?:TextFieldVariants
+    children?:ReactNode
 }
 
-const SwitchWithTextWrap =({mainText,subText,switchValue,switchOnChangeHendler,switchWrpaerSize,variant,subMainText}:SwitchWithTextWrapType)=>{
+const SwitchWithTextAndChildren =({
+        mainText,
+        subText,
+        value,
+        switchOnChangeHendler,
+        switchSize,
+        variant,
+        subMainText,
+        children
+        }:SwitchWithTextAndChildrenWrapType)=>{
+
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
 
     return (
-            <Flex   
-                alignItems={"center"}
+          <Flex   
+             direction={"row"}
+             justifyContent={"space-evenly"}
+                
                 pt={2}
                 pb={2}
                 pr={1}
                 pl={1}
                 m={1}
-                direction={"row"}
-                width={"98%"}
+                width={"100%"}
                 height={80}
                 gap={0.5}
                 borderRadius={1}
@@ -39,13 +56,24 @@ const SwitchWithTextWrap =({mainText,subText,switchValue,switchOnChangeHendler,s
                     },
                     }}
                  >
-                <SwitchWrap switchValue={switchValue} switchOnChangeHendler={switchOnChangeHendler} switchWrpaerSize={md?'large':'medium'} />
+            <SwitchWrap value={value} switchOnChangeHendler={switchOnChangeHendler }/>
                 <Flex>
-                  <Typography  fontWeight={"bold"} fontSize={!sm?13  :18}> {mainText.slice(0,20)}</Typography>
-                  {subMainText &&  <Typography  fontWeight={"bold"} fontSize={!sm?13  :18}> {subMainText.slice(0,20)}</Typography>}
-                  <Typography  fontSize={!sm ?11: 13} >{subText.slice(0,90)}</Typography>
+                   <Typography  fontWeight={"bold"} fontSize={!sm?13  :18}> {mainText.slice(0,20)}</Typography>
+                    {subMainText &&  <Typography  fontWeight={"bold"} fontSize={!sm?13  :18}> {subMainText.slice(0,20)}</Typography>}
+                  <Typography  fontSize={!sm ?11: 13} >{subText.slice(0, children? 70 : 90)}</Typography>
+                  
                 </Flex>
-            </Flex>
+
+                <Box width={100}  >
+                {! value &&  children}
+                </Box>
+
+                
+         </Flex>
     )
 }
-export default SwitchWithTextWrap
+
+
+
+
+export default SwitchWithTextAndChildren

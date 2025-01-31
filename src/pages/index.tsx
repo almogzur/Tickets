@@ -130,8 +130,8 @@ export default function Home() {
 
      if(!Events){
       return  (
-        <ClientLayout>
-      <Flex
+        <ClientLayout noScrool HeaderName='' >
+           <Flex
          direction={"row"}
          sx={{ display: 'flex',    width:"100%" , height:"100%" ,   }}
          justifyContent={"center"}
@@ -139,21 +139,16 @@ export default function Home() {
       >
           <CircularProgress />
           
-    </Flex>
+         </Flex>
     </ClientLayout>
       )
      }
      else{
       return (
         <>
-        <Head >
-            <title>הזמנות כרטיסים  | בית</title>
-        </Head>
-         <ClientLayout>
-            
-           <PageWrapper maxWidth='xl'>
+         <ClientLayout  HeaderName='' >
+            <PageWrapper maxWidth='xl'>
     
-              
                  <Carousel
                 sx={{background:"black"}}
                 
@@ -162,11 +157,8 @@ export default function Home() {
                     items.map( (item, i) => <Item key={i} {...item} /> )
                   }
                 </Carousel>
-     
-                
-                 <Scrooler>
-    
-                    <ArowsWrapper direction={"row"}  justifyContent={"space-between"}  >
+                <Scrooler>
+                  <ArowsWrapper direction={"row"}  justifyContent={"space-between"}  >
                      <RightArrow
                            position={"relative"}
                            left={!xs?-15 : !md?  -25 :"auto"}
@@ -203,9 +195,9 @@ export default function Home() {
                    </Button>    
                       </LeftArrow>
     
-                   </ArowsWrapper>
+                  </ArowsWrapper>
     
-                       <ScroolerConetnt
+                   <ScroolerConetnt
                         ref={scrollContainerRef}
                         onMouseDown={handleMouseDown}
                         onMouseMove={handleMouseMove}
@@ -246,28 +238,19 @@ export default function Home() {
     
     
     
-                       </ScroolerConetnt>
-                 </Scrooler>
+                  </ScroolerConetnt>
+                </Scrooler>
                           
             <Placeholder height={400} />
 
     
           </PageWrapper>
-                 
-          
-    
        </ClientLayout>
         </>
       )
 
      }
-
-
 }
-
-
-
-
 
 
 
