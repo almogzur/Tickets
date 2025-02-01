@@ -58,7 +58,7 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse<R
  
 
    //Stage 1  -- move image to folder baced on event name 
-   if(!preview){}
+   if(!preview){}  
 
    try{ 
       const result = await moveToEventNameFolder(preview,eventName,session,API_NAME)

@@ -31,7 +31,7 @@ const NewEventPage=()=>{
       <meta name="viewport" content="width=device-width, user-scalable=no"/>
     </Head>
 
-    <AdminLayout Path={''} noScrool >
+    <AdminLayout  noScrool >
         <NewEventFormWraper  />
     </AdminLayout>
 

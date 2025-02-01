@@ -11,7 +11,7 @@ import Head from 'next/head';
 interface AdminLayoutPropsType  {
   children?:ReactNode,
    noScrool?:boolean,
-   HeaderName:string
+   HeaderName?:string
   }
 
 

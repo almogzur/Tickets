@@ -9,7 +9,7 @@ import { ReactNode } from "react";
 interface ClientLayoutPropsType  {
     children?:ReactNode,
     noScrool?:boolean,
-    HeaderName:string
+    HeaderName?:string
   }
 
 const ClientLayout = (props:ClientLayoutPropsType) => {
@@ -40,7 +40,7 @@ export default ClientLayout;
 // fix scroll on under 600 expended 
 
 // see https://gist.github.com/dmurawsky/d45f068097d181c733a53687edce1919
- const FullHeightPage = ({children,noScrool}:{children:ReactNode, noScrool?:boolean ,HeaderName:string}) => {
+ const FullHeightPage = ({children,noScrool}:{children:ReactNode, noScrool?:boolean ,HeaderName?:string}) => {
   const theme = useTheme()
 
    return<Box sx={{

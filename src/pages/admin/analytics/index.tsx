@@ -16,11 +16,8 @@ if(status==="loading"){
   
 
 return (
-  <AdminLayout >
+  <AdminLayout HeaderName={'פורטל ניהול '} >
       <Typography variant='h2' textAlign={"center"} >סטיסטיקה</Typography>
-      
-
-
   </AdminLayout>
   ) 
 }

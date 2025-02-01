@@ -104,7 +104,7 @@ const Tickets = () => {
       <Head>
         <title>דף תשלום</title>
       </Head>
-      <ClientLayout>
+      <ClientLayout HeaderName={''}>
       <div >
         <Card />
       </div>

@@ -64,7 +64,7 @@ export default function SingInPage(){
 
 
 return (
-
+  <form onSubmit={e=>{e.preventDefault();  submit(e)}}  >
   <Flex  height={'100vh'}  alignItems={"center"} justifyContent={"center"}  >
 
     <Paper elevation={16}   sx={{boxShadow:"" , width:"90%" , maxWidth:1000,p:1  }} >
@@ -91,10 +91,7 @@ return (
              <Image src={Logo} height={0} width={0}  alt=""></Image>
          </Flex>
 
-         <form onSubmit={e=>{e.preventDefault();  submit(e)}}  >
-     
-
-               <Flex direction={"row"} justifyContent={"center"} >
+         <Flex direction={"row"} justifyContent={"center"} >
             <Flex   justifyContent={"center"}  width={300}  >
 
                <InputWrap 
@@ -132,8 +129,6 @@ return (
             </Flex>
             </Flex>
 
- 
-
 
             <Flex direction={'row'} justifyContent={"center"} m={2}   >
                <Button
@@ -148,14 +143,15 @@ return (
               </Button>
            </Flex>
 
-         </form>
+
      </Box>
                 {/*  change the quary system to context  */}
      { typeof error ==='string'&& errorMessages.hasOwnProperty( error) &&  <Alert sx={{direction:"rtl"}} severity="error">{ errorMessages[error] }</Alert>}
 
     </Paper>
 
-   </Flex>
+   </Flex>         
+   </form>
 
 ) 
 }
