@@ -83,36 +83,21 @@ export default function ClientTikectList({
   return (
     <List
        sx={{ 
-            width: '100%',
-            maxWidth: 'inherit',
-            overflowY:'scroll',
-            overflowX:'clip',
-            mb:10,
-            '&::-webkit-scrollbar': {
-              width: '5px',
-          },
-           '&::-webkit-scrollbar-track': {
-              boxShadow: `inset 0 0 2px rgba(0,0,0,0.00)`,
-              webkitBoxShadow: 'inset 0 0 3px rgba(0,0,0,0.00)',
-         },
-           '&::-webkit-scrollbar-thumb': {
-             background:theme.palette.secondary.main,
-         }
-            
+            width:"100%",
+            mb:15,
     
-
-
             }}
             >
-    {eventSelectSeats.map(({row,seatNumber,value}) => {
-           const labelId = `checkbox-list-label-${seatNumber}`;
+           {eventSelectSeats.map(({row,seatNumber,value}) => {
+               const labelId = `checkbox-list-label-${seatNumber}`;
 
-
-        return (
-          <ListItem
-             key={`${row}+${seatNumber}+Client-List`}
-             divider
-
+          return  <ListItem
+              key={`${row}+${seatNumber}+Client-List`}
+              divider
+              sx={{
+                width:"100%",
+                bgcolor:"#ddd"
+              }}
           >
               <ListItemText 
                  sx={{direction:"ltr", textAlign:"end"}}
@@ -125,18 +110,11 @@ export default function ClientTikectList({
               onClick={()=>hendler(value,seatNumber,row,clientEventTheaterState )}
               variant='text'
               color='secondary'
-     
-              
              >
-
-              
-                    <IoMdClose color='red' size={"2em"} />
-              
-  
+              <IoMdClose color='red' size={"2em"} /> 
             </Button>
-
           </ListItem>
-        );
+
       })}
     </List>
   );

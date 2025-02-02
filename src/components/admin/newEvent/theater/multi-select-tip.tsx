@@ -198,14 +198,7 @@ import { infoFiledsType } from "@/components/admin/newEvent/types/new-event-type
                 >הנחה 
                 </Button>
 
-                 <Button 
-                  sx={{bgcolor: orange[600] ,  ...comonAtt}} 
-                  onClick={(e)=>{ upateSeateValue( 5) }}
 
-                  >
-                   נגיש 
-               
-                </Button>
 
               
                 </Flex>

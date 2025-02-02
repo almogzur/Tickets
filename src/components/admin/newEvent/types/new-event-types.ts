@@ -69,7 +69,7 @@ export type EventSettingType  =  {
   }
 
 
-  export interface EventType extends infoFiledsType {
+export interface EventType extends infoFiledsType {
     _id: string;
     tickets?: TicketType[]
     eventSetting:EventSettingType

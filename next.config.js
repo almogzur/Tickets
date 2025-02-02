@@ -6,7 +6,7 @@ console.log(isProduction);
 
 const cspHeader = `
     default-src 'self' *.cloudinary.com ;
-    script-src 'self' ${isProduction ? "" : "'unsafe-eval' 'unsafe-inline'"}  *.cloudinary.com ;
+    script-src 'self' ${isProduction ? "" : "'unsafe-eval' 'unsafe-inline'"}  *.cloudinary.com *.paypal.com *.paypalobjects.com  ;
     style-src 'self' 'unsafe-inline';
     img-src 'self' *.cloudinary.com;
     font-src 'self';
@@ -55,6 +55,10 @@ const DevObject = {
             protocol:'https',
             hostname:'**.cloudinary.com',
           },
+          {
+            protocol:'https',
+            hostname:'**.paypal.com ',
+          }
         ],
       },
 

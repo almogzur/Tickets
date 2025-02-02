@@ -19,6 +19,9 @@ import { Positions, TheaterType } from '@/components/admin/newEvent/theater/type
 import DrawerContent from '@/components/client/event-page/drawer/drawer-content';
 import DrawerWighet from '@/components/client/event-page/drawer/info-drawer-wighet';
 
+import { TiArrowBack } from "react-icons/ti";
+
+
 // mote to theater types  after 
 export type  SeatType  = {
       row:string,
@@ -49,7 +52,9 @@ const DetailsPage = ({}) => {
  const [wighetIsExp , setWighetIsExp  ]= useState<boolean>(false)
 
 
-  const   TheaterFlex = Flex, Wrapper = Flex, PreBox = Box
+  const   TheaterFlex = Flex,
+                Wrapper = Flex,
+                 BackBTN = Button
 
      useEffect(()=>{
       setEventState(FilteredEvent)
@@ -74,9 +79,28 @@ const DetailsPage = ({}) => {
                 direction={ !md ? 'column':  "row"} 
                 sx={{ 
                   width:"100%",
-                  height:"100%"
+                  height:"100%",
                  }}
               >   
+               <BackBTN
+                     color='secondary'
+                  sx={{
+                     position:"absolute",
+                     left:"3%",
+                     top: !md ? "10%" : "13%",
+                     borderRadius:45 ,
+                       p:2, 
+                       scale:!md? 0.7 : 1,
+                       zIndex:5
+                     
+                  }}
+                  onClick={()=>{router.push("/")}}
+               >
+                     <TiArrowBack size={"2em"} color='black' />
+                     
+               </BackBTN>
+            
+
             <DrawerWighet
                wighetIsExp={wighetIsExp}
                eventSelectSeats={eventSelectSeats}
@@ -99,12 +123,11 @@ const DetailsPage = ({}) => {
                />
             </DrawerWighet>
 
-
-
             { eventState.Theater &&  
              <Box
                width={"100%"}
                height={ wighetIsExp && !md ? 0 : undefined  }
+
               >
                <ClineTransformContext.Provider value={{ClientMapPositions ,setClientMapPositions}}>
              <TheaterMap 
@@ -123,7 +146,6 @@ const DetailsPage = ({}) => {
              }
            
              {/* <Map/>*/}
-
 
          </Wrapper>
 

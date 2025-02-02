@@ -1,6 +1,6 @@
 import WidthContext from "@/context/WidthContext";
 import { EventsType } from "@/pages/api/client/events/R/get-events";
-import { Box, Typography, Chip ,Stack as Flex , useTheme, Button } from "@mui/material";
+import { Box, Typography, Chip ,Stack as Flex , useTheme, Button, Dialog, DialogTitle, DialogContent } from "@mui/material";
 import { CldImage } from "next-cloudinary";
 import React, { Dispatch, SetStateAction, useEffect } from "react";
 import { CgCalendarDates } from "react-icons/cg";
@@ -12,6 +12,9 @@ import ClientTicketList from "./tickets-list";
 import { GiTakeMyMoney } from "react-icons/gi";
 import { TheaterType } from "@/components/admin/newEvent/theater/types/theater-types";
 import axios from "axios";
+import PaypalBtn from "../payments-providers-buttons/paypal";
+import GooglePatBtn from "../payments-providers-buttons/google";
+
 
  export type   DrawerContentType = {
 
@@ -42,6 +45,17 @@ const DrawerContent = ({
     const sanitizedHtml = DOMPurify.sanitize(event.pre);
     const theme = useTheme()
 
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+  
+    const handleClose = () => {
+      setOpen(false);
+    };
+
+
 
 
     const updateEvent = async ()=>{
@@ -55,9 +69,9 @@ const DrawerContent = ({
     }
 
 
-    useEffect(()=>{
-      console.log(eventSelectSeats,"Drawer Content see ")
-    },[eventSelectSeats])
+    // useEffect(()=>{
+    //   console.log(eventSelectSeats,"Drawer Content see ")
+    // },[eventSelectSeats])
 
   
     const Pre=Box,
@@ -66,23 +80,24 @@ const DrawerContent = ({
 
 
     return(
-       <Flex
+       <Flex 
           alignItems={"center"}
-          sx={{ overflowY:"scroll", p:2, width:"100%"}}
+          sx={{height:undefined // ! importent dont limit 
+             }}
           >
         {/* cover */}
         { !eventSelectSeats.length && 
         <CldImage
               src={event.preview}
               alt="Description of my image"
-              width={300}
+              width={'300'}
               height={!xs? 300: 400}
               draggable={false}
               />
         }
         {/* heading */}
          <Typography 
-         color={theme.palette.common.white}
+          color={theme.palette.common.white}
           variant={'h4'}
           textAlign={"center"}
          >
@@ -121,13 +136,29 @@ const DrawerContent = ({
        { eventSelectSeats.length > 0   &&  
        <>
         <Typography mt={2} > סה״כ { eventSelectSeats.length }</Typography>
+
         <Button
          color='secondary'
-         onClick={()=>updateEvent()}
+
+         onClick={handleClickOpen}
            >לדף תשלום מאובטח 
           {<FaExpeditedssl  style={{margin:2}}/>}
        </Button>
-       
+
+       <Dialog
+        open={open}
+        onClose={handleClose}
+        fullWidth
+        aria-labelledby="Payment-Dialog"
+        aria-describedby="alert-dialog-Payment-Dialog"
+      >
+        <DialogContent  >
+          <PaypalBtn  id={event.eventName} amount={eventSelectSeats.length}  />
+          <GooglePatBtn/>
+        </DialogContent>
+
+      </Dialog>
+
        <ClientTicketList
           event={event}
           eventSelectSeats={eventSelectSeats}
@@ -140,33 +171,17 @@ const DrawerContent = ({
        { !eventSelectSeats.length &&
         <>
          <Pre
-            height={200}
-            p={2}
-            overflow={"scroll"}
-            sx={{
-  
-              overflowY:"scrool",
-              overflowX:'clip',
-              '&::-webkit-scrollbar': {
-                width: '3px',
-                
-              
-                
-              },
-              '&::-webkit-scrollbar-track': {
-                boxShadow: `inset 0 0 2px rgba(0,0,0,0.00)`,
-                webkitBoxShadow: 'inset 0 0 3px rgba(0,0,0,0.00)'
-              },
-              '&::-webkit-scrollbar-thumb': {
-                background:theme.palette.secondary.main,
-  
-              }
-             }}
+            p={1}
             textAlign={"center"}
             style={{background:'inherit',direction:"rtl"}}
             dangerouslySetInnerHTML={{__html:sanitizedHtml}}
             />
         <Box height={200} >box</Box>
+        <Box height={200} >box</Box>   
+         <Box height={200} >box</Box>
+
+
+
         </>
         }
 

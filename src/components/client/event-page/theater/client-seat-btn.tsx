@@ -1,11 +1,17 @@
 import { CSSProperties, useState, useMemo } from "react";
-import { green, orange, purple } from "@mui/material/colors";
-import { MdAccessible, MdDiscount } from "react-icons/md";
+import { green, orange, purple, yellow } from "@mui/material/colors";
+import { MdAccessible} from "react-icons/md";
+import { BiSolidDiscount } from "react-icons/bi";
+
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
+import { useTheme } from "@mui/material";
+import { FaTicketAlt } from "react-icons/fa";
+import { FaTicketSimple } from "react-icons/fa6";
+import { LuTicket } from "react-icons/lu";
 
 interface ToolTipButtonType {
   seatValue: number;
@@ -23,20 +29,23 @@ const styles: Record<string, CSSProperties> = {
     margin: 2,
     border: "none",
     padding: 0,
-    fontSize: 7,
     cursor: "pointer",
-    borderRadius:1.3
+    borderRadius:1.3,
+display:"flex",
+    fontSize:7
+    
   },
   seatBooked: { backgroundColor: "brown", cursor: "not-allowed" },
   seatSelected: { backgroundColor: purple[300] },
   seatBlocked: { color: "black", background: "black", cursor: "auto" },
-  seatDiscounted: { backgroundColor: green[700] },
-  seatAccsesble: { backgroundColor: orange[600] },
+  seatDiscounted: {},
+  seatAccsesble: {},
 };
 
 const TooltipButton = ({ seatValue, seatnumber, row, hendler }: ToolTipButtonType) => {
   const [originalSeatType] = useState(seatValue);
   const [openDialog, setOpenDialog] = useState(false);
+  const theme = useTheme()
 
   // Function to open the dialog
   const handleClick = () => {
@@ -72,8 +81,10 @@ const TooltipButton = ({ seatValue, seatnumber, row, hendler }: ToolTipButtonTyp
   return (
     <>
       <button onClick={handleClick} style={seatStyle}>
-        {(originalSeatType === 5 || seatValue === 5) && <MdAccessible />}
-        {(originalSeatType === 4 || seatValue === 4) && <MdDiscount />}
+
+          {(originalSeatType === 5 || seatValue === 5) && <MdAccessible   color={ seatValue === 2? theme.palette.common.black : theme.palette.secondary.main }  />}
+          {(originalSeatType === 4 || seatValue === 4) && <LuTicket  color={ seatValue === 2? theme.palette.common.black : theme.palette.secondary.main} />}
+
       </button>
 
       {/* Confirmation Dialog */}

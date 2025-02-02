@@ -104,27 +104,25 @@ const ClientTheaterRTransform = ({children}:ClientTheaterMapPropsTypes) => {
     const { zoomIn, zoomOut, resetTransform } = useControls();
   
     return (
-        <>
+        
       <Flex   
             direction={"row"}
             position={'absolute'}
             top= {! xs ?60 : 100}
             width={0}
-           height={0}
-           zIndex={1}
-           
-          
-          sx={{scale:!md ? 0.7  : 1}}
+            height={0}
+            zIndex={1}
+            sx={{scale:!md ? 0.7  : 1}}
             >
   
         <Button   
              color='secondary'
-              sx={{borderRadius:45 , m:1, p:3 }}
+              sx={{borderRadius:45 , m:1, p:3 , }}
                variant='contained'
                  onClick={(e) => {zoomIn()}}
                  
                  >
-          <FaPlus  size={"2em"}  />
+          <FaPlus  size={"2em"}  color='black'  />
           
         </Button>
   
@@ -135,7 +133,7 @@ const ClientTheaterRTransform = ({children}:ClientTheaterMapPropsTypes) => {
             sx={{borderRadius:45 , m:1, p:3 }}
 
               >
-          <FaMinus size={"2em"}/>
+          <FaMinus size={"2em"} color='black' />
         </Button>
 
         <Button  
@@ -145,11 +143,11 @@ const ClientTheaterRTransform = ({children}:ClientTheaterMapPropsTypes) => {
              sx={{borderRadius:45 , m:1, p:3 }}
 
              >
-          <LuRefreshCcw  size={"2em"}/>
+          <LuRefreshCcw  size={"2.5em"}   color='black'/>
        </Button>
 
       </Flex>
-      </>
+      
     );
   };
   

@@ -33,32 +33,33 @@ export default function DrawerWighet({
   const {xxl,xl,lg,md,sm,xs,xxs} = React.useContext(WidthContext)
   const theme = useTheme()
 
-      const InfoDrawer = Flex,
+      const
       FooterFlex = Flex,
+      FooterContent=Flex,
       ContentBox = Box,
       MdContentBox = Box
-
+      
 
 
 
       if(!md && !wighetIsExp ){
         return (
                <FooterFlex
-                        direction={"row"}
-
-                        alignItems={"center"}
-                        bgcolor={theme.palette.secondary.main} 
                         width={"100%"}
-                        height={70}
-                        justifyContent={"space-around"}
+                        height={0}
                         position={'sticky'}
                         top='calc(100% - 70px)'
                         zIndex={2}
-                        
-                        
                           >
                             {
-                               eventSelectSeats.length ? 
+                           <FooterContent
+                               bgcolor={theme.palette.secondary.main} 
+                               width={"100%"}
+                               direction={"row"}
+                               justifyContent={'space-around'}
+
+                              >
+                         {      eventSelectSeats.length ? 
                              <Box >
                                   <Typography fontWeight={'bold'} variant='h6'  >סה״כ</Typography>
                                   <Typography fontWeight={'bold'} variant='h6' >{eventSelectSeats.length} : כרטיסים </Typography>
@@ -69,52 +70,43 @@ export default function DrawerWighet({
                                 <Typography fontWeight={'bold'}  >  מחיר : {10000} </Typography>
                                 <Typography  fontWeight={'bold'}  >{event?.Date} </Typography>
                             </Flex>
-                         }
-                   <Button 
-                      sx={{
-                            m:2,
-                            borderRadius:45,
-                            bgcolor:'black',
-                            zIndex:10,
-                            "&:hover":{
-                              color:theme.palette.secondary.main
                             }
-                        }}
-                        onClick={()=>{setWighetIsExp(!wighetIsExp)}
+                           <Button 
+                              sx={{
+                                    m:2,
+                                    borderRadius:45,
+                                    bgcolor:'black',
+                                    zIndex:10,
+                                    "&:hover":{
+                                      color:theme.palette.secondary.main
+                                    }
+                                }}
+                                onClick={()=>{setWighetIsExp(!wighetIsExp)}
+        
+                                }
+                                >
+                                {eventSelectSeats.length ? "לרכישה ": "פרטים" }
+                          </Button>
 
-                        }
-                        >
-                        {eventSelectSeats.length ? "לרכישה ": "פרטים" }
-                  </Button>
+                          </FooterContent>
+                         }
                </FooterFlex>
         )
       }
       else if( !md && wighetIsExp){
  
            return    <MdContentBox 
-                    
-                    width={"100%"}
+                     width={"100%"}
                      height={'100%'}
-                     zIndex={10}
+                     zIndex={5}
                      bgcolor={grey[500]}
                      sx={{
                       overflowY:'scroll',
                       overflowX:'clip',
-                      '&::-webkit-scrollbar': {
-                        width: '5px',
-                    },
-                     '&::-webkit-scrollbar-track': {
-                        boxShadow: `inset 0 0 2px rgba(0,0,0,0.00)`,
-                        webkitBoxShadow: 'inset 0 0 3px rgba(0,0,0,0.00)',
-                   },
-                     '&::-webkit-scrollbar-thumb': {
-                       background:theme.palette.secondary.main,
-                   }
-                      
-                      
+                      scrollbarWidth: 'none', // "auto", "thin", or "none"
+                      scrollbarColor: `${theme.palette.secondary.main} transparent`, // thumb and track colors
                      }}
-                   
-              >
+                      >
                   {children}
                   <Button // toggler 
                         onClick={()=>{setWighetIsExp(!wighetIsExp)}}
@@ -128,25 +120,16 @@ export default function DrawerWighet({
       }
       else{
         return (
-
-          <ContentBox 
+          <ContentBox  // flex colunm  make the div  none scroll
              bgcolor={grey[500]}
-             width={450}
-             height={"100%"}
-             
+              width={"400px"}
+               height={"100%"}
              sx={{
               overflowY:"scroll",
               overflowX:'clip',
-              '&::-webkit-scrollbar': {
-                width: '5px',
-            },
-             '&::-webkit-scrollbar-track': {
-                boxShadow: `inset 0 0 2px rgba(0,0,0,0.00)`,
-                webkitBoxShadow: 'inset 0 0 3px rgba(0,0,0,0.00)',
-           },
-             '&::-webkit-scrollbar-thumb': {
-               background:theme.palette.secondary.main,
-           }
+              // Firefox Support
+              scrollbarWidth: 'none', // "auto", "thin", or "none"
+              scrollbarColor: `${theme.palette.secondary.main} transparent`, // thumb and track colors
              }}
              >
            {children}

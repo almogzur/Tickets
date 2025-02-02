@@ -160,18 +160,7 @@ const SingleSelectTip= ({theaterDate ,setTheater }:SingleSelectTipPropsType)=>{
 
                 >הנחה 
                 </Button>
-
-     
-
-                        <Button
-                           sx={{...comonAtt , bgcolor:orange[600]}} 
-                           onClick={()=>{upateSeateValue(5)}}
-                         >נגיש
-                         </Button>
-          
-   
                     </Flex>
-
                     <Button 
                   variant='contained' 
                   color='error'
@@ -180,9 +169,6 @@ const SingleSelectTip= ({theaterDate ,setTheater }:SingleSelectTipPropsType)=>{
                   סגור
                   </Button>
            
-           
-        
-            
                </motion.div>
       
        

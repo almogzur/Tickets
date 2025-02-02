@@ -1,5 +1,5 @@
 import WidthContext from "@/context/WidthContext";
-import {  TextField, TextFieldVariants,  } from "@mui/material"
+import {  TextField, TextFieldProps, TextFieldVariants,  } from "@mui/material"
 import {ChangeEventHandler, CSSProperties, ReactNode, RefObject} from "react";
 
 import ControledLabel from "@/components/gen/TeextFiledWrpa/controled-form-label";
@@ -31,7 +31,7 @@ type HTMLInputTypes =
 
   
 
-  export type InputWrapPropsType =  {
+  export interface  InputWrapPropsType extends  Omit<TextFieldProps, 'variant'>  {
 
   /** Requierd Fileds  */    
     
@@ -123,8 +123,8 @@ const InputWrap = ({
      placeholderStyle,
      valueTextColor,
      isValueBold,
-     labelTextcolor
-     
+     labelTextcolor,
+     ...rest 
     }:InputWrapPropsType)=>{
 
 
@@ -158,6 +158,7 @@ const InputWrap = ({
       rows={rows}
       placeholder={placeholder} // string can't extedn with ReactNode in SxProps
       slotProps={{input:{placeholder,style:{fontWeight:isValueBold?"bold":undefined, color:valueTextColor}}}}
+      {...rest}
      />
      
     
