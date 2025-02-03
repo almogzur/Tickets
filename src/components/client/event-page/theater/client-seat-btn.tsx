@@ -8,16 +8,20 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
-import { useTheme } from "@mui/material";
+import { SelectChangeEvent, Typography, useTheme } from "@mui/material";
 import { FaTicketAlt } from "react-icons/fa";
 import { FaTicketSimple } from "react-icons/fa6";
 import { LuTicket } from "react-icons/lu";
+import SelectWrap, { SelectItemType } from "@/components/gen/select-wrap";
+import { EventType, TicketType } from "@/components/admin/newEvent/types/new-event-types";
+import { TheaterType } from "@/components/admin/newEvent/theater/types/theater-types";
 
 interface ToolTipButtonType {
   seatValue: number;
   seatnumber: number;
   row: string;
-  hendler: (seatValue: number, seatnumber: number, row: string) => void;
+  hendler: (seatValue: number, seatnumber: number, row: string ,theater:TheaterType, price:string  ) => void;
+  event:EventType|undefined
 }
 
 const styles: Record<string, CSSProperties> = {
@@ -42,18 +46,52 @@ display:"flex",
   seatAccsesble: {},
 };
 
-const TooltipButton = ({ seatValue, seatnumber, row, hendler }: ToolTipButtonType) => {
+const TooltipButton = ({ seatValue, seatnumber, row, hendler, event }: ToolTipButtonType) => {
   const [originalSeatType] = useState(seatValue);
-  const [openDialog, setOpenDialog] = useState(false);
+
   const theme = useTheme()
 
+  const [openDiscounteDialog, setOpenopenDiscounteDialog] = useState(false);
+  const [openAccsessableDialog, setOpenAccsessableDialog] = useState(false);
+
+  const [ selectedDiscounetPrice, setselectedDiscounetPrice ] = useState<string>("")
+
+
+
+  const getDiscountes = ()=>{
+         return event?.tickets?.filter((tikect)=> tikect.selectedType === 'discount' || tikect.selectedType==='citizen' ).flat()
+  }
+  const getNormailTicket = ()=>{
+    return event?.tickets?.find((tikect)=> tikect.selectedType === 'normal' )
+  }
+  const getNoramlPrice = ()=>{
+     return getNormailTicket()?.price ?? "" 
+  }
+
+  const getDiscountesNames= () : SelectItemType[] | undefined=>{
+      const list =  getDiscountes()?.map((discount)=>{
+            return {value :discount.price , label:discount.priceInfo}
+          })
+          if(list){
+            return list
+          }
+  }
+
+
+
+
   // Function to open the dialog
-  const handleClick = () => {
-    if (seatValue === 4 || seatValue === 5) {// discount of accses seat 
-      setOpenDialog(true);
+  const handleClick = (seatValue:number) => {
+    if (seatValue === 5) {// discount of accses seat 
+      setOpenAccsessableDialog(true); // dialog invoke the hendler
     } 
+    else if( seatValue === 4   ){
+      setOpenopenDiscounteDialog(true) // dialog invoke the hendler
+    }
     else {
-      hendler(seatValue, seatnumber, row); // no dialog
+      if(event?.Theater){
+      hendler(seatValue, seatnumber, row ,event.Theater, getNoramlPrice() ); // no dialog
+      }
     }
   };
 
@@ -69,39 +107,97 @@ const TooltipButton = ({ seatValue, seatnumber, row, hendler }: ToolTipButtonTyp
 
 
 
-  const handleConfirm = () => {
-    hendler(seatValue, seatnumber, row);
-    setOpenDialog(false); 
+  const handleDiscounteConfirm = () => {
+     if(event?.Theater){
+    hendler(seatValue, seatnumber, row , event.Theater , selectedDiscounetPrice);
+    setOpenopenDiscounteDialog(false); 
+     }
   };
 
-  const handleCancel = () => {
-    setOpenDialog(false); 
+  const handleDiscounteCancel = () => {
+    setOpenopenDiscounteDialog(false); 
   };
+
+
+  const handleAccsessableConfirm = () => {
+    if(event?.Theater){
+      hendler(seatValue, seatnumber, row,event?.Theater, getNoramlPrice());
+      setOpenAccsessableDialog(false); 
+
+    }
+  };
+
+  const handleAccsessableCancel = () => {
+    setOpenAccsessableDialog(false); 
+  };
+
+  
 
   return (
     <>
-      <button onClick={handleClick} style={seatStyle}>
+      <button onClick={()=>  handleClick(seatValue)} style={seatStyle}>
 
           {(originalSeatType === 5 || seatValue === 5) && <MdAccessible   color={ seatValue === 2? theme.palette.common.black : theme.palette.secondary.main }  />}
           {(originalSeatType === 4 || seatValue === 4) && <LuTicket  color={ seatValue === 2? theme.palette.common.black : theme.palette.secondary.main} />}
 
       </button>
 
-      {/* Confirmation Dialog */}
-      <Dialog open={openDialog} onClose={handleCancel}>
-        <DialogTitle>Confirm Seat Selection</DialogTitle>
+      {/* Discounte  Confirmation Dialog */}
+          {/* accsessable Confirmation Dialog */}
+
+
+{  seatValue === 4 ? 
+      <Dialog
+           open={openDiscounteDialog}
+            onClose={handleDiscounteCancel}
+            sx={{direction:"rtl"}}
+            >
+        <DialogTitle>בחר הנחה </DialogTitle>
         <DialogContent>
-          <p>Are you sure you want to select this seat?</p>
+        <SelectWrap 
+             label={"בחר ההנחה"} 
+             items={getDiscountesNames()??[]} 
+             value={selectedDiscounetPrice} 
+             changeHndler={(e)=>{setselectedDiscounetPrice(e.target.value)} }
+             helpText={""} 
+             labelPositioin={"top"}
+             />
+          <Typography>יש להציג קופון/ תעודה </Typography>
+          <Typography>בעת ההגעה לאירוע </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCancel} color="primary">
+          <Button onClick={handleDiscounteCancel} color="primary">
             ביטול
           </Button>
-          <Button onClick={handleConfirm} color="primary">
+          <Button onClick={handleDiscounteConfirm} color="primary">
             אישור
           </Button>
         </DialogActions>
       </Dialog>
+    
+  : seatValue ===5 ?
+      <Dialog
+           open={openAccsessableDialog}
+            onClose={handleAccsessableCancel}
+            sx={{direction:"rtl"}}
+            >
+        <DialogTitle> מושב נגיש  </DialogTitle>
+        <DialogTitle> בעת ההגעה לאולם יש להציג תעודה  </DialogTitle>
+        <DialogContent>
+
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleAccsessableCancel} color="primary">
+            ביטול
+          </Button>
+          <Button onClick={handleAccsessableConfirm} color="primary">
+            אישור
+          </Button>
+        </DialogActions>
+      </Dialog>
+      : null
+}
+
     </>
   );
 };

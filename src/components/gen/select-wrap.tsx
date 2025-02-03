@@ -5,7 +5,7 @@ import WidthContext from "@/context/WidthContext";
 import ControledHelperText from "./TeextFiledWrpa/controled-helper-text";
 
 
-interface SelectIemType {
+export interface SelectItemType {
     value: string | number | readonly string[] 
     label:string
   
@@ -16,7 +16,7 @@ interface SelectWrapType {
   /** Required Items  */
 
     label:string
-    items:SelectIemType[]
+    items:SelectItemType[]
     value:string,
     changeHndler:(event: SelectChangeEvent<any>) => void
     helpText:string
@@ -172,7 +172,7 @@ const theme = useTheme()
                       fontSize: !sm? 13:18,
                      }} 
                      
-                     key={label}  
+                     key={label+i+"select-item"}  
                      value={value}  
                      >
                       {label}

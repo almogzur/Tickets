@@ -12,6 +12,7 @@ import {
     PaymentsController,
     OrderRequest
 } from "@paypal/paypal-server-sdk";
+import { CartItem, PayPalReqType } from "./types";
 
 
 const {
@@ -37,44 +38,41 @@ const ordersController = new OrdersController(client);
 const paymentsController = new PaymentsController(client);
 
 
-type CartItem ={
-    id: string,
-    quantity: number,
-    price:number,
-    description :string,
-    
-}
 
 
 const createOrder = async (cart:CartItem[]) => {
+    console.log("Create Order Cart",cart)
 
+    const MapOvePurchases :OrderRequest['purchaseUnits'] =cart.map((item,i)=>{
+                    return {
+                        amount: {
+                            currencyCode: "USD",
+                            value: `${item.price}`,
+                            },
+                    }
+            
+    })
 
-
-
-    const collect = {
-        body: {
-            intent: "CAPTURE",
-            purchaseUnits: [
-                {
-                    amount: {
-                        currencyCode: "USD",
-                        value: "100",
+    const collect : PayPalReqType  = {
+        body:  {
+            intent:CheckoutPaymentIntent.Capture,
+            purchaseUnits: [{
+                amount: {
+                    currencyCode: "USD",
+                    value: `20`,
                     },
-                },
-            ],
-            items:[
-                {
-                    name:"asd"
-                    
-                }
-            ]
+            }]
+            
         },
         prefer: "return=minimal",
+
     }; 
+
+   
 
     try {
 
-        const { body, ...httpResponse } = await ordersController.ordersCreate(collect as any );
+        const { body, ...httpResponse } = await ordersController.ordersCreate(collect);
         // Get more response info...
         // const { statusCode, headers } = httpResponse;
         return {
@@ -92,20 +90,28 @@ const createOrder = async (cart:CartItem[]) => {
 
 export default async function handler  ( req: NextApiRequest , res: NextApiResponse ):Promise<any>{
  const API_NAME =  "Pay - Order"
+ 
+ const { id } = req.query; 
+
+ const { cart } = req.body;
+ console.log(cart);
 
  if (req.method !== 'POST') {
     res.status(405).json({ message: `Method ${'$'}{req.method} not allowed` });
     return
   } 
 
+     
   try {
     // use the cart information passed from the front-end to calculate the order amount detals
-    const { cart } = req.body;
 
+    const data = await createOrder(cart)
+
+    if(data){
+        res.status(data.httpStatusCode).json(data.jsonResponse);
+    }
+    res.status(400).json({massage:"no items"});    
     
-    
-    const { jsonResponse, httpStatusCode } = await createOrder(cart  ) as any  ;
-    res.status(httpStatusCode).json(jsonResponse);
 } catch (error) {
     console.error("Failed to create order:", error);
     res.status(500).json({ error: "Failed to create order." });
@@ -115,8 +121,3 @@ export default async function handler  ( req: NextApiRequest , res: NextApiRespo
 
 }
 
-export const config = {
-    api: {
-      bodyParser: true,
-    },
-  };

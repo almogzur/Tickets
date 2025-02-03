@@ -1,17 +1,22 @@
+import { CartItem } from "@/pages/api/client/pay/types";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
+interface PaypalBtnType {
+     cart :CartItem[]|CartItem|undefined
+}   
 
-const PaypalBtn = ({id,amount}:{id:string,amount:number})=>{
+const PaypalBtn = ({cart}:PaypalBtnType)=>{
     const [message, setMessage] = useState("");
 
     const initialOptions = {   
+        "client-id":"ASYRE-aeRnmPLyJTz9GSQBAZMHxfcVD_MyzVS2bUv-_5GKyHJAOhY8lvZi3RFsa2LF_QFS6MiWOwni-o",
         "clientId":"ASYRE-aeRnmPLyJTz9GSQBAZMHxfcVD_MyzVS2bUv-_5GKyHJAOhY8lvZi3RFsa2LF_QFS6MiWOwni-o",
-
-
-        
     };
+
+    useEffect(()=>{console.log(cart)},[cart])
+
     return (
         <PayPalScriptProvider  options={initialOptions}>
           <PayPalButtons
@@ -20,72 +25,55 @@ const PaypalBtn = ({id,amount}:{id:string,amount:number})=>{
                         layout: "vertical",
                         color: "blue",
                         label: "paypal",
-                        tagline:false
+                
                     }} 
                         // send array of object to back end to create a list of item to display and cala price 
                         //
-                    createOrder={async () => {
-                        try {
-                            const response = await fetch("/api/client/pay/C/create-order", {
-                                method: "POST",
-                                headers: {
-                                    "Content-Type": "application/json",
-                                },
-                                // use the "body" param to optionally pass additional order information
-                                // like product ids and quantities
-                                body: JSON.stringify({
-                                    cart: [ // pass  array of items to create a list the back end 
-                                        {
-                                            id: id,
-                                            quantity: 1,
-                                            price:100,
-                                            description :"",
-
-                                        },
-                                        {
-                                            id: id,
-                                            quantity: 1,
-                                            price:100,
-                                            description :"",
-                                        },
-                                        {
-                                            id: id,
-                                            quantity: 1,
-                                            price:100,
-                                            description :"",
-                                        }
-                                    ],
-                                }),
-                            });
-                        
-                            const orderData = await response.json();
-                        
-                            if (orderData.id) {
-                                return orderData.id;
-                            } else {
-                                const errorDetail = orderData?.details?.[0];
-                                const errorMessage = errorDetail
-                                    ? `${errorDetail.issue} ${errorDetail.description} (${orderData.debug_id})`
-                                    : JSON.stringify(orderData);
-                            
-                                throw new Error(errorMessage);
-                            }
-                        } catch (error) {
-                            console.error(error);
-                            setMessage(
-                                `Could not initiate PayPal Checkout...${error}`
-                            );
-                        }
-                    }} 
-                    onApprove={async (data, actions) => {
-                        try {
-                            const response = await fetch(
-                                `/api/orders/${data.orderID}/capture`,
-                                {
+                        createOrder={async () => {
+                            try {
+                                const response = await fetch("/api/client/pay/create-order", {
                                     method: "POST",
                                     headers: {
                                         "Content-Type": "application/json",
                                     },
+                                    // use the "body" param to optionally pass additional order information
+                                    // like product ids and quantities
+                                    body: JSON.stringify({
+                                        cart: [
+                                            {
+                                                id: "adsds",
+                                                quantity: "dass",
+                                            },
+                                        ],
+                                    }),
+                                });
+    
+                                const orderData = await response.json();
+    
+                                if (orderData.id) {
+                                    return orderData.id;
+                                } else {
+                                    const errorDetail = orderData?.details?.[0];
+                                    const errorMessage = errorDetail
+                                        ? `${errorDetail.issue} ${errorDetail.description} (${orderData.debug_id})`
+                                        : JSON.stringify(orderData);
+    
+                                    throw new Error(errorMessage);
+                                }
+                            } catch (error) {
+                                console.error(error);
+                                setMessage(
+                                    `Could not initiate PayPal Checkout...${error}`
+                                );
+                            }
+                        }} 
+                        onApprove={async (data, actions) => {
+                            const orderID =data.orderID
+                        try {
+                            const response = await fetch(`/api/client/pay/aproved/${orderID}`,
+                            {   method: "POST",
+                                headers: { "Content-Type": "application/json",},
+                                body: JSON.stringify(data)
                                 }
                             );
                         
@@ -101,14 +89,17 @@ const PaypalBtn = ({id,amount}:{id:string,amount:number})=>{
                                 // (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
                                 // recoverable state, per https://developer.paypal.com/docs/checkout/standard/customize/handle-funding-failures/
                                 return actions.restart();
-                            } else if (errorDetail) {
+                            } 
+                            else if (errorDetail) {
                                 // (2) Other non-recoverable errors -> Show a failure message
                                 throw new Error(
                                     `${errorDetail.description} (${orderData.debug_id})`
                                 );
-                            } else {
+                            } 
+                          else {
                                 // (3) Successful transaction -> Show confirmation or thank you message
                                 // Or go to another URL:  actions.redirect('thank_you.html');
+                                console.log(orderData)
                                 const transaction =
                                     orderData.purchase_units[0].payments
                                         .captures[0];
@@ -121,12 +112,14 @@ const PaypalBtn = ({id,amount}:{id:string,amount:number})=>{
                                     JSON.stringify(orderData, null, 2)
                                 );
                             }
-                        } catch (error) {
+                        }
+                     catch (error) {
                             console.error(error);
                             setMessage(
                                 `Sorry, your transaction could not be processed...${error}`
                             );
                         }
+                        
                     }} 
                 />
        </PayPalScriptProvider>

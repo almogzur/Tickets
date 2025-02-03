@@ -103,9 +103,8 @@ export default function ClientTikectList({
                  sx={{direction:"ltr", textAlign:"end"}}
                  id={labelId}
                  primary={` ${seatNumber +1} - ${ row} `}
-                 
                   />
-         
+
             <Button 
               onClick={()=>hendler(value,seatNumber,row,clientEventTheaterState )}
               variant='text'

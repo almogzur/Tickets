@@ -13,7 +13,8 @@ import { GiTakeMyMoney } from "react-icons/gi";
 import { TheaterType } from "@/components/admin/newEvent/theater/types/theater-types";
 import axios from "axios";
 import PaypalBtn from "../payments-providers-buttons/paypal";
-import GooglePatBtn from "../payments-providers-buttons/google";
+import { CartItem } from "@/pages/api/client/pay/types";
+
 
 
  export type   DrawerContentType = {
@@ -45,6 +46,7 @@ const DrawerContent = ({
     const sanitizedHtml = DOMPurify.sanitize(event.pre);
     const theme = useTheme()
 
+
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -54,10 +56,7 @@ const DrawerContent = ({
     const handleClose = () => {
       setOpen(false);
     };
-
-
-
-
+  
     const updateEvent = async ()=>{
 
               const data = {
@@ -66,6 +65,20 @@ const DrawerContent = ({
 
         const updateStatus = await axios.post('/api/client/events/U/update-event',data)
 
+    }
+
+    const getSeatPrice = (seatValue:number)=>{
+       event.tickets?.filter((ticket)=> null )
+    }
+
+    const PaymentOCart = () : CartItem|CartItem[]|undefined  =>{
+      
+        const {_id,  eventName,  } = event
+        
+
+
+       
+      return undefined
     }
 
 
@@ -85,6 +98,9 @@ const DrawerContent = ({
           sx={{height:undefined // ! importent dont limit 
              }}
           >
+
+
+
         {/* cover */}
         { !eventSelectSeats.length && 
         <CldImage
@@ -93,8 +109,12 @@ const DrawerContent = ({
               width={'300'}
               height={!xs? 300: 400}
               draggable={false}
+              unoptimized
               />
         }
+
+
+
         {/* heading */}
          <Typography 
           color={theme.palette.common.white}
@@ -103,6 +123,8 @@ const DrawerContent = ({
          >
           {event.eventName}
          </Typography>
+
+
 
          {/*  tags */}
          <Tags alignItems={"start"}   >
@@ -122,8 +144,8 @@ const DrawerContent = ({
               avatar={   <TbClockHour1 />}
               label={<Typography  sx={{color:"#ddd"}}>שעת פתיחת דלתוד:{event.OpenDorHour?.toString().slice(0,10)}</Typography>}
                 />
-               {event.tickets?.map((ticket)=>{
-               return     <Chip key={ticket.price+event.eventName} 
+               {event.tickets?.map((ticket,i)=>{
+               return     <Chip key={ticket.price+event.eventName+i} 
                   avatar={<GiTakeMyMoney/>}
                   label={<Typography>{ticket.priceInfo}: {ticket.price} </Typography>}
                   
@@ -132,32 +154,37 @@ const DrawerContent = ({
 
         </Tags>
 
+
+
         {/*  pay btn and tickets counte */}
        { eventSelectSeats.length > 0   &&  
        <>
         <Typography mt={2} > סה״כ { eventSelectSeats.length }</Typography>
 
+     
         <Button
          color='secondary'
-
          onClick={handleClickOpen}
            >לדף תשלום מאובטח 
           {<FaExpeditedssl  style={{margin:2}}/>}
-       </Button>
+          
+       </Button> 
 
-       <Dialog
-        open={open}
-        onClose={handleClose}
-        fullWidth
-        aria-labelledby="Payment-Dialog"
-        aria-describedby="alert-dialog-Payment-Dialog"
+
+        <Dialog
+       open={open}
+       onClose={handleClose}
+       fullWidth
+       aria-labelledby="Payment-Dialog"
+       aria-describedby="alert-dialog-Payment-Dialog"
       >
-        <DialogContent  >
-          <PaypalBtn  id={event.eventName} amount={eventSelectSeats.length}  />
-          <GooglePatBtn/>
-        </DialogContent>
+       <DialogContent  >
+         <PaypalBtn   cart={PaymentOCart()} />
 
-      </Dialog>
+       </DialogContent>
+
+        </Dialog>
+
 
        <ClientTicketList
           event={event}
@@ -167,24 +194,22 @@ const DrawerContent = ({
        </>
        }
 
-        {/* pre */}
+
        { !eventSelectSeats.length &&
         <>
+                {/* pre */}
          <Pre
             p={1}
             textAlign={"center"}
             style={{background:'inherit',direction:"rtl"}}
             dangerouslySetInnerHTML={{__html:sanitizedHtml}}
             />
-        <Box height={200} >box</Box>
+         <Box height={200} >box</Box>
         <Box height={200} >box</Box>   
          <Box height={200} >box</Box>
-
-
-
         </>
         }
-
+        
 
     
         </Flex>

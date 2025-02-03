@@ -7,8 +7,11 @@ import { useTheme , Stack as Flex, Typography, Drawer } from '@mui/material';
 import WidthContext from '@/context/WidthContext';
 import { TheaterType } from '@/components/admin/newEvent/theater/types/theater-types';
 import { SeatType } from '@/pages/details/[id]';
+import { EventType } from '@/components/admin/newEvent/types/new-event-types';
 
 type TheaterMapType = {
+
+    event:EventType|undefined
     eventSelectSeats:SeatType[]
     clientEventTheaterState:TheaterType|undefined
 
@@ -23,7 +26,8 @@ type TheaterMapType = {
 
 
 const  TheaterMap = ({  
-     clientEventTheaterState,
+      event,
+      clientEventTheaterState,
       eventSelectSeats ,
       hendlerSeatOldValues,
       setHendlerSeatOldValues ,
@@ -40,10 +44,13 @@ const  TheaterMap = ({
     // to hndle remove item in sebling component in the tree 
     // hendler function cant be exported  or made ganric  
     // insted State is  lifted to perent 
-    
+
+
+
+    // henlder need event in the global+scope
 
      
-    const hendler = (seatValue: number, seatNumber: number, row: string,theater:TheaterType  ) => {
+    const hendler = (seatValue: number, seatNumber: number, row: string,theater:TheaterType ,price:string ) => {
     
     const inMain = theater.mainSeats.hasOwnProperty(row);
     const inSide = theater.sideSeats.hasOwnProperty(row);
@@ -58,7 +65,7 @@ const  TheaterMap = ({
     setEventSelectedSeats((prev) =>
         prev.some((item) => item.row === row && item.seatNumber === seatNumber)
             ? prev.filter((item) => !(item.row === row && item.seatNumber === seatNumber))
-            : [...prev, { row, seatNumber, value: seatValue }]
+            : [...prev, { row, seatNumber, value: seatValue ,price:"123"}]
     );
 
     const updateSeats = (prevState: TheaterType | undefined, seatCollection: "mainSeats" | "sideSeats") => {
@@ -97,6 +104,7 @@ const  TheaterMap = ({
 // Reset state function
 
 
+
   const sideSeatsStylesObject = clientEventTheaterState && Object.fromEntries(
     Object.entries(clientEventTheaterState.styles).map(([row, positions]) => [row, positions])
   )
@@ -120,7 +128,8 @@ const  TheaterMap = ({
           seatValue={seatValue}
           seatnumber={i}
           row={row}
-           hendler={()=> hendler(seatValue,i,row,clientEventTheaterState)}
+          hendler={hendler}
+           event={event}
             />
       );
     })
@@ -144,14 +153,15 @@ const  TheaterMap = ({
    const SideSeats = clientEventTheaterState &&     Object.entries(clientEventTheaterState.sideSeats).map(([row, rowContent])=>{
     const colValue  = rowContent.map((seatValue: number, i: number) => {
      
-    
+
         return (
           <TooltipButton
             key={`${row}.${i}`}
             seatValue={seatValue}
             seatnumber={i}
             row={row}
-            hendler={()=> hendler(seatValue,i,row,clientEventTheaterState)}
+            hendler={hendler}
+            event={event}
             />
         );
       });

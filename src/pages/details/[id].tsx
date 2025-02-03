@@ -130,7 +130,10 @@ const DetailsPage = ({}) => {
 
               >
                <ClineTransformContext.Provider value={{ClientMapPositions ,setClientMapPositions}}>
+
              <TheaterMap 
+
+                  event={FilteredEvent}
                  // theater  seates
                    clientEventTheaterState={clientEventTheaterState}
                    setClientEventTheaterState={setClientEventTheaterState}
