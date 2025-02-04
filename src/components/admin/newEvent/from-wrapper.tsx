@@ -77,9 +77,9 @@ const NewEventFormWraper = ({EventId,setEventId}:NewEventFormWrapperProps)=>{
       pre:"",
       availableSeatsAmount:undefined,
       Theater:undefined,
-      Date:null,
-      Hour:null,
-      OpenDorHour:null,
+      Date:"",
+      Hour:"",
+      OpenDorHour:"",
       isEventClosedForSeal:false,
       image:undefined,
       preview:""

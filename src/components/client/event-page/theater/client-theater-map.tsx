@@ -50,7 +50,7 @@ const  TheaterMap = ({
     // henlder need event in the global+scope
 
      
-    const updateTheater = (seatValue: number, seatNumber: number, row: string,theater:TheaterType ,price:string , priceInfo?:string ) => {
+    const updateTheater = ( seatValue: number, seatNumber: number, row: string,theater:TheaterType ,price:string , priceInfo?:string ) => {
     
     const inMain = theater.mainSeats.hasOwnProperty(row);
     const inSide = theater.sideSeats.hasOwnProperty(row);
@@ -70,7 +70,7 @@ const  TheaterMap = ({
 
     const updateSeats = (prevState: TheaterType | undefined, seatCollection: "mainSeats" | "sideSeats") => {
 
-      console.log("updateSeats - Price", price);
+  //    console.log("updateSeats - Price", price);
       
         if (!prevState) return prevState;
 

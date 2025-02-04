@@ -57,9 +57,9 @@ export interface infoFiledsType {
   image:File|undefined
   preview:string
   isEventClosedForSeal:boolean
-  Date:string|null,
-  Hour:string|null
-  OpenDorHour:string|null
+  Date:string,
+  Hour:string
+  OpenDorHour:string
 }
 
 export type EventSettingType  =  {

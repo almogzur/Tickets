@@ -10,9 +10,14 @@ import {
     LogLevel,
     OrdersController,
     PaymentsController,
-    OrderRequest
+    OrderRequest,
+    OrderApplicationContextLandingPage,
+    OrderApplicationContextShippingPreference,
+    UpcType,
+    ItemCategory,
+    Item
 } from "@paypal/paypal-server-sdk";
-import { CartItem, PayPalReqType } from "./paypal-types";
+import { CartItemType, PayPalReqType } from "./paypal-types";
 
 
 const {
@@ -37,33 +42,52 @@ const client = new Client({
 const ordersController = new OrdersController(client);
 const paymentsController = new PaymentsController(client);
 
+ // Item format  
+// name: "T-Shirt", 
+// description: "Super Fresh Shirt", 
+// quantity: "1", 
+// unitAmount: { currencyCode: "USD", value: total,  },
+// category:ItemCategory.DigitalGoods
 
 
 
-const createOrder = async (cart:CartItem[]) => {
+
+
+const createOrder = async (cart:Item[] , total:string) => {
     console.log("Create Order Cart",cart)
 
-    const MapOvePurchases :OrderRequest['purchaseUnits'] =cart.map((item,i)=>{
-                    return {
-                        amount: {
-                            currencyCode: "USD",
-                            value: `${item.price}`,
-                            },
-                    }
-            
-    })
+    
+
 
     const collect : PayPalReqType  = {
         body:  {
             intent:CheckoutPaymentIntent.Capture,
-            purchaseUnits: [{
-                amount: {
-                    currencyCode: "USD",
-                    value: `20`,
+
+            purchaseUnits: [
+                {
+                amount:{
+                     currencyCode:"USD",
+                      value:total,
+                      breakdown:{itemTotal:{value:total,currencyCode:"USD"}}
+                 },
+                 // total value need to match to total in brakedown else you get err 
+               items:cart
                     },
-            }]
+
+     
+             ],
+
+            applicationContext:{
+                brandName:"Styled-Tickets",
+                locale:"he",        
+                shippingPreference:OrderApplicationContextShippingPreference.NoShipping,
+            },
+
             
+   
+
         },
+        
         prefer: "return=minimal",
 
     }; 
@@ -93,7 +117,7 @@ export default async function handler  ( req: NextApiRequest , res: NextApiRespo
  
  const { id } = req.query; 
 
- const { cart } = req.body;
+ const { cart ,total} = req.body;
  console.log(cart);
 
  if (req.method !== 'POST') {
@@ -105,7 +129,7 @@ export default async function handler  ( req: NextApiRequest , res: NextApiRespo
   try {
     // use the cart information passed from the front-end to calculate the order amount detals
 
-    const data = await createOrder(cart)
+    const data = await createOrder(cart , total)
 
     if(data){
         res.status(data.httpStatusCode).json(data.jsonResponse);
@@ -120,4 +144,5 @@ export default async function handler  ( req: NextApiRequest , res: NextApiRespo
 
 
 }
+
 

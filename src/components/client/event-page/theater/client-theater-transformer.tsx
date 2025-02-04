@@ -41,11 +41,11 @@ const ClientTheaterRTransform = ({children}:ClientTheaterMapPropsTypes) => {
         initialPositionX={!sm? 80 : 0 }
         minScale={!sm? 0.45 : !md? 0.8 : 1 }
         smooth
- 
+        velocityAnimation={{disabled:true}}
         maxScale={10}
         onPanningStop={(e)=>{
+        
           
-
           //setClientMapPositions(prev=>({x:e.state.positionX,y:e.state.positionY,Scale:e.state.scale}))
           //console.log(ClientMapPositions,e);
           
@@ -101,7 +101,7 @@ const ClientTheaterRTransform = ({children}:ClientTheaterMapPropsTypes) => {
     const theme = useTheme()
 
 
-    const { zoomIn, zoomOut, resetTransform } = useControls();
+    const { zoomIn, zoomOut, resetTransform , ...rest } = useControls();
   
     return (
         

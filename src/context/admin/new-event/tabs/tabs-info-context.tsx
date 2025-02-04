@@ -20,9 +20,9 @@ export default createContext<InfoTabContextType>(
             image: undefined,
             preview: "",
             isEventClosedForSeal: false,
-            Date: null,
-            Hour: null,
-            OpenDorHour: null,
+            Date: "",
+            Hour: "",
+            OpenDorHour: "",
             availableSeatsAmount: undefined
         },
         setInfoFileds: function (value: SetStateAction<infoFiledsType>): void {

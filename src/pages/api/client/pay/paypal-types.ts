@@ -1,10 +1,11 @@
 import { SeatType } from "@/pages/details/[id]";
 import { OrderRequest } from "@paypal/paypal-server-sdk";
 
-export interface  CartItem extends SeatType  {
-    id: string,
-    quantity: number,
-    description :string,
+export interface CartItemType extends Omit<SeatType, 'value'> {
+    id: string;
+    name: string;
+    Date:string,
+    Hour:string
 }
 
 export type PayPalReqType = { // see Order Controller fn parameters 

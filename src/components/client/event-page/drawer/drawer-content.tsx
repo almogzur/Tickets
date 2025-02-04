@@ -13,7 +13,8 @@ import { GiTakeMyMoney } from "react-icons/gi";
 import { TheaterType } from "@/components/admin/newEvent/theater/types/theater-types";
 import axios from "axios";
 import PaypalBtn from "../payments-providers-buttons/paypal";
-import { CartItem } from "@/pages/api/client/pay/paypal-types";
+
+import { ItemCategory, Item as PatPalItem } from "@paypal/paypal-server-sdk";
 
 
 
@@ -46,6 +47,10 @@ const DrawerContent = ({
     const sanitizedHtml = DOMPurify.sanitize(event.pre);
     const theme = useTheme()
 
+   const [open, setOpen] = React.useState(false);
+    const handleClickOpen = () => {setOpen(true);};  
+    const handleClose = () => {setOpen(false);};
+
 
     const getNormailTicket = ()=>{
       return event?.tickets?.find((tikect)=> tikect.selectedType === 'normal' )
@@ -53,27 +58,39 @@ const DrawerContent = ({
     const getNoramlPrice = ()=>{
        return getNormailTicket()?.price ?? "" 
     }
-
-
-    const [open, setOpen] = React.useState(false);
-
-    const handleClickOpen = () => {
-      setOpen(true);
-    };
-  
-    const handleClose = () => {
-      setOpen(false);
-    };
-  
-    const PaymentOCart = () : CartItem|CartItem[]|undefined  =>{
+    const createPaymentCart = (selectedSeats:SeatType[]) : PatPalItem[]  =>{
       
-        const {_id,  eventName,  } = event
+        const {_id, eventName ,Date,Hour} = event
+
+          if(selectedSeats){
+              // array
+           const cart =   selectedSeats.map((seat)=>{
+                   return {
+                       id:_id,  // assigning event id
+                       name:`כרטיס להופעה : ${eventName}`,
+                       quantity:"1",
+                       category:ItemCategory.DigitalGoods,
+                       unitAmount: { currencyCode: "USD", value: seat.price  },
+                       discription:"dsadsa"
+                       
         
-
-
-       
-      return undefined
+                   }
+              })
+              return cart
+          } 
+          else{
+            return []
+          }
     }
+    const getTotalCost = (): string => {
+      let total = 0;
+  
+      eventSelectSeats.map(seat => {
+        total += parseInt(seat.price); // Ensure proper number conversion
+    });
+  
+      return total.toString(); // Return formatted string
+  };
 
 
     // useEffect(()=>{
@@ -92,8 +109,6 @@ const DrawerContent = ({
           sx={{height:undefined // ! importent dont limit 
              }}
           >
-
-
 
         {/* cover */}
         { !eventSelectSeats.length && 
@@ -136,7 +151,7 @@ const DrawerContent = ({
         {/*  pay btn and tickets counte */}
        { eventSelectSeats.length > 0   &&  
        <>
-        <Typography mt={2} > סה״כ { eventSelectSeats.length }</Typography>
+        <Typography mt={2} > סה״כ { eventSelectSeats.length  } מחיר : {getTotalCost()}</Typography>
 
      
         <Button
@@ -149,14 +164,14 @@ const DrawerContent = ({
 
 
         <Dialog
-       open={open}
+         open={open}
        onClose={handleClose}
        fullWidth
        aria-labelledby="Payment-Dialog"
        aria-describedby="alert-dialog-Payment-Dialog"
       >
        <DialogContent  >
-         <PaypalBtn   cart={PaymentOCart()} />
+         <PaypalBtn   cart={createPaymentCart(eventSelectSeats)} total={getTotalCost()} />
 
        </DialogContent>
 

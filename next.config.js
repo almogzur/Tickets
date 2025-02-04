@@ -1,19 +1,18 @@
-const { hostname } = require("os");
 
 const isProduction = process.env.NODE_ENV === 'production';
-console.log(isProduction);
+console.log(isProduction, " NEXT-CONFIG");
 
 
 
 const cspHeader = `
-    default-src 'self' *.cloudinary.com *.sandbox.paypal.com ;
+    default-src 'self' *.cloudinary.com *.sandbox.paypal.com *.paypal.com *.paypalobjects.com;
     script-src 'self' ${isProduction ? "" : "'unsafe-eval' 'unsafe-inline'"}  *.cloudinary.com *.paypal.com *.paypalobjects.com  *.sandbox.paypal.com ;
     style-src 'self' 'unsafe-inline';
-    img-src 'self' *.cloudinary.com *.sandbox.paypal.com;
+    img-src 'self' *.cloudinary.com *.sandbox.paypal.com *.paypal.com *.paypalobjects.com;
     font-src 'self';
     object-src 'none';
     base-uri 'self';
-    form-action 'self' *.cloudinary.com *.sandbox.paypal.com;
+    form-action 'self' *.cloudinary.com *.sandbox.paypal.com *.paypal.com *.paypalobjects.com;
     frame-ancestors 'none';
     upgrade-insecure-requests;
 `.replace(/\n/g, ''); // Remove newlines for compatibility
@@ -46,8 +45,6 @@ const ProdObject = {
         ],
     },
 };
-
-
 
 const DevObject = {
     images: {

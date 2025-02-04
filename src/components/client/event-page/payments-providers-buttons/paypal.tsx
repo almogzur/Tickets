@@ -1,13 +1,15 @@
-import { CartItem } from "@/pages/api/client/pay/paypal-types";
+import { CartItemType } from "@/pages/api/client/pay/paypal-types";
+import { Item  as PaypalItem} from "@paypal/paypal-server-sdk";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { useEffect, useState } from "react";
 
 
 interface PaypalBtnType {
-     cart :CartItem[]|CartItem|undefined
+     cart :PaypalItem[]
+     total:string
 }   
 
-const PaypalBtn = ({cart}:PaypalBtnType)=>{
+const PaypalBtn = ({cart,total}:PaypalBtnType)=>{
     const [message, setMessage] = useState("");
 
     const initialOptions = {   
@@ -38,12 +40,8 @@ const PaypalBtn = ({cart}:PaypalBtnType)=>{
                                     // use the "body" param to optionally pass additional order information
                                     // like product ids and quantities
                                     body: JSON.stringify({
-                                        cart: [
-                                            {
-                                                id: "adsds",
-                                                quantity: "dass",
-                                            },
-                                        ],
+                                        cart:cart,
+                                        total:total
                                     }),
                                 });
     
