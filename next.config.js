@@ -9,11 +9,11 @@ const cspHeader = `
     default-src 'self' *.cloudinary.com ;
     script-src 'self' ${isProduction ? "" : "'unsafe-eval' 'unsafe-inline'"}  *.cloudinary.com *.paypal.com *.paypalobjects.com  *.sandbox.paypal.com ;
     style-src 'self' 'unsafe-inline';
-    img-src 'self' *.cloudinary.com;
+    img-src 'self' *.cloudinary.com *.sandbox.paypal.com;
     font-src 'self';
     object-src 'none';
     base-uri 'self';
-    form-action 'self' *.cloudinary.com;
+    form-action 'self' *.cloudinary.com *.sandbox.paypal.com;
     frame-ancestors 'none';
     upgrade-insecure-requests;
 `.replace(/\n/g, ''); // Remove newlines for compatibility
