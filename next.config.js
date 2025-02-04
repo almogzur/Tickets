@@ -6,7 +6,7 @@ console.log(isProduction);
 
 const cspHeader = `
     default-src 'self' *.cloudinary.com ;
-    script-src 'self' ${isProduction ? "" : "'unsafe-eval' 'unsafe-inline'"}  *.cloudinary.com *.paypal.com *.paypalobjects.com  *sandbox.paypal.com ;
+    script-src 'self' ${isProduction ? "" : "'unsafe-eval' 'unsafe-inline'"}  *.cloudinary.com *.paypal.com *.paypalobjects.com  *.sandbox.paypal.com ;
     style-src 'self' 'unsafe-inline';
     img-src 'self' *.cloudinary.com;
     font-src 'self';
