@@ -76,7 +76,7 @@ interface TicketsTabPropsType {  setTabValue : Dispatch<SetStateAction<number>>}
     return totalSeats ;
   };
 
-  const selectTheater= (TheaterName:"תיאטראות אילת"|"2 אילת"): TheaterType | undefined =>{
+  const selectTheater= (TheaterName : string): TheaterType | undefined =>{
 
         switch(TheaterName){
           case 'תיאטראות אילת': return Eilat_1
@@ -105,7 +105,7 @@ interface TicketsTabPropsType {  setTabValue : Dispatch<SetStateAction<number>>}
              label={"אולם"}
              items={[{ label: Eilat_1.ThaeaterName, value: Eilat_1.ThaeaterName }, { label: Eilat_2.ThaeaterName, value: Eilat_2.ThaeaterName }]}
              changeHndler={(e)=>{
-              setInfoFileds(p=>({...p,TheaterName:e.target.value , Theater:selectTheater(e.target.value) }))} }
+              setInfoFileds(p=>({...p,TheaterName:e.target.value , Theater:selectTheater(e.target.value ) }))} }
              labelPositioin={"top"}
              variant='outlined'
              isValueBold              

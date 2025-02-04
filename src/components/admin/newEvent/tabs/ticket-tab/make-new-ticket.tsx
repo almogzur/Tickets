@@ -165,7 +165,7 @@ export default function MakeNewTicket({setTabValue}:MakeNewTicketType) {
               labelPositioin='top'
               value={Ticket.selectedType}
               changeHndler={(e) => {
-                setTicket(p => ({ ...p, selectedType: e.target.value }));
+                setTicket(p => ({ ...p, selectedType: e.target.value  as TicketType['selectedType'] }));
                 e.target.value === "citizen" ? setTicket(p => ({ ...p, priceInfo: "הנחת תושב" }))
                   :
                   e.target.value === "normal" ? setTicket(p => ({ ...p, priceInfo: 'מחיר' }))
