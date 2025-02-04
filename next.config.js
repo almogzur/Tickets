@@ -1,3 +1,4 @@
+const { hostname } = require("os");
 
 const isProduction = process.env.NODE_ENV === 'production';
 console.log(isProduction);
@@ -58,6 +59,10 @@ const DevObject = {
           {
             protocol:'https',
             hostname:'**.paypal.com ',
+          },
+          {
+            protocol:"https",
+            hostname:'**.sendbox.paypal.com'
           }
         ],
       },
