@@ -1,4 +1,4 @@
-import { CartItem } from "@/pages/api/client/pay/types";
+import { CartItem } from "@/pages/api/client/pay/paypal-types";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { useEffect, useState } from "react";
 
@@ -25,7 +25,6 @@ const PaypalBtn = ({cart}:PaypalBtnType)=>{
                         layout: "vertical",
                         color: "blue",
                         label: "paypal",
-                
                     }} 
                         // send array of object to back end to create a list of item to display and cala price 
                         //

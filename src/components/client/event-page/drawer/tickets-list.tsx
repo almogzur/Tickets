@@ -1,10 +1,13 @@
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-import { Button, ListItemAvatar, Typography, useTheme } from '@mui/material';
+import { Button, ListItemAvatar, ListItemButton, Typography, useTheme , Stack as Flex, Divider  } from '@mui/material';
 import { TheaterType } from '@/components/admin/newEvent/theater/types/theater-types';
 import { DrawerContentType } from './drawer-content';
 import { IoMdClose } from "react-icons/io";
+import { grey } from '@mui/material/colors';
+import WidthContext from '@/context/WidthContext';
+import { useContext } from 'react';
 
 
 interface ClientTicketListType extends  DrawerContentType {}
@@ -21,13 +24,17 @@ export default function ClientTikectList({
   }:ClientTicketListType) {
   
   const theme = useTheme()
+    const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
   
 
   const hendler = (
-      seatValue: number,
-      seatNumber: number,
-      row: string,
-      theater:TheaterType|undefined
+    seatValue: number,
+     seatNumber: number,
+      row: string ,
+      theater?:TheaterType,
+       price?:string ,
+        priceInfo?:string 
+      
     ) => {
       const inMain = theater?.mainSeats.hasOwnProperty(row);
       const inSide = theater?.sideSeats.hasOwnProperty(row);
@@ -40,9 +47,9 @@ export default function ClientTikectList({
   
       // Toggle seat selection
       setEventSelectedSeats((prev) =>
-          prev.some((item) => item.row === row && item.seatNumber === seatNumber)
+          prev.some((item) => item.row === row && item.seatNumber === seatNumber  )
               ? prev.filter((item) => !(item.row === row && item.seatNumber === seatNumber))
-              : [...prev, { row, seatNumber, value: seatValue }]
+              : [...prev, { row, seatNumber, value: seatValue ,price:""}]
       );
   
       const updateSeats = (prevState: TheaterType | undefined, seatCollection: "mainSeats" | "sideSeats") => {
@@ -83,35 +90,54 @@ export default function ClientTikectList({
   return (
     <List
        sx={{ 
-            width:"100%",
+            width:"95%",
+            maxWidth:500,
             mb:15,
-    
+
+            
             }}
             >
-           {eventSelectSeats.map(({row,seatNumber,value}) => {
+           {eventSelectSeats.map(({row,seatNumber,value,price,priceInfo}) => {
                const labelId = `checkbox-list-label-${seatNumber}`;
 
           return  <ListItem
               key={`${row}+${seatNumber}+Client-List`}
               divider
-              sx={{
-                width:"100%",
-                bgcolor:"#ddd"
-              }}
+              sx={{   
+                bgcolor:grey[400],
+                  mt:1,
+                 borderRadius:1,
+                 fontSize:"12px",
+                 transition:"all 0.5s",
+                 "&:hover":{scale:1.02 },
+                 "& *": { fontSize:  !sm?  12 : 14 , direction:"rtl" },
+                   }}
           >
-              <ListItemText 
-                 sx={{direction:"ltr", textAlign:"end"}}
-                 id={labelId}
-                 primary={` ${seatNumber +1} - ${ row} `}
-                  />
+              <Flex width={"100%"}   alignItems={"top"} >
 
-            <Button 
-              onClick={()=>hendler(value,seatNumber,row,clientEventTheaterState )}
-              variant='text'
-              color='secondary'
-             >
-              <IoMdClose color='red' size={"2em"} /> 
-            </Button>
+               <IoMdClose
+                     color='red'
+                     size={"2em"}
+                     onClick={()=>hendler(value,seatNumber,row,clientEventTheaterState )}
+                     style={{position:"absolute", right: !md ? "92%" : "89%" , top:0  }}
+                  /> 
+
+                <Flex   width={"100%"}  alignItems={"start"}   >
+                  <Typography >{row }   מושב  :  { seatNumber+1}</Typography>
+                     <Divider sx={{borderWidth:1, width:"inherit"}} />
+                     <Flex direction={"row"} gap={1} >
+                      
+                      <Typography> מחיר :  { price}</Typography>
+                      {priceInfo && <Typography> תיאור : {priceInfo}</Typography>}
+                  </Flex>
+                </Flex>
+                
+     
+
+
+              </Flex>
+
+              
           </ListItem>
 
       })}

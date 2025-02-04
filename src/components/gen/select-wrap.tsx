@@ -1,5 +1,5 @@
 import { FormControl, FormHelperText, InputLabel, MenuItem, Select, SelectChangeEvent, SxProps, TextFieldVariants, Typography, useFormControl, useTheme } from "@mui/material"
-import {  CSSProperties, ReactElement, useContext, useEffect, useState } from "react"
+import {  CSSProperties, ReactElement, ReactNode, useContext, useEffect, useState } from "react"
 
 import WidthContext from "@/context/WidthContext";
 import ControledHelperText from "./TeextFiledWrpa/controled-helper-text";
@@ -18,7 +18,7 @@ interface SelectWrapType {
     label:string
     items:SelectItemType[]
     value:string,
-    changeHndler:(event: SelectChangeEvent<any>) => void
+    changeHndler :(event: SelectChangeEvent<string>, child: ReactNode) => void
     helpText:string
     
     /** Util  */
@@ -80,13 +80,10 @@ const SelectWrap = ({
     }:SelectWrapType)=>{
 
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
+  const theme = useTheme()
 
-
-
-
-const theme = useTheme()
     return (
-             <FormControl fullWidth  variant={variant} >
+             <FormControl fullWidth  variant={variant}  >
               <InputLabel 
               
               sx={{ 
@@ -135,18 +132,22 @@ const theme = useTheme()
                 {label}
               </InputLabel>  
 
-              <Select
+               <Select
+                         labelId="demo-simple-select-readonly-label"
+          id="demo-simple-select-readonly"
                value={value??""}
                onChange={changeHndler}
+               
                variant={ variant}
                endAdornment={labelPositioin === "top" ? icon : null}
                startAdornment={labelPositioin === "end"?   icon : null}
                label={label}
+               
                // selected item 
                style={{ fontWeight: isValueBold ? "bold" : undefined, ...styles, color:valueColor  }} 
                sx={{ 
                    // add icon postion add option baced on top and end titile postions
-                   flexGrow:Fgrow?? null,
+                   flexGrow:Fgrow?? null, 
                    bgcolor:bg,
                     m: m?m:0.5,
                     p:0,
@@ -167,12 +168,14 @@ const theme = useTheme()
                >
                 {items.map(({label,value},i)=>{
                   return <MenuItem 
+        
                      sx={{ 
                       fontWeight: isListItemBold? "bold":null,
                       fontSize: !sm? 13:18,
                      }} 
                      
                      key={label+i+"select-item"}  
+                      
                      value={value}  
                      >
                       {label}

@@ -50,7 +50,7 @@ const  TheaterMap = ({
     // henlder need event in the global+scope
 
      
-    const hendler = (seatValue: number, seatNumber: number, row: string,theater:TheaterType ,price:string ) => {
+    const updateTheater = (seatValue: number, seatNumber: number, row: string,theater:TheaterType ,price:string , priceInfo?:string ) => {
     
     const inMain = theater.mainSeats.hasOwnProperty(row);
     const inSide = theater.sideSeats.hasOwnProperty(row);
@@ -65,11 +65,13 @@ const  TheaterMap = ({
     setEventSelectedSeats((prev) =>
         prev.some((item) => item.row === row && item.seatNumber === seatNumber)
             ? prev.filter((item) => !(item.row === row && item.seatNumber === seatNumber))
-            : [...prev, { row, seatNumber, value: seatValue ,price:"123"}]
+            : [...prev, { row, seatNumber, value: seatValue ,price:price , priceInfo:priceInfo}]
     );
 
     const updateSeats = (prevState: TheaterType | undefined, seatCollection: "mainSeats" | "sideSeats") => {
 
+      console.log("updateSeats - Price", price);
+      
         if (!prevState) return prevState;
 
         const newState = { ...prevState };
@@ -95,9 +97,11 @@ const  TheaterMap = ({
 
     if (inMain) {
       setClientEventTheaterState((prevState) => updateSeats(prevState, "mainSeats"));
-    } else if (inSide) {
+    } 
+    else if (inSide) {
       setClientEventTheaterState((prevState) => updateSeats(prevState, "sideSeats"));
-    } else {
+    } 
+    else {
         throw new Error("Seat not found in main or side seats.");
     }
    };
@@ -128,7 +132,7 @@ const  TheaterMap = ({
           seatValue={seatValue}
           seatnumber={i}
           row={row}
-          hendler={hendler}
+          hendler={updateTheater}
            event={event}
             />
       );
@@ -160,7 +164,7 @@ const  TheaterMap = ({
             seatValue={seatValue}
             seatnumber={i}
             row={row}
-            hendler={hendler}
+            hendler={updateTheater}
             event={event}
             />
         );

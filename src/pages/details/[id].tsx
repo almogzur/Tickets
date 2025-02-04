@@ -27,16 +27,18 @@ export type  SeatType  = {
       row:string,
       seatNumber:number
       value:number
+      price:string,
+      priceInfo?:string
 }
 
 const DetailsPage = ({}) => {  
 
-   const theme = useTheme()
+  const theme = useTheme()
   const router = useRouter()
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
   const [ClientMapPositions , setClientMapPositions] =useState<Positions>({ x:0 ,y:0 ,Scale:undefined})
   const {Events,isEventsError,isEventsValidating,updateEvents} = useClientEvents()
-  const {id}  = router.query
+  const { id }  = router.query
   const FilteredEvent = Events?.find((event)=> event._id  === id )
 
 
@@ -56,11 +58,13 @@ const DetailsPage = ({}) => {
                 Wrapper = Flex,
                  BackBTN = Button
 
+   // update the event state 
      useEffect(()=>{
       setEventState(FilteredEvent)
          },[FilteredEvent])
 
 
+   // update the event Theater state 
    useEffect(()=>{
                if(FilteredEvent){
                   setClientEventTheaterState(FilteredEvent.Theater)
@@ -68,8 +72,6 @@ const DetailsPage = ({}) => {
        
          },[FilteredEvent])
        
-            
- 
   if (!eventState) return <div>loading...</div>
 
   return (
@@ -151,7 +153,6 @@ const DetailsPage = ({}) => {
              {/* <Map/>*/}
 
          </Wrapper>
-
       </ClientLayout>
     
   );

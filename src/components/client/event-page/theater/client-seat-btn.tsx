@@ -1,26 +1,23 @@
-import { CSSProperties, useState, useMemo } from "react";
+import { CSSProperties, useState, useMemo, ReactNode } from "react";
 import { green, orange, purple, yellow } from "@mui/material/colors";
 import { MdAccessible} from "react-icons/md";
-import { BiSolidDiscount } from "react-icons/bi";
-
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
-import { SelectChangeEvent, Typography, useTheme } from "@mui/material";
-import { FaTicketAlt } from "react-icons/fa";
-import { FaTicketSimple } from "react-icons/fa6";
+import {  Typography, useTheme } from "@mui/material";
 import { LuTicket } from "react-icons/lu";
 import SelectWrap, { SelectItemType } from "@/components/gen/select-wrap";
-import { EventType, TicketType } from "@/components/admin/newEvent/types/new-event-types";
+import { EventType } from "@/components/admin/newEvent/types/new-event-types";
 import { TheaterType } from "@/components/admin/newEvent/theater/types/theater-types";
+import { SelectInputProps } from "@mui/material/Select/SelectInput";
 
 interface ToolTipButtonType {
   seatValue: number;
   seatnumber: number;
   row: string;
-  hendler: (seatValue: number, seatnumber: number, row: string ,theater:TheaterType, price:string  ) => void;
+  hendler: (seatValue: number, seatnumber: number, row: string ,theater:TheaterType, price:string ,  priceInfo?:string ) => void;
   event:EventType|undefined
 }
 
@@ -47,6 +44,7 @@ display:"flex",
 };
 
 const TooltipButton = ({ seatValue, seatnumber, row, hendler, event }: ToolTipButtonType) => {
+
   const [originalSeatType] = useState(seatValue);
 
   const theme = useTheme()
@@ -54,30 +52,30 @@ const TooltipButton = ({ seatValue, seatnumber, row, hendler, event }: ToolTipBu
   const [openDiscounteDialog, setOpenopenDiscounteDialog] = useState(false);
   const [openAccsessableDialog, setOpenAccsessableDialog] = useState(false);
 
-  const [ selectedDiscounetPrice, setselectedDiscounetPrice ] = useState<string>("")
+  const [SelectedDiscounteInfo ,setSelectedDiscounteInfo ] = useState<{ price:string,priceInfo:string}>({
+      price:'',
+      priceInfo:''
+    })
 
 
-
-  const getDiscountes = ()=>{
+  const getDiscountesTickets = ()=>{
          return event?.tickets?.filter((tikect)=> tikect.selectedType === 'discount' || tikect.selectedType==='citizen' ).flat()
   }
+  const getDiscountesValues= () : SelectItemType[] | undefined=>{
+    const list =  getDiscountesTickets()?.map((discount)=>{
+          return {value :discount.price , label:discount.priceInfo}
+        })
+        if(list){
+          return list
+        }
+}
+
   const getNormailTicket = ()=>{
     return event?.tickets?.find((tikect)=> tikect.selectedType === 'normal' )
   }
   const getNoramlPrice = ()=>{
      return getNormailTicket()?.price ?? "" 
   }
-
-  const getDiscountesNames= () : SelectItemType[] | undefined=>{
-      const list =  getDiscountes()?.map((discount)=>{
-            return {value :discount.price , label:discount.priceInfo}
-          })
-          if(list){
-            return list
-          }
-  }
-
-
 
 
   // Function to open the dialog
@@ -90,7 +88,7 @@ const TooltipButton = ({ seatValue, seatnumber, row, hendler, event }: ToolTipBu
     }
     else {
       if(event?.Theater){
-      hendler(seatValue, seatnumber, row ,event.Theater, getNoramlPrice() ); // no dialog
+        hendler(seatValue, seatnumber, row ,event.Theater, getNoramlPrice() ); // no dialog
       }
     }
   };
@@ -109,8 +107,10 @@ const TooltipButton = ({ seatValue, seatnumber, row, hendler, event }: ToolTipBu
 
   const handleDiscounteConfirm = () => {
      if(event?.Theater){
-    hendler(seatValue, seatnumber, row , event.Theater , selectedDiscounetPrice);
-    setOpenopenDiscounteDialog(false); 
+
+          hendler(seatValue, seatnumber, row , event.Theater , SelectedDiscounteInfo.price , SelectedDiscounteInfo.priceInfo);
+
+        setOpenopenDiscounteDialog(false); 
      }
   };
 
@@ -137,8 +137,8 @@ const TooltipButton = ({ seatValue, seatnumber, row, hendler, event }: ToolTipBu
     <>
       <button onClick={()=>  handleClick(seatValue)} style={seatStyle}>
 
-          {(originalSeatType === 5 || seatValue === 5) && <MdAccessible   color={ seatValue === 2? theme.palette.common.black : theme.palette.secondary.main }  />}
-          {(originalSeatType === 4 || seatValue === 4) && <LuTicket  color={ seatValue === 2? theme.palette.common.black : theme.palette.secondary.main} />}
+          {(originalSeatType === 5 || seatValue === 5) && <MdAccessible   color={ theme.palette.common.black  }  />}
+          {(originalSeatType === 4 || seatValue === 4) && <LuTicket  color={theme.palette.common.black } />}
 
       </button>
 
@@ -154,14 +154,29 @@ const TooltipButton = ({ seatValue, seatnumber, row, hendler, event }: ToolTipBu
             >
         <DialogTitle>בחר הנחה </DialogTitle>
         <DialogContent>
+
         <SelectWrap 
              label={"בחר ההנחה"} 
-             items={getDiscountesNames()??[]} 
-             value={selectedDiscounetPrice} 
-             changeHndler={(e)=>{setselectedDiscounetPrice(e.target.value)} }
+             items={getDiscountesValues()??[]} 
+             value={SelectedDiscounteInfo.price} 
+             changeHndler={(e,child)=> {
+
+                const childElement = child as React.ReactElement<{children:ReactNode}>; // bootsraping the component
+
+                if(childElement.props.children){
+                    setSelectedDiscounteInfo(p=>({ price: e.target.value, priceInfo:childElement.props.children?.toString()??""}))
+                  }
+                  else{
+                      throw new Error("Client Select Discoune Elemnt Err line 170 , ")
+                  }
+                }
+                   }
+                  
+          
              helpText={""} 
              labelPositioin={"top"}
              />
+
           <Typography>יש להציג קופון/ תעודה </Typography>
           <Typography>בעת ההגעה לאירוע </Typography>
         </DialogContent>
@@ -169,7 +184,7 @@ const TooltipButton = ({ seatValue, seatnumber, row, hendler, event }: ToolTipBu
           <Button onClick={handleDiscounteCancel} color="primary">
             ביטול
           </Button>
-          <Button onClick={handleDiscounteConfirm} color="primary">
+          <Button disabled={!SelectedDiscounteInfo.price}  onClick={handleDiscounteConfirm} color="primary">
             אישור
           </Button>
         </DialogActions>

@@ -4,7 +4,6 @@ import { OrderRequest } from "@paypal/paypal-server-sdk";
 export interface  CartItem extends SeatType  {
     id: string,
     quantity: number,
-    price:number,
     description :string,
 }
 

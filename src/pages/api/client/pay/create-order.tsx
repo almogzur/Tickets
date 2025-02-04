@@ -12,7 +12,7 @@ import {
     PaymentsController,
     OrderRequest
 } from "@paypal/paypal-server-sdk";
-import { CartItem, PayPalReqType } from "./types";
+import { CartItem, PayPalReqType } from "./paypal-types";
 
 
 const {

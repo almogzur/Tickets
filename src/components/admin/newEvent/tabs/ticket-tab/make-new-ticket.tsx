@@ -64,7 +64,7 @@ export default function MakeNewTicket({setTabValue}:MakeNewTicketType) {
   const generateTickitOptions = (tickets: TicketType[]): TicketOptionType[] => {
 
   const TicketOptions: TicketOptionType[] = [
-    { value: "normal", label: "מחיר מלא" },
+    { value: "normal", label: "מחיר" },
     { value: "citizen", label: "  הנחת תושב " },
     { value: "discount", label: " הנחה כללי" },
   ];
@@ -168,7 +168,7 @@ export default function MakeNewTicket({setTabValue}:MakeNewTicketType) {
                 setTicket(p => ({ ...p, selectedType: e.target.value }));
                 e.target.value === "citizen" ? setTicket(p => ({ ...p, priceInfo: "הנחת תושב" }))
                   :
-                  e.target.value === "normal" ? setTicket(p => ({ ...p, priceInfo: 'מחיר מלא' }))
+                  e.target.value === "normal" ? setTicket(p => ({ ...p, priceInfo: 'מחיר' }))
                     :
                     e.target.value === "discount" ? setTicket(p => ({ ...p, priceInfo: '' }))
                       :
@@ -218,7 +218,8 @@ export default function MakeNewTicket({setTabValue}:MakeNewTicketType) {
               inputType='number'
               labelPositioin={'top'}
               onChangeHndler={(e) => { setTicket(p => ({ ...p, price: e.target.value })); } }
-              variant='outlined' helpText={''}
+              variant='outlined'
+               helpText={''}
             />   
          }
           {  isClosingDate && 
@@ -227,7 +228,7 @@ export default function MakeNewTicket({setTabValue}:MakeNewTicketType) {
               value={Ticket.EndSealesDate}
               minDate={new Date()}
               variant='outlined'
-              label={"בחר תאריך  "}
+              label={"בחר תאריך"}
               helpText={""}
          
               labelPositioin={'top'}
@@ -238,7 +239,7 @@ export default function MakeNewTicket({setTabValue}:MakeNewTicketType) {
               }} 
               />
               <TimePickerWrap 
-                  label={'בחר שעה '} 
+                  label={'בחר שעה'} 
                   value={Ticket.EndSealesHour}
                    onEroorHndler={()=>{}}
                    labelPositioin={'top'}

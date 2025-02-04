@@ -13,7 +13,7 @@ import { GiTakeMyMoney } from "react-icons/gi";
 import { TheaterType } from "@/components/admin/newEvent/theater/types/theater-types";
 import axios from "axios";
 import PaypalBtn from "../payments-providers-buttons/paypal";
-import { CartItem } from "@/pages/api/client/pay/types";
+import { CartItem } from "@/pages/api/client/pay/paypal-types";
 
 
 
@@ -47,6 +47,14 @@ const DrawerContent = ({
     const theme = useTheme()
 
 
+    const getNormailTicket = ()=>{
+      return event?.tickets?.find((tikect)=> tikect.selectedType === 'normal' )
+    }
+    const getNoramlPrice = ()=>{
+       return getNormailTicket()?.price ?? "" 
+    }
+
+
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -57,20 +65,6 @@ const DrawerContent = ({
       setOpen(false);
     };
   
-    const updateEvent = async ()=>{
-
-              const data = {
-                eventSelectSeats,
-              }
-
-        const updateStatus = await axios.post('/api/client/events/U/update-event',data)
-
-    }
-
-    const getSeatPrice = (seatValue:number)=>{
-       event.tickets?.filter((ticket)=> null )
-    }
-
     const PaymentOCart = () : CartItem|CartItem[]|undefined  =>{
       
         const {_id,  eventName,  } = event
@@ -116,41 +110,24 @@ const DrawerContent = ({
 
 
         {/* heading */}
-         <Typography 
-          color={theme.palette.common.white}
-          variant={'h4'}
-          textAlign={"center"}
-         >
-          {event.eventName}
-         </Typography>
+
 
 
 
          {/*  tags */}
-         <Tags alignItems={"start"}   >
-              <Chip
-              avatar={<FaLocationDot />}
-               label={<Typography sx={{color:"#ddd"}}  > מיקום : {event.TheaterName}</Typography>}
-              />
-              <Chip
-                avatar={<CgCalendarDates />}
-                label={<Typography  sx={{color:"#ddd"}}> תאריך: {event.Date}</Typography>}
-              />
-              <Chip
-               avatar={<TbClockHour1 />}
-              label={  <Typography sx={{color:"#ddd"}}  >שעה :{event.Hour}</Typography>}
-              />
-              <Chip
-              avatar={   <TbClockHour1 />}
-              label={<Typography  sx={{color:"#ddd"}}>שעת פתיחת דלתוד:{event.OpenDorHour?.toString().slice(0,10)}</Typography>}
-                />
-               {event.tickets?.map((ticket,i)=>{
-               return     <Chip key={ticket.price+event.eventName+i} 
-                  avatar={<GiTakeMyMoney/>}
-                  label={<Typography>{ticket.priceInfo}: {ticket.price} </Typography>}
-                  
-                  />
-               })}
+         <Tags  width={"100%"}  mr={5}    >
+         <Typography 
+          color={theme.palette.secondary.main}
+          variant={'h4'}
+         >
+          {event.eventName}
+         </Typography>
+
+            <Typography   > מיקום : {event.TheaterName}</Typography>
+             <Typography  > תאריך: {event.Date}</Typography>
+              <Typography  >שעה :{event.Hour}</Typography>
+              <Typography >שעת פתיחת דלתוד:{event.OpenDorHour?.toString().slice(0,10)}</Typography>
+                <Typography> מחיר :   { getNoramlPrice()}</Typography>
 
         </Tags>
 

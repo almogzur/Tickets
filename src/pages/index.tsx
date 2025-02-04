@@ -157,6 +157,7 @@ export default function Home() {
                     items.map( (item, i) => <Item key={i} {...item} /> )
                   }
                 </Carousel>
+
                 <Scrooler>
                   <ArowsWrapper direction={"row"}  justifyContent={"space-between"}  >
                      <RightArrow
@@ -210,8 +211,6 @@ export default function Home() {
                        
                         sx={{
                           overflowX: 'auto',
-      
-         
                           '&::-webkit-scrollbar': {
                             width: '0.2em'
                           },

@@ -72,11 +72,11 @@ export default async function handler  ( req: NextApiRequest , res: NextApiRespo
    if (req.method  !== 'POST') {
     res.status(400).json({ message: "Not Alowed" });
   } 
-  const { id } = req.query
+  const { orderId } = req.query
   const body =req.body
 
 try {
-  const  data = await captureOrder(id as string ) 
+  const  data = await captureOrder(orderId as string ) 
 
   if(data ){
       res.status(data.httpStatusCode).json(data.jsonResponse);
