@@ -1,5 +1,4 @@
 import { TheaterType } from "@/components/admin/newEvent/theater/types/theater-types";
-import { EventsType } from "@/pages/api/client/events/R/get-events";
 import { CartItemType } from "@/pages/api/client/pay/paypal-types";
 import { Item  as PaypalItem} from "@paypal/paypal-server-sdk";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";

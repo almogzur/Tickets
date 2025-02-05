@@ -9,16 +9,15 @@ import Button from "@mui/material/Button";
 import {  Typography, useTheme } from "@mui/material";
 import { LuTicket } from "react-icons/lu";
 import SelectWrap, { SelectItemType } from "@/components/gen/select-wrap";
-import { EventType } from "@/components/admin/newEvent/types/new-event-types";
+import { ClientEventType } from "@/components/admin/newEvent/types/new-event-types";
 import { TheaterType } from "@/components/admin/newEvent/theater/types/theater-types";
-import { SelectInputProps } from "@mui/material/Select/SelectInput";
 
 interface ToolTipButtonType {
   seatValue: number;
   seatnumber: number;
   row: string;
   hendler: (seatValue: number, seatnumber: number, row: string ,theater:TheaterType, price:string ,  priceInfo?:string ) => void;
-  event:EventType|undefined
+  event:ClientEventType|undefined
 }
 
 const styles: Record<string, CSSProperties> = {

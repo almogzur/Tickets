@@ -7,7 +7,6 @@ import Map from '../../components/client/event-page/tom-map'
 import ClientLayout from '../../Layouts/client-layout';
 
 import useClientEvents from '@/lib/client/Hooks/useGetEvents';
-import { EventsType } from '../api/client/events/R/get-events';
 import WidthContext from '@/context/WidthContext';
 
 import TheaterMap from '@/components/client/event-page/theater/client-theater-map';
@@ -20,6 +19,7 @@ import DrawerContent from '@/components/client/event-page/drawer/drawer-content'
 import DrawerWighet from '@/components/client/event-page/drawer/info-drawer-wighet';
 
 import { TiArrowBack } from "react-icons/ti";
+import { ClientEventType } from '@/components/admin/newEvent/types/new-event-types';
 
 
 // mote to theater types  after 
@@ -42,7 +42,7 @@ const DetailsPage = ({}) => {
   const FilteredEvent = Events?.find((event)=> event._id  === id )
 
 
-  const [eventState ,setEventState]=useState<EventsType|undefined>(undefined)
+  const [eventState ,setEventState]=useState<ClientEventType|undefined>(undefined)
 
    // Theater State lifted up to pass  and passed to  ticket list  to gain theater handler functinalty 
   const [ clientEventTheaterState , setClientEventTheaterState ]=useState<TheaterType>()

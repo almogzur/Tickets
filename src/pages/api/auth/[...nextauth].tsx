@@ -7,8 +7,8 @@ import bcrypt from 'bcryptjs'
 
 import jwt from 'jsonwebtoken'
 import { NewUserSchemaDefinition, NewUserType, NewUserValidationShema, } from "@/lib/supervisor_types"
-import { createSchmaAndModel } from "@/components/admin/newEvent/types/new-event-db-schema"
 import { disconnectFromDb, ModleAuthUsersConncectin } from "@/lib/DB/Mongosee_Connection"
+import { createModel } from "@/components/admin/newEvent/types/new-event-db-schema"
 
 
 // Exdenting the type using -  module Augmentation
@@ -80,7 +80,7 @@ export const authOptions: AuthOptions = {
         }
 
 
-        const UsersModle =  createSchmaAndModel<NewUserType>("ActiveUsers",NewUserSchemaDefinition)
+        const UsersModle =  createModel<NewUserType>("ActiveUsers",NewUserSchemaDefinition)
 
         const user = await UsersModle.findOne({ name: credential.name},{},{lean:true})
 

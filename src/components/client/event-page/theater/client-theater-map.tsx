@@ -7,11 +7,11 @@ import { useTheme , Stack as Flex, Typography, Drawer } from '@mui/material';
 import WidthContext from '@/context/WidthContext';
 import { TheaterType } from '@/components/admin/newEvent/theater/types/theater-types';
 import { SeatType } from '@/pages/details/[id]';
-import { EventType } from '@/components/admin/newEvent/types/new-event-types';
+import { ClientEventType } from '@/components/admin/newEvent/types/new-event-types';
 
 type TheaterMapType = {
 
-    event:EventType|undefined
+    event:ClientEventType|undefined
     eventSelectSeats:SeatType[]
     clientEventTheaterState:TheaterType|undefined
 

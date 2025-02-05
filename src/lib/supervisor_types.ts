@@ -1,4 +1,3 @@
-import {  createSchmaAndModel } from '@/components/admin/newEvent/types/new-event-db-schema'
 import { Schema } from 'mongoose'
 import {z} from 'zod'
 

@@ -5,12 +5,12 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import {Typography, useTheme, Stack as Flex} from '@mui/material'
 
-import { EventsType } from '@/pages/api/client/events/R/get-events';
 import { CldImage } from 'next-cloudinary';
 import { useRouter } from 'next/router';
 import WidthContext from '@/context/WidthContext';
 import { useContext } from 'react';
 import { optimizeImage } from 'next/dist/server/image-optimizer';
+import { ClientEventType } from '@/components/admin/newEvent/types/new-event-types';
 
 export default function EventCard({
   eventName,
@@ -28,7 +28,7 @@ export default function EventCard({
   isEventClosedForSeal
   
   
-}:EventsType) {
+}:ClientEventType) {
   const theme = useTheme()
   const router = useRouter()
   const Actions = Flex

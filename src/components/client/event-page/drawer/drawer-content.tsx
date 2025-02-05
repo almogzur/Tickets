@@ -1,5 +1,4 @@
 import WidthContext from "@/context/WidthContext";
-import { EventsType } from "@/pages/api/client/events/R/get-events";
 import { Box, Typography, Chip ,Stack as Flex , useTheme, Button, Dialog, DialogTitle, DialogContent } from "@mui/material";
 import { CldImage } from "next-cloudinary";
 import React, { Dispatch, SetStateAction, useEffect } from "react";
@@ -15,14 +14,15 @@ import axios from "axios";
 import PaypalBtn from "../payments-providers-buttons/paypal";
 
 import { ItemCategory, Item as PatPalItem } from "@paypal/paypal-server-sdk";
+import { ClientEventType } from "@/components/admin/newEvent/types/new-event-types";
 
 
 
  export type   DrawerContentType = {
 
     // event Data 
-    event :EventsType
-    setEventState:Dispatch<SetStateAction<EventsType|undefined>>
+    event :ClientEventType
+    setEventState:Dispatch<SetStateAction<ClientEventType|undefined>>
 
 
     //Theater to update 

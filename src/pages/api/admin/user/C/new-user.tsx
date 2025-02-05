@@ -1,6 +1,6 @@
 // File: pages/api/public.ts
 
-import { createSchmaAndModel } from "@/components/admin/newEvent/types/new-event-db-schema";
+import { createModel } from "@/components/admin/newEvent/types/new-event-db-schema";
 import {  ModleAuthUsersConncectin  ,disconnectFromDb} from "@/lib/DB/Mongosee_Connection";
 import { NewUserSchemaDefinition, NewUserType } from "@/lib/supervisor_types";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
@@ -36,7 +36,7 @@ export default async function handler  ( req: NextApiRequest , res: NextApiRespo
 
    const Data = req.body
    
-  const UsersModle = createSchmaAndModel<NewUserType>("ActiveUsers",NewUserSchemaDefinition)
+  const UsersModle = createModel<NewUserType>("ActiveUsers",NewUserSchemaDefinition)
 
    const model = new  UsersModle(Data) 
 

@@ -7,8 +7,8 @@ import { Container , Typography as Heading , Stack as Flex  , Button, Typography
 import { SetStateAction, } from 'react'
 import { SeatType } from '@/pages/details/[id]';
 import { grey } from '@mui/material/colors';
-import { EventsType } from '@/pages/api/client/events/R/get-events';
 import { GiTakeMyMoney } from 'react-icons/gi';
+import { ClientEventType } from '@/components/admin/newEvent/types/new-event-types';
 
 
 interface ClientInfoDrawerType {
@@ -16,7 +16,7 @@ interface ClientInfoDrawerType {
     wighetIsExp:boolean
     setWighetIsExp:React.Dispatch<SetStateAction<boolean>>
     eventSelectSeats:SeatType[]
-    event:EventsType|undefined
+    event:ClientEventType|undefined
 
 }
 

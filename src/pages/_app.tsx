@@ -1,7 +1,6 @@
 import type { AppProps } from 'next/app'
  
 import { useMediaQuery } from 'usehooks-ts';
-import { useState } from 'react';
 import '../styles/global.css'
 
 
@@ -28,8 +27,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 // Geo Location  Map  Css
 import '@tomtom-international/web-sdk-maps/dist/maps.css'
-import { Positions, TheaterTipinfoType } from '@/components/admin/newEvent/theater/types/theater-types';
-import { EventsType } from './api/client/events/R/get-events';
 
 
 export const FullDateOptions :Intl.DateTimeFormatOptions = {

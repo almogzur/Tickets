@@ -5,7 +5,7 @@ import {  EventSettingType, DraftType, LogType, TicketType, ClientEventType, Adm
 const { Schema } = mongoose;
 
 
- const createModel = <T extends unknown>  ( name:string, schemaDefinition: SchemaDefinition<T> ) : mongoose.Model<T> => {
+ export const createModel = <T extends unknown>  ( name:string, schemaDefinition: SchemaDefinition<T> ) : mongoose.Model<T> => {
   if (!name) {
      throw new Error("Name is required to create a model");
     }

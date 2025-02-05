@@ -2,9 +2,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
 import { ModleDbNamedConnction, disconnectFromDb } from "@/lib/DB/Mongosee_Connection";
-import { createSchmaAndModel, DraftModle, DraftSchemaDefinition } from "@/components/admin/newEvent/types/new-event-db-schema";
+import {  DraftModle } from "@/components/admin/newEvent/types/new-event-db-schema";
 import { delFolder, findSubFolders, moveToEventNameFolder } from "../cloudinary_helper_functions";
-import { EventType } from "@/components/admin/newEvent/types/new-event-types";
 
 type ResponseData = {
   message?: string
