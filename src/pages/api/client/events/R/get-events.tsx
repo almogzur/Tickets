@@ -1,13 +1,12 @@
-import { createSchmaAndModel, DraftSchemaDefinition } from "@/components/admin/newEvent/types/new-event-db-schema";
-import { EventType } from "@/components/admin/newEvent/types/new-event-types";
+import { ClientEventType } from "@/components/admin/newEvent/types/new-event-types";
 import { CRUDConnection } from "@/lib/DB/CRUD_Calls_Mongo";
-import { MongoClient, WithId, Document } from "mongodb";
+import { disconnectFromDb } from "@/lib/DB/Mongosee_Connection";
 
 import { NextApiRequest, NextApiResponse } from "next";
 
-export type EventsType = EventType
 
-const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<EventsType[] | undefined | void> => {
+
+const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<ClientEventType[] | undefined | void> => {
   const API_NAME = "Get All Active Drafts (Hook)";
 
   if (req.method !== 'GET') {
@@ -27,7 +26,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<Event
 
   const ClusterUsersDBLIst = Cluster?.databases.filter((db, i) => db.name.includes("_Data"));
 
-  const getUserCollections = async (dbName: string): Promise<WithId<Document>[] | null> => {
+  const getUserCollections = async (dbName: string)=> {
     try {
       const UserDB = MongoClient?.db(dbName);
       const collections = await UserDB?.collections();
@@ -73,6 +72,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<Event
       console.log(API_NAME,"Sucsses");
       
   res.status(200).send(Events );
+    await disconnectFromDb(MongoClient,API_NAME) 
+  
 };
 
 export default handler;

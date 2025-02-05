@@ -1,11 +1,11 @@
 
 import mongoose, { model,SchemaDefinition,   } from 'mongoose';
-import {  EventSettingType, LogType, TicketType } from './new-event-types';
+import {  EventSettingType, DraftType, LogType, TicketType, ClientEventType, AdminEventType } from './new-event-types';
 
 const { Schema } = mongoose;
 
 
-export const createSchmaAndModel = <T extends unknown>  ( name:string, schemaDefinition: SchemaDefinition<T> ) : mongoose.Model<T> => {
+ const createModel = <T extends unknown>  ( name:string, schemaDefinition: SchemaDefinition<T> ) : mongoose.Model<T> => {
   if (!name) {
      throw new Error("Name is required to create a model");
     }
@@ -26,21 +26,18 @@ const EventSettingsShema = new Schema<EventSettingType>({
   versionKey:false
 })
 
-// end of week this just start working id remoived no dev recorde saveed
-// all db recored del .. eror on rendreing 
-
-
 
 const TicketSchema = new Schema<TicketType>({
-    EndSealesHour:{type :String , required:false },
-    EndSealesDate: { type:String ,required:false},
-    selectedType:{ type:String , required:true },
-    priceInfo:{type:String ,required:false},
-    price:{type:String ,required:true}  
+  EndSealesHour:{type :String , required:false },
+  EndSealesDate: { type:String ,required:false},
+  selectedType:{ type:String , required:true },
+  priceInfo:{type:String ,required:false},
+  price:{type:String ,required:true}  
 },
 {_id:false,versionKey:false}
 )
-export const DraftSchemaDefinition = {
+
+const DraftSchemaDefinition = {
   eventName: { type: String, required: true, unique: true },
   cat:{type:String , require:false},
   TheaterName:{type:String , require:false},
@@ -55,16 +52,19 @@ export const DraftSchemaDefinition = {
   tickets: { type: [TicketSchema], required: false },
   eventSetting: {type : EventSettingsShema ,required : false }
 }
-
-const EventSchema ={}
-
-const EventLogsModleShema ={}
-  
+const EventLogsShema ={}
+const adminEventSchema={}
+const clientEventSchema ={}
 
 
+// end of week this just start working id remoived no dev recorde saveed
+// all db recored del .. eror on rendreing 
 
 
 //Db Modoles 
+  export const DraftModle = createModel<DraftType>("Drafts",DraftSchemaDefinition)
+  export const AdminEventModle = createModel<AdminEventType>("Events_DATA",adminEventSchema)
+  export const ClientEventModle = createModel<ClientEventType>("LiveEvents",clientEventSchema)
 
 
 

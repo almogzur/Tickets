@@ -2,6 +2,7 @@
 
 
 
+import { disconnectFromDb } from "@/lib/DB/Mongosee_Connection";
 import {
     ApiError,
     CheckoutPaymentIntent,
@@ -33,8 +34,8 @@ const client = new Client({
 }); 
 
 
-
 const captureOrder = async (orderID:string) => {
+
   const collect = {
       id: orderID,
       prefer: "return=minimal",
@@ -88,7 +89,6 @@ catch (error) {
   console.error("Failed to create order:", error);
   res.status(500).json({ error: "Failed to capture order." });
 }
-
 
 
 

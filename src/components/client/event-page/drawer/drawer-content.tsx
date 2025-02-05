@@ -41,7 +41,8 @@ import { ItemCategory, Item as PatPalItem } from "@paypal/paypal-server-sdk";
 const DrawerContent = ({  
       event,
       eventSelectSeats,
-     ...rest
+      clientEventTheaterState,
+     ...restDrawerContentProps
     }:DrawerContentType)=>{
     const {xxl,xl,lg,md,sm,xs,xxs} = React.useContext(WidthContext)
     const sanitizedHtml = DOMPurify.sanitize(event.pre);
@@ -67,13 +68,10 @@ const DrawerContent = ({
            const cart =   selectedSeats.map((seat)=>{
                    return {
                        id:_id,  // assigning event id
-                       name:`כרטיס להופעה : ${eventName}`,
+                       name:`${eventName}`,
                        quantity:"1",
                        category:ItemCategory.DigitalGoods,
                        unitAmount: { currencyCode: "USD", value: seat.price  },
-                       discription:"dsadsa"
-                       
-        
                    }
               })
               return cart
@@ -130,20 +128,18 @@ const DrawerContent = ({
 
 
          {/*  tags */}
-         <Tags  width={"100%"}  mr={5}    >
-         <Typography 
-          color={theme.palette.secondary.main}
-          variant={'h4'}
-         >
-          {event.eventName}
-         </Typography>
-
-            <Typography   > מיקום : {event.TheaterName}</Typography>
-             <Typography  > תאריך: {event.Date}</Typography>
-              <Typography  >שעה :{event.Hour}</Typography>
-              <Typography >שעת פתיחת דלתוד:{event.OpenDorHour?.toString().slice(0,10)}</Typography>
-                <Typography> מחיר :   { getNoramlPrice()}</Typography>
-
+      <Tags  width={"100%"}  mr={5}    >
+          <Typography 
+              color={theme.palette.secondary.main}
+              variant={'h4'}
+             >
+                {event.eventName}
+          </Typography>
+          <Typography   > מיקום : {event.TheaterName}</Typography>
+          <Typography  > תאריך: {event.Date}</Typography>
+          <Typography  >שעה :{event.Hour}</Typography>
+          <Typography >שעת פתיחת דלתוד:{event.OpenDorHour?.toString().slice(0,10)}</Typography>
+          <Typography> מחיר :   { getNoramlPrice()}</Typography>
         </Tags>
 
 
@@ -171,7 +167,13 @@ const DrawerContent = ({
        aria-describedby="alert-dialog-Payment-Dialog"
       >
        <DialogContent  >
-         <PaypalBtn   cart={createPaymentCart(eventSelectSeats)} total={getTotalCost()} />
+         <PaypalBtn   
+            cart={createPaymentCart(eventSelectSeats)} 
+            total={getTotalCost()} 
+            TheaterState={clientEventTheaterState}
+            eventId={event._id}
+ 
+             />
 
        </DialogContent>
 
@@ -181,7 +183,8 @@ const DrawerContent = ({
        <ClientTicketList
           event={event}
           eventSelectSeats={eventSelectSeats}
-          {...rest}
+          clientEventTheaterState={clientEventTheaterState}
+          {...restDrawerContentProps}
             />
        </>
        }

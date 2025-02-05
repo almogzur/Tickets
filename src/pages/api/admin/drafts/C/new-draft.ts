@@ -3,8 +3,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import {  ModleDbNamedConnction, disconnectFromDb } from '@/lib/DB/Mongosee_Connection';
 import { moveToEventNameFolder } from '../cloudinary_helper_functions';
-import { createSchmaAndModel, DraftSchemaDefinition } from '@/components/admin/newEvent/types/new-event-db-schema';
-import { EventType } from '@/components/admin/newEvent/types/new-event-types';
+import {  DraftModle,  } from '@/components/admin/newEvent/types/new-event-db-schema';
 
  
 type ResponseData = {
@@ -49,7 +48,6 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse<R
 
          // calling the Molde Only on Api call prevanting un wanted folder saves 
 
-     const DraftModle = createSchmaAndModel<EventType>("Drafts",DraftSchemaDefinition)
      const doc = new DraftModle(body) // Pass body to the model
       
      //console.log(body)

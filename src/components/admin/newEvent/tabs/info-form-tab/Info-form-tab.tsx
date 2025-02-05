@@ -23,7 +23,7 @@ import { grey } from "@mui/material/colors"
 import { useSession } from "next-auth/react"
 import axios from "axios"
 import tabsPageContext from "@/context/admin/new-event/tabs/tabs-page-context"
-import { TempInfoFiledsValidationSchema } from "../../types/new-event-types"
+import { DraftValidationSchema } from "../../types/new-event-types"
 import { LuImageMinus } from "react-icons/lu"
 
 
@@ -275,7 +275,7 @@ return(
                disabled={!!infoFileds.preview} // converts its to boll then if info filed it ther its flase else it true 
                variant='text'
                onClick={() => {
-                  TempInfoFiledsValidationSchema.safeParse(infoFileds).success? 
+                DraftValidationSchema.safeParse(infoFileds).success? 
                   open()
                   :
                   setSaevNewEventReqestStatus("Temp")

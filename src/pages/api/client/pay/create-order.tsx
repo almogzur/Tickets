@@ -27,8 +27,8 @@ const {
 
 const client = new Client({
     clientCredentialsAuthCredentials: {
-        oAuthClientId: PAYPAL_CLIENT_ID as string ,
-        oAuthClientSecret: PAYPAL_CLIENT_SECRET as string  , 
+        oAuthClientId:`${ PAYPAL_CLIENT_ID}`  ,
+        oAuthClientSecret:`${ PAYPAL_CLIENT_SECRET }`  , 
     },
     timeout: 0,
     environment: Environment.Sandbox,
@@ -42,36 +42,33 @@ const client = new Client({
 const ordersController = new OrdersController(client);
 const paymentsController = new PaymentsController(client);
 
- // Item format  
-// name: "T-Shirt", 
-// description: "Super Fresh Shirt", 
-// quantity: "1", 
-// unitAmount: { currencyCode: "USD", value: total,  },
-// category:ItemCategory.DigitalGoods
-
-
-
+ /* Item format (requierd fileds)  : Type  for futher ref 
+       {
+        name: "string,   
+        description: "string", 
+         quantity: "string", 
+         unitAmount: { currencyCode: "USD", value: total,  },
+         category:ItemCategory.DigitalGoods  <= enum  
+         }
+ */
 
 
 const createOrder = async (cart:Item[] , total:string) => {
-    console.log("Create Order Cart",cart)
 
-    
-
+    //    console.log("Create Order Cart",cart)
 
     const collect : PayPalReqType  = {
         body:  {
             intent:CheckoutPaymentIntent.Capture,
-
             purchaseUnits: [
                 {
                 amount:{
-                     currencyCode:"USD",
-                      value:total,
-                      breakdown:{itemTotal:{value:total,currencyCode:"USD"}}
+                  currencyCode:"USD",
+                  value:total,
+                  breakdown:{itemTotal:{value:total,currencyCode:"USD"}}
                  },
-                 // total value need to match to total in brakedown else you get err 
-               items:cart
+                 // total value need to match to total in brakedown else you get err MISSMATCH 
+                 items:cart
                     },
 
      
@@ -103,7 +100,8 @@ const createOrder = async (cart:Item[] , total:string) => {
             jsonResponse: JSON.parse(body.toString()),
             httpStatusCode: httpResponse.statusCode,
         };
-    } catch (error) {
+    }
+     catch (error) {
         if (error instanceof ApiError) {
             // const { statusCode, headers } = error;
             throw new Error(error.message);
@@ -115,17 +113,15 @@ const createOrder = async (cart:Item[] , total:string) => {
 export default async function handler  ( req: NextApiRequest , res: NextApiResponse ):Promise<any>{
  const API_NAME =  "Pay - Order"
  
- const { id } = req.query; 
-
  const { cart ,total} = req.body;
- console.log(cart);
+
+// console.log( API_NAME, cart);
 
  if (req.method !== 'POST') {
     res.status(405).json({ message: `Method ${'$'}{req.method} not allowed` });
     return
   } 
-
-     
+    
   try {
     // use the cart information passed from the front-end to calculate the order amount detals
 

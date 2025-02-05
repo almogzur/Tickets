@@ -2,8 +2,7 @@ import { ModleDbNamedConnction, disconnectFromDb } from "@/lib/DB/Mongosee_Conne
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
-import { createSchmaAndModel, DraftSchemaDefinition } from "@/components/admin/newEvent/types/new-event-db-schema";
-import { EventType } from "@/components/admin/newEvent/types/new-event-types";
+import {  DraftModle } from "@/components/admin/newEvent/types/new-event-db-schema";
 
 
 type Message = {
@@ -45,7 +44,6 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse<M
 
       // calling the Molde Only on Api call prevanting un wanted folder saves 
 
-       const DraftModle = createSchmaAndModel<EventType>("Drafts",DraftSchemaDefinition)
   
   
        const Drafts  = await DraftModle.findOneAndDelete({_id:id})

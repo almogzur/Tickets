@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from "react";
-import { EventSettingType, infoFiledsType, ProductionInfoFiledsValidtinSchema, RequestStatusType, TempInfoFiledsValidationSchema, TicketType } from "./types/new-event-types";
+import { EventSettingType, infoFiledsType, EventValidtinSchema, RequestStatusType, DraftValidationSchema, TicketType } from "./types/new-event-types";
 
 //WraperContex
 import TabsTickets from '@/context/admin/new-event/tabs/tabs-ticket-context'
@@ -151,8 +151,8 @@ const [ eventSetting , setEventSetting] =useState<EventSettingType>({
    // Functions 
 
   const newEventValidateFiled = ( filed:string ): string | undefined  => {  
-    const TempInfoFiledsIssues = TempInfoFiledsValidationSchema.safeParse(infoFileds).error?.issues
-    const ProductionInfoFiledsIssues= ProductionInfoFiledsValidtinSchema.safeParse(infoFileds).error?.issues      
+    const TempInfoFiledsIssues = DraftValidationSchema.safeParse(infoFileds).error?.issues
+    const ProductionInfoFiledsIssues= EventValidtinSchema.safeParse(infoFileds).error?.issues      
     
      const issue  =
                   SaevNewEventReqestStatus === 'Temp' ? TempInfoFiledsIssues?.find(item => item.path.join("") === filed)
@@ -198,7 +198,7 @@ const [ eventSetting , setEventSetting] =useState<EventSettingType>({
         ):Promise<void>=> {
           console.log("sending req" ,infoFileds.image);
          setSaevNewEventReqestStatus('Temp')
-      const ValidationResult =  TempInfoFiledsValidationSchema.safeParse(infoFileds); //validate form on click 
+      const ValidationResult =  DraftValidationSchema.safeParse(infoFileds); //validate form on click 
          try {
                if(ValidationResult.success){
 

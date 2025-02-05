@@ -1,7 +1,7 @@
 import {  CSSProperties, useContext, useEffect, useState } from 'react'
 
 import { useTheme } from '@mui/material';
-import { green, orange, pink } from '@mui/material/colors';
+import { green, orange, pink, red } from '@mui/material/colors';
 import SingleTipontext from '@/context/admin/new-event/map/single-tip-context'
 import MultiSelectContext from '@/context/admin/new-event/map/multi-select-context';
 import React from 'react';
@@ -54,6 +54,7 @@ const AdminSeatBtn = ({ seatValue, seatnumber, row , isMultiSelect }:AdminSeatBt
           padding:0,
           
         },
+        seatPurchase:{background:red[900],cursor:'not-allowed'},
         seatBlocked: {backgroundColor:"black"},
         seatAccsesble:{backgroundColor:orange[600]},
         seatDiscounted:{backgroundColor:green[700]}

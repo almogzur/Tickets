@@ -60,17 +60,8 @@ export default function Home() {
  const [isDragging, setIsDragging] = useState(false);
  const [startX, setStartX] = useState(0);
  const [scrollToLeft, setScrollToLeft] = useState(0);
-  const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
-
-
-
-
-  const {Events,isEventsError,isEventsValidating,updateEvents} = useClientEvents()
-
-
-
-
-
+ const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
+ const {Events,isEventsError,isEventsValidating,updateEvents} = useClientEvents()
 
   useEffect(()=>{
         console.log(Events)

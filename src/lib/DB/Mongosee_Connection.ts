@@ -1,3 +1,4 @@
+import { MongoClient } from 'mongodb';
 import mongoose from 'mongoose';
 import { Session } from 'next-auth';
 
@@ -5,10 +6,10 @@ import { Session } from 'next-auth';
 
 // add public adccsess ip for domain
 
- export const ModleDbNamedConnction = async (session: Session) :Promise<boolean|null|undefined> => {
+ export const ModleDbNamedConnction = async (session: Session) :Promise<mongoose.Connection|undefined> => {
   
     if( !session || !session.user?.name ){
-      return null
+      return undefined
     }
 
     try {    
@@ -19,18 +20,19 @@ import { Session } from 'next-auth';
          tls : process.env.NODE_ENV === 'development'? undefined :true
          });
          if(connection.connection.db){
-          return true
+          return connection.connection
          }
+         return undefined
 
      } 
     catch (error) {
     console.error('Error connecting to the database:', error);
-    return false
+    return undefined
     
   }
 };
 
-export const ModleAuthUsersConncectin = async () :Promise<boolean|null|undefined> => {
+export const ModleAuthUsersConncectin = async () :Promise<mongoose.Connection|undefined> => {
   try {    
     const connection = await mongoose.connect(process.env.MONGODB_URI as string, 
       {
@@ -39,18 +41,18 @@ export const ModleAuthUsersConncectin = async () :Promise<boolean|null|undefined
       tls : process.env.NODE_ENV === 'development'? undefined :true
       });
       if(connection.connection.db){
-       return true
+       return connection.connection
       }
 
   } 
  catch (error) {
  console.error('Error connecting to the database:', error);
- return false
+ return undefined
  
 }
 }
 
- export const CRUDClientConnection = async():Promise<boolean|undefined>=>{
+ export const CRUDClientConnection = async():Promise<mongoose.Connection|undefined>=>{
 
    try{ 
      const connection = await mongoose.connect(process.env.MONGODB_URI as string, {
@@ -58,40 +60,32 @@ export const ModleAuthUsersConncectin = async () :Promise<boolean|null|undefined
       tls : process.env.NODE_ENV === 'development'? undefined :true
      });
         if(connection.connection.db){
-          return true
+          return connection.connection
         }
-       
-     
+        return undefined
+
+      
     }
    catch (err){ 
       console.log("ClientConnection:","No DB", err);
-      return false
+      return undefined
+
     }
 
  }
 
-export async function disconnectFromDb(connectionStatus:boolean|undefined|null,API_NAME?:string): Promise<void> {
-  if(!connectionStatus){
-    console.log("disconnectFromDb","No Connection");
-    return 
-  }
-  try {
-    mongoose.connections.map( 
-        async (connection,i)=>{
-          try{
-            connection.close()
-            console.log("DB _ Disconected : ",  API_NAME);
+export async function disconnectFromDb(
+    connection:mongoose.Connection|MongoClient|undefined,
+    API_NAME?:string,
+  )
+    : Promise<void> {
 
-            }
-          catch (err){ 
-            console.error("Error while disconnecting from the database:", err);        
-           }
-          
-    })
-   
-  } catch (error) {
-    console.error("Error while disconnecting from the database:", error);
+  if( connection?.db ){
+      connection.close()
+   console.log(API_NAME, "db Disconnected")
   }
+
+
 }
 
 

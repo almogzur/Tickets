@@ -1,12 +1,12 @@
 
-import { EventsType } from "@/pages/api/client/events/R/get-events";
+import { ClientEventType } from "@/components/admin/newEvent/types/new-event-types";
 import axios, { AxiosRequestConfig } from "axios";
 import useSWR, { Fetcher, Key as SWRKey , KeyedMutator, SWRConfiguration} from "swr";
 
-type T  = EventsType[]
+interface T extends  ClientEventType {}
 
 type ReturendFetcherType<T> = {
-  Events: T  // Allow `undefined` for when data is not yet loaded
+  Events: T[] // Allow `undefined` for when data is not yet loaded
   isEventsValidating: boolean;
   isEventsError: unknown;
   updateEvents: KeyedMutator<T>;

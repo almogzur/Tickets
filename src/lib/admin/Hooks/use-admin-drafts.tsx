@@ -1,10 +1,10 @@
-import { EventType } from "@/components/admin/newEvent/types/new-event-types";
+import { DraftType, } from "@/components/admin/newEvent/types/new-event-types";
 import {  getAdminDraftsApiReturndType } from "@/pages/api/admin/drafts/R/get-drafts";
 import axios, { AxiosRequestConfig } from "axios";
 import { Session } from "next-auth";
 import useSWR, { Fetcher, Key as SWRKey , KeyedMutator, SWRConfiguration} from "swr";
 
-type DataType = EventType[]
+type DataType = DraftType[]
 
 
 type ReturendFetcherType<T> = {
