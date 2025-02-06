@@ -6,7 +6,7 @@ import { CRUDConnection } from "@/lib/DB/CRUD_Calls_Mongo"
 import bcrypt from 'bcryptjs'
 
 import jwt from 'jsonwebtoken'
-import { NewUserSchemaDefinition, NewUserType, NewUserValidationShema, } from "@/lib/supervisor_types"
+import { NewUserSchemaDefinition, NewUserType, NewUserValidationShema, UsersModle, } from "@/lib/supervisor_types"
 import { disconnectFromDb, ModleAuthUsersConncectin } from "@/lib/DB/Mongosee_Connection"
 import { createModel } from "@/components/admin/newEvent/types/new-event-db-schema"
 
@@ -79,8 +79,6 @@ export const authOptions: AuthOptions = {
           return null
         }
 
-
-        const UsersModle =  createModel<NewUserType>("ActiveUsers",NewUserSchemaDefinition)
 
         const user = await UsersModle.findOne({ name: credential.name},{},{lean:true})
 

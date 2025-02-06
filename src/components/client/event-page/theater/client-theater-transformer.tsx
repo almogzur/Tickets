@@ -37,9 +37,10 @@ const ClientTheaterRTransform = ({children}:ClientTheaterMapPropsTypes) => {
        <TransformWrapper 
         
         initialScale={ClientMapPositions.Scale|| !sm? 0.50 : 1} //only reser on full app reset 
-        limitToBounds={false }
-        initialPositionX={!sm? 80 : 0 }
+        limitToBounds={!md ? false : true }
+        initialPositionX={!sm? 80 : undefined }
         minScale={!sm? 0.45 : !md? 0.8 : 1 }
+        
         smooth
         velocityAnimation={{disabled:true}}
         maxScale={10}

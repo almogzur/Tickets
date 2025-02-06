@@ -37,9 +37,9 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse<R
     return res.status(401).json({ message: 'You Shell Not Pass' });
   }
 
-  const isConnected  = await ModleDbNamedConnction(session)
+  const connection  = await ModleDbNamedConnction(session)
 
-    if(!isConnected){
+    if(!connection){
       console.log("no db");
       res.status(4001).json({ message: "no db" });
   
@@ -51,10 +51,9 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse<R
      const doc = new DraftModle(body) // Pass body to the model
       
      //console.log(body)
-     const preview = body.preview
-     const eventName = body.eventName
+     const preview = body.info.preview
+     const eventName = body.info.eventName
  
-
    //Stage 1  -- move image to folder baced on event name 
    if(!preview){}  
 
@@ -82,7 +81,7 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse<R
    res.status(200).json({ message: "Saved New Modle" });
      
  
-     await disconnectFromDb(isConnected,API_NAME) 
+     await disconnectFromDb(connection,API_NAME) 
 
   // Stage 2 on file re-location continue saving 
 

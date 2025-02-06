@@ -1,22 +1,22 @@
-import { DraftType, } from "@/components/admin/newEvent/types/new-event-types";
+import { AdminEventType, DraftType, } from "@/components/admin/newEvent/types/new-event-types";
 import axios, { AxiosRequestConfig } from "axios";
 import { Session } from "next-auth";
 import useSWR, { Fetcher, Key as SWRKey , KeyedMutator, SWRConfiguration} from "swr";
 
-type DataType = DraftType[]
+type DataType = AdminEventType[]
 
 
 type ReturendFetcherType<T> = {
-  Drafts: T ; // Allow `undefined` for when data is not yet loaded
-  isDraftsValidating: boolean;
-  isDraftsError: unknown;
-  updateDrafts: KeyedMutator<T>;
+  Events: T ; // Allow `undefined` for when data is not yet loaded
+  isEventsValidating: boolean;
+  isEventsError: unknown;
+  updateEvents: KeyedMutator<T>;
 };
 
 
-export const useAdminDrafts  = (session:Session|null) : ReturendFetcherType<DataType>=> { 
+export const useAdminEvents  = (session:Session|null) : ReturendFetcherType<DataType>=> { 
 
-     const fetcherKey : SWRKey = ()=> session?.user?.name? '/api/admin/drafts/R/get-drafts' : null // will not fetch if no session
+     const fetcherKey : SWRKey = ()=> session?.user?.name? '/api/admin/live-events/R/get-events' : null //no fetch if no session
 
      const fetcher : Fetcher<DataType> = async ( key: string ) : Promise<DataType> => {
 
@@ -44,10 +44,10 @@ export const useAdminDrafts  = (session:Session|null) : ReturendFetcherType<Data
     const { data, error, isValidating , mutate } = useSWR(fetcherKey, fetcher , SWRconfig)
    
     return {
-      Drafts: data,
-      isDraftsValidating: isValidating,
-      isDraftsError: error,
-      updateDrafts: mutate,
+      Events: data,
+      isEventsValidating: isValidating,
+      isEventsError: error,
+      updateEvents: mutate,
     }
 }
 

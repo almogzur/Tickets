@@ -57,7 +57,6 @@ const AdminSeatBtn = ({ seatValue, seatnumber, row , isMultiSelect }:AdminSeatBt
         seatPurchase:{background:red[900],cursor:'not-allowed'},
         seatBlocked: {backgroundColor:"black"},
         seatAccsesble:{backgroundColor:orange[600]},
-        seatDiscounted:{backgroundColor:green[700]}
  };  
 
 
@@ -161,8 +160,6 @@ const AdminSeatBtn = ({ seatValue, seatnumber, row , isMultiSelect }:AdminSeatBt
 
       style={ 
         seatValue === 3? { ...styles.seats, ...styles.seatBlocked } 
-        :
-        seatValue === 4? { ...styles.seats, ...styles.seatDiscounted } 
         :
         seatValue === 5? { ...styles.seats, ...styles.seatAccsesble } 
         :

@@ -45,7 +45,7 @@ const DrawerContent = ({
      ...restDrawerContentProps
     }:DrawerContentType)=>{
     const {xxl,xl,lg,md,sm,xs,xxs} = React.useContext(WidthContext)
-    const sanitizedHtml = DOMPurify.sanitize(event.pre);
+    const sanitizedHtml = DOMPurify.sanitize(event.info.pre);
     const theme = useTheme()
 
    const [open, setOpen] = React.useState(false);
@@ -57,11 +57,12 @@ const DrawerContent = ({
       return event?.tickets?.find((tikect)=> tikect.selectedType === 'normal' )
     }
     const getNoramlPrice = ()=>{
-       return getNormailTicket()?.price ?? "" 
+       return getNormailTicket()?.price ?? "N/A" 
     }
     const createPaymentCart = (selectedSeats:SeatType[]) : PatPalItem[]  =>{
-      
-        const {_id, eventName ,Date,Hour} = event
+
+        const {_id , info, ...rest} = event
+        const {eventName} = info
 
           if(selectedSeats){
               // array
@@ -111,7 +112,7 @@ const DrawerContent = ({
         {/* cover */}
         { !eventSelectSeats.length && 
         <CldImage
-              src={event.preview}
+              src={event.info.preview}
               alt="Description of my image"
               width={'300'}
               height={!xs? 300: 400}
@@ -133,12 +134,12 @@ const DrawerContent = ({
               color={theme.palette.secondary.main}
               variant={'h4'}
              >
-                {event.eventName}
+                {event.info.eventName}
           </Typography>
-          <Typography   > מיקום : {event.TheaterName}</Typography>
-          <Typography  > תאריך: {event.Date}</Typography>
-          <Typography  >שעה :{event.Hour}</Typography>
-          <Typography >שעת פתיחת דלתוד:{event.OpenDorHour?.toString().slice(0,10)}</Typography>
+          <Typography   > מיקום : {event.info.TheaterName}</Typography>
+          <Typography  > תאריך: {event.info.Date}</Typography>
+          <Typography  >שעה :{event.info.Hour}</Typography>
+          <Typography >שעת פתיחת דלתוד:{event.info.OpenDoors?.toString().slice(0,10)}</Typography>
           <Typography> מחיר :   { getNoramlPrice()}</Typography>
         </Tags>
 

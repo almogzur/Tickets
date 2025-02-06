@@ -66,9 +66,9 @@ export default function DrawerWighet({
                             </Box>
                             :
                             <Flex height={"100%"}  justifyContent={"center"}  >
-                                <Typography fontWeight={'bold'}  >{event?.eventName} </Typography>
+                                <Typography fontWeight={'bold'}  >{event?.info.eventName} </Typography>
                                 <Typography fontWeight={'bold'}  >  מחיר : {10000} </Typography>
-                                <Typography  fontWeight={'bold'}  >{event?.Date} </Typography>
+                                <Typography  fontWeight={'bold'}  >{event?.info.Date} </Typography>
                             </Flex>
                             }
                            <Button 

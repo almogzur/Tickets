@@ -152,14 +152,7 @@ const SingleSelectTip= ({theaterDate ,setTheater }:SingleSelectTipPropsType)=>{
                          >
                          חסום
                         </Button>
-                        <Button    
-                  variant='contained' 
-                  sx={comonAtt}
-                  onClick={(e)=>{ upateSeateValue( 4) }}
-                  color='success'
 
-                >הנחה 
-                </Button>
                     </Flex>
                     <Button 
                   variant='contained' 

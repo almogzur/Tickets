@@ -16,7 +16,7 @@ export type getAdminDraftsApiReturndType =DraftType [] |  Message
 
 export default async function handler(req: NextApiRequest,res: NextApiResponse<getAdminDraftsApiReturndType>) {
 
-  const API_NAME = "Get All Drafts Api (Hook)";
+  const API_NAME = "Admin Get All Drafts Api (Hook)";
   console.log(API_NAME);
   
   const session = await getServerSession(req, res, authOptions);

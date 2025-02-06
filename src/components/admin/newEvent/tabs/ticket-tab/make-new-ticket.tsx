@@ -64,9 +64,8 @@ export default function MakeNewTicket({setTabValue}:MakeNewTicketType) {
   const generateTickitOptions = (tickets: TicketType[]): TicketOptionType[] => {
 
   const TicketOptions: TicketOptionType[] = [
-    { value: "normal", label: "מחיר" },
-    { value: "citizen", label: "  הנחת תושב " },
-    { value: "discount", label: " הנחה כללי" },
+    { value: "normal", label: "רגיל" },
+    { value: "discount", label: " הנחה " },
   ];
 
   if (tickets.length) {
@@ -210,18 +209,7 @@ export default function MakeNewTicket({setTabValue}:MakeNewTicketType) {
                 />
               </>
                     }
-          { Ticket.selectedType==="citizen" && 
-            <InputWrap 
-              stateName={''}
-              value={Ticket.price}
-              label={'מחיר תתושב'}
-              inputType='number'
-              labelPositioin={'top'}
-              onChangeHndler={(e) => { setTicket(p => ({ ...p, price: e.target.value })); } }
-              variant='outlined'
-               helpText={''}
-            />   
-         }
+
           {  isClosingDate && 
           <>
             <DatePickerWrap    

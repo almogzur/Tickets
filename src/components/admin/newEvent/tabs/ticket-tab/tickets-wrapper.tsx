@@ -28,6 +28,7 @@ import { IoTicket } from "react-icons/io5"
 import { infoFiledsType } from "@/components/admin/newEvent/types/new-event-types"
 import { TheaterType } from "@/components/admin/newEvent/theater/types/theater-types"
 import { Seats } from "@/components/theater-gen/types/theater-types"
+import tabsEroorsContext from "@/context/admin/new-event/tabs/tabs-eroors-context"
 
 
 
@@ -39,6 +40,7 @@ interface TicketsTabPropsType {  setTabValue : Dispatch<SetStateAction<number>>}
    const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
    const {tickets,setTickets}= useContext(TabsTicketContext)
    const {infoFileds, setInfoFileds} = useContext(TabsInfoContext)
+   const {newEventValidateFiled} =  useContext(tabsEroorsContext)
    
    useEffect(() => {
     if (infoFileds.Theater) {
@@ -95,6 +97,8 @@ interface TicketsTabPropsType {  setTabValue : Dispatch<SetStateAction<number>>}
 
  
 
+
+
    return (
     <Container  sx={{ mt:2 }}   >
       <Flex>
@@ -109,7 +113,7 @@ interface TicketsTabPropsType {  setTabValue : Dispatch<SetStateAction<number>>}
              labelPositioin={"top"}
              variant='outlined'
              isValueBold              
-             helpText={""}
+             helpText={newEventValidateFiled("TheaterName")??""}
              />
          </Flex>
         { 
@@ -133,12 +137,15 @@ interface TicketsTabPropsType {  setTabValue : Dispatch<SetStateAction<number>>}
                  <Flex direction={"row"} alignItems={"center"} justifyContent={"space-between"} width={"100%"}  gap={2} >
                      <Flex  flexGrow={1}>
                        <Typography fontWeight={'bold'} fontSize={!sm?12:18}>  הוסף כרטיסים</Typography>
+                     
                        <Typography fontSize={!sm ? 11 : 15} > סוג הכרטיס ו הפרטים יוצגו ללקוח בעת הרכישה  </Typography>     
                     </Flex>
+   
                 </Flex>
+
                 
               </Flex>
-
+              <Typography variant="body2" sx={{color:"red"}}  >{newEventValidateFiled("tickets")}</Typography>
                
           
          </Flex>

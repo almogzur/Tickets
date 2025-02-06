@@ -1,4 +1,5 @@
 import { TheaterType } from "@/components/admin/newEvent/theater/types/theater-types";
+import useClientEvents from "@/lib/client/Hooks/useGetEvents";
 import { CartItemType } from "@/pages/api/client/pay/paypal-types";
 import { Item  as PaypalItem} from "@paypal/paypal-server-sdk";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
@@ -17,6 +18,7 @@ interface PaypalBtnType {
 const PaypalBtn = ({eventId,cart,total,TheaterState}:PaypalBtnType)=>{
     const [message, setMessage] = useState("");
     const router= useRouter()
+    const { updateEvents } = useClientEvents()
 
     const initialOptions = {   
         "client-id":"ASYRE-aeRnmPLyJTz9GSQBAZMHxfcVD_MyzVS2bUv-_5GKyHJAOhY8lvZi3RFsa2LF_QFS6MiWOwni-o",
@@ -120,6 +122,9 @@ const PaypalBtn = ({eventId,cart,total,TheaterState}:PaypalBtnType)=>{
                             setMessage(
                                 `Sorry, your transaction could not be processed...${error}`
                             );
+                        }
+                        finally{
+                            updateEvents()
                         }
                         
                         

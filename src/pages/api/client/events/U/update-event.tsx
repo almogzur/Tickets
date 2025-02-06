@@ -13,6 +13,9 @@ const wighetList = [
     "http://127.0.0.1:*"  // Allow 127.0.0.1 (alternative localhost)
 ];
 
+// befor modifaing the value see that its not 1 and if it is retur err 
+
+
 const modifieSeatValue = (theater: TheaterType): TheaterType => {
     const newTheaterSeatDetails = { ...theater };
     const combinedSeats = { ...theater.mainSeats, ...theater.sideSeats };
@@ -36,8 +39,6 @@ const isValidOrigin = (url: string) => {
         return regex.test(url);
     });
 };
-
-
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<any> {
@@ -92,9 +93,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                         if (event){
                             console.log( collection.dbName, collection.collectionName)
-                            const { Theater , ...restEvent }= event
+                             const { info , ...restEvent }= event
+                             const { Theater , ...restInfo } = info
+                             const newEvent : ClientEventType = {  info:{ Theater: newTheater, ...restInfo }, ...restEvent   }
+                          
                             // mutate with new Theater 
-                            const newEvent :ClientEventType = {  Theater:newTheater,...restEvent}
+                            
                             const  replaceResult =    await collection.findOneAndReplace({_id:ObjectId.createFromHexString(id)},newEvent,{returnDocument:'after'})
 
                             if(replaceResult){

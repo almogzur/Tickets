@@ -58,7 +58,7 @@ const TooltipButton = ({ seatValue, seatnumber, row, hendler, event }: ToolTipBu
 
 
   const getDiscountesTickets = ()=>{
-         return event?.tickets?.filter((tikect)=> tikect.selectedType === 'discount' || tikect.selectedType==='citizen' ).flat()
+         return event?.tickets?.filter((tikect)=> tikect.selectedType === 'discount').flat()
   }
   const getDiscountesValues= () : SelectItemType[] | undefined=>{
     const list =  getDiscountesTickets()?.map((discount)=>{
@@ -86,8 +86,8 @@ const TooltipButton = ({ seatValue, seatnumber, row, hendler, event }: ToolTipBu
       setOpenopenDiscounteDialog(true) // dialog invoke the hendler
     }
     else {
-      if(event?.Theater){
-        hendler(seatValue, seatnumber, row ,event.Theater, getNoramlPrice() ); // no dialog
+      if(event?.info.Theater){
+        hendler(seatValue, seatnumber, row ,event.info.Theater, getNoramlPrice() ); // no dialog
       }
     }
   };
@@ -105,9 +105,9 @@ const TooltipButton = ({ seatValue, seatnumber, row, hendler, event }: ToolTipBu
 
 
   const handleDiscounteConfirm = () => {
-     if(event?.Theater){
+     if(event?.info.Theater){
 
-          hendler(seatValue, seatnumber, row , event.Theater , SelectedDiscounteInfo.price , SelectedDiscounteInfo.priceInfo);
+          hendler(seatValue, seatnumber, row , event.info.Theater , SelectedDiscounteInfo.price , SelectedDiscounteInfo.priceInfo);
 
         setOpenopenDiscounteDialog(false); 
      }
@@ -119,8 +119,8 @@ const TooltipButton = ({ seatValue, seatnumber, row, hendler, event }: ToolTipBu
 
 
   const handleAccsessableConfirm = () => {
-    if(event?.Theater){
-      hendler(seatValue, seatnumber, row,event?.Theater, getNoramlPrice());
+    if(event?.info.Theater){
+      hendler(seatValue, seatnumber, row,event?.info.Theater, getNoramlPrice());
       setOpenAccsessableDialog(false); 
 
     }

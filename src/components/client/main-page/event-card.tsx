@@ -12,23 +12,7 @@ import { useContext } from 'react';
 import { optimizeImage } from 'next/dist/server/image-optimizer';
 import { ClientEventType } from '@/components/admin/newEvent/types/new-event-types';
 
-export default function EventCard({
-  eventName,
-  _id,
-  cat,
-  pre,
-  preview,
-  tickets,
-  Theater,
-  TheaterName,
-  image,
-  OpenDorHour,
-  Date,
-  availableSeatsAmount,
-  isEventClosedForSeal
-  
-  
-}:ClientEventType) {
+export default function EventCard(props:ClientEventType) {
   const theme = useTheme()
   const router = useRouter()
   const Actions = Flex
@@ -54,7 +38,7 @@ export default function EventCard({
             }}  
         >
          <CldImage
-          src={preview}
+          src={props.info.preview}
           unselectable='on'
           alt="Description of my image"
           width={!xs? 200:  250}
@@ -74,14 +58,14 @@ export default function EventCard({
                  alignItems={"center"}  
                  height={'20%'}
                  sx={{      cursor:'pointer',                 }}
-                 onClick={   ()=>  router.push(`/details/${_id}`)}
+                 onClick={   ()=>  router.push(`/details/${props._id}`)}
 
                    >
                  <Typography 
                     textAlign={"center"}
                      variant='h6'
                       sx={{color:"#fff"}}                     
-                     > {   eventName}</Typography>
+                     > {  props.info.eventName}</Typography>
 
                
              </Flex>

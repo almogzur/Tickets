@@ -23,7 +23,6 @@ import { grey } from "@mui/material/colors"
 import { useSession } from "next-auth/react"
 import axios from "axios"
 import tabsPageContext from "@/context/admin/new-event/tabs/tabs-page-context"
-import { DraftValidationSchema } from "../../types/new-event-types"
 import { LuImageMinus } from "react-icons/lu"
 
 
@@ -159,21 +158,19 @@ return(
               <TimePickerWrap             
                 helpTextPotionsEnd    
                 MediaQuery={theme.breakpoints.up("sm")}
-                value={infoFileds.OpenDorHour}
+                value={infoFileds.OpenDoors}
                 
                 onAcceptHendler={(e) => {
                   if (e !== null) {
                       const formattedTime = dayjs(e).format('HH:mm');
-                      setInfoFileds((p) => ({ ...p, OpenDorHour: formattedTime }));
+                      setInfoFileds((p) => ({ ...p, OpenDoors: formattedTime }));
                   }
               }}
-               helpText={newEventValidateFiled("OpenDorHour")?? ""}
+               helpText={newEventValidateFiled("OpenDoors")?? ""}
                label={"  שעת פתיחת דלתות"} 
                 labelPositioin={'end'}
                 color='secondary'
                 onEroorHndler={ErrorHndler}
-                
-
                   />
 
             <TimePickerWrap                 
@@ -193,22 +190,14 @@ return(
                 labelPositioin={'end'}
                 color='secondary'
                 onEroorHndler={ErrorHndler}
-
                   />
-
-
-
-    
-       
-
              </Flex>
 
          </Flex>
 
          <Divider sx={{borderWidth:1,mt:2,mb:2}} />
 
-         <Editor />     
-
+          <Editor />     
 
           <Flex direction={!xs?"row":'column'} width={"100%"} mb={1}  gap={1} justifyContent={"space-evenly"}  >
 
@@ -269,20 +258,19 @@ return(
                 }}
                >
                {({ open }) => {
-             return (
+                 return (
+                  <>
+               <Typography sx={{color:"red"}} >{newEventValidateFiled('preview')}</Typography>
                <Button
-               sx={{ gap:1, p:0.5 , boxShadow:0, background:grey[200], mt:1 }} 
-               disabled={!!infoFileds.preview} // converts its to boll then if info filed it ther its flase else it true 
-               variant='text'
-               onClick={() => {
-                DraftValidationSchema.safeParse(infoFileds).success? 
-                  open()
-                  :
-                  setSaevNewEventReqestStatus("Temp")
-                }}
+                 sx={{ gap:1, p:0.5 , boxShadow:0, background:grey[200], mt:1 }} 
+                 disabled={!!infoFileds.preview} // converts its to boll then if info filed it ther its flase else it true 
+                 variant='text'
+                 onClick={() => {  open() }}
                  >הוסף תמונה 
                 <RiImageAddFill size={"2em"}   />
+                  
               </Button>
+              </>
               );
                }}
           </CldUploadWidget>
@@ -296,7 +284,9 @@ return(
            <LuImageMinus size={"2em"}   />
 
          </Button>
+
          </Flex>
+
         { infoFileds.preview &&      
          <Flex justifyContent={"center"} direction={"row"}   > 
 

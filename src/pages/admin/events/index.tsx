@@ -2,16 +2,83 @@ import { useSession } from 'next-auth/react'
 import {useEffect,useState} from 'react'
 import { useRouter } from 'next/router'
 import AdminLayout from '@/Layouts/admin-layout'
-import { Typography } from '@mui/material'
+import { Button, Typography } from '@mui/material'
+import DataGridWrap from '@/components/gen/data-grid-wrapper/grid-wrapper'
+import {   GridColDef, GridRowsProp } from '@mui/x-data-grid'
+import { useAdminEvents } from '@/lib/admin/Hooks/use-get-admin-events'
 
 const ManageEventsPage=()=>{
 
   const router = useRouter()
   const { data: session ,status ,update} = useSession()
+  const { Events,isEventsError,isEventsValidating ,updateEvents }  =  useAdminEvents(session)
 
-  useEffect(()=>{
+  useEffect(()=>{ console.log(Events) },[Events])
 
-        })
+  const Na = "לא זמין "
+
+
+
+
+  const ColData : GridColDef[] =  [
+        { field: 'actions', type:'actions', headerName: 'פעולות',width: 170,
+          getActions: ({ id , row  })=> { // row containe all the fileds in row (event) object
+               return [
+                <Button  
+                  key={row.eventId}
+                  sx={{p:0.3, display:"flex",flexDirection:"column", "*":{fontSize:12,fontWeight:'bold',color:"#ddd"}}}
+
+                  color='error'
+      
+                  onClick={()=>{}} 
+                  >
+                                 
+                     <Typography>הפסק</Typography>
+                     <Typography>מכירה </Typography>
+                </Button>,
+                 <Button
+                    color='success' 
+                   key={row.eventId} 
+                   onClick={   ()=>  router.push(`/admin/events/info/${row.eventId}`)}
+
+                    sx={{p:0.3, display:"flex",flexDirection:"column", "*":{fontSize:12,fontWeight:'bold',color:"#ddd"}}}
+                     >
+                     <Typography>צפה</Typography>
+                     <Typography>בנתונים </Typography>
+                  </Button>
+               ]
+          
+          }
+        },
+        { field: 'eventName', headerName: 'שם האירוע', align:'right' , width: 150  },
+        { field: 'price', headerName: 'מחיר ', align:'right', width: 150 },
+        { field: 'date', headerName: 'תאריך', align:'right', width: 150 },
+        { field: "hour", headerName: "שעה" , align:"right" , width:150},
+        { field: "location", headerName: "מיקום" , align:"right" , width:110},
+        ]
+
+        const Rows : GridRowsProp = 
+    ! Events
+       ? [{id:1,eventName:"טוען"}] 
+    : Array.isArray(Events) 
+       ? Events.map((event,i)=> [
+            {
+            id:i ,
+            eventName:event.info.eventName,
+            date:event.info.Date ??  Na ,
+            hour:event.info.Hour ?? Na,
+            price:event.tickets?.map((ticket)=> ticket.selectedType ==='normal' ? ticket.price : null ),
+            eventId:event._id, // this value dose NOT ! have a vlue on Cloumns , its for config the button key 
+            location:event.info.TheaterName?? Na,
+            }
+          ]
+          ).flat() // Rows is Array and 
+                   //  Draft.map return array so its [][] to cancel the map effect
+       :
+       [] // data is not array 
+// Eed Table Data 
+
+   
 
     if (status === 'loading') {
      return <h1 style={{textAlign:'center'}}>Loading...</h1>
@@ -19,7 +86,7 @@ const ManageEventsPage=()=>{
 
 return (
         <AdminLayout>
-           <Typography>אירועים</Typography>
+                <DataGridWrap columnsData={ColData} rowsData={Rows}/>
         </AdminLayout>
 ) 
 }

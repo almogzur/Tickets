@@ -35,4 +35,4 @@ const verifyAccessToken = (token: string) => {
       // Token is invalid or expired
       return res.status(401).json({ message: 'Invalid or expired token' });
     }
-  };
+  }

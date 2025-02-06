@@ -6,10 +6,11 @@ import { Session } from 'next-auth';
 
 // add public adccsess ip for domain
 
- export const ModleDbNamedConnction = async (session: Session) :Promise<mongoose.Connection|undefined> => {
+ export const ModleDbNamedConnction = async (session: Session|null) :Promise<mongoose.Connection|undefined> => {
   
     if( !session || !session.user?.name ){
-      return undefined
+      throw new Error("im not gona to connect with no session")
+      
     }
 
     try {    

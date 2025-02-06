@@ -6,7 +6,7 @@ import DataGridWrap from '@/components/gen/data-grid-wrapper/grid-wrapper'
 import { useAdminDrafts } from '@/lib/admin/Hooks/use-admin-drafts'
 import { useEffect, useMemo, useState } from 'react'
 import LoadingScreen from '@/components/gen/loading'
-import {  GridActionsCellItem, GridColDef, GridRowsProp } from '@mui/x-data-grid'
+import {   GridColDef, GridRowsProp } from '@mui/x-data-grid'
 import NewEventFormWraper from '@/components/admin/newEvent/from-wrapper'
 import axios, { AxiosRequestConfig } from 'axios'
 import { ImRedo2 } from "react-icons/im";
@@ -44,9 +44,16 @@ const AdminDrafts=()=>{
             <Button  
               key={row.eventId}   
               loading={delActionIsLoading === row.eventId} 
-              onClick={()=>removeDraft(row.eventId)} sx={{p:0.5}} >מחק
+              sx={{p:0.5}}
+              color='error'
+              onClick={()=>removeDraft(row.eventId)}  >מחק
             </Button>,
-            <Button  key={row.eventId}   onClick={()=>{setDraftId(row["eventId"])}}  sx={{p:0.5}} >ערוך</Button>
+            <Button  
+                key={row.eventId}
+                onClick={()=>{setDraftId(row["eventId"])}} 
+                
+                    sx={{p:0.5}}
+                     >ערוך</Button>
            ]
       
       }
@@ -64,12 +71,12 @@ const AdminDrafts=()=>{
        ? Drafts.map((draft,i)=> [
             {
             id:i ,
-            eventName:draft.eventName,
-            date:draft.Date ??  Na ,
-            hour:draft.Hour ?? Na,
+            eventName:draft.info.eventName,
+            date:draft.info.Date ??  Na ,
+            hour:draft.info.Hour ?? Na,
             price:draft.tickets?.map((ticket)=> ticket.selectedType ==='normal' ? ticket.price : null ),
             eventId:draft._id, // this value dose NOT ! have a vlue on Cloumns , its for config the button key 
-            location:draft.TheaterName?? Na,
+            location:draft.info.TheaterName?? Na,
             }
           ]
           ).flat() // Rows is Array and 
@@ -110,8 +117,6 @@ const  removeDraft = async (draftId:string)=>{
 
 }
 
-
-
 if(status==="loading" || isLoading){
   return <LoadingScreen/>
 }
@@ -119,6 +124,7 @@ if(status==="loading" || isLoading){
 return (
 
   <AdminLayout >
+
      { draftId &&
       <Button variant='text' sx={{position:"absolute" , top:10 ,left:90 , zIndex:300}}  onClick={()=>{setDraftId(undefined)}} >
       <ImRedo2  size={'2em'} />

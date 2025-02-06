@@ -67,7 +67,7 @@ const DetailsPage = ({}) => {
    // update the event Theater state 
    useEffect(()=>{
                if(FilteredEvent){
-                  setClientEventTheaterState(FilteredEvent.Theater)
+                  setClientEventTheaterState(FilteredEvent.info.Theater)
                }
        
          },[FilteredEvent])
@@ -76,7 +76,7 @@ const DetailsPage = ({}) => {
 
   return (
     
-      <ClientLayout noScrool  HeaderName={eventState.eventName} > 
+      <ClientLayout noScrool  HeaderName={eventState.info.eventName} > 
          <Wrapper 
                 direction={ !md ? 'column':  "row"} 
                 sx={{ 
@@ -125,7 +125,7 @@ const DetailsPage = ({}) => {
                />
             </DrawerWighet>
 
-            { eventState.Theater &&  
+            { eventState.info.Theater &&  
              <Box
                width={"100%"}
                height={ wighetIsExp && !md ? 0 : undefined  }

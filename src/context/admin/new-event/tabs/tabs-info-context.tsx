@@ -1,5 +1,4 @@
 import { infoFiledsType } from "@/components/admin/newEvent/types/new-event-types";
-import dayjs from "dayjs";
 import { createContext, Dispatch, SetStateAction } from "react";
 
 interface InfoTabContextType {
@@ -17,12 +16,11 @@ export default createContext<InfoTabContextType>(
             cat: "",
             TheaterName: '',
             Theater: undefined,
-            image: undefined,
             preview: "",
             isEventClosedForSeal: false,
             Date: "",
             Hour: "",
-            OpenDorHour: "",
+            OpenDoors: "",
             availableSeatsAmount: undefined
         },
         setInfoFileds: function (value: SetStateAction<infoFiledsType>): void {

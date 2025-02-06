@@ -29,14 +29,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<Clien
   const getUserCollections = async (dbName: string)=> {
     try {
       const UserDB = MongoClient?.db(dbName);
-      const collections = await UserDB?.collections();
+      const EventsCollections = (await UserDB?.collections({}))
+        .filter((collection)=>   collection.collectionName === 'Events');
   
-      if (!collections) {
-        throw new Error(`No collections found in database ${dbName}`);
+      if (!EventsCollections.length) {
+          console.warn(`No Events collections found in database ${dbName}`);
       }
   
       const data = await Promise.all(
-        collections.map(async (collection) => {
+        EventsCollections.map(async (collection) => {
           const documents = await collection.find({}).toArray();
           return documents; // Returns WithId<Document>[]
         })
@@ -44,7 +45,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<Clien
   
       return data.flat(); // Flatten the array of arrays into a single array of documents
     } catch (error) {
-      console.error(`Error fetching collections for db ${dbName}:`, error);
+      console.log(`No Events collections found in database ${dbName}`);
+
       return null;
     }
   };

@@ -35,12 +35,12 @@ export default function TemporaryDrawer() {
   const router = useRouter()
   
   const links :DrawerLinkType[]  = [
-    {text:"סטטיסטיקה", Icon:<FcBullish size={"1.5em"} />,link:"/admin/analytics"},
     {text:'צור אירוע' , Icon:<FcPuzzle size={"1.5em"} /> , link:"/admin/new-event", },
     {text:"טיוטות",Icon:<RiDraftFill size={"1.5em"} color={theme.palette.warning.main} /> , link:"/admin/drafts",},
     {text:'אירועים ' , Icon:<FcDataSheet size={"1.5em"} /> , link:"/admin/events" },
     {text:"מימוש כרטיסים",Icon:<FcFilingCabinet  size={"1.5em"}    />,link:"/admin/ticket-actions"},
     {text:"לקוחות",Icon:<PiPaperclipFill size={"1.5em"}  color='#f6444d'  />,link:"/admin/clients"},
+    {text:"סטטיסטיקה", Icon:<FcBullish size={"1.5em"} />,link:"/admin/analytics"},
     {text:"קופאי",Icon:<IoTicketSharp size={"1.5em"} color={blue[700]}  /> , link:"/admin/regester"},
     {text:"כספים", Icon:<FcCalculator size={"1.5em"} /> , link:"/admin/finance"},
     {text:"הגדרות", Icon:<FcSettings size={"1.5em"}/> , link:"/admin/settings" },
@@ -103,7 +103,7 @@ export default function TemporaryDrawer() {
         PaperProps={{sx:{background:"black"}}}
          >
           <Flex>
-            <Typography sx={{mt:2, mx:"auto",color:"#fff"}}>{session?.user?.name}</Typography>
+            <Typography sx={{mt:2, mx:"auto",color:"#fff"}}>{session?.user?.displayName}</Typography>
           </Flex>
             <DrawerList links={links}/>
         

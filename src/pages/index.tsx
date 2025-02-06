@@ -149,7 +149,7 @@ export default function Home() {
                   }
                 </Carousel>
 
-                <Scrooler>
+                 <Scrooler>
                   <ArowsWrapper direction={"row"}  justifyContent={"space-between"}  >
                      <RightArrow
                            position={"relative"}

@@ -66,16 +66,14 @@ const AdminNewEventTheatherMap = ({children, isMultiSelect,setIsMultiSelect ,mul
                
                  >
                   
-         
+
                   {children}   
       
                  
                 </TransformComponent>
 
                  </Flex>
-      
-               <ColorIndexDial />
-
+    
               < SeatControls isMuiltiSelct={isMultiSelect} setIsMultiSelect={setIsMultiSelect} multiSelectBadgeInfo={multiSelectBadgeInfo}   />
              
             </Flex>

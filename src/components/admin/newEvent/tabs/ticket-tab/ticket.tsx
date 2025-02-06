@@ -34,15 +34,14 @@ const TicketComponent = ({ EndSealesDate,price,priceInfo,selectedType ,index }:T
    const {tickets,setTickets}= useContext(tabsTicketContext)
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
 
-    const translateCardTypr = (selectedType:string)=>{
+    const translateCardTypr = (selectedType:string) : string =>{
         switch(selectedType){
-          case "discount":   "הנחה"
+          case "discount": return  "הנחה"
           break;
-          case "normal": "רגיל" 
+          case  "normal": return  "רגיל"  
           break;
-          case "": 
-          break;
-          default : 
+          case "": return "" 
+          default : return  ""
         }
 
     }
@@ -87,29 +86,19 @@ const TicketComponent = ({ EndSealesDate,price,priceInfo,selectedType ,index }:T
 
              <Flex direction={ !xs? "column": "row"} alignContent={"center"} flexWrap={"wrap"} >
                    <MyChip m={0.5} 
-                       text={ 
-                           selectedType==="normal" ?
-                                 " סוג : רגיל "
-                                   :
-                           selectedType==="discount"? 
-                                  " סוג : הנחה"
-                                   :
-                                  "סוג : תושב "
-                      } 
+                       text={ "סוג : "  + translateCardTypr(selectedType) } 
                    />
+                     
                      <MyChip text={   "מחיר : "+    price    }  m={0.5} grow={1} />
-                     { selectedType === 'discount' && 
-                    <MyChip text={priceInfo}   m={0.5} grow={0}  /> 
-                      }
-                    {
-                    selectedType === "citizen" && 
-                    <MyChip text={  priceInfo}   m={0.5} grow={0}  /> 
-                  }
-               
-               <Flex direction={ !xs? "column": "row"}  flexWrap={"wrap"}  alignContent={"center"} >
-            
-               { EndSealesDate&&   <MyChip text={ "  סגירת קופות : " +  EndSealesDate}  m={0.5} grow={0}  /> }
-            </Flex>
+                      
+                      { selectedType === 'discount' &&    <MyChip text={ "תיאור: " + priceInfo}  m={0.5} grow={0}  />  }
+                     
+                      { EndSealesDate&&
+                        <Flex direction={ !xs? "column": "row"}  flexWrap={"wrap"}  alignContent={"center"} >
+                          <MyChip text={ "  סגירת קופות : " +  EndSealesDate}  m={0.5} grow={0}  /> 
+                     </Flex>
+                      } 
+                    
              </Flex>
 
           
