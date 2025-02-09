@@ -28,8 +28,8 @@ export const getServerSideProps: GetServerSideProps<{Events: ClientEventType[];}
    async (context) => {
       try {
         const response = await axios.get<ClientEventType[]>(
-         "http://localhost:8888/api/client/events/R/get-events"
-       );
+          `${process.env.NEXTAUTH_URL}/api/client/events/R/get-events`
+        );
        if(response.status=== 200){
          return { props: { Events: response.data } };
        }
