@@ -2,7 +2,7 @@
 
 
 
-import { disconnectFromDb } from "@/lib/DB/Mongosee_Connection";
+import { disconnectFromDb } from "@/util/DB/connections/Mongosee_Connection";
 import {
     ApiError,
     CheckoutPaymentIntent,
@@ -65,7 +65,6 @@ const captureOrder = async (orderID:string) => {
 
 
 
-
 export default async function handler  ( req: NextApiRequest , res: NextApiResponse ):Promise<any>{
 
    const API_NAME =  " payment aproved order api  "
@@ -77,6 +76,7 @@ export default async function handler  ( req: NextApiRequest , res: NextApiRespo
   const body =req.body
 
 try {
+
   const  data = await captureOrder(orderId as string ) 
 
   if(data ){

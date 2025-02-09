@@ -8,8 +8,6 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import ClientLayout from '../Layouts/client-layout';
-import useClientEvents from '@/lib/client/Hooks/useGetEvents';
 import {  useContext, useEffect, useRef, useState } from 'react';
 import EventCard from '@/components/client/main-page/event-card';
 import Carousel from 'react-material-ui-carousel'
@@ -32,12 +30,9 @@ var items = [
 ]
 
 type ItemTye ={name:string,description:string}
-
 interface ItemComponentProps   {
   item:ItemTye
 }
-
-
   function Item({name,description}:ItemTye ){
     return (
         <Paper 
@@ -53,7 +48,33 @@ interface ItemComponentProps   {
 }
 
 
-export default function Home() {
+
+import type {  GetServerSideProps, GetServerSidePropsResult } from 'next'
+import axios from 'axios';
+import { ClientEventType } from '@/types/pages-types/new-event-types';
+import ClientLayout from '@/components/Layouts/client-layout';
+ 
+
+export const getServerSideProps: GetServerSideProps<{Events: ClientEventType[];}> =
+   async (context) => {
+      try {
+        const response = await axios.get<ClientEventType[]>(
+        `${process.env.NEXTAUTH_URL}/api/client/events/R/get-events`
+       );
+       if(response.status=== 200){
+         return { props: { Events: response.data } };
+       }
+       return{ notFound:true}
+     }
+    catch (error) {
+      console.error("Error fetching events:", error);
+    
+    return { props: { Events: [] } }; // Return an empty array as a fallback
+  }
+};
+
+
+export default function Home({Events}:{Events:ClientEventType[]}) {
 
  const theme = useTheme()
  const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -61,11 +82,8 @@ export default function Home() {
  const [startX, setStartX] = useState(0);
  const [scrollToLeft, setScrollToLeft] = useState(0);
  const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
- const {Events,isEventsError,isEventsValidating,updateEvents} = useClientEvents()
 
-  useEffect(()=>{
-        console.log(Events)
-  },[Events])
+  useEffect(()=>{console.log(Events )},[Events])
 
 
   const scrollLeft = () => {

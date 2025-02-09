@@ -93,18 +93,3 @@ const SeatControls =({isMuiltiSelct,setIsMultiSelect,multiSelectBadgeInfo}:SeatC
 }
 
 export default SeatControls;
-
-export const ClinetSeatColorsIndex = ()=>{
-    const theme = useTheme()
-
-  return  <Flex direction={'row'} height={80}  justifyContent={"center"} borderTop={'solid'} >
-      <Avatar  sx={{ bgcolor: grey[300], margin:1 , padding:.5 }} variant={'square'} >זמין</Avatar>        
-      <Avatar sx={{ bgcolor: theme.palette.secondary.main, margin:1,padding:.5 }} variant={'square'} >נבחר</Avatar>
-      <Avatar sx={{ bgcolor: red[800] , margin:1 , padding:.5 }} variant={'square'} >תפוס</Avatar>
-      <Avatar sx={{ bgcolor: blue[800] , margin:1 , padding:.5 }} variant={'square'} > מוזל</Avatar>
-      <Avatar sx={{ bgcolor: orange[600] , margin:1 , padding:.5 }} variant={'square'} > נגיש</Avatar>
-      <Avatar sx={{ bgcolor: pink[600] , margin:1 , padding:.5 }} variant={'square'} > מוזל נגיש</Avatar>
-
-      <Avatar variant='square' sx={{bgcolor:"black"}} >חסום</Avatar>
-    </Flex>     
-}

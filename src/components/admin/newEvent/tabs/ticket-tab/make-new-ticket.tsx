@@ -27,7 +27,7 @@ import TabsInfoContext from '@/context/admin/new-event/tabs/tabs-info-context';
 import SelectWrap from '@/components/gen/select-wrap';
 import {  ZodError } from 'zod';
 import { IoMdAddCircle } from 'react-icons/io';
-import {  TicketType, TicketValidationSchema } from '@/components/admin/newEvent/types/new-event-types';
+import {  TicketType, TicketValidationSchema } from '@/types/pages-types/new-event-types';
 import DatePickerWrap from '@/components/gen/time-date/date-picker-wrap';
 import { NormalSwitchWrap } from '@/components/gen/switch-wrap';
 import TimePickerWrap from '@/components/gen/time-date/time-picker-wrap';

@@ -4,9 +4,7 @@ import { useRouter } from 'next/router'
 import { useState, useEffect, useContext, CSSProperties, useRef, SetStateAction, } from 'react'
 import { Container , Typography as Heading , Stack as Flex  , Button, Typography, useTheme, Box, Chip } from '@mui/material';
 import Map from '../../components/client/event-page/tom-map'
-import ClientLayout from '../../Layouts/client-layout';
 
-import useClientEvents from '@/lib/client/Hooks/useGetEvents';
 import WidthContext from '@/context/WidthContext';
 
 import TheaterMap from '@/components/client/event-page/theater/client-theater-map';
@@ -14,12 +12,35 @@ import React from 'react';
 
 import ClineTransformContext from '@/context/client/event-page/client-tranform-contenx'
 
-import { Positions, TheaterType } from '@/components/admin/newEvent/theater/types/theater-types';
+import { Positions, TheaterType } from '@/types/components-typs/admin/theater/admin-theater-types';
 import DrawerContent from '@/components/client/event-page/drawer/drawer-content';
 import DrawerWighet from '@/components/client/event-page/drawer/info-drawer-wighet';
 
 import { TiArrowBack } from "react-icons/ti";
-import { ClientEventType } from '@/components/admin/newEvent/types/new-event-types';
+import { ClientEventType } from '@/types/pages-types/new-event-types';
+import { GetServerSideProps } from 'next';
+import axios from 'axios';
+import ClientLayout from '@/components/Layouts/client-layout';
+
+
+
+export const getServerSideProps: GetServerSideProps<{Events: ClientEventType[];}> =
+   async (context) => {
+      try {
+        const response = await axios.get<ClientEventType[]>(
+         "http://localhost:8888/api/client/events/R/get-events"
+       );
+       if(response.status=== 200){
+         return { props: { Events: response.data } };
+       }
+       return{ notFound:true}
+     }
+    catch (error) {
+      console.error("Error fetching events:", error);
+    
+    return { props: { Events: [] } }; // Return an empty array as a fallback
+  }
+};
 
 
 // mote to theater types  after 
@@ -31,13 +52,12 @@ export type  SeatType  = {
       priceInfo?:string
 }
 
-const DetailsPage = ({}) => {  
+const DetailsPage = ({Events}:{ Events: ClientEventType[]}) => {  
 
   const theme = useTheme()
   const router = useRouter()
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
   const [ClientMapPositions , setClientMapPositions] =useState<Positions>({ x:0 ,y:0 ,Scale:undefined})
-  const {Events,isEventsError,isEventsValidating,updateEvents} = useClientEvents()
   const { id }  = router.query
   const FilteredEvent = Events?.find((event)=> event._id  === id )
 
@@ -58,19 +78,15 @@ const DetailsPage = ({}) => {
                 Wrapper = Flex,
                  BackBTN = Button
 
-   // update the event state 
-     useEffect(()=>{
-      setEventState(FilteredEvent)
-         },[FilteredEvent])
+   // update the event state from db
+     useEffect(()=>{ setEventState(FilteredEvent)},[FilteredEvent])
 
 
-   // update the event Theater state 
+   // update the event Theater state  from db 
    useEffect(()=>{
-               if(FilteredEvent){
-                  setClientEventTheaterState(FilteredEvent.info.Theater)
-               }
-       
-         },[FilteredEvent])
+      if(FilteredEvent){
+             setClientEventTheaterState(FilteredEvent.info.Theater)
+          }},[FilteredEvent])
        
   if (!eventState) return <div>loading...</div>
 

@@ -1,17 +1,25 @@
 import { useSession } from 'next-auth/react'
 import {useEffect,useState} from 'react'
 import { useRouter } from 'next/router'
-import AdminLayout from '@/Layouts/admin-layout'
 import { Button, Typography } from '@mui/material'
 import DataGridWrap from '@/components/gen/data-grid-wrapper/grid-wrapper'
 import {   GridColDef, GridRowsProp } from '@mui/x-data-grid'
-import { useAdminEvents } from '@/lib/admin/Hooks/use-get-admin-events'
+import { useAdminEvents } from '@/util/Hooks/admin/Hooks/use-get-admin-events'
+import { GetServerSideProps } from 'next'
+import { ClientEventType } from '@/types/pages-types/new-event-types'
+import axios from 'axios'
+import AdminLayout from '@/components/Layouts/admin-layout'
+
+
+
+
 
 const ManageEventsPage=()=>{
 
   const router = useRouter()
   const { data: session ,status ,update} = useSession()
   const { Events,isEventsError,isEventsValidating ,updateEvents }  =  useAdminEvents(session)
+
 
   useEffect(()=>{ console.log(Events) },[Events])
 

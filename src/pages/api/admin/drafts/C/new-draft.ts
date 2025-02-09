@@ -1,9 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from "next-auth/next";
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
-import {  ModleDbNamedConnction, disconnectFromDb } from '@/lib/DB/Mongosee_Connection';
+import {  ModleDbNamedConnction, disconnectFromDb } from '@/util/DB/connections/Mongosee_Connection';
 import { moveToEventNameFolder } from '../cloudinary_helper_functions';
-import {  DraftModle,  } from '@/components/admin/newEvent/types/new-event-db-schema';
+import {  DraftModle,  } from '@/util/DB/Schmas/event';
 
  
 type ResponseData = {
@@ -81,7 +81,7 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse<R
    res.status(200).json({ message: "Saved New Modle" });
      
  
-     await disconnectFromDb(connection,API_NAME) 
+      await disconnectFromDb(connection,API_NAME) 
 
   // Stage 2 on file re-location continue saving 
 

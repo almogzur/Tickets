@@ -1,8 +1,8 @@
-import { ModleDbNamedConnction, disconnectFromDb } from "@/lib/DB/Mongosee_Connection";
+import { ModleDbNamedConnction, disconnectFromDb } from "@/util/DB/connections/Mongosee_Connection";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
-import {  DraftModle } from "@/components/admin/newEvent/types/new-event-db-schema";
+import {  DraftModle } from "@/util/DB/Schmas/event";
 
 
 type Message = {

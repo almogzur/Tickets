@@ -13,7 +13,7 @@ import { SessionProvider } from "next-auth/react"
 
 //MUI ------
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { blue } from '@mui/material/colors';
+import { blue, red } from '@mui/material/colors';
 
 //Day JS
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -49,7 +49,9 @@ const theme  = createTheme({
     direction:"rtl",
     palette:{
       primary:{main:blue[700]},
-      secondary:{main:"#fe2769"},
+    //  secondary:{main:"#fe2769"},
+    secondary:{main:red["A700"]},
+
       warning:{main:"#fdb931"},
       info:{main:"#8e569f"}
       

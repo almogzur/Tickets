@@ -1,23 +1,37 @@
-** done 
+TO_DO
+=====================
 
- DOTO !! 3/FEB/2025
-* server :
- 1.  add call to  event update to mark payed seats  can be
-     done on client side on responce or back end   use mongose shema to update ** 5/feb/2015 
+* server 
+1. add update event api + validate seat is open befor update  **
+2. add call to free seat api  
+3. add db log for payed item info 
+4. add mongosee shema for customer 
+5. build  send recipe data 
+6. send it to thank you page || err 
+8. create QR Code && sms 
 
-2. add call to free seat on cancel  and loging  
+* db shmas  :
 
-3. add db log  for payed item info 
-4.  add mongosee shema for customer 
-5.   send recipe to user include qr code  sms and email 
+
+==========================
 
 * front 
 
  - admin : 
- 1. add customer page with all event payed customers 
- 2. client :
- 3.  thank you page send ticket 
+  1. add customers page with all  payed customers 
+  2. integrate pament data  into event page
+z
 
 
- schema diff for lieve event , logs , invoice , 
+
+
+- client :
+1.  thank you page   { sent ticket info via sms with QR code  }
+2. purches err page 
+
+
+
+===================
+
+
  

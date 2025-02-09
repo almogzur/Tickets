@@ -9,8 +9,8 @@ import Button from "@mui/material/Button";
 import {  Typography, useTheme } from "@mui/material";
 import { LuTicket } from "react-icons/lu";
 import SelectWrap, { SelectItemType } from "@/components/gen/select-wrap";
-import { ClientEventType } from "@/components/admin/newEvent/types/new-event-types";
-import { TheaterType } from "@/components/admin/newEvent/theater/types/theater-types";
+import { ClientEventType } from "@/types/pages-types/new-event-types";
+import { TheaterType } from "@/types/components-typs/admin/theater/admin-theater-types";
 
 interface ToolTipButtonType {
   seatValue: number;

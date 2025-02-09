@@ -5,9 +5,9 @@ import { useState} from 'react'
 
 //components
 import Head from 'next/head'
-import AdminLayout from '@/Layouts/admin-layout'
 import LoadingScreen from '@/components/gen/loading'
 import NewEventFormWraper from '@/components/admin/newEvent/from-wrapper'
+import AdminLayout from '@/components/Layouts/admin-layout'
 
 
 const NewEventPage=()=>{

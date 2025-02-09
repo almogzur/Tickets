@@ -3,8 +3,8 @@ import { motion ,AnimatePresence } from "framer-motion"
 import { CSSProperties, Dispatch, SetStateAction, useContext } from "react"
 import MultiSelectContext from "@/context/admin/new-event/map/multi-select-context"
 import { grey, orange, pink } from "@mui/material/colors"
-import { TheaterType } from "@/components/admin/newEvent/theater/types/theater-types"
-import { infoFiledsType } from "@/components/admin/newEvent/types/new-event-types"
+import { TheaterType } from "@/types/components-typs/admin/theater/admin-theater-types"
+import { infoFiledsType } from "@/types/pages-types/new-event-types"
 
 
     interface MultiSelectTipType {

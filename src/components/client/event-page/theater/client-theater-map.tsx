@@ -5,9 +5,9 @@ import ClientTheaterRTransform from '@/components/client/event-page/theater/clie
 import { useState, useEffect, useContext, CSSProperties, useRef, Dispatch, SetStateAction, } from 'react'
 import { useTheme , Stack as Flex, Typography, Drawer } from '@mui/material';
 import WidthContext from '@/context/WidthContext';
-import { TheaterType } from '@/components/admin/newEvent/theater/types/theater-types';
+import { TheaterType } from '@/types/components-typs/admin/theater/admin-theater-types';
 import { SeatType } from '@/pages/details/[id]';
-import { ClientEventType } from '@/components/admin/newEvent/types/new-event-types';
+import { ClientEventType } from '@/types/pages-types/new-event-types';
 
 type TheaterMapType = {
 

@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
-import { ModleDbNamedConnction, disconnectFromDb } from "@/lib/DB/Mongosee_Connection";
-import {  DraftModle } from "@/components/admin/newEvent/types/new-event-db-schema";
+import { ModleDbNamedConnction, disconnectFromDb } from "@/util/DB/connections/Mongosee_Connection";
+import {  DraftModle } from "@/util/DB/Schmas/event";
 import { delFolder, findSubFolders, moveToEventNameFolder } from "../cloudinary_helper_functions";
 
 type ResponseData = {

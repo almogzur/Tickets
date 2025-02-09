@@ -2,11 +2,11 @@ import InputWrap from '@/components/gen/TeextFiledWrpa/input-wrap';
 import { FormEvent, useState } from 'react';
 import bcrypt from 'bcryptjs';
 import { Button, Typography , Stack as Flex, Container } from '@mui/material';
-import AdminLayout from '@/Layouts/admin-layout';
 
 import axios from 'axios';
-import { NewUserType } from '../../../lib/supervisor_types';
 import { grey } from '@mui/material/colors';
+import AdminLayout from '@/components/Layouts/admin-layout';
+import { NewUserType } from '@/types/pages-types/supervisor-types';
 
 
 const UserForm = () => {

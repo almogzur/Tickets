@@ -2,13 +2,12 @@ import NextAuth, { Account, Awaitable, DefaultSession, Profile, Session, User } 
 import CredentialsProvider from "next-auth/providers/credentials"
 import { z } from 'zod'
 import { AuthOptions } from "next-auth"
-import { CRUDConnection } from "@/lib/DB/CRUD_Calls_Mongo"
 import bcrypt from 'bcryptjs'
 
 import jwt from 'jsonwebtoken'
-import { NewUserSchemaDefinition, NewUserType, NewUserValidationShema, UsersModle, } from "@/lib/supervisor_types"
-import { disconnectFromDb, ModleAuthUsersConncectin } from "@/lib/DB/Mongosee_Connection"
-import { createModel } from "@/components/admin/newEvent/types/new-event-db-schema"
+import {  NewUserValidationShema } from "@/types/pages-types/supervisor-types"
+import { disconnectFromDb, ModleAuthUsersConncectin } from "@/util/DB/connections/Mongosee_Connection"
+import { UsersModle } from "@/util/DB/Schmas/new-user"
 
 
 // Exdenting the type using -  module Augmentation

@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from "react";
-import { EventSettingType, infoFiledsType, EventValidtinSchema, RequestStatusType, DraftValidationSchema, TicketType } from "./types/new-event-types";
+import { EventSettingType, infoFiledsType, EventValidtinSchema, RequestStatusType, DraftValidationSchema, TicketType } from "../../../types/pages-types/new-event-types";
 import TabsTickets from '@/context/admin/new-event/tabs/tabs-ticket-context'
 import TabInfoContext from '@/context/admin/new-event/tabs/tabs-info-context'
 import SingleTipContext from '@/context/admin/new-event/map/single-tip-context';
@@ -8,7 +8,7 @@ import AdminTransformContext  from '@/context/admin/new-event/map/admin-map-posi
 import TabsPageContext from '@/context/admin/new-event/tabs/tabs-page-context'
 import TabsEroorsContext from '@/context/admin/new-event/tabs/tabs-eroors-context'
 import TabsEventSettingsContest from '@/context/admin/new-event/tabs/tabs-event-settings-context'
-import { Positions, TheaterMultiTipeInfoType, TheaterTipinfoType } from "./theater/types/theater-types";
+import { Positions, TheaterMultiTipeInfoType, TheaterTipinfoType } from "../../../types/components-typs/admin/theater/admin-theater-types";
 import TabsWraper from '@/components/admin/newEvent/tabs/tabs-wraper'
 import TheaterComponent from '@/components/admin/newEvent/theater/theater'
 import { z, ZodIssue }  from 'zod'
@@ -19,7 +19,7 @@ import { FaFirstdraft } from 'react-icons/fa6'
 import { MdPublic } from "react-icons/md";
 import { useRouter } from "next/router";
 import WidthContext from "@/context/WidthContext";
-import { useAdminDrafts } from "@/lib/admin/Hooks/use-admin-drafts";
+import { useAdminDrafts } from "@/util/Hooks/admin/Hooks/use-admin-drafts";
 import { useSession } from "next-auth/react";
 import { RiDraftFill } from "react-icons/ri";
 import { useTheme } from "@mui/material";
@@ -83,7 +83,7 @@ const NewEventFormWraper = ({EventId,setEventId}:NewEventFormWrapperProps)=>{
       cat:"",
       TheaterName:"",
       pre:"",
-      availableSeatsAmount:undefined,
+      availableSeatsAmount:0,
       Theater:undefined,
       Date:"",
       Hour:"",
@@ -138,7 +138,7 @@ const [ eventSetting , setEventSetting] =useState<EventSettingType>({
                  undefined
 
 
-      console.log(EvenntIssues?.map((issue)=>issue))
+      //console.log(EvenntIssues?.map((issue)=>issue))
       return issue?.message
   }
 

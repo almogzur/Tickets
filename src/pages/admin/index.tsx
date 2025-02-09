@@ -1,7 +1,8 @@
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
-import AdminLayout from '@/Layouts/admin-layout'
+
 import { Typography } from '@mui/material'
+import AdminLayout from '@/components/Layouts/admin-layout'
 
 const AdminHomePage=()=>{
 

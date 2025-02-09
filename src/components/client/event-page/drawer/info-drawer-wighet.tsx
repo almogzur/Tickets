@@ -8,7 +8,7 @@ import { SetStateAction, } from 'react'
 import { SeatType } from '@/pages/details/[id]';
 import { grey } from '@mui/material/colors';
 import { GiTakeMyMoney } from 'react-icons/gi';
-import { ClientEventType } from '@/components/admin/newEvent/types/new-event-types';
+import { ClientEventType } from '@/types/pages-types/new-event-types';
 
 
 interface ClientInfoDrawerType {

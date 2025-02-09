@@ -1,13 +1,13 @@
-import { ClientEventType } from "@/components/admin/newEvent/types/new-event-types";
-import { CRUDConnection } from "@/lib/DB/CRUD_Calls_Mongo";
-import { disconnectFromDb } from "@/lib/DB/Mongosee_Connection";
+import { ClientEventType } from "@/types/pages-types/new-event-types";
+import { CRUDConnection } from "@/util/DB/connections/CRUD_Calls_Mongo";
+import { disconnectFromDb } from "@/util/DB/connections/Mongosee_Connection";
 
 import { NextApiRequest, NextApiResponse } from "next";
 
 
 
 const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<ClientEventType[] | undefined | void> => {
-  const API_NAME = "Get All Active Drafts (Hook)";
+  const API_NAME = "Get All Client Active Events  (Hook)";
 
   if (req.method !== 'GET') {
     res.setHeader('Allow', ['GET']);
@@ -31,6 +31,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<Clien
       const UserDB = MongoClient?.db(dbName);
       const EventsCollections = (await UserDB?.collections({}))
         .filter((collection)=>   collection.collectionName === 'Events');
+      
+
+        
   
       if (!EventsCollections.length) {
           console.warn(`No Events collections found in database ${dbName}`);
@@ -38,7 +41,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<Clien
   
       const data = await Promise.all(
         EventsCollections.map(async (collection) => {
-          const documents = await collection.find({}).toArray();
+          const documents = await collection.find({},{}).toArray();
+          
           return documents; // Returns WithId<Document>[]
         })
       );
@@ -51,6 +55,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<Clien
     }
   };
    
+
   const UsersEventsRow = await Promise.all(
       ClusterUsersDBLIst.map(
           async (Db)=>{
@@ -65,7 +70,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<Clien
       .flat();
 
       if(!Events){
-        res.status(400).json({massage:"No Events"})
+        res.status(204).json({massage:"No Events"})
         console.log(API_NAME,"Failed");
 
       }
@@ -73,8 +78,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<Clien
 
       console.log(API_NAME,"Sucsses");
       
-  res.status(200).send(Events );
-    await disconnectFromDb(MongoClient,API_NAME) 
+  
+      res.status(200).send(Events );
   
 };
 

@@ -19,7 +19,7 @@ import Logo from "../../../public/logo.png";
 import { useTheme } from "@mui/material/styles";
 import { MdOutlineCancelPresentation } from "react-icons/md";
 import WidthContext from "@/context/WidthContext";
-import { NewUserType } from "@/lib/supervisor_types";
+import { NewUserType } from "@/types/pages-types/supervisor-types";
 import dynamic from "next/dynamic";
 
 interface ErrorMessagesType {

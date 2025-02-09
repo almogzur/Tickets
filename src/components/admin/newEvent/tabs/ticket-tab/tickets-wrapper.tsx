@@ -18,16 +18,15 @@ import TicketComponent from "./ticket"
 import { IoMdAddCircle } from "react-icons/io"
 
 
-import Eilat_1 from "@/constants/theathers/eilat_1";
+import Eilat_1, { Seats } from "@/constants/theathers/eilat_1";
 import Eilat_2 from "@/constants/theathers/eilat_2";
 
 
 import TabsInfoContext from "@/context/admin/new-event/tabs/tabs-info-context"
 import SelectWrap from "@/components/gen/select-wrap"
 import { IoTicket } from "react-icons/io5"
-import { infoFiledsType } from "@/components/admin/newEvent/types/new-event-types"
-import { TheaterType } from "@/components/admin/newEvent/theater/types/theater-types"
-import { Seats } from "@/components/theater-gen/types/theater-types"
+import { infoFiledsType } from "@/types/pages-types/new-event-types"
+import { TheaterType } from "@/types/components-typs/admin/theater/admin-theater-types"
 import tabsEroorsContext from "@/context/admin/new-event/tabs/tabs-eroors-context"
 
 
