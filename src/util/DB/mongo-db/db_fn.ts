@@ -1,5 +1,6 @@
 import { Db, ListDatabasesResult,MongoClient } from "mongodb";
-import { Mongo } from "./Mongo-db";
+import { Mongo } from '@/util/db/mongo-db/mongo'
+
 
 const Client = await Mongo()
 
