@@ -1,7 +1,7 @@
 import { TheaterType } from "@/types/components-typs/admin/theater/admin-theater-types";
 import { ClientEventType } from "@/types/pages-types/new-event-types";
 import { disconnectFromMongooseDb } from "@/util/dbs/mongosee-fn";
-import { getAllDbListDB, getDb } from "@/util/dbs/mongo-db/db_fn";
+import { Client, getAllDbListDB, getDb } from "@/util/dbs/mongo-db/db_fn";
 import { ObjectId } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next/types";
 import { json } from "stream/consumers";
@@ -64,30 +64,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             
             console.log(API_NAME);
 
-            const connection = await Mongo()
-
+       
             if (req.method !== "POST") {
                 return res.status(401).json({ message: `Method ${req.method} not allowed` });
             }
 
             res.setHeader("Allow", ["POST"]);
 
-            if (!connection) {
-                return res.status(500).json({ massage: " No DB Connection" })
-            }
+
 
             const { TheaterState, eventId } = req.body  // Theater State 
 
             const dbList = await getAllDbListDB()
-            const session = connection?.startSession();
-
+            const session =   (await Mongo())?.startSession()
             //https://mongoosejs.com/docs/transactions.html
             // let you execute multiple operations in isolation and potentially
             //  undo all the operations if one of them fails. 
 
-
+    
             const TransactionResult = await session?.withTransaction(
                 async (): Promise<boolean | undefined> => {
+                    console.log("TransactionResult Start")
                     if (!dbList) {
                         return false;
                     }
@@ -135,7 +132,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 },
             );
             if (!TransactionResult) { // if no event in db 
-                return res.status(204).end()
+                return res.status(404).json({massage:"bad TransactionResult"})
             }
             return res.status(200).json({ massage: `succsess ${API_NAME} ` })
 

@@ -2,7 +2,7 @@ import { Db, ListDatabasesResult,MongoClient } from "mongodb";
 import { Mongo } from '@/util/dbs/mongo-db/mongo'
 
 
-const Client = await Mongo()
+export const Client = await Mongo()
 
 
 

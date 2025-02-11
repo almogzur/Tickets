@@ -56,6 +56,7 @@ if (!authKey || !crypto.timingSafeEqual(new Uint8Array(authKeyBuffer), new Uint8
                     ...restbillingInfo,
                       clientSecret: deCipherSecret
                  }
+                 console.log("GetBillingInfoFromEventId Succsess")
                 return { info: Info }
             }
         }
