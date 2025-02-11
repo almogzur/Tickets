@@ -8,7 +8,7 @@ import { useAdminEvents } from '@/util/hooks/admin/use-admin-events'
 import { GetServerSideProps } from 'next'
 import { ClientEventType } from '@/types/pages-types/new-event-types'
 import axios from 'axios'
-import AdminLayout from '@/components/layouts/admin-layout'
+import AdminLayout from '@/layouts/admin-layout'
 
 
 

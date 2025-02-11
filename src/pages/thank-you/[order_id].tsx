@@ -2,7 +2,7 @@ import { useSession } from 'next-auth/react'
 import {useEffect,useState} from 'react'
 import { useRouter } from 'next/router'
 import { Box, useTheme , Stack as Flex, Typography } from '@mui/material'
-import ClientLayout from '@/components/layouts/client-layout'
+import ClientLayout from '@/layouts/client-layout'
 
 const Invoice=()=>{
 

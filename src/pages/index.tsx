@@ -43,7 +43,7 @@ interface ItemComponentProps   {
 import type {  GetServerSideProps, GetServerSidePropsResult } from 'next'
 import axios from 'axios';
 import { ClientEventType } from '@/types/pages-types/new-event-types';
-import ClientLayout from '@/components/layouts/client-layout';
+import ClientLayout from '@/layouts/client-layout';
 
 export const getServerSideProps  =( 
     async (context:any) =>

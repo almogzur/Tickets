@@ -4,7 +4,7 @@ import { Button, Typography, Stack as Flex, Container } from '@mui/material';
 
 import axios from 'axios';
 import { grey } from '@mui/material/colors';
-import AdminLayout from '@/components/layouts/admin-layout';
+import AdminLayout from '@/layouts/admin-layout';
 import { NewUserType } from '@/types/pages-types/supervisor-types';
 import { hashString } from '@/util/fn/hase';
 

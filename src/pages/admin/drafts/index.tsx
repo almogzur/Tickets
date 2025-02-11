@@ -9,7 +9,7 @@ import {   GridColDef, GridRowsProp } from '@mui/x-data-grid'
 import NewEventFormWraper from '@/components/admin/newEvent/from-wrapper'
 import axios, { AxiosRequestConfig } from 'axios'
 import { ImRedo2 } from "react-icons/im";
-import AdminLayout from '@/components/layouts/admin-layout'
+import AdminLayout from '@/layouts/admin-layout'
 
 
 

@@ -16,7 +16,7 @@ import { TiArrowBack } from "react-icons/ti";
 import { ClientEventType } from '@/types/pages-types/new-event-types';
 import { GetServerSideProps } from 'next';
 import axios from 'axios';
-import ClientLayout from '@/components/layouts/client-layout';
+import ClientLayout from '@/layouts/client-layout';
 
 
 

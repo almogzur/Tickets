@@ -1,7 +1,7 @@
 import { Box, Container , Stack as Flex, GlobalStyles, useTheme } from "@mui/material";
 import Head from "next/head";
 import { ReactNode } from "react";
-import ClientNavbar from "../client/Navbar";
+import ClientNavbar from "../components/client/Navbar";
 
 
 

@@ -3,6 +3,8 @@ import { useRouter } from 'next/router'
 import { Typography } from '@mui/material'
 import AdminLayout from '@/layouts/admin-layout'
 
+
+
 const AdminHomePage=()=>{
 
   const router = useRouter()
@@ -16,11 +18,8 @@ if(status==="loading"){
   
 
 return (
-  <AdminLayout >
-      <Typography variant='h2' textAlign={"center"} >קופאי</Typography>
-      
-
-
+  <AdminLayout HeaderName={'פורטל ניהול '} >
+      <Typography variant='h2' textAlign={"center"} >סטיסטיקה</Typography>
   </AdminLayout>
   ) 
 }
