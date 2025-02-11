@@ -4,7 +4,7 @@ import {  MongoseeAuthUsersDb  ,disconnectFromMongooseDb} from "@/util/DB/mongos
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
-import { UsersModle } from "@/util/DB/schmas/new-user";
+import { UsersModle } from "@/util/DB/Schmas/new-user";
 
 
 

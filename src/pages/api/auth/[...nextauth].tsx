@@ -7,7 +7,7 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import {  NewUserValidationShema } from "@/types/pages-types/supervisor-types"
 import { disconnectFromMongooseDb, MongoseeAuthUsersDb } from "@/util/DB/mongosee-fn"
-import { UsersModle } from "@/util/DB/schmas/new-user"
+import { UsersModle } from "@/util/DB/Schmas/new-user"
 
 
 // Exdenting the type using -  module Augmentation
