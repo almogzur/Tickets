@@ -1,6 +1,6 @@
 import { TheaterType } from "@/types/components-typs/admin/theater/admin-theater-types";
 import { ClientEventType } from "@/types/pages-types/new-event-types";
-import { disconnectFromMongooseDb } from "@/util/db/connections/mongosee/mongosee-connections";
+import { disconnectFromMongooseDb } from "@/util/db/connections/mongosee/conect";
 import { getAllDbListDB, getDb } from "@/util/db/connections/mongo-db/Mongo_db_fn";
 import { ObjectId } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next/types";
