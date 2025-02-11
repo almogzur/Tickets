@@ -16,6 +16,7 @@ import { PayPalReqType } from "./paypal-types";
 import { GetBillingInfoFromEventId } from "@/util/fn/pay-fn";
 import { ObjectId } from "mongodb";
 import { rateLimitConfig } from "@/util/fn/api-rate-limit.config";
+import { Mongo } from "@/util/dbs/mongo-db/mongo";
 
 const apiLimiter = rateLimit(rateLimitConfig);
 
@@ -23,12 +24,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return apiLimiter(req, res,async () => {
             const API_NAME = "Pay - Order"
             const { cart, total, publicId, eventId } = req.body;
+            const MongoClient = Mongo()
+
 
             if (!ObjectId.isValid(eventId)) {
                 return res.status(404).json({ error: "Invalid eventId format" });
             }
 
-            const userInfo = await GetBillingInfoFromEventId(eventId, `${process.env.CIPHER_SECRET}`)
+            const userInfo = await GetBillingInfoFromEventId(eventId, `${process.env.CIPHER_SECRET}`,MongoClient)
 
             if (!  userInfo) {
                 console.log("! userInfo")

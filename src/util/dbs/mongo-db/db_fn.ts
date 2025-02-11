@@ -1,19 +1,17 @@
 import { Db, ListDatabasesResult,MongoClient } from "mongodb";
-import { Mongo } from '@/util/dbs/mongo-db/mongo'
-
-
-export const Client = await Mongo()
 
 
 
 
-export const getAllDbListDB = async  ( )=>{
-   const list =  (await Client?.db().admin().listDatabases())?.databases
+
+
+export const getAllDbListDB = async  (c:Promise<MongoClient | null> )=>{
+   const list =  (await (await c)?.db().admin().listDatabases())?.databases
    return   list
 }
 
-export const getDb =   async (name:string) : Promise<Db | undefined>  =>{
-   const db =  Client?.db(name)
+export const getDb =   async (name:string ,c:Promise<MongoClient | null>  ) : Promise<Db | undefined>  =>{
+   const db =  (await c)?.db(name)
   return db
 }
 

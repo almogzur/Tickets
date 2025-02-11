@@ -6,7 +6,7 @@ import { getAllCollectionFromDb, getAllDbListDB, getDb } from "../dbs/mongo-db/d
 import crypto from 'crypto'
 
 
-export const GetBillingInfoFromEventId = async (eventId: string, authKey: string): Promise<{ info: UserPayPalInfo } | undefined> => {
+export const GetBillingInfoFromEventId = async (eventId: string, authKey: string ,c:Promise<MongoClient | null> ): Promise<{ info: UserPayPalInfo } | undefined> => {
 
     console.log("GetBillingInfoFromEventId ", "_ invoked")
     const ServerKey = `${process.env.CIPHER_SECRET}`
@@ -21,7 +21,7 @@ if (!authKey || !crypto.timingSafeEqual(new Uint8Array(authKeyBuffer), new Uint8
         return;
     }
 
-    const dblist = await getAllDbListDB()
+    const dblist = await getAllDbListDB(c)
 
     const Users_Data_DBS = dblist?.filter((db) => db.name.includes("_Data"))
 
@@ -29,7 +29,7 @@ if (!authKey || !crypto.timingSafeEqual(new Uint8Array(authKeyBuffer), new Uint8
 
     for (const { name, empty } of Users_Data_DBS) {
         if (empty) return
-        const db = await getDb(name)
+        const db = await getDb(name,c)
         if (!db) return
 
         const dbCollections = await getAllCollectionFromDb(db)

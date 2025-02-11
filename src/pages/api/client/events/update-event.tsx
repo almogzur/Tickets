@@ -1,7 +1,7 @@
 import { TheaterType } from "@/types/components-typs/admin/theater/admin-theater-types";
 import { ClientEventType } from "@/types/pages-types/new-event-types";
 import { disconnectFromMongooseDb } from "@/util/dbs/mongosee-fn";
-import { Client, getAllDbListDB, getDb } from "@/util/dbs/mongo-db/db_fn";
+import {  getAllDbListDB, getDb } from "@/util/dbs/mongo-db/db_fn";
 import { ObjectId } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next/types";
 import { json } from "stream/consumers";
@@ -64,19 +64,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             
             console.log(API_NAME);
 
+
        
             if (req.method !== "POST") {
                 return res.status(401).json({ message: `Method ${req.method} not allowed` });
             }
 
             res.setHeader("Allow", ["POST"]);
-
+            const Client = Mongo()
+      
 
 
             const { TheaterState, eventId } = req.body  // Theater State 
 
-            const dbList = await getAllDbListDB()
-            const session =   (await Mongo())?.startSession()
+            const dbList = await getAllDbListDB(Client)
+            const session = (await Client)?.startSession()
             //https://mongoosejs.com/docs/transactions.html
             // let you execute multiple operations in isolation and potentially
             //  undo all the operations if one of them fails. 
@@ -90,7 +92,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     }
                     for (const { name, empty } of dbList) {
                         if (empty) continue;
-                        const db = await getDb(name)
+                        const db = await getDb(name,Client)
                         if (!db) continue;
                         const collections = await db.collections();
                         for (const collection of collections) {
