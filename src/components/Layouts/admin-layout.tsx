@@ -1,4 +1,3 @@
-
 import {  ReactNode, useContext, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import router from 'next/router';
