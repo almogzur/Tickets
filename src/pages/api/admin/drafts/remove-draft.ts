@@ -1,8 +1,8 @@
-import { disconnectFromMongooseDb, MongoseeWithSessionModleDb } from "@/util/db/mongosee-conect";
+import { disconnectFromMongooseDb, MongoseeWithSessionModleDb } from "@/util/DB/mongosee-fn";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
-import {  DraftModle } from "@/util/db/schmas/event";
+import {  DraftModle } from "@/util/DB/schmas/event";
 
 
 type Message = {

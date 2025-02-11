@@ -1,10 +1,10 @@
 // File: pages/api/public.ts
 
-import {  MongoseeAuthUsersDb  ,disconnectFromMongooseDb} from "@/util/db/mongosee-conect";
+import {  MongoseeAuthUsersDb  ,disconnectFromMongooseDb} from "@/util/DB/mongosee-fn";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
-import { UsersModle } from "@/util/db/schmas/new-user";
+import { UsersModle } from "@/util/DB/schmas/new-user";
 
 
 

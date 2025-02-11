@@ -1,11 +1,11 @@
 import { TheaterType } from "@/types/components-typs/admin/theater/admin-theater-types";
 import { ClientEventType } from "@/types/pages-types/new-event-types";
-import { disconnectFromMongooseDb } from "@/util/db/mongosee-conect";
-import { getAllDbListDB, getDb } from "@/util/db/mongo-db/db_fn";
+import { disconnectFromMongooseDb } from "@/util/DB/mongosee-fn";
+import { getAllDbListDB, getDb } from "@/util/DB/mongo-db/db_fn";
 import { ObjectId } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next/types";
 import { json } from "stream/consumers";
-import { Mongo } from "@/util/db/mongo-db/mongo";
+import { Mongo } from "@/util/DB/mongo-db/mongo";
 import rateLimit from "express-rate-limit";
 import { rateLimitConfig } from "@/util/fn/api-rate-limit.config";
 
