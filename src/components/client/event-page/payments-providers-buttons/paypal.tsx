@@ -1,10 +1,7 @@
 import { TheaterType } from "@/types/components-typs/admin/theater/admin-theater-types";
-import { CartItemType } from "@/pages/api/client/pay/paypal-types";
-import { Item  as PaypalItem} from "@paypal/paypal-server-sdk";
-import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
-import axios, { Axios } from "axios";
-import { ServerResponse, STATUS_CODES } from "http";
-import { Http2ServerResponse } from "http2";
+import { Item  as PaypalItem } from "@paypal/paypal-server-sdk";
+import { PayPalScriptProvider, PayPalButtons, ScriptContextState } from "@paypal/react-paypal-js";
+import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -14,22 +11,28 @@ export interface PaypalBtnType {
      cart :PaypalItem[]
      total:string
      TheaterState:TheaterType|undefined
+     publicId:string
      eventId:string
 }   
 
-const PaypalBtn = ({eventId,cart,total,TheaterState}:PaypalBtnType)=>{
+const PaypalBtn = ({ eventId, publicId , cart,total,TheaterState}:PaypalBtnType)=>{
     const [message, setMessage] = useState("");
     const router= useRouter()
 
-    const initialOptions = {   
-        "client-id":"ASYRE-aeRnmPLyJTz9GSQBAZMHxfcVD_MyzVS2bUv-_5GKyHJAOhY8lvZi3RFsa2LF_QFS6MiWOwni-o",
-        "clientId":"ASYRE-aeRnmPLyJTz9GSQBAZMHxfcVD_MyzVS2bUv-_5GKyHJAOhY8lvZi3RFsa2LF_QFS6MiWOwni-o",
+    const initialOptions: ScriptContextState['options'] = {   
+        "client-id":publicId,
+        "clientId":publicId,
+        environment:'sandbox',
+
     };
 
     useEffect(()=>{console.log(cart)},[cart])
 
     return (
-        <PayPalScriptProvider  options={initialOptions}>
+        <PayPalScriptProvider
+          options={initialOptions}
+          
+          >
           <PayPalButtons
                     style={{
                         shape: "rect",
@@ -40,6 +43,7 @@ const PaypalBtn = ({eventId,cart,total,TheaterState}:PaypalBtnType)=>{
                         // send array of object to back end to create a list of item to display and cala price 
                         //
                         createOrder={async () => {
+                   
                             try {
                                 const response = await fetch("/api/client/pay/create-order", {
                                     method: "POST",
@@ -50,7 +54,9 @@ const PaypalBtn = ({eventId,cart,total,TheaterState}:PaypalBtnType)=>{
                                     // like product ids and quantities
                                     body: JSON.stringify({
                                         cart,
-                                        total
+                                        total,
+                                        publicId,
+                                        eventId,
                                     }),
                                 });
     
@@ -80,7 +86,7 @@ const PaypalBtn = ({eventId,cart,total,TheaterState}:PaypalBtnType)=>{
 
                         const  updateEvent = async  () :Promise<boolean>=>{
                         try{ 
-                        const UpdateEvent = await axios.post("/api/client/events/U/update-event",
+                        const UpdateEvent = await axios.post("/api/client/events/update-event",
                             {TheaterState,eventId},
                            {headers: { "Content-Type": "application/json" } }
                            )
@@ -96,7 +102,7 @@ const PaypalBtn = ({eventId,cart,total,TheaterState}:PaypalBtnType)=>{
                         }
                         const capturePayment  = async  () : Promise<void>=>{     try {
                             // paypal builing process 
-                              const payPalResponse = await axios.post(`/api/client/pay/aproved/${orderID}`,
+                              const payPalResponse = await axios.post(`/api/client/pay/${orderID}`,
                                           data,
                                         {headers: { "Content-Type": "application/json" } }
                                          );
@@ -139,6 +145,7 @@ const PaypalBtn = ({eventId,cart,total,TheaterState}:PaypalBtnType)=>{
                                }
  
                              }
+
 
                         if( ! await updateEvent())   {
                                 router.push({

@@ -1,5 +1,6 @@
-import { NewUserType, NewUserValidationShema } from "@/types/pages-types/supervisor-types";
-import { createModel } from "./event";
+import { NewUserType } from "@/types/pages-types/supervisor-types";
+import { createModel } from "./schema-fn";
+
 
 
 export const NewUserSchemaDefinition = {

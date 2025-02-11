@@ -6,8 +6,8 @@ import bcrypt from 'bcryptjs'
 
 import jwt from 'jsonwebtoken'
 import {  NewUserValidationShema } from "@/types/pages-types/supervisor-types"
-import { disconnectFromDb, ModleAuthUsersConncectin } from "@/util/DB/connections/Mongosee_Connection"
-import { UsersModle } from "@/util/DB/Schmas/new-user"
+import { disconnectFromMongooseDb, MongoseeAuthUsersDb } from "@/util/db/connections/mongosee/Mongosee"
+import { UsersModle } from "@/util/db/schmas/new-user"
 
 
 // Exdenting the type using -  module Augmentation
@@ -33,7 +33,7 @@ export type  inferedType  = z.infer<typeof NewUserValidationShema>
 
 // check evn
 const NODE_ENV = process.env.NODE_ENV
-const secret = process.env.JWT_SECRET;
+const JWT_SECRET = process.env.JWT_SECRET;
 
 
 export const authOptions: AuthOptions = {
@@ -57,7 +57,7 @@ export const authOptions: AuthOptions = {
       async authorize(credential, req) {
 
 
-        if (!secret || !credential?.password) {
+        if (!JWT_SECRET || !credential?.password) {
 
           throw new Error("JWT_SECRET is not defined in environment variables");
         }
@@ -70,7 +70,7 @@ export const authOptions: AuthOptions = {
           return null
         }
 
-        const Client = await ModleAuthUsersConncectin()
+        const Client = await MongoseeAuthUsersDb()
 
 
         if (!Client) {
@@ -85,17 +85,18 @@ export const authOptions: AuthOptions = {
 
         if (!user) {
           console.log("User not found")
-          await disconnectFromDb(Client,"AuthF")
+          await disconnectFromMongooseDb(Client,"AuthF")
           return null
         }
 
         console.log("auth got user ",user);
         
+
+        // not used yet 
         const tokenPayload = { id: user.name  };
-        const accessToken = jwt.sign(tokenPayload, secret, { expiresIn: "1h" });
+        const accessToken = jwt.sign(tokenPayload, JWT_SECRET, { expiresIn: "1h" });
 
         const isPasswordValid  = await bcrypt.compare(credential.password, user.password);
-          
 
          if ( isPasswordValid) {
 
@@ -106,7 +107,7 @@ export const authOptions: AuthOptions = {
                displayName: user.displayName,
                id: user._id.toString()
           }
-          await disconnectFromDb(Client,"AuthF")
+          await disconnectFromMongooseDb(Client,"AuthF")
 
           return {
             ...ReturnUser,
@@ -115,7 +116,7 @@ export const authOptions: AuthOptions = {
         }
 
         console.log("Invalid credentials")
-        await disconnectFromDb(Client,"AuthF")
+        await disconnectFromMongooseDb(Client,"AuthF")
         return null
       }
 

@@ -12,7 +12,7 @@ export const TicketValidationSchema = z.object({
      .string()
      .regex(/^(?!0$)(?:[1-9]\d*|0?\.\d{1,2})$/g,{message:"not valid number"})
 })  
-export const EventValidtinSchema = z.object({
+export const EventValidationSchema = z.object({
   eventName: z.string().min(3, "❌ לפחות 3 תווים").max(30),
   cat: z.string().min(1,{message:"❌ בחר קטגוריה"}),
   Date: z.string().min( 1 , "❌ בחר תאריך לאירוע"),
@@ -73,11 +73,12 @@ export interface DraftType {
      eventSetting:EventSettingType
 }
 export interface  AdminEventType extends  DraftType   {
+     publicId:string
     logs:LogType
     invoices:InvoiceType[]
 }
 export interface  ClientEventType extends Omit<AdminEventType, "logs" | "invoices"> {
-
+ 
 }
 
 

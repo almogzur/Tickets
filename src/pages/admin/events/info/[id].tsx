@@ -1,17 +1,17 @@
 import { useSession } from 'next-auth/react'
 import {useEffect,useMemo,useState} from 'react'
 import { useRouter } from 'next/router'
-import { useAdminEvents } from '@/util/Hooks/admin/Hooks/use-get-admin-events'
+import { useAdminEvents } from '@/util/hooks/admin/use-admin-events'
 import { GetServerSideProps } from 'next'
 import { ClientEventType } from '@/types/pages-types/new-event-types'
 import axios from 'axios'
-import AdminLayout from '@/components/Layouts/admin-layout'
+import AdminLayout from '@/components/layouts/admin-layout'
 
 export const getServerSideProps: GetServerSideProps<{Events: ClientEventType[];}> =
    async (context) => {
       try {
         const response = await axios.get<ClientEventType[]>(
-         "http://localhost:8888/api/client/events/R/get-events"
+         "http://localhost:8888/api/client/events/get-events"
        );
        if(response.status=== 200){
          return { props: { Events: response.data } };

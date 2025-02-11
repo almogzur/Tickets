@@ -1,4 +1,4 @@
-import { Seats, SeatStyles } from '@/constants/theathers/eilat_1'
+import { Seats, SeatStyles } from '@/constants/theaters/eilat_1'
 import { RefObject } from 'react'
 
 export interface TheaterLocationType {

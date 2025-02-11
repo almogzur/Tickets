@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import { Box ,Stack as Flex } from '@mui/material'
 import { grey } from '@mui/material/colors'
 import InputWrap from '@/components/gen/TeextFiledWrpa/input-wrap'
-import AdminLayout from '@/components/Layouts/admin-layout'
+import AdminLayout from '@/components/layouts/admin-layout'
 
 const ClientListPage=()=>{
 

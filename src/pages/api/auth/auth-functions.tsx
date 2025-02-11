@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 
-const secret = process.env.JWT_SECRET || 'your_default_secret_key'; // Ensure you use the same secret for verification
+const secret = `${process.env.JWT_SECRET }`
 
 const verifyAccessToken = (token: string) => {
     try {

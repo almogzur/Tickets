@@ -28,7 +28,6 @@ interface ErrorMessagesType {
 
 export default function SignInPage() {
   const router = useRouter();
-  const { slug } = router.query; // Capture dynamic route
   const theme = useTheme();
   const { xs } = useContext(WidthContext);
 
@@ -47,11 +46,11 @@ export default function SignInPage() {
   });
 
   const submit = async (e: SyntheticEvent) => {
-e.preventDefault()
+    e.preventDefault()
     signIn("credentials", {
       name: formData.name,
       password: formData.password,
-      callbackUrl: slug ? `/${slug}` : "/admin", // Redirect based on slug
+      callbackUrl: "/admin", // Redirect based on slug
     });
   };
 
@@ -94,11 +93,6 @@ e.preventDefault()
               }}
               labelPositioin={"top"}
               autoComplete="username"
-
-
-              
-              
-
             />
 
             <InputWrap
@@ -118,7 +112,7 @@ e.preventDefault()
                 fontWeight: "bold",
                 opacity: 1,
               }}
-                           autoComplete="current-password"
+              autoComplete="current-password"
             />
           </Flex>
 

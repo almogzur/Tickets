@@ -18,8 +18,8 @@ import TicketComponent from "./ticket"
 import { IoMdAddCircle } from "react-icons/io"
 
 
-import Eilat_1, { Seats } from "@/constants/theathers/eilat_1";
-import Eilat_2 from "@/constants/theathers/eilat_2";
+import Eilat_1, { Seats } from "@/constants/theaters/eilat_1";
+import Eilat_2 from "@/constants/theaters/eilat_2";
 
 
 import TabsInfoContext from "@/context/admin/new-event/tabs/tabs-info-context"
@@ -39,7 +39,7 @@ interface TicketsTabPropsType {  setTabValue : Dispatch<SetStateAction<number>>}
    const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
    const {tickets,setTickets}= useContext(TabsTicketContext)
    const {infoFileds, setInfoFileds} = useContext(TabsInfoContext)
-   const {newEventValidateFiled} =  useContext(tabsEroorsContext)
+   const {GetFormErrors} =  useContext(tabsEroorsContext)
    
    useEffect(() => {
     if (infoFileds.Theater) {
@@ -112,7 +112,7 @@ interface TicketsTabPropsType {  setTabValue : Dispatch<SetStateAction<number>>}
              labelPositioin={"top"}
              variant='outlined'
              isValueBold              
-             helpText={newEventValidateFiled("TheaterName")??""}
+             helpText={GetFormErrors("TheaterName")??""}
              />
          </Flex>
         { 
@@ -144,7 +144,7 @@ interface TicketsTabPropsType {  setTabValue : Dispatch<SetStateAction<number>>}
 
                 
               </Flex>
-              <Typography variant="body2" sx={{color:"red"}}  >{newEventValidateFiled("tickets")}</Typography>
+              <Typography variant="body2" sx={{color:"red"}}  >{GetFormErrors("tickets")}</Typography>
                
           
          </Flex>

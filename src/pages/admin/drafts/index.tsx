@@ -2,14 +2,14 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { Button, Typography } from '@mui/material'
 import DataGridWrap from '@/components/gen/data-grid-wrapper/grid-wrapper'
-import { useAdminDrafts } from '@/util/Hooks/admin/Hooks/use-admin-drafts'
+import { useAdminDrafts } from '@/util/hooks/admin/use-admin-drafts'
 import { useEffect, useMemo, useState } from 'react'
 import LoadingScreen from '@/components/gen/loading'
 import {   GridColDef, GridRowsProp } from '@mui/x-data-grid'
 import NewEventFormWraper from '@/components/admin/newEvent/from-wrapper'
 import axios, { AxiosRequestConfig } from 'axios'
 import { ImRedo2 } from "react-icons/im";
-import AdminLayout from '@/components/Layouts/admin-layout'
+import AdminLayout from '@/components/layouts/admin-layout'
 
 
 
@@ -22,6 +22,10 @@ const AdminDrafts=()=>{
   const [ isLoading ,setIsLoading] = useState(false)
   const [ draftId ,setDraftId] = useState<string|undefined>(undefined)
   const [ delActionIsLoading,setDelActionIsLoading]= useState<string|undefined>(undefined)
+
+
+
+
 
   type GetActionsProps ={
      row:{ 
@@ -85,6 +89,7 @@ const AdminDrafts=()=>{
        [] // data is not array 
 // Eed Table Data 
 
+const Draft = Drafts?.find((draft) => draft._id === draftId);
 
 
 
@@ -131,7 +136,7 @@ return (
      </Button>}
     { !draftId
        ? <DataGridWrap columnsData={ColData} rowsData={Rows} />
-       : <NewEventFormWraper EventId={draftId} setEventId={setDraftId} />
+       : <NewEventFormWraper Draft={Draft} DraftId={draftId}  />
     }
   
   </AdminLayout>

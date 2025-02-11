@@ -1,0 +1,124 @@
+import { NextApiRequest, NextApiResponse } from "next";
+import rateLimit from 'express-rate-limit';
+import {
+    ApiError,
+    CheckoutPaymentIntent,
+    Client,
+    Environment,
+    LogLevel,
+    OrdersController,
+    PaymentsController,
+    OrderApplicationContextShippingPreference,
+    Item
+} from "@paypal/paypal-server-sdk";
+import { PayPalReqType } from "./paypal-types";
+
+import { GetBillingInfoFromEventId } from "@/util/fn/pay-fn";
+import { ObjectId } from "mongodb";
+import { rateLimitConfig } from "@/util/fn/api-rate-limit.config";
+
+const apiLimiter = rateLimit(rateLimitConfig);
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+    return apiLimiter(req, res,async () => {
+            const API_NAME = "Pay - Order"
+            const { cart, total, publicId, eventId } = req.body;
+
+            if (!ObjectId.isValid(eventId)) {
+                return res.status(404).json({ error: "Invalid eventId format" });
+            }
+
+            const userInfo = await GetBillingInfoFromEventId(eventId, `${process.env.CIPHER_SECRET}`)
+
+            if (!  userInfo) {
+                console.log("! userInfo")
+                return res.status(404).json({ massage: "no auth" })
+            }
+
+            const client = new Client({
+                clientCredentialsAuthCredentials: {
+                    oAuthClientId: publicId,
+                    oAuthClientSecret: `${userInfo?.info.clientSecret}`,
+                },
+                timeout: 0,
+                environment: Environment.Sandbox,
+                logging: {
+                    logLevel: LogLevel.Error,
+                    logRequest: { logBody: true },
+                    logResponse: { logHeaders: true },
+                },
+            });
+
+            const ordersController = new OrdersController(client);
+
+            const createOrder = async (cart: Item[], total: string) => {
+                const collect: PayPalReqType = {
+                    body: {
+                        intent: CheckoutPaymentIntent.Capture,
+                        purchaseUnits: [
+                            {
+                                amount: {
+                                    currencyCode: "USD",
+                                    value: total,
+                                    breakdown: { itemTotal: { value: total, currencyCode: "USD" } }
+                                },
+                                items: cart
+                            },
+                        ],
+                        applicationContext: {
+                            brandName: "Styled-Tickets",
+                            locale: "he",
+                            shippingPreference: OrderApplicationContextShippingPreference.NoShipping,
+                        },
+                    },
+                    prefer: "return=minimal",
+                };
+
+                try {
+                    const { body, ...httpResponse } = await ordersController.ordersCreate(collect);
+                    return {
+                        jsonResponse: JSON.parse(body.toString()),
+                        httpStatusCode: httpResponse.statusCode,
+                    };
+                }
+                catch (error) {
+                    if (error instanceof ApiError) {
+                        const { statusCode } = error;
+                        return {
+                            jsonResponse: { error: error.message },
+                            httpStatusCode: statusCode
+                        };
+                    }
+                    // Handle non-ApiError cases
+                    return {
+                        jsonResponse: { error: 'An unexpected error occurred' },
+                        httpStatusCode: 500
+                    };
+                }
+            };
+
+            if (req.method !== 'POST') {
+                return res.status(405).json({ message: `Method ${req.method} not allowed` });
+            }
+
+            try {
+                const data = await createOrder(cart, total)
+                if (!data) 
+                     return res.status(200).json({ massage: 'no_Data' + API_NAME })
+                     return res.status(data.httpStatusCode).json(data.jsonResponse);
+            } catch (error) {
+                console.error("Failed to create order:", error);
+                return {
+                    jsonResponse: { error: "Failed to create order." },
+                    httpStatusCode: 500
+                };
+            }
+        });
+}
+
+
+export const config = {
+    api: {
+      externalResolver: true,  // resolve by the rate limeter
+    },
+  }

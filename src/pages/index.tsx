@@ -1,20 +1,11 @@
-import {  Button, Container ,Stack as Flex ,  Typography as Heading , Box, useTheme, Paper, Drawer, CircularProgress } from '@mui/material'
+import {  Button, Container ,Stack as Flex ,  Typography  , Box, useTheme, Paper, CircularProgress } from '@mui/material'
 
-import Head from 'next/head'
-import Link from 'next/link';
 
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
 import {  useContext, useEffect, useRef, useState } from 'react';
 import EventCard from '@/components/client/main-page/event-card';
 import Carousel from 'react-material-ui-carousel'
 import { FaCircleArrowLeft, FaCircleArrowRight } from 'react-icons/fa6';
-import zIndex from '@mui/material/styles/zIndex';
 import WidthContext from '@/context/WidthContext';
-import { grey } from '@mui/material/colors';
 
 
 
@@ -52,26 +43,23 @@ interface ItemComponentProps   {
 import type {  GetServerSideProps, GetServerSidePropsResult } from 'next'
 import axios from 'axios';
 import { ClientEventType } from '@/types/pages-types/new-event-types';
-import ClientLayout from '@/components/Layouts/client-layout';
- 
+import ClientLayout from '@/components/layouts/client-layout';
 
-export const getServerSideProps: GetServerSideProps<{Events: ClientEventType[];}> =
-   async (context) => {
+export const getServerSideProps  =( 
+    async (context:any) =>
+  {
       try {
-        const response = await axios.get<ClientEventType[]>(
-        `${process.env.NEXTAUTH_URL}/api/client/events/R/get-events`
-       );
-       if(response.status=== 200){
-         return { props: { Events: response.data } };
-       }
-       return{ notFound:true}
-     }
+        const response = await axios.get<ClientEventType[]>( `${process.env.NEXTAUTH_URL}/api/client/events/get-events`);
+        if(response.status=== 200){
+           return { props: { Events: response.data } };
+        }
+        return { props: { Events: [] } }
+    }
     catch (error) {
-      console.error("Error fetching events:", error);
-    
+     console.error("Error fetching events:", error);
     return { props: { Events: [] } }; // Return an empty array as a fallback
   }
-};
+}) satisfies GetServerSideProps<{ Events: ClientEventType[] }>
 
 
 export default function Home({Events}:{Events:ClientEventType[]}) {

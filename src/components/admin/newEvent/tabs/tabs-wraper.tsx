@@ -23,9 +23,7 @@ import InfoFormTab from "./info-form-tab/Info-form-tab"
 import PrevieTab from "./preview-tab"
 import { IoTicket } from "react-icons/io5";
 import tabsPageContext from "@/context/admin/new-event/tabs/tabs-page-context";
-import { blue, green, grey } from "@mui/material/colors";
-import { RiDraftFill } from "react-icons/ri";
-import TabsEventSettingsContest from '@/context/admin/new-event/tabs/tabs-event-settings-context'
+import { blue } from "@mui/material/colors";
 
 
 
@@ -34,10 +32,10 @@ import TabsEventSettingsContest from '@/context/admin/new-event/tabs/tabs-event-
 
 
 interface TabsWraperPropsType { 
-  EventId?:string
+  DraftId?:string
  }
 
-const TabsWraper = ({ EventId}:TabsWraperPropsType)=>{
+const TabsWraper = ({ DraftId}:TabsWraperPropsType)=>{
 
     const theme = useTheme()
     const {tabValue, setTabValue} = useContext(tabsPageContext);

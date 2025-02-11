@@ -42,7 +42,7 @@ export default function TemporaryDrawer() {
     { text: "רשימת דיוור", Icon: <PiPaperclipFill size={"1.5em"} color='#f6444d' />, link: "/admin/clients" },
     { text: "סטטיסטיקה", Icon: <FcBullish size={"1.5em"} />, link: "/admin/analytics" },
     { text: "קופאי", Icon: <IoTicketSharp size={"1.5em"} color={blue[700]} />, link: "/admin/regester" },
-    { text: "כספים", Icon: <FcCalculator size={"1.5em"} />, link: "/admin/finance" },
+    { text: "כספים", Icon: <FcCalculator size={"1.5em"} />, link: "/admin/biling" },
     { text: "הגדרות", Icon: <FcSettings size={"1.5em"} />, link: "/admin/settings" },
   ]
 
@@ -63,7 +63,7 @@ export default function TemporaryDrawer() {
         break;
       case "/admin/ticket-actions": return "מימוש כרטיסים";
         break;
-      case "/admin/finance": return "כספים";
+      case "/admin/biling": return "כספים";
         break;
       case "/admin/settings": return "הגדרות";
         break;

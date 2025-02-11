@@ -148,7 +148,7 @@ const InputWrap = ({
       required={isRequired}
       disabled={isDisabled}
       name={stateName}
-      helperText={helpText && <ControledHelperText text={helpText} helpTextPotionsEnd={helpTextPotionsEnd??false} />}
+      helperText={helpText ? <ControledHelperText text={helpText} helpTextPotionsEnd={helpTextPotionsEnd??false} /> : null}
       variant={variant ?? 'standard'}
       label={ placeholderMode ? null : <ControledLabel labelPositioin={labelPositioin?? "top"} label={label} isLabelBold={isLabelBold} labelTextcolor={labelTextcolor}/>}
       error={error}

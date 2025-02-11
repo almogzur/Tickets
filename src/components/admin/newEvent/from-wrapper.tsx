@@ -1,70 +1,76 @@
-import { Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from "react";
-import { EventSettingType, infoFiledsType, EventValidtinSchema, RequestStatusType, DraftValidationSchema, TicketType } from "../../../types/pages-types/new-event-types";
-import TabsTickets from '@/context/admin/new-event/tabs/tabs-ticket-context'
-import TabInfoContext from '@/context/admin/new-event/tabs/tabs-info-context'
+import { useContext, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
+import { useSession } from "next-auth/react";
+import { useTheme } from "@mui/material";
+import axios from "axios";
+import { z, ZodIssue } from "zod";
+
+// Import Types
+import {
+  EventSettingType,
+  infoFiledsType,
+  EventValidationSchema,
+  RequestStatusType,
+  DraftValidationSchema,
+  TicketType,
+  DraftType,
+  AdminEventType,
+  ClientEventType,
+} from "../../../types/pages-types/new-event-types";
+import {
+  Positions,
+  TheaterMultiTipeInfoType,
+  TheaterTipinfoType
+} from "../../../types/components-typs/admin/theater/admin-theater-types";
+
+// Import Contexts
+import TabsTickets from '@/context/admin/new-event/tabs/tabs-ticket-context';
+import TabInfoContext from '@/context/admin/new-event/tabs/tabs-info-context';
 import SingleTipContext from '@/context/admin/new-event/map/single-tip-context';
 import MultiSelectContext from '@/context/admin/new-event/map/multi-select-context';
-import AdminTransformContext  from '@/context/admin/new-event/map/admin-map-positions-context'
-import TabsPageContext from '@/context/admin/new-event/tabs/tabs-page-context'
-import TabsEroorsContext from '@/context/admin/new-event/tabs/tabs-eroors-context'
-import TabsEventSettingsContest from '@/context/admin/new-event/tabs/tabs-event-settings-context'
-import { Positions, TheaterMultiTipeInfoType, TheaterTipinfoType } from "../../../types/components-typs/admin/theater/admin-theater-types";
-import TabsWraper from '@/components/admin/newEvent/tabs/tabs-wraper'
-import TheaterComponent from '@/components/admin/newEvent/theater/theater'
-import { z, ZodIssue }  from 'zod'
-import axios from 'axios'
-import { SlOptions, SlOptionsVertical } from "react-icons/sl";
-import SpeedDialWrap from '@/components/gen/speed-dail-wrap'
-import { FaFirstdraft } from 'react-icons/fa6'
-import { MdPublic } from "react-icons/md";
-import { useRouter } from "next/router";
+import AdminTransformContext from '@/context/admin/new-event/map/admin-map-positions-context';
+import TabsPageContext from '@/context/admin/new-event/tabs/tabs-page-context';
+import TabsEroorsContext from '@/context/admin/new-event/tabs/tabs-eroors-context';
+import TabsEventSettingsContest from '@/context/admin/new-event/tabs/tabs-event-settings-context';
 import WidthContext from "@/context/WidthContext";
-import { useAdminDrafts } from "@/util/Hooks/admin/Hooks/use-admin-drafts";
-import { useSession } from "next-auth/react";
+
+// Import Hooks
+import { useAdminDrafts } from "@/util/hooks/admin/use-admin-drafts";
+import { useAdminBilingInfo } from "@/util/hooks/admin/use-admin-biiling-info";
+
+// Import Icons
+import { SlOptions, SlOptionsVertical } from "react-icons/sl";
+import { FaFirstdraft } from "react-icons/fa6";
+import { MdPublic } from "react-icons/md";
 import { RiDraftFill } from "react-icons/ri";
-import { useTheme } from "@mui/material";
 import { ImRedo2 } from "react-icons/im";
-import LoadingScreen from "@/components/gen/loading";
+import { UserPayPalInfo, UserPayPalInfoValidationSchema } from "@/types/pages-types/biling-types";
 
+// Dynamic Component Imports (Lazy Loading)
+const TabsWraper = dynamic(() => import("@/components/admin/newEvent/tabs/tabs-wraper"), { ssr: false });
+const TheaterComponent = dynamic(() => import("@/components/admin/newEvent/theater/theater"), { ssr: false });
+const SpeedDialWrap = dynamic(() => import("@/components/gen/speed-dail-wrap"), { ssr: false });
+const LoadingScreen = dynamic(() => import("@/components/gen/loading"), { ssr: false });
 
-type NOPropsTypeRequired ={
-  EventId?: string;
-  setEventId?: Dispatch<SetStateAction<string | undefined>>;
+type NewEventFormWrapperProps ={
+  Draft?: DraftType
+  DraftId?:string
 }
 
-type WithIdPropsTypeRequired ={
-  EventId: string;
-  setEventId: Dispatch<SetStateAction<string | undefined>>;
-  }
+const NewEventFormWraper = ({Draft,DraftId}:NewEventFormWrapperProps)=>{
 
-type NewEventFormWrapperProps = NOPropsTypeRequired | WithIdPropsTypeRequired
-  
+  const { data: session, status, update } = useSession()
 
-const NewEventFormWraper = ({EventId,setEventId}:NewEventFormWrapperProps)=>{
-
-  
-
-  const { data: session ,status ,update} = useSession()
-
-  const { Drafts , isDraftsValidating, isDraftsError , updateDrafts}=useAdminDrafts(session)
-  
-
-    // For DB Data 
-        // For DB Data 
-            // For DB Data 
+  const { PayPalInfo, updatePayPalInfo, isPayPalInfoError, isPayPalInfoValidating } = useAdminBilingInfo(session)
 
 
     // For DB Data 
         // For DB Data 
             // For DB Data 
-
 
     useEffect(()=>{
    
-          if(EventId && typeof EventId === 'string' && session?.user?.name ){
-             // console.log(EventId);
-             const Draft = Drafts?.find((draft) => draft._id === EventId);
-              
               if(Draft){
                   const { eventSetting,tickets ,info , _id} = Draft
                   setInfoFileds(info)
@@ -74,11 +80,11 @@ const NewEventFormWraper = ({EventId,setEventId}:NewEventFormWrapperProps)=>{
                 }
               }
 
-        }
-    },[Drafts, EventId, session?.user?.name])
+        
+    },[Draft])
 
-
-    const [infoFileds,setInfoFileds]=useState<infoFiledsType>({
+    
+ const [infoFileds,setInfoFileds]=useState<infoFiledsType>({
       eventName:"",
       cat:"",
       TheaterName:"",
@@ -105,8 +111,6 @@ const [ eventSetting , setEventSetting] =useState<EventSettingType>({
   const router = useRouter()
   const theme = useTheme()
 
-
-
   const [tabValue, setTabValue] = useState(0);
   const [isLoading, setIsLoading ] = useState<boolean>(false)
   const [loadingScrenText ,setLoadingScrenText] =useState<string|undefined>(undefined)
@@ -126,9 +130,9 @@ const [ eventSetting , setEventSetting] =useState<EventSettingType>({
 
 
 // ganerate  errors for form inputs  
-  const newEventValidateFiled = ( filed:string ): string | undefined  => {  
+  const GetFormErrors = ( filed:string ): string | undefined  => {  
     const DraftIssues = DraftValidationSchema.safeParse(infoFileds).error?.issues
-    const EvenntIssues= EventValidtinSchema.safeParse({...infoFileds,tickets}).error?.issues // sparidng both to create 1 continues object 
+    const EvenntIssues= EventValidationSchema.safeParse({...infoFileds,tickets}).error?.issues // sparidng both to create 1 continues object 
     
      const issue  =
                   SaevNewEventReqestStatus === 'Temp' ? DraftIssues?.find(item => item.path.join("") === filed)
@@ -142,16 +146,22 @@ const [ eventSetting , setEventSetting] =useState<EventSettingType>({
       return issue?.message
   }
 
+  const ValidateUserPaymentInfo = () : {success:boolean, eroors:z.ZodError<UserPayPalInfo>|undefined}=>{
+       const vlidate = UserPayPalInfoValidationSchema.safeParse(PayPalInfo)
+       console.log(vlidate.error , vlidate.success ," ValidatePayment", "149_FormWraper")
+    return {success :vlidate.success , eroors: vlidate.error}
+  }
+
   const updateDraft = async (EventId:string)=>{
  //   setIsLoading(true)
     setLoadingScrenText("מעדכן")
 
-    const ReqData = { info:infoFileds, tickets, eventSetting , id:EventId }
+    const ReqData : DraftType = { info:infoFileds, tickets, eventSetting , _id:EventId }
 
-    if(EventId){
+    if(DraftId){
       try{ 
         console.log("With ID")
-        const response = await axios.post("/api/admin/drafts/U/update-draft",ReqData );
+        const response = await axios.post("/api/admin/drafts/update-draft",ReqData );
 
         if(response.status===200){
             
@@ -171,20 +181,23 @@ const [ eventSetting , setEventSetting] =useState<EventSettingType>({
 
   }}
    // Requests 
-  const saveDraft = async (
-        ):Promise<void>=> {
+  const saveDraft = async () : Promise<void> => {
           console.log("sending req" ,infoFileds);
           setSaevNewEventReqestStatus('Temp')
-          const ValidationResult =  DraftValidationSchema.safeParse(infoFileds); //validate form on click 
-          console.log(ValidationResult)
+          const DraftValidationResult =  DraftValidationSchema.safeParse(infoFileds); //validate form on click 
+          console.log(DraftValidationResult)
 
          try {
-               if(ValidationResult.success){
+               if(DraftValidationResult.success){
 
                   setIsLoading(true)
                    setLoadingScrenText("שומר")
-                   const ReqData ={ info:infoFileds, tickets , eventSetting} 
-                   const response = await axios.post("/api/admin/drafts/C/new-draft",ReqData ,{} );
+                   const ReqData :  Omit<DraftType , "_id">  = {
+                      info: infoFileds, 
+                      tickets,
+                      eventSetting,
+                   } 
+                   const response = await axios.post("/api/admin/drafts/new-draft",ReqData ,{} );
             
                 if(response.status === 200 ){
                       router.push("/admin")
@@ -215,15 +228,18 @@ const [ eventSetting , setEventSetting] =useState<EventSettingType>({
   
   const saveEvent = async () =>{
 
-    console.log(infoFileds)
+    const EvenntIssues= EventValidationSchema.safeParse({...infoFileds,tickets})
 
-    const EvenntIssues= EventValidtinSchema.safeParse({...infoFileds,tickets})
-
-      if(EvenntIssues.success){
+      if(ValidateUserPaymentInfo().success && EvenntIssues.success  ){
         // setIsLoading(true)
-        const ReqData ={ info:infoFileds, tickets , eventSetting} 
+       const ReqData :Omit<ClientEventType , "_id"> ={ 
+             publicId:PayPalInfo.clientId,
+             info:infoFileds, 
+             tickets ,
+             eventSetting
+            } 
         try{ 
-            const response = await axios.post("/api/admin/live-events/C/new-event",ReqData ,{} );
+            const response = await axios.post("/api/admin/live-events/new-event",ReqData ,{} );
               if(response.status === 200){
                  return router.push("/admin")
               }
@@ -232,13 +248,11 @@ const [ eventSetting , setEventSetting] =useState<EventSettingType>({
            console.log(err)
           }
 
-  
-           
-  
       }
       else{
         setSaevNewEventReqestStatus('Production')
-        alert("  אנא הזן  את כול הפרטים המסומנים ב ❌")
+        // make llist of errs and payments errs
+        alert("  אנא הזן  את כול הפרטים המסומנים ב ❌"   )
       }
       
     }
@@ -247,8 +261,8 @@ const [ eventSetting , setEventSetting] =useState<EventSettingType>({
             { icon: <FaFirstdraft size={"2em"} />,
              name: 'שמור טיוטה' , 
              ClickHendler:(e:React.MouseEvent<HTMLDivElement>)=>
-                EventId
-                ? updateDraft(EventId) 
+              DraftId
+                ? updateDraft(DraftId) 
                 : saveDraft()
               
             },
@@ -264,13 +278,13 @@ const [ eventSetting , setEventSetting] =useState<EventSettingType>({
       icon:<ImRedo2  size={'2em'} />
       ,
       name:"בטל וחזור",
-      ClickHendler:(e:React.MouseEvent<HTMLDivElement>)=>{ setEventId? setEventId(""):null} 
+      ClickHendler:(e:React.MouseEvent<HTMLDivElement>)=>{} 
     },
     { icon: <RiDraftFill size={"2em"} />,
     name: 'עדכן טיוטה ' , 
     ClickHendler:(e:React.MouseEvent<HTMLDivElement>)=>
-       EventId
-       ? updateDraft(EventId) 
+      DraftId
+       ? updateDraft(DraftId) 
        : saveDraft()
    },
    { icon: <MdPublic size={"2.5em"} />,
@@ -280,20 +294,18 @@ const [ eventSetting , setEventSetting] =useState<EventSettingType>({
 
    ]
 
-          if (isLoading)  {
-   
-         return <LoadingScreen text={loadingScrenText} />
-         }
+      if (isLoading)  {
+          return <LoadingScreen text={loadingScrenText} />
+       }
 
   return(
-
-    <TabsEroorsContext.Provider value={{newEventValidateFiled}}>
+    <TabsEroorsContext.Provider value={{GetFormErrors}}>
     <TabsPageContext.Provider value={{tabValue,setTabValue, isLoading, setIsLoading, SaevNewEventReqestStatus, setSaevNewEventReqestStatus ,loadingScrenText ,setLoadingScrenText }}>
     <TabInfoContext.Provider value={{infoFileds,setInfoFileds}}>
     <TabsTickets.Provider  value={{tickets ,setTickets}} >
     <TabsEventSettingsContest.Provider value={{ eventSetting, setEventSetting}} >
 
-           <TabsWraper EventId={EventId}  />
+           <TabsWraper DraftId={DraftId}  />
 
            { 
             infoFileds.Theater &&
@@ -307,7 +319,7 @@ const [ eventSetting , setEventSetting] =useState<EventSettingType>({
             </AdminTransformContext.Provider>    
            }
           <SpeedDialWrap
-              actions={EventId? withIdQuickAction :  QuickActions}
+              actions={DraftId? withIdQuickAction :  QuickActions}
               mainIcon={<SlOptions size={"2em"} />}
               openToolTip
               openToolTipPlacement="right"

@@ -90,15 +90,14 @@ const DrawerContent = ({
     return total.toString(); // Return formatted string
   };
 
-
   // useEffect(()=>{
   //   console.log(eventSelectSeats,"Drawer Content see ")
   // },[eventSelectSeats])
 
 
   const Pre = Box,
-    Tags = Flex,
-    PreBox = Box
+          Tags = Flex,
+          PreBox = Box
 
 
   return (
@@ -172,6 +171,7 @@ const DrawerContent = ({
                 cart={createPaymentCart(eventSelectSeats)}
                 total={getTotalCost()}
                 TheaterState={clientEventTheaterState}
+                publicId={event.publicId}
                 eventId={event._id}
 
               />

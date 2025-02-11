@@ -1,5 +1,5 @@
 import WidthContext from "@/context/WidthContext";
-import { FormHelperText, SxProps, useFormControl, useTheme } from "@mui/material"
+import { FormHelperText, SxProps, Typography, useFormControl, useTheme } from "@mui/material"
 import { useContext } from "react";
 
 
@@ -41,7 +41,11 @@ export default function ControledHelperText ({text , helpTextPotionsEnd}:Control
 
     
     return (
-        <FormHelperText 
+        <Typography 
+        // avoiding <p> in a <p> err
+        // span can be a chiled of p 
+        component={'span'}
+        
         
         sx={ 
           
@@ -76,9 +80,9 @@ export default function ControledHelperText ({text , helpTextPotionsEnd}:Control
             ]
               
                 }
-          variant={variant}
+  
           >{text}
-          </FormHelperText>
+          </Typography>
 
     )
 }

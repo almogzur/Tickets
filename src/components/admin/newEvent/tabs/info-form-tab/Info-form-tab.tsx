@@ -35,7 +35,7 @@ const InfoForm =({}:InfoFormType)=>{
   const {infoFileds,setInfoFileds}= useContext(TabsInfoContext)
   const theme = useTheme()
   const [dateEroor,setDateEroor ]= useState(false)
-  const {newEventValidateFiled} =  useContext(tabsEroorsContext)
+  const {GetFormErrors} =  useContext(tabsEroorsContext)
   const {setIsLoading,setTabValue,setLoadingScrenText,setSaevNewEventReqestStatus}= useContext(tabsPageContext)
     
   
@@ -114,10 +114,10 @@ return(
                   value={infoFileds.eventName}
                   onChangeHndler={(e) => { setInfoFileds(p => ({ ...p, eventName: e.target.value })) } }
                   labelPositioin={"end"} 
-                  helpText={newEventValidateFiled("eventName")?? ""}
+                  helpText={GetFormErrors("eventName")?? ""}
                   helpTextPotionsEnd
               
-                  error={newEventValidateFiled("eventName")? true: false}
+                  error={GetFormErrors("eventName")? true: false}
                   
                  />
                  <SelectWrap 
@@ -128,8 +128,8 @@ return(
                     labelPositioin={"end"}
                     variant='outlined' 
                     helpTextPotionsEnd
-                    helpText={newEventValidateFiled("cat")?? ""}
-                    isError={newEventValidateFiled("cat")?true:false}
+                    helpText={GetFormErrors("cat")?? ""}
+                    isError={GetFormErrors("cat")?true:false}
                 />
      
              </Flex>
@@ -142,7 +142,7 @@ return(
                MediaQuery={theme.breakpoints.up("sm")}
                value={infoFileds.Date}
                variant='outlined'
-               helpText={newEventValidateFiled("Date")?? ""}
+               helpText={GetFormErrors("Date")?? ""}
                helpTextPotionsEnd
                label={" תאריך"}
                labelPositioin={'end'}
@@ -166,7 +166,7 @@ return(
                       setInfoFileds((p) => ({ ...p, OpenDoors: formattedTime }));
                   }
               }}
-               helpText={newEventValidateFiled("OpenDoors")?? ""}
+               helpText={GetFormErrors("OpenDoors")?? ""}
                label={"  שעת פתיחת דלתות"} 
                 labelPositioin={'end'}
                 color='secondary'
@@ -176,7 +176,7 @@ return(
             <TimePickerWrap                 
                 MediaQuery={theme.breakpoints.up("sm")}
                 value={infoFileds.Hour}
-                helpText={newEventValidateFiled("Hour")?? ""}
+                helpText={GetFormErrors("Hour")?? ""}
                 variant='outlined'
                 helpTextPotionsEnd
                 onAcceptHendler={(e) => {
@@ -260,7 +260,7 @@ return(
                {({ open }) => {
                  return (
                   <>
-               <Typography sx={{color:"red"}} >{newEventValidateFiled('preview')}</Typography>
+               <Typography sx={{color:"red"}} >{GetFormErrors('preview')}</Typography>
                <Button
                  sx={{ gap:1, p:0.5 , boxShadow:0, background:grey[200], mt:1 }} 
                  disabled={!!infoFileds.preview} // converts its to boll then if info filed it ther its flase else it true 
