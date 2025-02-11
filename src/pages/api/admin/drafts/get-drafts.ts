@@ -1,4 +1,4 @@
-import { disconnectFromMongooseDb, MongoseeWithSessionModleDb } from "@/util/db/connections/mongosee/conect";
+import { disconnectFromMongooseDb, MongoseeWithSessionModleDb } from "@/util/db/mongosee/conect";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
