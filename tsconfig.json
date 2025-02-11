@@ -30,7 +30,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "src/components/tom-map.js", "src/pages/api/client/pay",
+    "src/components/tom-map.js", 
     
     
   ],
