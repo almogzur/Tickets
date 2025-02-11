@@ -1,5 +1,5 @@
 import { ClientEventType } from "@/types/pages-types/new-event-types";
-import { Mongo } from "@/util/db/connections/Mongo-db/MongoDb";
+import { Mongo } from "@/util/db/connections/mongo-db/Mongo-db";
 import { rateLimitConfig } from "@/util/fn/api-rate-limit.config";
 import rateLimit from "express-rate-limit";
 

@@ -2,7 +2,7 @@ import { UserPayPalInfo } from "@/types/pages-types/biling-types";
 import { ClientEventType } from "@/types/pages-types/new-event-types";
 import { MongoClient, ObjectId } from "mongodb";
 import { unCipherString } from "./crypto";
-import { getAllCollectionFromDb, getAllDbListDB, getDb } from "../db/connections/Mongo-db/Mongo_db_fn";
+import { getAllCollectionFromDb, getAllDbListDB, getDb } from "../db/connections/mongo-db/Mongo_db_fn";
 import crypto from 'crypto'
 
 

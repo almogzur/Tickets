@@ -6,7 +6,7 @@ import bcrypt from 'bcryptjs'
 
 import jwt from 'jsonwebtoken'
 import {  NewUserValidationShema } from "@/types/pages-types/supervisor-types"
-import { disconnectFromMongooseDb, MongoseeAuthUsersDb } from "@/util/db/connections/mongosee/Mongosee"
+import { disconnectFromMongooseDb, MongoseeAuthUsersDb } from "@/util/db/connections/mongosee/mongosee-connections"
 import { UsersModle } from "@/util/db/schmas/new-user"
 
 

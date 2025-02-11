@@ -1,5 +1,5 @@
 import { Db, ListDatabasesResult,MongoClient } from "mongodb";
-import { Mongo } from "./MongoDb";
+import { Mongo } from "./Mongo-db";
 
 const Client = await Mongo()
 

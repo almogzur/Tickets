@@ -1,6 +1,6 @@
 // File: pages/api/public.ts
 
-import {  MongoseeAuthUsersDb  ,disconnectFromMongooseDb} from "@/util/db/connections/mongosee/Mongosee";
+import {  MongoseeAuthUsersDb  ,disconnectFromMongooseDb} from "@/util/db/connections/mongosee/mongosee-connections";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";

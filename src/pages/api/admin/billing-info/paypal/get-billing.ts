@@ -1,5 +1,5 @@
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
-import { disconnectFromMongooseDb, MongoseeWithSessionModleDb } from "@/util/db/connections/mongosee/Mongosee";
+import { disconnectFromMongooseDb, MongoseeWithSessionModleDb } from "@/util/db/connections/mongosee/mongosee-connections";
 import { PayPalModle } from "@/util/db/schmas/user-biling-info";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";

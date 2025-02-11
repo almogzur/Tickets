@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
-import { disconnectFromMongooseDb, MongoseeWithSessionModleDb } from "@/util/db/connections/mongosee/Mongosee";
+import { disconnectFromMongooseDb, MongoseeWithSessionModleDb } from "@/util/db/connections/mongosee/mongosee-connections";
 import {  DraftModle } from "@/util/db/schmas/event";
 import { delFolder, findSubFolders, moveToEventNameFolder } from "../../../../util/fn/cloudinary_helper_functions";
 
