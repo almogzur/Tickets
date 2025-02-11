@@ -1,9 +1,9 @@
-import { disconnectFromMongooseDb, MongoseeWithSessionModleDb } from "@/util/DB/mongosee-fn";
+import { disconnectFromMongooseDb, MongoseeWithSessionModleDb } from "@/util/dbs/mongosee-fn";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import {  DraftType } from "@/types/pages-types/new-event-types";
-import { DraftModle } from "@/util/DB/Schmas/event";
+import { DraftModle } from "@/util/dbs/schma/event";
 
  // findOne(filter: Filter<TSchema>, options: FindOptions): Promise<WithId<TSchema> | null>;
 
