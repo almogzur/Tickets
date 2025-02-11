@@ -56,8 +56,8 @@ export const MongoseeAuthUsersDb = async () :Promise<mongoose.Connection|undefin
 }
 }
 
-export async function disconnectFromMongooseDb( connection:mongoose.Connection|MongoClient|undefined,API_NAME?:string,)
-: Promise<void> {
+export const  disconnectFromMongooseDb = async ( connection:mongoose.Connection|MongoClient|undefined,API_NAME?:string,)
+: Promise<void> => {
   if( connection?.db ){
        await connection.close()
    console.log(API_NAME, "db Disconnected")
