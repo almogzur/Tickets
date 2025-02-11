@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from "next-auth/next";
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
-import { disconnectFromMongooseDb, MongoseeWithSessionModleDb } from "@/util/db/mongosee/conect";
+import { disconnectFromMongooseDb, MongoseeWithSessionModleDb } from "@/util/db/mongosee-conect";
 import { moveToEventNameFolder } from '@/util/fn/cloudinary_helper_functions';
 import {  DraftModle,  } from '@/util/db/schmas/event';
 

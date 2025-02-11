@@ -1,7 +1,7 @@
 // File: pages/api/public.ts
 
 import { AdminEventModle } from "@/util/db/schmas/event";
-import { disconnectFromMongooseDb, MongoseeWithSessionModleDb } from "@/util/db/mongosee/conect";
+import { disconnectFromMongooseDb, MongoseeWithSessionModleDb } from "@/util/db/mongosee-conect";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
