@@ -10,7 +10,7 @@ export const NewUserSchemaDefinition = {
 };
 
 
-export const UsersModle =  createModel<NewUserType>("ActiveUsers",NewUserSchemaDefinition)
+export const UsersModle =  createModel<NewUserType>(`${process.env.APP_USERS_FOLDER_PATH}`,NewUserSchemaDefinition)
 
 
 

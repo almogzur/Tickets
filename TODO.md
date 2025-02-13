@@ -20,9 +20,6 @@ TO_DO
  - admin : 
   1. add customers page with all  payed customers 
   2. integrate pament data  into event page
-z
-
-
 
 
 - client :
@@ -32,6 +29,23 @@ z
 
 
 ===================
+
+test  GetBillingInfoFromEventId working , 
+
+test update event  withTransaction api 
+
+add apiLimiter to all payment / sensitiv info api 
+
+add vlidation (zods) in api side () see in nedded logic wize
+
+
+
+
+chiper srting not working 
+
+
+
+
 
 
  

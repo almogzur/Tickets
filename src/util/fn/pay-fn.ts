@@ -1,66 +1,87 @@
 import { UserPayPalInfo } from "@/types/pages-types/biling-types";
 import { ClientEventType } from "@/types/pages-types/new-event-types";
 import { MongoClient, ObjectId } from "mongodb";
-import { unCipherString } from "./crypto";
-import { getAllCollectionFromDb, getAllDbListDB, getDb } from "../dbs/mongo-db/db_fn";
+import { getCollectionsFromDb, getAllDbList, getDb } from "../dbs/mongo-db/db_fn";
 import crypto from 'crypto'
+import { decryptData } from "./crypto";
 
 
-export const GetBillingInfoFromEventId = async (eventId: string, authKey: string ,c:Promise<MongoClient | null> ): Promise<{ info: UserPayPalInfo } | undefined> => {
+export const GetBillingInfoFromEventId = async (eventId: string, authKey: string, Client: MongoClient | null): Promise<{ info: UserPayPalInfo } | undefined> => {
 
-    console.log("GetBillingInfoFromEventId ", "_ invoked")
-    const ServerKey = `${process.env.CIPHER_SECRET}`
+    console.log("GetBillingInfoFromEventId ", "_ invoked", eventId)
 
-   //  https://developers.cloudflare.com/workers/examples/protect-against-timing-attacks/
-const encoder = new TextEncoder();
-const authKeyBuffer = encoder.encode(authKey);
-const serverKeyBuffer = encoder.encode(ServerKey);
+    const ServerKey =`${ process.env.CIPHER_SECRET }`
 
-if (!authKey || !crypto.timingSafeEqual(new Uint8Array(authKeyBuffer), new Uint8Array(serverKeyBuffer))) {
-    console.log("Unauthorized request: Invalid authKey");
+    
+    if(!ServerKey){
+        console.log("GetBillingInfoFromEventId", "NO SERVER KEy")
+        return
+
+    }
+
+
+    const encoder = new TextEncoder();
+    const authKeyBuffer = encoder.encode(authKey);
+    const serverKeyBuffer = encoder.encode(ServerKey);
+
+    const isKeyValide = crypto.timingSafeEqual(new Uint8Array(authKeyBuffer), new Uint8Array(serverKeyBuffer))
+
+
+    if (!authKey || !isKeyValide) {
+        console.log("Unauthorized request: Invalid authKey");
         return;
     }
 
-    const dblist = await getAllDbListDB(c)
+    if (!Client) {
+        console.log("!NO client GetBillingInfoFromEventId")
+        return
+    }
+    const dbList = await getAllDbList(Client)
 
-    const Users_Data_DBS = dblist?.filter((db) => db.name.includes("_Data"))
+    if (!dbList) {
+        console.log("!GetBillingInfoFromEventId ", "@dbList")
+        return
+    }
 
-    if (!Users_Data_DBS) return
+    for (const { name, empty } of dbList) {
+        if (empty) {continue}
+            const db = await getDb(name, Client, `${process.env.USER_DATA_FOLDER_PATH}`) // with filted build in 
+        if (!db) { continue }
+        const UserCollections = await getCollectionsFromDb(db, `${process.env.USER_EVENTS_FOLDER_PATH}`)  // with filted build in  
 
-    for (const { name, empty } of Users_Data_DBS) {
-        if (empty) return
-        const db = await getDb(name,c)
-        if (!db) return
+        for (const collection of UserCollections) { // only _Data DBs
 
-        const dbCollections = await getAllCollectionFromDb(db)
-
-        for (const collection of dbCollections) { // only _Data DBs
-
-            // filter only User_Data Collections 
-
-            //  in User_Data collection
-            // look for eventID  in user Data 
-
+                // filter only User_Data Collections 
+                //  in User_Data collection
+                // look for eventID  in user Data 
             const event = await collection.findOne<ClientEventType>({ _id: ObjectId.createFromHexString(eventId) })
 
-            if (!event) return // if the event is not in user
 
-            // now we know the db  name and collection 
-            const billingInfo = await db.collection("Billing_PayPal").findOne<UserPayPalInfo>();
-            //    console.log(billingInfo)
+             if (!event) {continue }// if the event is not in user
 
-            if (billingInfo) {
+              // now we know the db name and collection 
+             const billingInfo = await db.collection(`${process.env.BILING_FOLDER_NAME}`).findOne<UserPayPalInfo>();
+           
+              if (billingInfo) {
                 const { clientSecret, ...restbillingInfo } = billingInfo
-                const deCipherSecret = unCipherString(clientSecret, ServerKey)
+                const deCipherSecret = decryptData(clientSecret, ServerKey)
+            
                 const Info = {
                     ...restbillingInfo,
-                      clientSecret: deCipherSecret
-                 }
-                 console.log("GetBillingInfoFromEventId Succsess")
+                    clientSecret: deCipherSecret
+                }
+                console.log("GetBillingInfoFromEventId Succsess")
                 return { info: Info }
             }
         }
     }
+
+
+
+
+
+
+    //  https://developers.cloudflare.com/workers/examples/protect-against-timing-attacks/
 
 
 }

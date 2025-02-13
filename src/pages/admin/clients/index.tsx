@@ -1,10 +1,8 @@
 import { useSession } from 'next-auth/react'
 import {useEffect,useState} from 'react'
 import { useRouter } from 'next/router'
-import { Box ,Stack as Flex } from '@mui/material'
-import { grey } from '@mui/material/colors'
-import InputWrap from '@/components/gen/TeextFiledWrpa/input-wrap'
-import AdminLayout from '@/layouts/admin-layout'
+
+import AdminWrapper from '@/Wrappers/admin'
 
 const ClientListPage=()=>{
 
@@ -20,11 +18,11 @@ const ClientListPage=()=>{
 }
 
 return (
-    <AdminLayout>
+    <AdminWrapper>
 
 
 
-    </AdminLayout>
+    </AdminWrapper>
 ) 
 }
 

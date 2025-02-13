@@ -23,5 +23,5 @@ export  const UserPayPalBillingShema = {
 // complite the billing form
 
 
-export const PayPalModle = createModel<UserPayPalInfo>("Billing_PayPal", UserPayPalBillingShema)
-export const BankModle = createModel<UserBankInfo>("Billing_bank", UserBankInfoDBSchema)
+export const PayPalModle = createModel<UserPayPalInfo>(`${process.env.BILING_FOLDER_NAME}`, UserPayPalBillingShema)
+export const BankModle = createModel<UserBankInfo>(`${process.env.BANK_BLIING_FOLDER_NAME}`, UserBankInfoDBSchema)

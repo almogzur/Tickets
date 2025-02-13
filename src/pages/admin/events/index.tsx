@@ -2,13 +2,13 @@ import { useSession } from 'next-auth/react'
 import {useEffect,useState} from 'react'
 import { useRouter } from 'next/router'
 import { Button, Typography } from '@mui/material'
-import DataGridWrap from '@/components/gen/data-grid-wrapper/grid-wrapper'
 import {   GridColDef, GridRowsProp } from '@mui/x-data-grid'
-import { useAdminEvents } from '@/util/hooks/admin/use-admin-events'
+import { useAdminEvents } from '@/hooks/admin/use-admin-events'
 import { GetServerSideProps } from 'next'
 import { ClientEventType } from '@/types/pages-types/new-event-types'
 import axios from 'axios'
-import AdminLayout from '@/layouts/admin-layout'
+import AdminLayout from '@/Wrappers/admin'
+import DataGridWrap from '@/HOCs/data-grid-wrapper/grid-wrapper'
 
 
 

@@ -89,7 +89,7 @@ export const authOptions: AuthOptions = {
           return null
         }
 
-        console.log("auth got user ",user);
+        //console.log("auth got user ",user);
         
 
         // not used yet 
@@ -100,14 +100,14 @@ export const authOptions: AuthOptions = {
 
          if ( isPasswordValid) {
 
-           console.log("Pass Password hasing ");
+         console.log("Pass Password hasing ");
            
             const ReturnUser: User = {
                ...user,
                displayName: user.displayName,
                id: user._id.toString()
           }
-          await disconnectFromMongooseDb(Client,"AuthF")
+          await disconnectFromMongooseDb(Client)
 
           return {
             ...ReturnUser,
@@ -116,7 +116,7 @@ export const authOptions: AuthOptions = {
         }
 
         console.log("Invalid credentials")
-        await disconnectFromMongooseDb(Client,"AuthF")
+        await disconnectFromMongooseDb(Client)
         return null
       }
 

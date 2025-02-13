@@ -2,7 +2,6 @@ import {  Button, Container ,Stack as Flex ,  Typography  , Box, useTheme, Paper
 
 
 import {  useContext, useEffect, useRef, useState } from 'react';
-import EventCard from '@/components/client/main-page/event-card';
 import Carousel from 'react-material-ui-carousel'
 import { FaCircleArrowLeft, FaCircleArrowRight } from 'react-icons/fa6';
 import WidthContext from '@/context/WidthContext';
@@ -43,24 +42,21 @@ interface ItemComponentProps   {
 import type {  GetServerSideProps, GetServerSidePropsResult } from 'next'
 import axios from 'axios';
 import { ClientEventType } from '@/types/pages-types/new-event-types';
-import ClientLayout from '@/layouts/client-layout';
+import ClientLayout from '@/Wrappers/client';
+import EventCard from '@/pages-components/client/main-page/event-card';
 
-export const getServerSideProps  =( 
-    async (context:any) =>
-  {
-      try {
-        const response = await axios.get<ClientEventType[]>( `${process.env.NEXTAUTH_URL}/api/client/events/get-events`);
-        if(response.status=== 200){
-           return { props: { Events: response.data } };
-        }
-        return { props: { Events: [] } }
-    }
-    catch (error) {
-     console.error("Error fetching events:", error);
-    return { props: { Events: [] } }; // Return an empty array as a fallback
+export const getServerSideProps: GetServerSideProps<{ Events: ClientEventType[] }> = async (context) => {
+  try {
+    const baseUrl = `${process.env.NEXTAUTH_URL}`
+    const response = await axios.get<ClientEventType[]>(`${baseUrl}/api/client/events/get-events`);
+    return {
+      props: { Events: response.status === 200 ? response.data : [] },
+    };
+  } catch (error) {
+    console.error("Error fetching events:", error);
+    return { props: { Events: [] } }; // Ensure fallback
   }
-}) satisfies GetServerSideProps<{ Events: ClientEventType[] }>
-
+};
 
 export default function Home({Events}:{Events:ClientEventType[]}) {
 
@@ -140,7 +136,7 @@ export default function Home({Events}:{Events:ClientEventType[]}) {
     </ClientLayout>
       )
      }
-     else{
+
       return (
         <>
          <ClientLayout  HeaderName='' >
@@ -245,7 +241,7 @@ export default function Home({Events}:{Events:ClientEventType[]}) {
         </>
       )
 
-     }
+     
 }
 
 

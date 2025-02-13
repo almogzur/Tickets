@@ -83,7 +83,7 @@ const EventSchema = {
 
 //Db Modoles 
 export const DraftModle = createModel<DraftType>("Drafts", DraftSchema)
-export const AdminEventModle = createModel<AdminEventType>("Events", EventSchema)
+export const AdminEventModle = createModel<AdminEventType>(`${process.env.USER_EVENTS_FOLDER_PATH}`, EventSchema)
 
 
 

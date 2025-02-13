@@ -1,11 +1,11 @@
 import { useSession } from 'next-auth/react'
 import {useEffect,useMemo,useState} from 'react'
 import { useRouter } from 'next/router'
-import { useAdminEvents } from '@/util/hooks/admin/use-admin-events'
+import { useAdminEvents } from '@/hooks/admin/use-admin-events'
 import { GetServerSideProps } from 'next'
 import { ClientEventType } from '@/types/pages-types/new-event-types'
 import axios from 'axios'
-import AdminLayout from '@/layouts/admin-layout'
+import AdminLayout from '@/Wrappers/admin'
 
 export const getServerSideProps: GetServerSideProps<{Events: ClientEventType[];}> =
    async (context) => {

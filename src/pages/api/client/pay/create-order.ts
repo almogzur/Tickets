@@ -3,7 +3,7 @@ import rateLimit from 'express-rate-limit';
 import {
     ApiError,
     CheckoutPaymentIntent,
-    Client,
+    Client as PayPalClient ,
     Environment,
     LogLevel,
     OrdersController,
@@ -17,28 +17,46 @@ import { GetBillingInfoFromEventId } from "@/util/fn/pay-fn";
 import { ObjectId } from "mongodb";
 import { rateLimitConfig } from "@/util/fn/api-rate-limit.config";
 import { Mongo } from "@/util/dbs/mongo-db/mongo";
+import { NewOrderType, NewOrderValidationSchema } from "@/types/pages-types/new-event-types";
 
 const apiLimiter = rateLimit(rateLimitConfig);
 
+
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+    
     return apiLimiter(req, res,async () => {
             const API_NAME = "Pay - Order"
-            const { cart, total, publicId, eventId } = req.body;
-            const MongoClient = Mongo()
 
+            const body :NewOrderType  = req.body
+            const IsValidData = NewOrderValidationSchema.safeParse( body )
+
+            if( ! IsValidData.success){
+                console.log(IsValidData.error)
+                return res.status(400).json({massage:"bad format Data"})
+            }
+
+            const { cart, total, publicId, eventId } = IsValidData.data
+
+            const Client = await  Mongo()
+
+
+            if(!Client) {
+                console.log(API_NAME,"!db client")
+                return
+            }
 
             if (!ObjectId.isValid(eventId)) {
-                return res.status(404).json({ error: "Invalid eventId format" });
+                return res.status(400).json({ error: "Invalid eventId format" });
             }
 
-            const userInfo = await GetBillingInfoFromEventId(eventId, `${process.env.CIPHER_SECRET}`,MongoClient)
+            const userInfo = await GetBillingInfoFromEventId(eventId, `${process.env.CIPHER_SECRET}`,Client)
 
             if (!  userInfo) {
-                console.log("! userInfo")
-                return res.status(404).json({ massage: "no auth" })
+                return res.status(400).json({ massage: "no auth" })
             }
 
-            const client = new Client({
+            const client = new PayPalClient({
                 clientCredentialsAuthCredentials: {
                     oAuthClientId: publicId,
                     oAuthClientSecret: `${userInfo?.info.clientSecret}`,
@@ -47,12 +65,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 environment: Environment.Sandbox,
                 logging: {
                     logLevel: LogLevel.Error,
-                    logRequest: { logBody: true },
-                    logResponse: { logHeaders: true },
+                    logRequest: { logBody: false },
+                    logResponse: { logHeaders: false },
                 },
             });
 
-            const ordersController = new OrdersController(client);
 
             const createOrder = async (cart: Item[], total: string) => {
                 const collect: PayPalReqType = {
@@ -99,6 +116,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     };
                 }
             };
+
+
+            const ordersController = new OrdersController(client);
 
             if (req.method !== 'POST') {
                 return res.status(405).json({ message: `Method ${req.method} not allowed` });

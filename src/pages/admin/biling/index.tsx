@@ -1,20 +1,20 @@
-import { useSession } from 'next-auth/react'
+import { getCsrfToken, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { Typography, Stack as Flex, Button, Container } from '@mui/material'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { grey } from '@mui/material/colors'
-import InputWrap from '@/components/gen/TeextFiledWrpa/input-wrap'
-import AdminLayout from '@/layouts/admin-layout'
-import { BillingAccountType, UserBankInfo, UserBankInfoValidationSchema, UserPayPalInfo } from '@/types/pages-types/biling-types'
+import AdminLayout from '@/Wrappers/admin'
+import { BillingAccountType, UserBankInfo, UserBankInfoValidationSchema, UserPayPalInfo, UserPayPalInfoValidationSchema } from '@/types/pages-types/biling-types'
 import axios from 'axios'
-import SelectWrap from '@/components/gen/select-wrap'
-import { useAdminBilingInfo } from '@/util/hooks/admin/use-admin-biiling-info'
-import { hashString } from '@/util/fn/hase'
-import { cipherString } from '@/util/fn/crypto'
+import { useAdminBilingInfo } from '@/hooks/admin/use-admin-biiling-info'
+import SelectWrap from '@/HOCs/select-wrap'
+import InputWrap from '@/HOCs/TeextFiledWrpa/input-wrap'
 
-// for now only get paypal data 
+// page is secure under JWT token 
+// https uses  (Advanced Encryption Standard)  AES  chiper 
+// back end uses same AES chiper  
 
-const secret = `${process.env.CIPHER_SECRET}`
+
 
 const AdminBillingPage = () => {
 
@@ -60,30 +60,24 @@ const AdminBillingPage = () => {
 
   const savePayPalInfo = async (e: React.SyntheticEvent<HTMLButtonElement>,) => {
 
-    const CipherPayPalSrcret = cipherString(PayPalBillingInfo.clientSecret,secret)
+    const isValiedData = UserPayPalInfoValidationSchema.safeParse(PayPalBillingInfo)
 
-    // removing the origin clientSecret string
-     const { clientSecret, ...restPayPalBillingInfo } = PayPalBillingInfo
+    if(!isValiedData.success){
+      console.log("no valid data  Client "  , "")
+      return
+    }
+  
 
     // hasing sring befor sending the req , so if db is gets hacked the haker letf with  *hit 
-    const data: UserPayPalInfo = {
-      clientSecret: CipherPayPalSrcret,
-      ...restPayPalBillingInfo
-    }
+    const URL = "/api/admin/billing-info/paypal/add-billing-info"
+    const data: UserPayPalInfo = isValiedData.data
 
     try {
-      const responce = await axios.post("/api/admin/billing-info/paypal/new-billing", data)
-
-      if (responce.status === 200) {
-
-      } else {
-        alert(responce.data)
-      }
-
-
-    }
-    catch (err) {
-      alert(err)
+       const responce = await axios.post( URL , data )
+      if (responce.status === 200) {} 
+       alert(responce.data)
+    }catch (err) {
+       alert(err)
     }
   }
 

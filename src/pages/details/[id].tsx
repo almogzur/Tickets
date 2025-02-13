@@ -3,20 +3,20 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useState, useEffect, useContext, CSSProperties, useRef, SetStateAction, } from 'react'
 import { Container, Typography as Heading, Stack as Flex, Button, Typography, useTheme, Box, Chip } from '@mui/material';
-import Map from '../../components/client/event-page/tom-map'
+import Map from '@/pages-components/client/event-page/tom-map'
 
 import WidthContext from '@/context/WidthContext';
-import TheaterMap from '@/components/client/event-page/theater/client-theater-map';
 import React from 'react';
 import ClineTransformContext from '@/context/client/event-page/client-tranform-contenx'
 import { Positions, TheaterType } from '@/types/components-typs/admin/theater/admin-theater-types';
-import DrawerContent from '@/components/client/event-page/drawer/drawer-content';
-import DrawerWighet from '@/components/client/event-page/drawer/info-drawer-wighet';
 import { TiArrowBack } from "react-icons/ti";
-import { ClientEventType } from '@/types/pages-types/new-event-types';
+import { ClientEventType, SeatType } from '@/types/pages-types/new-event-types';
 import { GetServerSideProps } from 'next';
 import axios from 'axios';
-import ClientLayout from '@/layouts/client-layout';
+import ClientLayout from '@/Wrappers/client';
+import DrawerContent from '@/pages-components/client/event-page/drawer/drawer-content';
+import DrawerWighet from '@/pages-components/client/event-page/drawer/info-drawer-wighet';
+import TheaterMap from '@/pages-components/client/event-page/theater/client-theater-map';
 
 
 
@@ -39,13 +39,7 @@ export const getServerSideProps  =(
 
 
 // mote to theater types  after 
-export type SeatType = {
-  row: string,
-  seatNumber: number
-  value: number
-  price: string,
-  priceInfo?: string
-}
+
 
 const DetailsPage = ({ Events }: { Events: ClientEventType[] }) => {
 

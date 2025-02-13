@@ -1,4 +1,5 @@
-import { SeatType } from "@/pages/details/[id]";
+
+import { SeatType } from "@/types/pages-types/new-event-types";
 import { OrderRequest } from "@paypal/paypal-server-sdk";
 
 export interface CartItemType extends Omit<SeatType, 'value'> {

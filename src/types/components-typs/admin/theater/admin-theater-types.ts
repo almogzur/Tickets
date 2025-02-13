@@ -1,5 +1,11 @@
-import { Seats, SeatStyles } from '@/constants/theaters/eilat_1'
-import { RefObject } from 'react'
+
+import { SeatValidationSchema } from '@/types/pages-types/new-event-types'
+import { CSSProperties, RefObject } from 'react'
+import { z } from 'zod'
+
+export type  Seats = z.infer< typeof SeatValidationSchema>
+export type  SeatStyles = Record<string,CSSProperties>
+
 
 export interface TheaterLocationType {
   alt:string

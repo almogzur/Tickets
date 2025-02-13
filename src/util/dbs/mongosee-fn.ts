@@ -16,7 +16,7 @@ import { Session } from 'next-auth';
     try {    
       const connection = await mongoose.connect(process.env.MONGODB_URI as string, 
          {
-         dbName:`${session.user.name}_Data`,
+         dbName:`${session.user.name}${process.env.USER_DATA_FOLDER_PATH}`,
          maxPoolSize:10,
         //  ssl : process.env.NODE_ENV === 'development'? undefined :true,
         //  tls : process.env.NODE_ENV === 'development'? undefined :true
@@ -38,7 +38,7 @@ export const MongoseeAuthUsersDb = async () :Promise<mongoose.Connection|undefin
   try {    
     const connection = await mongoose.connect(process.env.MONGODB_URI as string, 
       {
-      dbName:"Auth",
+      dbName:`${process.env.APP_AUTH_LOC}`,
       ssl : process.env.NODE_ENV === 'development'? undefined :true,
       tls : process.env.NODE_ENV === 'development'? undefined :true,
       maxPoolSize:10,
@@ -60,7 +60,7 @@ export const  disconnectFromMongooseDb = async ( connection:mongoose.Connection|
 : Promise<void> => {
   if( connection?.db ){
        await connection.close()
-   console.log(API_NAME, "db Disconnected")
+   console.log( API_NAME?? '', "db Disconnected")
   }
 }
 

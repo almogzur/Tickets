@@ -1,18 +1,27 @@
+import CryptoJS,  { AES  } from 'crypto-js';
 
-import CryptoJS from 'crypto-js'
 
-export const  cipherString = ( s:string,secret:string  ) : string=>{ 
-    if(!secret){
-        throw new Error( "sry - cipherString  needs its SECRET shh... "  )
-    }
-     const  ciphertext = CryptoJS.AES.encrypt(s, secret).toString();
-     return ciphertext
+export function encryptData(s: string , key:string) :string  {
+  try {
+    // Combine IV and encrypted data (Base64 encoded)
+    const encryptedText = AES.encrypt(s,key).toString()
+
+    return encryptedText;
+
+  } catch (error) {
+    console.error("Encryption failed:", error);
+    throw new Error("Failed to encrypt data");
+  }
 }
-export const unCipherString  = ( s:string , secret:string )=>{
-    if(!secret){
-        throw new Error( "sry - unCipherString  needs its SECRET shh... "  )
-    }
-    const  bytes  = CryptoJS.AES.decrypt(s, secret);
-    const  originalText = bytes.toString(CryptoJS.enc.Utf8);
-    return originalText
-}
+
+export function decryptData(s:  string, key:string) : string {
+     
+   const decryptedStr = AES.decrypt( s, key ).toString(CryptoJS.enc.Utf8);
+    if (!decryptedStr) {
+      console.log("Err ",  decryptedStr , "decryptData from in")
+  }
+    return decryptedStr;
+  }
+
+
+  

@@ -1,15 +1,15 @@
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { Button, Typography } from '@mui/material'
-import DataGridWrap from '@/components/gen/data-grid-wrapper/grid-wrapper'
-import { useAdminDrafts } from '@/util/hooks/admin/use-admin-drafts'
+import { useAdminDrafts } from '@/hooks/admin/use-admin-drafts'
 import { useEffect, useMemo, useState } from 'react'
-import LoadingScreen from '@/components/gen/loading'
 import {   GridColDef, GridRowsProp } from '@mui/x-data-grid'
-import NewEventFormWraper from '@/components/admin/newEvent/from-wrapper'
 import axios, { AxiosRequestConfig } from 'axios'
 import { ImRedo2 } from "react-icons/im";
-import AdminLayout from '@/layouts/admin-layout'
+import AdminLayout from '@/Wrappers/admin'
+import DataGridWrap from '@/HOCs/data-grid-wrapper/grid-wrapper'
+import LoadingScreen from '@/HOCs/loading'
+import NewEventFormWraper from '@/pages-components/admin/newEvent/from-wrapper'
 
 
 

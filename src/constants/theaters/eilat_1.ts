@@ -1,9 +1,7 @@
-import { TheaterLocationType, TheaterType } from "@/types/components-typs/admin/theater/admin-theater-types"
+import { Seats, SeatStyles, TheaterLocationType, TheaterType } from "@/types/components-typs/admin/theater/admin-theater-types"
 import { CSSProperties } from "react"
 
 
-export interface Seats { [key:string] :number[]  }
-export interface SeatStyles   {[key:string]: CSSProperties  }
 
 
 const positionAtr : CSSProperties = { 
