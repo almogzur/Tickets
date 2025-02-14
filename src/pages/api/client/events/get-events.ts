@@ -1,4 +1,4 @@
-import { ClientEventType } from "@/types/pages-types/new-event-types";
+import { ClientEventType } from "@/types/pages-types/admin/new-event-types";
 import {  getAllDbList, getCollectionsFromDb, getDb } from "@/util/dbs/mongo-db/db_fn";
 import { Mongo } from "@/util/dbs/mongo-db/mongo";
 import { rateLimitConfig } from "@/util/fn/api-rate-limit.config";
@@ -46,14 +46,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<Clien
           )
           
            //  findResult will only be returned if its ! null . flat remove the dblist wraper array
-        const Events =FinedCrusersArray.filter((findResult)=> findResult ).flat() //  [[  [{}],[{}],[{}] ] ] <- this one . -> after [ [] ,[], [] ] 
-
-        if(!Events.length){
-          console.log(API_NAME, 'faield ' ,Events)
-
-            return res.status(200)
-        }
-            
+        const Events =FinedCrusersArray.filter((findResult)=> findResult ).flat() //  [[  [{}],[{}],[{}] ] ] <- this one . -> after [ [] ,[], [] ]             
 
       console.log(API_NAME, 'succsess' )
        //     console.log(Events)

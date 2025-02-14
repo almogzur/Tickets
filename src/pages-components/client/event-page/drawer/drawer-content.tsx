@@ -5,10 +5,11 @@ import React, { Dispatch, SetStateAction, useEffect } from "react";
 import { FaExpeditedssl, FaLocationDot } from "react-icons/fa6";
 import DOMPurify from "isomorphic-dompurify";
 import ClientTicketList from "./tickets-list";
-import { TheaterType } from "@/types/components-typs/admin/theater/admin-theater-types";
-import PaypalBtn from "../payments-providers-buttons/paypal";
+import PaypalBtn from "./payments-providers-buttons/paypal";
 import { ItemCategory} from "@paypal/paypal-server-sdk";
-import { ClientEventType, PayPalItem,SeatType } from "@/types/pages-types/new-event-types";
+import { ClientEventType  } from "@/types/pages-types/admin/new-event-types";
+import { PayPalCartItemType, ClientSelectedSeatType } from "@/types/pages-types/client/client-event-type";
+import { TheaterType } from "@/types/components-typs/admin/theater/admin-theater-types";
 
 
 
@@ -24,8 +25,8 @@ export type DrawerContentType = {
   setClientEventTheaterState: Dispatch<SetStateAction<TheaterType | undefined>>
 
   /// Selected Seates 
-  eventSelectSeats: SeatType[]
-  setEventSelectedSeats: Dispatch<SetStateAction<SeatType[]>>
+  eventSelectSeats: ClientSelectedSeatType[]
+  setEventSelectedSeats: Dispatch<SetStateAction<ClientSelectedSeatType[]>>
 
   // old seate valuse  ( state to return the orgin icons and colors at  un-select )
   hendlerSeatOldValues: Record<string, number>
@@ -52,7 +53,7 @@ const DrawerContent = ({
   const getNoramlPrice = () => {
     return getNormailTicket()?.price ?? "N/A"
   }
-  const createPaymentCart = (selectedSeats: SeatType[]): PayPalItem[] => {
+  const createPaymentCart = (selectedSeats: ClientSelectedSeatType[]): PayPalCartItemType[] => {
 
     const { _id, info, ...rest } = event
     const { eventName } = info

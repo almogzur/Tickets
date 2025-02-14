@@ -18,7 +18,7 @@ import { FcPrevious } from "react-icons/fc";
 import { IoTicketSharp } from 'react-icons/io5';
 import { blue, grey } from '@mui/material/colors';
 
-import { DrawerLinkType, ItemPropsType } from './admin-drawer-types';
+import { DrawerLinkType, ItemPropsType } from '../../types/components-typs/admin/admin-drawer-types';
 import { useRouter } from 'next/router';
 import { RiDraftFill } from 'react-icons/ri';
 import WidthContext from '@/context/WidthContext';

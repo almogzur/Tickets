@@ -1,6 +1,5 @@
 // File: pages/api/public.ts
 
-import { CapturedOrderType } from "@/types/pages-types/new-event-types";
 import { Mongo } from "@/util/dbs/mongo-db/mongo";
 import { rateLimitConfig } from "@/util/fn/api-rate-limit.config";
 import { GetBillingInfoFromEventId } from "@/util/fn/pay-fn";

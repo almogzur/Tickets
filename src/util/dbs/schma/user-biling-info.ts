@@ -1,4 +1,4 @@
-import { UserBankInfo, UserPayPalInfo } from "@/types/pages-types/biling-types";
+import { UserBankInfo, UserPayPalInfo } from "@/types/pages-types/admin/user-biling-info-types";
 import { createModel } from "./schema-fn";
 
 

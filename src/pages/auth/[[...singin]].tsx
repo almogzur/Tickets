@@ -12,14 +12,14 @@ import {
 // was trwoing Prop className did not match  and hydration errors  
 //  
 const Paper = dynamic(() => import("@mui/material/Paper"), { ssr: false });
-const InputWrap = dynamic(() => import("@/components/gen/TeextFiledWrpa/input-wrap"), { ssr: false });
+const InputWrap = dynamic(() => import("@/HOCs/TeextFiledWrpa/input-wrap"), { ssr: false });
 
 import Image from "next/image";
 import Logo from "../../../public/logo.png";
 import { useTheme } from "@mui/material/styles";
 import { MdOutlineCancelPresentation } from "react-icons/md";
 import WidthContext from "@/context/WidthContext";
-import { NewUserType } from "@/types/pages-types/supervisor-types";
+import { NewUserType } from "@/types/pages-types/admin/supervisor-types";
 import dynamic from "next/dynamic";
 
 interface ErrorMessagesType {
@@ -50,7 +50,7 @@ export default function SignInPage() {
     signIn("credentials", {
       name: formData.name,
       password: formData.password,
-      callbackUrl: "/admin", // Redirect based on slug
+      callbackUrl: `${process.env.NEXTAUTH_URL}/admin`, 
     });
   };
 

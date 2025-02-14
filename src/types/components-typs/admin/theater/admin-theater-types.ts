@@ -1,27 +1,35 @@
+import { RefObject } from 'react';
+import {z} from 'zod'
 
-import { SeatValidationSchema } from '@/types/pages-types/new-event-types'
-import { CSSProperties, RefObject } from 'react'
-import { z } from 'zod'
+export const SeatValidationSchema = z.record(z.string(), z.array(z.number()));
+export const SeatStylesValidationSchema = z.record(z.string(), z.any())
+
+export const TheaterLocationValidationSchma = z.object({
+  alt:z.string(),
+  lot:z.string(),
+  city:z.string(),
+  address:z.string()
+})
+export const TheaterValidationSchema = z.object({
+     mainSeats:SeatValidationSchema ,
+     sideSeats:SeatValidationSchema ,
+     textsStyle:SeatStylesValidationSchema,
+     styles:SeatStylesValidationSchema,
+     ThaeaterName:z.string(),
+     TheaterLocation:TheaterLocationValidationSchma,
+     TheaterMainPhone:z.string()
+})
+
+
 
 export type  Seats = z.infer< typeof SeatValidationSchema>
-export type  SeatStyles = Record<string,CSSProperties>
+export type  SeatStyles = z.infer<typeof SeatStylesValidationSchema>
+export type TheaterLocationType = z.infer<typeof TheaterLocationValidationSchma>
+export type TheaterType = z.infer< typeof TheaterValidationSchema>
 
 
-export interface TheaterLocationType {
-  alt:string
-  lot:string
-  city:string
-  address:string
-}
-export interface TheaterType {
-   mainSeats:Seats 
-   sideSeats:Seats 
-   textsStyle:SeatStyles
-   styles:SeatStyles
-   ThaeaterName:string
-   TheaterLocation:TheaterLocationType
-   TheaterMainPhone:string
-}
+
+
 
 export interface TheaterTipinfoType {
     initValue:number

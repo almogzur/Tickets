@@ -1,4 +1,4 @@
-import { infoFiledsType } from "@/types/pages-types/new-event-types";
+import { infoFiledsType } from "@/types/pages-types/admin/new-event-types";
 import { createContext, Dispatch, SetStateAction } from "react";
 
 interface InfoTabContextType {

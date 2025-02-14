@@ -1,4 +1,4 @@
-import { EventSettingType } from "@/types/pages-types/new-event-types";
+import { EventSettingType } from "@/types/pages-types/admin/new-event-types";
 import { createContext, Dispatch, SetStateAction } from "react";
 
 interface TabEventSettingsContest {

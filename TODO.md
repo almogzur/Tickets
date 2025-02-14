@@ -26,6 +26,9 @@ TO_DO
 1.  thank you page   { sent ticket info via sms with QR code  }
 2. purches err page 
 
+  // const { Event } = useContex(LiveEventContext)
+
+
 
 
 ===================

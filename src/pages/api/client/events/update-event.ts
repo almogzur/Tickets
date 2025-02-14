@@ -1,5 +1,5 @@
-import { TheaterType } from "@/types/components-typs/admin/theater/admin-theater-types";
-import { ClientEventType } from "@/types/pages-types/new-event-types";
+import { Seats, TheaterType } from "@/types/components-typs/admin/theater/admin-theater-types";
+import { ClientEventType } from "@/types/pages-types/admin/new-event-types";
 import { disconnectFromMongooseDb } from "@/util/dbs/mongosee-fn";
 import {  getAllDbList, getDb, getCollectionsFromDb } from "@/util/dbs/mongo-db/db_fn";
 import { ObjectId } from "mongodb";
@@ -8,17 +8,20 @@ import { json } from "stream/consumers";
 import { Mongo } from "@/util/dbs/mongo-db/mongo";
 import rateLimit from "express-rate-limit";
 import { rateLimitConfig } from "@/util/fn/api-rate-limit.config";
+import { modifieSeatValueType } from "@/types/pages-types/client/client-theater-types";
+import { UpdateTheaterApiValidationSchema } from "@/types/pages-types/client/client-event-type";
 
 
 
 const apiLimiter = rateLimit(rateLimitConfig);
 
 
-const ValidateNotOcupideSeats = (oldT: Partial<TheaterType>, newT: Partial<TheaterType>): boolean => {
+const ValidateNotOcupideSeats = (oldT: TheaterType, newT: TheaterType): boolean => {
     console.log("Validating Inoket");
 
     const existingTheaterSeats = { ...oldT };
     const newSeats = { ...newT };
+
     const combinedExistingSeats = { ...existingTheaterSeats.mainSeats, ...existingTheaterSeats.sideSeats };
     const combinedNewSeats = { ...newSeats.mainSeats, ...newSeats.sideSeats };
 
@@ -29,7 +32,7 @@ const ValidateNotOcupideSeats = (oldT: Partial<TheaterType>, newT: Partial<Theat
 
             if (seatValue === 1 && combinedNewSeats[rowName]?.[index] === 2) {
                 // Invalid case found - seat was occupied (1) and new seat value is 2
-                console.log("ValidateNotOcupideSeats", "new:", combinedNewSeats[rowName]?.[index], "old:", seatValue);
+                console.log("ValidateNotOcupideSeats", "new:", combinedNewSeats[rowName]?.[index], "old:", seatValue  , "at " ,rowName );
 
                 return false;
             }
@@ -39,11 +42,12 @@ const ValidateNotOcupideSeats = (oldT: Partial<TheaterType>, newT: Partial<Theat
     return true;
 };
 
-const modifieSeatValue = (Theater: Partial<TheaterType>): TheaterType => {
 
+const modifieSeatValue = ( TheaterSeates : modifieSeatValueType ): modifieSeatValueType => {
 
-    const newTheaterSeatDetails = { ...Theater };
-    const combinedSeats = { ...Theater.mainSeats, ...Theater.sideSeats };
+    const newTheaterSeatDetails = { ... TheaterSeates}
+
+    const combinedSeats = { ...TheaterSeates.main, ...TheaterSeates.side  };
 
     Object.entries(combinedSeats).forEach(([_, rowSeats]) => {
         rowSeats.forEach((value, index) => {
@@ -63,20 +67,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         async () => {
 
             const API_NAME = "Client Update Events (Only PayProvider Invoke)";
-            
+
             if (req.method !== "POST") {
                 return res.status(401).json({ message: `Method ${req.method} not allowed` });
             }
 
-            res.setHeader("Allow", ["POST"]);
-            const Client = await Mongo()
+            const body =req.body
+            const isValideData = UpdateTheaterApiValidationSchema.safeParse(body)
 
-            // validate incoming data !!!
-             
-      
+            if(!isValideData.success){
+                return res.status(400).json({massage:" bad request data " })
+            }
+
             const { reqTheater, eventId } = req.body 
-            const {mainSeats ,sideSeats} = reqTheater
-            
+            res.setHeader("Allow", ["POST"]);
+
+             
+            const Client = await Mongo()
             const dbList = await getAllDbList(Client)
             const session =  Client?.startSession()
             //https://mongoosejs.com/docs/transactions.html
@@ -91,14 +98,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             return false;
                         }
                         for (const { name, empty } of dbList) {
-                            if (empty) continue;
+
+                            if (empty) continue; // remove
+
                             const db = await getDb(name,Client,`${process.env.USER_DATA_FOLDER_PATH}`)
-                            if (!db) continue;
+
+                             if (!db) continue; // no connection
                          
                             const UserCollections = await getCollectionsFromDb(db, `${process.env.USER_EVENTS_FOLDER_PATH}`)
-                            if(!UserCollections) continue
-                            for (const collection of UserCollections) {
-                                // console.log(collection)
+
+                            if(!UserCollections) continue // no data 
+
+                            for (const collection of UserCollections) {             // console.log(collection)
+
+
                                 //  User db
                                 // looking throu all collections  and retriving the first one ( _id is uniq ) so can only be 1 result 
                                 //  with   _id
@@ -110,8 +123,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                                      continue
                                 }
     
-                                console.log(collection.dbName, collection.collectionName);
-                                    const {   info, ...restEvent } = event;
+                           // console.log(collection.dbName, collection.collectionName);
+
+                                     const {   info, ...restEvent } = event;
                                      const { Theater, ...restInfo } = info;
     
                                 if (!Theater) continue;
@@ -120,15 +134,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     
                                  if (!isSeatsFree)   return false
-                                 const modifiedSeates = modifieSeatValue(reqTheater)
+
+                                 const modifiedSeates = modifieSeatValue({main:reqTheater.mainSeats , side:reqTheater.sideSeats})
 
                                  const newTheater : TheaterType  = {
                                      ...Theater,
-                                      mainSeats:modifiedSeates.mainSeats,
-                                      sideSeats:modifiedSeates.sideSeats
+                                      mainSeats:modifiedSeates.main,
+                                      sideSeats:modifiedSeates.side
                                  }
                                 
                                 const newEvent: ClientEventType = { info: { Theater: newTheater, ...restInfo }, ...restEvent };
+
                                 const replaceResult = await collection.findOneAndReplace(
                                     { _id: ObjectId.createFromHexString(eventId) },
                                     newEvent,

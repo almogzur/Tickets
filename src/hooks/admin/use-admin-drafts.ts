@@ -1,4 +1,4 @@
-import { DraftType, } from "@/types/pages-types/new-event-types";
+import { DraftType, } from "@/types/pages-types/admin/new-event-types";
 import axios, { AxiosRequestConfig } from "axios";
 import { Session } from "next-auth";
 import useSWR, { Fetcher, Key as SWRKey , KeyedMutator, SWRConfiguration} from "swr";

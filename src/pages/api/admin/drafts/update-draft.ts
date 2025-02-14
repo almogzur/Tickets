@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import { disconnectFromMongooseDb, MongoseeWithSessionModleDb } from "@/util/dbs/mongosee-fn";
 import {  DraftModle } from "@/util/dbs/schma/event";
 import { delFolder, findSubFolders, moveToEventNameFolder } from "../../../../util/fn/cloudinary_helper_functions";
+import { DraftValidationSchema } from "@/types/pages-types/admin/new-event-types";
 
 type ResponseData = {
   massage?: string
@@ -22,7 +23,6 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse<R
      return res.status(500).json({ massage: "Server configuration error" });
   }
 
-  
   const session = await getServerSession(req, res, authOptions);
 
 
@@ -40,17 +40,20 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse<R
   const isConnected  = await MongoseeWithSessionModleDb(session)
 
   if(!isConnected){
-
         console.log("no db");
         return res.status(500).json({massage:" No DB Connection"})
-    
   }
 
-  const { id, ...rest }= req.body // removing the id from the to be saved data 
-//  console.log(id);
+  const  body = req.body
+   const isValidData = DraftValidationSchema.safeParse(  body)
 
+   if(!isValidData){
+      res.status(400).json({massage:'bad Data  input '})
+   }
 
-    // calling the Molde Only on Api call prevanting un wanted folder saves 
+   
+  const { id, ...rest }=  isValidData.data // removing the id from the to be saved data 
+
 
 
   const preview = rest.preview
@@ -64,8 +67,7 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse<R
    try{ 
     const result = await moveToEventNameFolder(preview,eventName,session,API_NAME)
      console.log(" moveToEventNameFolder Succsess",  eventName , API_NAME, result);
-    }
-   catch (err){
+    }catch (err){
      console.log ("moveToEventNameFolder", err , eventName, API_NAME);
   }
 
@@ -111,14 +113,15 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse<R
       return false
      }
     }
+
+
     try{
       const data = await delEmptyFolders(session.user?.name)
       if(data){
         console.log(API_NAME,"delFolders","Seccsess");
       }
         
-     }
-    catch (err){ 
+     }catch (err){ 
       console.log(API_NAME,"delFolders", err);
      }
     

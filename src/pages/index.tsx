@@ -41,7 +41,7 @@ interface ItemComponentProps   {
 
 import type {  GetServerSideProps, GetServerSidePropsResult } from 'next'
 import axios from 'axios';
-import { ClientEventType } from '@/types/pages-types/new-event-types';
+import { ClientEventType } from '@/types/pages-types/admin/new-event-types';
 import ClientLayout from '@/Wrappers/client';
 import EventCard from '@/pages-components/client/main-page/event-card';
 
@@ -50,7 +50,7 @@ export const getServerSideProps: GetServerSideProps<{ Events: ClientEventType[] 
     const baseUrl = `${process.env.NEXTAUTH_URL}`
     const response = await axios.get<ClientEventType[]>(`${baseUrl}/api/client/events/get-events`);
     return {
-      props: { Events: response.status === 200 ? response.data : [] },
+      props: { Events: response.status === 200 ? response.data :[] },
     };
   } catch (error) {
     console.error("Error fetching events:", error);
@@ -58,7 +58,13 @@ export const getServerSideProps: GetServerSideProps<{ Events: ClientEventType[] 
   }
 };
 
-export default function Home({Events}:{Events:ClientEventType[]}) {
+
+interface HomePageProps  {
+  Events:ClientEventType[]
+}
+export default  function Home  ( props : HomePageProps) {
+
+  const  {  Events } =    props
 
  const theme = useTheme()
  const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -121,21 +127,6 @@ export default function Home({Events}:{Events:ClientEventType[]}) {
      ArowsWrapper = Flex
 
 
-     if(!Events){
-      return  (
-        <ClientLayout noScrool HeaderName='' >
-           <Flex
-         direction={"row"}
-         sx={{ display: 'flex',    width:"100%" , height:"100%" ,   }}
-         justifyContent={"center"}
-         alignItems={"center"}
-      >
-          <CircularProgress />
-          
-         </Flex>
-    </ClientLayout>
-      )
-     }
 
       return (
         <>

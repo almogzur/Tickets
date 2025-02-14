@@ -17,7 +17,7 @@ import {
   DraftType,
   AdminEventType,
   ClientEventType,
-} from "../../../types/pages-types/new-event-types";
+} from "../../../types/pages-types/admin/new-event-types";
 import {
   Positions,
   TheaterMultiTipeInfoType,
@@ -45,7 +45,7 @@ import { FaFirstdraft } from "react-icons/fa6";
 import { MdPublic } from "react-icons/md";
 import { RiDraftFill } from "react-icons/ri";
 import { ImRedo2 } from "react-icons/im";
-import { UserPayPalInfo, UserPayPalInfoValidationSchema } from "@/types/pages-types/biling-types";
+import { UserPayPalInfo, UserPayPalInfoValidationSchema } from "@/types/pages-types/admin/user-biling-info-types";
 
 // Dynamic Component Imports (Lazy Loading)
 const TabsWraper = dynamic(() => import("@/pages-components/admin/newEvent/tabs/tabs-wraper"), { ssr: false });

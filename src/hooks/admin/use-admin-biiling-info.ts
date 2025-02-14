@@ -1,4 +1,4 @@
-import { UserPayPalInfo } from "@/types/pages-types/biling-types";
+import { UserPayPalInfo } from "@/types/pages-types/admin/user-biling-info-types";
 import axios, { AxiosRequestConfig } from "axios";
 import { Session } from "next-auth";
 import useSWR, { Fetcher, Key as SWRKey, KeyedMutator, SWRConfiguration } from "swr";

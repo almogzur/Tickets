@@ -1,5 +1,5 @@
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
-import { UserPayPalInfo, UserPayPalInfoValidationSchema } from "@/types/pages-types/biling-types";
+import { UserPayPalInfo, UserPayPalInfoValidationSchema } from "@/types/pages-types/admin/user-biling-info-types";
 import { disconnectFromMongooseDb, MongoseeWithSessionModleDb } from "@/util/dbs/mongosee-fn";
 import { PayPalModle } from "@/util/dbs/schma/user-biling-info";
 import { decryptData, encryptData } from "@/util/fn/crypto";

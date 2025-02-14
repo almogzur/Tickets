@@ -25,7 +25,7 @@ import TabsInfoContext from '@/context/admin/new-event/tabs/tabs-info-context';
 
 import {  ZodError } from 'zod';
 import { IoMdAddCircle } from 'react-icons/io';
-import {  TicketType, TicketValidationSchema } from '@/types/pages-types/new-event-types';
+import {  TicketType, TicketValidationSchema } from '@/types/pages-types/admin/new-event-types';
 import InputWrap from '@/HOCs/TeextFiledWrpa/input-wrap';
 import SelectWrap from '@/HOCs/select-wrap';
 import { NormalSwitchWrap } from '@/HOCs/switch-wrap';

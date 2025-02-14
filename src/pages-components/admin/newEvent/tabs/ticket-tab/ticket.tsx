@@ -18,7 +18,7 @@ import { FaFilePdf } from "react-icons/fa6";
 import { grey } from "@mui/material/colors";
 import { FullDateOptions } from "@/pages/_app";
 import tabsTicketContext from "@/context/admin/new-event/tabs/tabs-ticket-context";
-import { TicketType } from "@/types/pages-types/new-event-types";
+import { TicketType } from "@/types/pages-types/admin/new-event-types";
 import MyChip from "@/HOCs/chip-wrap";
 
 

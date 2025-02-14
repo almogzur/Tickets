@@ -5,7 +5,7 @@ import { AuthOptions } from "next-auth"
 import bcrypt from 'bcryptjs'
 
 import jwt from 'jsonwebtoken'
-import {  NewUserValidationShema } from "@/types/pages-types/supervisor-types"
+import {  NewUserValidationShema } from "@/types/pages-types/admin/supervisor-types"
 import { disconnectFromMongooseDb, MongoseeAuthUsersDb } from "@/util/dbs/mongosee-fn"
 import { UsersModle } from "@/util/dbs/schma/new-user"
 
@@ -146,10 +146,9 @@ export const authOptions: AuthOptions = {
     // , you can use the redirect callback to customise that behaviour.
     //The default redirect callback looks like this:
 
-    async redirect({ url, baseUrl }) {
-      return baseUrl
+    async redirect({  baseUrl }) {
+       return  `${baseUrl}/admin`; // Redirect after login
     },
-
     // sing In Pass data to JWT Token 
     //This callback is called whenever a JSON Web 
     // Token is created (i.e. at sign in) or updated (i.e whenever a session is accessed in the client).

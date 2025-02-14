@@ -6,7 +6,7 @@ import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession  } from "next-auth";
-import { ClientEventType } from "@/types/pages-types/new-event-types";
+import { ClientEventType } from "@/types/pages-types/admin/new-event-types";
 
 export default async function handler  ( req: NextApiRequest , res: NextApiResponse ):Promise<any>{
  

@@ -1,4 +1,4 @@
-import { NewUserType } from "@/types/pages-types/supervisor-types";
+import { NewUserType } from "@/types/pages-types/admin/supervisor-types";
 import { createModel } from "./schema-fn";
 
 

@@ -10,13 +10,14 @@ import React from 'react';
 import ClineTransformContext from '@/context/client/event-page/client-tranform-contenx'
 import { Positions, TheaterType } from '@/types/components-typs/admin/theater/admin-theater-types';
 import { TiArrowBack } from "react-icons/ti";
-import { ClientEventType, SeatType } from '@/types/pages-types/new-event-types';
+import { ClientEventType, } from '@/types/pages-types/admin/new-event-types';
 import { GetServerSideProps } from 'next';
 import axios from 'axios';
 import ClientLayout from '@/Wrappers/client';
 import DrawerContent from '@/pages-components/client/event-page/drawer/drawer-content';
 import DrawerWighet from '@/pages-components/client/event-page/drawer/info-drawer-wighet';
 import TheaterMap from '@/pages-components/client/event-page/theater/client-theater-map';
+import { ClientSelectedSeatType } from '@/types/pages-types/client/client-event-type';
 
 
 
@@ -43,6 +44,11 @@ export const getServerSideProps  =(
 
 const DetailsPage = ({ Events }: { Events: ClientEventType[] }) => {
 
+
+
+
+  // const { Event } = useContex(LiveEventContext)
+
   const theme = useTheme()
   const router = useRouter()
   const { xxl, xl, lg, md, sm, xs, xxs } = useContext(WidthContext)
@@ -58,7 +64,7 @@ const DetailsPage = ({ Events }: { Events: ClientEventType[] }) => {
 
   // Event State 
   const [clientEventTheaterState, setClientEventTheaterState] = useState<TheaterType>()
-  const [eventSelectSeats, setEventSelectedSeats] = useState<SeatType[]>([])
+  const [eventSelectSeats, setEventSelectedSeats] = useState<ClientSelectedSeatType[]>([])
   const [hendlerSeatOldValues, setHendlerSeatOldValues] = useState<Record<string, number>>({});
 
 

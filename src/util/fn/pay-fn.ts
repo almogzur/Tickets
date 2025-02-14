@@ -1,5 +1,5 @@
-import { UserPayPalInfo } from "@/types/pages-types/biling-types";
-import { ClientEventType } from "@/types/pages-types/new-event-types";
+import { UserPayPalInfo } from "@/types/pages-types/admin/user-biling-info-types";
+import { ClientEventType } from "@/types/pages-types/admin/new-event-types";
 import { MongoClient, ObjectId } from "mongodb";
 import { getCollectionsFromDb, getAllDbList, getDb } from "../dbs/mongo-db/db_fn";
 import crypto from 'crypto'
@@ -8,13 +8,13 @@ import { decryptData } from "./crypto";
 
 export const GetBillingInfoFromEventId = async (eventId: string, authKey: string, Client: MongoClient | null): Promise<{ info: UserPayPalInfo } | undefined> => {
 
-    console.log("GetBillingInfoFromEventId ", "_ invoked", eventId)
+    //console.log("GetBillingInfoFromEventId ", "_ invoked", eventId)
 
     const ServerKey =`${ process.env.CIPHER_SECRET }`
 
     
     if(!ServerKey){
-        console.log("GetBillingInfoFromEventId", "NO SERVER KEy")
+        console.log("GetBillingInfoFromEventId", "NO SERVER KEY")
         return
 
     }
@@ -70,7 +70,7 @@ export const GetBillingInfoFromEventId = async (eventId: string, authKey: string
                     ...restbillingInfo,
                     clientSecret: deCipherSecret
                 }
-                console.log("GetBillingInfoFromEventId Succsess")
+              //  console.log("GetBillingInfoFromEventId Succsess")
                 return { info: Info }
             }
         }

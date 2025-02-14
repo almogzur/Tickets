@@ -4,7 +4,7 @@ import { Button, Typography, Stack as Flex, Container } from '@mui/material';
 import axios from 'axios';
 import { grey } from '@mui/material/colors';
 import AdminLayout from '@/Wrappers/admin';
-import { NewUserType } from '@/types/pages-types/supervisor-types';
+import { NewUserType } from '@/types/pages-types/admin/supervisor-types';
 import { hashString } from '@/util/fn/hase';
 import InputWrap from '@/HOCs/TeextFiledWrpa/input-wrap';
 
@@ -28,7 +28,7 @@ const UserForm = () => {
 
     }
     try {
-      const response = await axios.post('/api/super/user/new-user', HashedPasswordUser, {})
+      const response = await axios.post('/api/super/new-user', HashedPasswordUser, {})
       return response
     }
     catch (err) {

@@ -43,3 +43,6 @@ yarn-error.log*
 
 # auth pages 
 /src/api/auth
+
+*.vscode
+*.qodo

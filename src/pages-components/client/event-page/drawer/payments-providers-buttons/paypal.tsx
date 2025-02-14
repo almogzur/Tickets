@@ -1,5 +1,6 @@
+
 import { TheaterType } from "@/types/components-typs/admin/theater/admin-theater-types";
-import { CapturedOrderType, PayPalItem } from "@/types/pages-types/new-event-types";
+import { PayPalCartItemType } from "@/types/pages-types/client/client-event-type";
 import { PayPalScriptProvider, PayPalButtons, ScriptContextState } from "@paypal/react-paypal-js";
 import axios from "axios";
 import { useRouter } from "next/router";
@@ -8,7 +9,7 @@ import { useEffect, useState } from "react";
 
 
 export interface PaypalBtnType {
-    cart: PayPalItem[]
+    cart: PayPalCartItemType[]
     total: string
     TheaterState: TheaterType | undefined
     publicId: string

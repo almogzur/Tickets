@@ -1,6 +1,6 @@
 
 import {Schema} from 'mongoose';
-import { EventSettingType, DraftType, LogType, TicketType, ClientEventType, AdminEventType, infoFiledsType, InvoiceType } from '../../../types/pages-types/new-event-types';
+import { EventSettingType, DraftType, LogType, TicketType, ClientEventType, AdminEventType, infoFiledsType, InvoiceType } from '../../../types/pages-types/admin/new-event-types';
 import { createModel } from './schema-fn';
 
 
@@ -59,8 +59,6 @@ const EventInvoceSchema   ={
   amout: {type:Number, required:false},
   timeStamp: {type:String, required:false},
 }
-
-
 const DraftSchema =   {
   info: { type: DraftGlobalFiled },
   tickets: { type: [TicketSchema], required: false },

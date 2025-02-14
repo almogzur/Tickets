@@ -2,12 +2,12 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import { Button, ListItemAvatar, ListItemButton, Typography, useTheme , Stack as Flex, Divider  } from '@mui/material';
-import { TheaterType } from '@/types/components-typs/admin/theater/admin-theater-types';
 import { DrawerContentType } from './drawer-content';
 import { IoMdClose } from "react-icons/io";
 import { grey } from '@mui/material/colors';
 import WidthContext from '@/context/WidthContext';
 import { useContext } from 'react';
+import { TheaterType } from '@/types/pages-types/admin/new-event-types';
 
 
 interface ClientTicketListType extends  DrawerContentType {}

@@ -8,7 +8,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import {  Typography, useTheme } from "@mui/material";
 import { LuTicket } from "react-icons/lu";
-import { ClientEventType } from "@/types/pages-types/new-event-types";
+import { ClientEventType } from "@/types/pages-types/admin/new-event-types";
 import { TheaterType } from "@/types/components-typs/admin/theater/admin-theater-types";
 import SelectWrap, { SelectItemType } from "@/HOCs/select-wrap";
 

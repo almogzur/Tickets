@@ -10,7 +10,7 @@ import { useRouter } from 'next/router';
 import WidthContext from '@/context/WidthContext';
 import { useContext } from 'react';
 import { optimizeImage } from 'next/dist/server/image-optimizer';
-import { ClientEventType } from '@/types/pages-types/new-event-types';
+import { ClientEventType } from '@/types/pages-types/admin/new-event-types';
 
 export default function EventCard(props:ClientEventType) {
   const theme = useTheme()

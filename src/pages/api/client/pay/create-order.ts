@@ -17,7 +17,7 @@ import { GetBillingInfoFromEventId } from "@/util/fn/pay-fn";
 import { ObjectId } from "mongodb";
 import { rateLimitConfig } from "@/util/fn/api-rate-limit.config";
 import { Mongo } from "@/util/dbs/mongo-db/mongo";
-import { NewOrderType, NewOrderValidationSchema } from "@/types/pages-types/new-event-types";
+import { PayPalRequestCreateOrderValidationSchema } from "@/types/pages-types/client/client-event-type";
 
 const apiLimiter = rateLimit(rateLimitConfig);
 
@@ -28,15 +28,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return apiLimiter(req, res,async () => {
             const API_NAME = "Pay - Order"
 
-            const body :NewOrderType  = req.body
-            const IsValidData = NewOrderValidationSchema.safeParse( body )
+            const body   = req.body
+            const IsValidData    = PayPalRequestCreateOrderValidationSchema.safeParse( body )
 
             if( ! IsValidData.success){
                 console.log(IsValidData.error)
                 return res.status(400).json({massage:"bad format Data"})
             }
 
-            const { cart, total, publicId, eventId } = IsValidData.data
+            const  { cart, total, publicId, eventId } =  IsValidData.data
 
             const Client = await  Mongo()
 
