@@ -7,17 +7,18 @@ import { IoMdClose } from "react-icons/io";
 import { grey } from '@mui/material/colors';
 import WidthContext from '@/context/WidthContext';
 import { useContext } from 'react';
-import { TheaterType } from '@/types/pages-types/admin/new-event-types';
+import { TheaterType } from '@/types/components-typs/admin/theater/admin-theater-types';
 
+import ClientSelectedEventContext from '@/context/client/event-page/selected-event-context'
 
 interface ClientTicketListType extends  DrawerContentType {}
 
 export default function ClientTikectList({
-    event,
+    
     eventSelectSeats,
     clientEventTheaterState,
     hendlerSeatOldValues,
-    setEventState,
+
     setEventSelectedSeats,
     setClientEventTheaterState,
     setHendlerSeatOldValues,
@@ -25,6 +26,8 @@ export default function ClientTikectList({
   
   const theme = useTheme()
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
+
+  const {  ClientSelectedEvent , setClientSelectedEvent} = useContext(ClientSelectedEventContext)
   
 
   const hendler = (

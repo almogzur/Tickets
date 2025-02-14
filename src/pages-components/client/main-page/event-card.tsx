@@ -8,9 +8,11 @@ import {Typography, useTheme, Stack as Flex} from '@mui/material'
 import { CldImage } from 'next-cloudinary';
 import { useRouter } from 'next/router';
 import WidthContext from '@/context/WidthContext';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { optimizeImage } from 'next/dist/server/image-optimizer';
 import { ClientEventType } from '@/types/pages-types/admin/new-event-types';
+
+import ClientSelectedEventContext from '@/context/client/event-page/selected-event-context'
 
 export default function EventCard(props:ClientEventType) {
   const theme = useTheme()
@@ -18,6 +20,9 @@ export default function EventCard(props:ClientEventType) {
   const Actions = Flex
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
 
+  const {  ClientSelectedEvent , setClientSelectedEvent} = useContext(ClientSelectedEventContext)
+
+  useEffect(()=>{console.log(props, "Event Card Props")},[props])
 
   
   return (
@@ -57,8 +62,16 @@ export default function EventCard(props:ClientEventType) {
                  justifyContent={"center"}
                  alignItems={"center"}  
                  height={'20%'}
-                 sx={{      cursor:'pointer',                 }}
-                 onClick={   ()=>  router.push(`/details/${props._id}`)}
+                 sx={{ cursor:'pointer'}}
+                 onClick={ (e)=> {
+
+                     setClientSelectedEvent(props)
+                     router.push({
+                        pathname:`/event/${props.info.eventName}`,
+                       },
+                      
+                      )}
+                  }
 
                    >
                  <Typography 

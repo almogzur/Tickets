@@ -89,10 +89,10 @@ const AdminBillingPage = () => {
 
 
   return (
-    <AdminLayout >
-      <Typography variant='h3' textAlign={"center"} > כספים</Typography>
 
       <Container>
+      <Typography variant='h3' textAlign={"center"} > כספים</Typography>
+
         <Wrapper
           direction={"row"}
           justifyContent={"center"}
@@ -137,7 +137,6 @@ const AdminBillingPage = () => {
         </Wrapper>
       </Container>
 
-    </AdminLayout>
   )
 }
 

@@ -1,6 +1,6 @@
 // React | Next
 import { useSession } from 'next-auth/react'
-import { useState} from 'react'
+import { useEffect, useState} from 'react'
 
 
 //components
@@ -12,6 +12,9 @@ import NewEventFormWraper from '@/pages-components/admin/newEvent/from-wrapper'
 
 
 const NewEventPage=()=>{
+
+
+  useEffect(()=>{})  // IMPORTETNT ADD setNoSCROOL To LAYOUT
 
    //Global State 
    const {data: session ,status ,update} = useSession()
@@ -26,15 +29,17 @@ const NewEventPage=()=>{
       return <LoadingScreen text={loadingScrenText} />
       }
 
+
+
        return (
     <>
      <Head>
       <meta name="viewport" content="width=device-width, user-scalable=no"/>
     </Head>
 
-    <AdminLayout  noScrool >
+    <   >
         <NewEventFormWraper  />
-    </AdminLayout>
+    </>
 
     </>
       ) 

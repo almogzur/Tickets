@@ -1,7 +1,11 @@
 import ClientNavbar from "@/pages-components/client/Navbar";
 import { Box, Container , Stack as Flex, GlobalStyles, useTheme } from "@mui/material";
 import Head from "next/head";
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useMemo, useState } from "react";
+import ClientSelectedEventContest from '@/context/client/event-page/selected-event-context'
+import { ClientEventType } from "@/types/pages-types/admin/new-event-types";
+import ClientSelectedEventContext from '@/context/client/event-page/selected-event-context'
+import FullHeightPage from "@/HOCs/full-height-page";
 
 
 
@@ -13,21 +17,27 @@ interface ClientLayoutPropsType  {
   }
 
 const  ClientWrapper = (props:ClientLayoutPropsType) => {
-    const theme = useTheme()
+    
+    const [ ClientSelectedEvent , setClientSelectedEvent ] = useState<ClientEventType>()
 
   const {children, noScrool, HeaderName} = props
+
   return (
     <>
         <Head>
           <title>{HeaderName}</title>
           <meta name="viewport" content="width=device-width, user-scalable=no"/>
       </Head>
-          <FullHeightPage  noScrool={noScrool}  HeaderName={HeaderName} >
+    
+      <ClientSelectedEventContext.Provider value={{ClientSelectedEvent,setClientSelectedEvent}} >
+
+      <FullHeightPage  noScrool={noScrool}  HeaderName={HeaderName} >
 
          <ClientNavbar />
            { children }
-  
       </FullHeightPage>
+      </ClientSelectedEventContext.Provider>
+
       </>
     
   );
@@ -40,22 +50,5 @@ export default ClientWrapper;
 // fix scroll on under 600 expended 
 
 // see https://gist.github.com/dmurawsky/d45f068097d181c733a53687edce1919
- const FullHeightPage = ({children,noScrool}:{children:ReactNode, noScrool?:boolean ,HeaderName?:string}) => {
-  const theme = useTheme()
-
-   return<Box sx={{
-    direction:"rtl",
-    height:"100vh",
-    background:"black",
-    overflowY: noScrool? 'clip' : 'scroll', 
-    overflowX:"clip",
-    scrollbarWidth: 'none', // "auto", "thin", or "none"
-    scrollbarColor: `${theme.palette.secondary.main} transparent`, // thumb and track colors
-  }} >
-  {children}
-
-</Box>
-}
-
 
 

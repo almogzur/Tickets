@@ -13,7 +13,7 @@ export interface PaypalBtnType {
     total: string
     TheaterState: TheaterType | undefined
     publicId: string
-    eventId: string
+    eventId: string|undefined
 }
 
 const PaypalBtn = ({ eventId, publicId, cart, total, TheaterState }: PaypalBtnType) => {

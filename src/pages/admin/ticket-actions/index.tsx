@@ -16,12 +16,9 @@ if(status==="loading"){
   
 
 return (
-  <AdminLayout >
+  < >
       <Typography variant='h2' textAlign={"center"} >מימוש כרטיסים</Typography>
-      
-
-
-  </AdminLayout>
+  </>
   ) 
 }
 

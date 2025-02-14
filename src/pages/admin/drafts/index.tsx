@@ -128,7 +128,7 @@ if(status==="loading" || isLoading){
  
 return (
 
-  <AdminLayout >
+  < >
   { !draftId && <Typography textAlign={"center"} variant='h3' >טיוטות</Typography>}
      { draftId &&
       <Button variant='text' sx={{position:"absolute" , top:10 ,left:90 , zIndex:300}}  onClick={()=>{setDraftId(undefined)}} >
@@ -139,7 +139,7 @@ return (
        : <NewEventFormWraper Draft={Draft} DraftId={draftId}  />
     }
   
-  </AdminLayout>
+  </>
   ) 
 }
 

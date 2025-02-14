@@ -3,11 +3,8 @@ import { ItemCategory, OrderRequest } from '@paypal/paypal-server-sdk'
 import { SeatValidationSchema } from '@/types/components-typs/admin/theater/admin-theater-types'
 
 
-
-
-
 export const PayPalCartItemVlidationShema= z.object({
-    id: z.string().min(1),
+    id: z.string().min(1).or(z.undefined()),
     name: z.string().min(1),
     quantity: z.string().min(1),
     category:z.union([z.literal(ItemCategory.Donation) ,z.literal(ItemCategory.DigitalGoods),z.literal(ItemCategory.PhysicalGoods) ] ),
@@ -57,8 +54,6 @@ export const PayPalCapturedRequestOrderValidationSchema= z.object({
 
 
 
-
-
 export interface CartItemType extends Omit<ClientSelectedSeatType, 'value'> {
   id: string;
   name: string;
@@ -66,7 +61,7 @@ export interface CartItemType extends Omit<ClientSelectedSeatType, 'value'> {
   Hour:string
 }
 
-export type PayPalReqType = { // see Order Controller fn parameters 
+export type PayPalClollectInfoObjectType  = { // see Order Controller fn parameters 
   body: OrderRequest;
   paypalRequestId?: string;
   paypalPartnerAttributionId?: string;
@@ -74,17 +69,6 @@ export type PayPalReqType = { // see Order Controller fn parameters
   prefer?: string;
   paypalAuthAssertion?: string;
 }
-
-export type PayPalCaptureReqType = { // see Order Controller fn parameters 
-    body: OrderRequest;
-    paypalRequestId?: string;
-    paypalPartnerAttributionId?: string;
-    paypalClientMetadataId?: string;
-    prefer?: string;
-    paypalAuthAssertion?: string;
-  }
-
-
 
 
   

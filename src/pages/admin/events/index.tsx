@@ -93,9 +93,9 @@ const ManageEventsPage=()=>{
 }
 
 return (
-        <AdminLayout>
+        <>
                 <DataGridWrap columnsData={ColData} rowsData={Rows}/>
-        </AdminLayout>
+        </>
 ) 
 }
 

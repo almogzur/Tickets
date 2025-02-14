@@ -17,12 +17,10 @@ if(status==="loading"){
   
 
 return (
-  <AdminLayout >
+  < >
       <Typography variant='h2' textAlign={"center"} >פורטל ניהול</Typography>
       
-
-
-  </AdminLayout>
+  </>
   ) 
 }
 

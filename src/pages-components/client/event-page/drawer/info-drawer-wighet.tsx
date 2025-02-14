@@ -4,10 +4,11 @@ import * as React from 'react';
 
 import WidthContext from '@/context/WidthContext';
 import {      Stack as Flex  , Button, Typography, useTheme, Box,} from '@mui/material';
-import { SetStateAction, } from 'react'
+import { SetStateAction, useContext, } from 'react'
 import { grey } from '@mui/material/colors';
 import { ClientEventType } from '@/types/pages-types/admin/new-event-types';
 import { ClientSelectedSeatType } from '@/types/pages-types/client/client-event-type';
+import ClientSelectedEventContext from '@/context/client/event-page/selected-event-context'
 
 
 interface ClientInfoDrawerType {
@@ -15,7 +16,6 @@ interface ClientInfoDrawerType {
     wighetIsExp:boolean
     setWighetIsExp:React.Dispatch<SetStateAction<boolean>>
     eventSelectSeats:ClientSelectedSeatType[]
-    event:ClientEventType|undefined
 
 }
 
@@ -25,12 +25,13 @@ export default function DrawerWighet({
     wighetIsExp,
     setWighetIsExp,
     eventSelectSeats,
-    event
+    
     
     
     }:ClientInfoDrawerType) {
   const {xxl,xl,lg,md,sm,xs,xxs} = React.useContext(WidthContext)
   const theme = useTheme()
+  const {  ClientSelectedEvent , setClientSelectedEvent} = useContext(ClientSelectedEventContext)
 
       const
       FooterFlex = Flex,
@@ -65,9 +66,9 @@ export default function DrawerWighet({
                             </Box>
                             :
                             <Flex height={"100%"}  justifyContent={"center"}  >
-                                <Typography fontWeight={'bold'}  >{event?.info.eventName} </Typography>
+                                <Typography fontWeight={'bold'}  >{ClientSelectedEvent?.info.eventName} </Typography>
                                 <Typography fontWeight={'bold'}  >  מחיר : {10000} </Typography>
-                                <Typography  fontWeight={'bold'}  >{event?.info.Date} </Typography>
+                                <Typography  fontWeight={'bold'}  >{ClientSelectedEvent?.info.Date} </Typography>
                             </Flex>
                             }
                            <Button 

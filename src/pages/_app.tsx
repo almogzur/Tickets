@@ -27,6 +27,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 // Geo Location  Map  Css
 import '@tomtom-international/web-sdk-maps/dist/maps.css'
+import { Dispatch, ReactNode, SetStateAction, useState } from 'react';
+import { ClientEventType } from '@/types/pages-types/admin/new-event-types';
 
 
 export const FullDateOptions :Intl.DateTimeFormatOptions = {
@@ -42,6 +44,12 @@ export const samiDateOptions :Intl.DateTimeFormatOptions = {
         month: '2-digit',
         day: '2-digit',
 };
+
+import ClientWrapper from "@/Wrappers/client";
+import { useRouter } from 'next/router';
+
+import AdminWrrpaer from '@/Wrappers/admin';
+
 
 
 
@@ -174,8 +182,8 @@ const theme  = createTheme({
 
 
 const MyApp = ({ Component, pageProps: { nonce, session, ...pageProps } }: AppProps)=> {
-
-
+  
+  const router = useRouter();
 
   // media qurys
    const xxl = useMediaQuery('(min-width : 1600px)')
@@ -185,20 +193,45 @@ const MyApp = ({ Component, pageProps: { nonce, session, ...pageProps } }: AppPr
    const sm = useMediaQuery('(min-width : 576px)')
    const xs = useMediaQuery('(min-width : 489px)')
    const xxs = useMediaQuery('(min-width : 310px)')
+   
+   const [pageName,setPageName] = useState<string>("")
+   const [noScroll,setNoScroll]= useState<boolean>(false)
+   
 
+   const isAdminRoute = /^\/admin(\/|$)/.test(router.pathname);
+
+   interface LayoutPropsType  {
+    children?:ReactNode,
+    noScroll?:boolean,
+    pageName?:string
+    setPageName:Dispatch<SetStateAction<string>>
+    setNoScroll:Dispatch<SetStateAction<boolean>>
+   }
+   
+
+   const Layout = isAdminRoute ? AdminWrrpaer : ClientWrapper;
+   const LayoutProps : LayoutPropsType ={ pageName , noScroll , setPageName , setNoScroll  }
+
+  
 
 return (
-
+<>
 
   <SessionProvider session={session}>
   <ThemeProvider theme={theme}>
   <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='he'  >
   <WidthContext.Provider value={{xxl,xl,lg,md,sm,xs,xxs}}>
-       <Component {...pageProps} />
+      <Layout {...LayoutProps} >  
+           <Component {...pageProps} /> 
+     </Layout>
   </WidthContext.Provider>
   </LocalizationProvider>
   </ThemeProvider>
   </SessionProvider>
+
+  </>
+
+
 
 
 

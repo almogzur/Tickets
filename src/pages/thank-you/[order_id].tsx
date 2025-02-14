@@ -19,7 +19,8 @@ const Invoice=()=>{
      return <h1 style={{textAlign:'center'}}>Loading...</h1>
 }
 
-return (<ClientLayout>
+return (
+
      <Flex
      height={"80%"}
      alignItems={"center"}
@@ -36,7 +37,8 @@ return (<ClientLayout>
 
     </Box>
     </Flex>
-</ClientLayout>) 
+
+) 
 }
 
 export default Invoice

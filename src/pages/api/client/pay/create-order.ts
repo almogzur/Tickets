@@ -11,13 +11,13 @@ import {
     OrderApplicationContextShippingPreference,
     Item
 } from "@paypal/paypal-server-sdk";
-import { PayPalReqType } from "./paypal-types";
+
 
 import { GetBillingInfoFromEventId } from "@/util/fn/pay-fn";
 import { ObjectId } from "mongodb";
 import { rateLimitConfig } from "@/util/fn/api-rate-limit.config";
 import { Mongo } from "@/util/dbs/mongo-db/mongo";
-import { PayPalRequestCreateOrderValidationSchema } from "@/types/pages-types/client/client-event-type";
+import {   PayPalClollectInfoObjectType, PayPalRequestCreateOrderValidationSchema } from "@/types/pages-types/client/client-event-type";
 
 const apiLimiter = rateLimit(rateLimitConfig);
 
@@ -26,9 +26,14 @@ const apiLimiter = rateLimit(rateLimitConfig);
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     
     return apiLimiter(req, res,async () => {
-            const API_NAME = "Pay - Order"
 
-            const body   = req.body
+            const API_NAME = " Client  PayPal Create new API "
+
+            if (req.method !== 'POST') {
+                return res.status(405).json({ message: `Method ${req.method} not allowed` });
+            }
+
+            const body  = req.body
             const IsValidData    = PayPalRequestCreateOrderValidationSchema.safeParse( body )
 
             if( ! IsValidData.success){
@@ -52,7 +57,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
             const userInfo = await GetBillingInfoFromEventId(eventId, `${process.env.CIPHER_SECRET}`,Client)
 
-            if (!  userInfo) {
+            if (!userInfo) {
                 return res.status(400).json({ massage: "no auth" })
             }
 
@@ -72,7 +77,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 
             const createOrder = async (cart: Item[], total: string) => {
-                const collect: PayPalReqType = {
+                const collect: PayPalClollectInfoObjectType = {
                     body: {
                         intent: CheckoutPaymentIntent.Capture,
                         purchaseUnits: [
@@ -118,11 +123,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             };
 
 
-            const ordersController = new OrdersController(client);
+           const ordersController = new OrdersController(client);
 
-            if (req.method !== 'POST') {
-                return res.status(405).json({ message: `Method ${req.method} not allowed` });
-            }
 
             try {
                 const data = await createOrder(cart, total)

@@ -1,8 +1,7 @@
 
 import {Schema} from 'mongoose';
-import { EventSettingType, DraftType, LogType, TicketType, ClientEventType, AdminEventType, infoFiledsType, InvoiceType } from '../../../types/pages-types/admin/new-event-types';
+import { EventSettingType, DraftType, TicketType, ClientEventType, AdminEventType, infoFiledsType } from '../../../types/pages-types/admin/new-event-types';
 import { createModel } from './schema-fn';
-
 
 
 const EventSettingsShema = new Schema<EventSettingType>({
@@ -81,6 +80,7 @@ const EventSchema = {
 
 //Db Modoles 
 export const DraftModle = createModel<DraftType>("Drafts", DraftSchema)
+export const ClientEventMolde= createModel<ClientEventType>(`${process.env.USER_EVENTS_FOLDER_PATH}`,EventSchema)
 export const AdminEventModle = createModel<AdminEventType>(`${process.env.USER_EVENTS_FOLDER_PATH}`, EventSchema)
 
 

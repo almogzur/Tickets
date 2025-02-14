@@ -45,13 +45,13 @@ const EventInfoPage=({Events}:{Events:ClientEventType[]})=>{
      return <h1 style={{textAlign:'center'}}>Loading...</h1>
 }
 
-return (    <AdminLayout>
+return (    <>
                     logs,
                     paymets,
                     customers,
                     views,
                     total ernings,
-              </AdminLayout>
+              </>
 ) 
 }
 

@@ -1,7 +1,7 @@
 import WidthContext from "@/context/WidthContext";
 import { Box, Typography, Chip, Stack as Flex, useTheme, Button, Dialog, DialogTitle, DialogContent } from "@mui/material";
 import { CldImage } from "next-cloudinary";
-import React, { Dispatch, SetStateAction, useEffect } from "react";
+import React, { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import { FaExpeditedssl, FaLocationDot } from "react-icons/fa6";
 import DOMPurify from "isomorphic-dompurify";
 import ClientTicketList from "./tickets-list";
@@ -10,15 +10,13 @@ import { ItemCategory} from "@paypal/paypal-server-sdk";
 import { ClientEventType  } from "@/types/pages-types/admin/new-event-types";
 import { PayPalCartItemType, ClientSelectedSeatType } from "@/types/pages-types/client/client-event-type";
 import { TheaterType } from "@/types/components-typs/admin/theater/admin-theater-types";
+import ClientSelectedEventContext from '@/context/client/event-page/selected-event-context'
 
 
 
 export type DrawerContentType = {
 
   // event Data 
-  event: ClientEventType
-  setEventState: Dispatch<SetStateAction<ClientEventType | undefined>>
-
 
   //Theater to update 
   clientEventTheaterState: TheaterType | undefined
@@ -34,28 +32,33 @@ export type DrawerContentType = {
 }
 
 const DrawerContent = ({
-  event,
   eventSelectSeats,
   clientEventTheaterState,
   ...restDrawerContentProps
 }: DrawerContentType) => {
   const { xxl, xl, lg, md, sm, xs, xxs } = React.useContext(WidthContext)
-  const sanitizedHtml = DOMPurify.sanitize(event.info.pre);
+
+  const {  ClientSelectedEvent , setClientSelectedEvent} = useContext(ClientSelectedEventContext)
+
+  
+  const sanitizedHtml = DOMPurify.sanitize(ClientSelectedEvent?.info.pre?? "");
   const theme = useTheme()
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const handleClickOpen = () => { setOpen(true); };
   const handleClose = () => { setOpen(false); };
 
   const getNormailTicket = () => {
-    return event?.tickets?.find((tikect) => tikect.selectedType === 'normal')
+    return ClientSelectedEvent?.tickets?.find((tikect) => tikect.selectedType === 'normal')
   }
   const getNoramlPrice = () => {
     return getNormailTicket()?.price ?? "N/A"
   }
   const createPaymentCart = (selectedSeats: ClientSelectedSeatType[]): PayPalCartItemType[] => {
 
-    const { _id, info, ...rest } = event
+    if(ClientSelectedEvent){
+
+    const { _id, info, ...rest } = ClientSelectedEvent
     const { eventName } = info
 
     if (selectedSeats) {
@@ -75,6 +78,8 @@ const DrawerContent = ({
       return []
     }
   }
+  return []
+  }
   const getTotalCost = (): string => {
     let total = 0;
 
@@ -93,7 +98,9 @@ const DrawerContent = ({
   const Pre = Box,
           Tags = Flex,
           PreBox = Box
-
+if(!ClientSelectedEvent){
+  return
+}
 
   return (
     <Flex
@@ -106,7 +113,7 @@ const DrawerContent = ({
       {/* cover */}
       {!eventSelectSeats.length &&
         <CldImage
-          src={event.info.preview}
+          src={ClientSelectedEvent.info.preview}
           alt="Description of my image"
           width={'300'}
           height={!xs ? 300 : 400}
@@ -128,12 +135,12 @@ const DrawerContent = ({
           color={theme.palette.secondary.main}
           variant={'h4'}
         >
-          {event.info.eventName}
+          {ClientSelectedEvent.info.eventName}
         </Typography>
-        <Typography   > מיקום : {event.info.TheaterName}</Typography>
-        <Typography  > תאריך: {event.info.Date}</Typography>
-        <Typography  >שעה :{event.info.Hour}</Typography>
-        <Typography >שעת פתיחת דלתוד:{event.info.OpenDoors?.toString().slice(0, 10)}</Typography>
+        <Typography   > מיקום : {ClientSelectedEvent.info.TheaterName}</Typography>
+        <Typography  > תאריך: {ClientSelectedEvent.info.Date}</Typography>
+        <Typography  >שעה :{ClientSelectedEvent.info.Hour}</Typography>
+        <Typography >שעת פתיחת דלתוד:{ClientSelectedEvent.info.OpenDoors?.toString().slice(0, 10)}</Typography>
         <Typography> מחיר :   {getNoramlPrice()}</Typography>
       </Tags>
 
@@ -166,8 +173,8 @@ const DrawerContent = ({
                 cart={createPaymentCart(eventSelectSeats)}
                 total={getTotalCost()}
                 TheaterState={clientEventTheaterState}
-                publicId={event.publicId}
-                eventId={event._id}
+                publicId={ClientSelectedEvent.publicId}
+                eventId={ClientSelectedEvent._id}
 
               />
 
@@ -177,7 +184,7 @@ const DrawerContent = ({
 
 
           <ClientTicketList
-            event={event}
+ 
             eventSelectSeats={eventSelectSeats}
             clientEventTheaterState={clientEventTheaterState}
             {...restDrawerContentProps}

@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import {  DraftType } from "@/types/pages-types/admin/new-event-types";
-import { DraftModle } from "@/util/dbs/schma/event";
+import { DraftModle } from "@/util/dbs/schma/new-event";
 
  // findOne(filter: Filter<TSchema>, options: FindOptions): Promise<WithId<TSchema> | null>;
 

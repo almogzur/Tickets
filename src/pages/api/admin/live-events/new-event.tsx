@@ -1,6 +1,6 @@
 // File: pages/api/public.ts
 
-import { AdminEventModle } from "@/util/dbs/schma/event";
+import { AdminEventModle } from "@/util/dbs/schma/new-event";
 import { disconnectFromMongooseDb, MongoseeWithSessionModleDb } from "@/util/dbs/mongosee-fn";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 

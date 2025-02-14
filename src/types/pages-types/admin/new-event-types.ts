@@ -51,7 +51,7 @@ export const EventValidationSchema = z.object({
 })
 
 export const DraftValidationSchema= z.object({
-  _id: z.string(),
+  _id: z.string().optional(),
   info:infoFiledsValidationSchema,
   tickets: z.array( TicketValidationSchema),
   eventSetting:EventSettingValidationSchema
@@ -62,6 +62,8 @@ export const AdminEventTypeValidationScheam = DraftValidationSchema.extend({
 })
 
 export const  ClientEventTypeValidationSchima = AdminEventTypeValidationScheam.omit({})
+
+
 
 
 

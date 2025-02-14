@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { disconnectFromMongooseDb, MongoseeWithSessionModleDb } from "@/util/dbs/mongosee-fn";
 import { moveToEventNameFolder } from '@/util/fn/cloudinary_helper_functions';
-import {  DraftModle,  } from '@/util/dbs/schma/event';
+import {  DraftModle,  } from '@/util/dbs/schma/new-event';
 
  
 type ResponseData = {

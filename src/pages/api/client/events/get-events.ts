@@ -38,7 +38,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<Clien
                 const UserDB = await getDb(db.name, Client, `${process.env.USER_DATA_FOLDER_PATH}`)
                  if(!UserDB){return}
                 const UserCollections = await getCollectionsFromDb(UserDB, `${process.env.USER_EVENTS_FOLDER_PATH}`)
-                const FinedCruser =await  Promise.all(  UserCollections.map(async (collection) =>  collection.find().toArray()) )
+                const FinedCruser =await  Promise.all(  
+                    UserCollections.map(
+                        async (collection) => 
+                         collection
+                             .find( {},{ projection: { invoices: false, log: false } }) // Exclude invoices & logs from the result
+                            .toArray()) 
+                 )
+
              
                 return FinedCruser.flat() //flat remove the UserCollections wraper array [ [{}]. [{}] .[{}] ] <- this one
               

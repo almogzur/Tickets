@@ -18,11 +18,11 @@ const ClientListPage=()=>{
 }
 
 return (
-    <AdminWrapper>
+    <>
 
 
 
-    </AdminWrapper>
+    </>
 ) 
 }
 

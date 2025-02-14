@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
 import { disconnectFromMongooseDb, MongoseeWithSessionModleDb } from "@/util/dbs/mongosee-fn";
-import {  DraftModle } from "@/util/dbs/schma/event";
+import {  DraftModle } from "@/util/dbs/schma/new-event";
 import { delFolder, findSubFolders, moveToEventNameFolder } from "../../../../util/fn/cloudinary_helper_functions";
 import { DraftValidationSchema } from "@/types/pages-types/admin/new-event-types";
 

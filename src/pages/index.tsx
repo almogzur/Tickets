@@ -1,56 +1,21 @@
-import {  Button, Container ,Stack as Flex ,  Typography  , Box, useTheme, Paper, CircularProgress } from '@mui/material'
-
-
-import {  useContext, useEffect, useRef, useState } from 'react';
+import { Button, Container, Stack as Flex, Typography, Box, useTheme, Paper, CircularProgress } from '@mui/material'
+import { useContext, useEffect, useRef, useState } from 'react';
 import Carousel from 'react-material-ui-carousel'
 import { FaCircleArrowLeft, FaCircleArrowRight } from 'react-icons/fa6';
 import WidthContext from '@/context/WidthContext';
-
-
-
-var items = [
-  {
-      name: "Random Name #1",
-      description: "Probably the most random thing you have ever seen!"
-  },
-  {
-      name: "Random Name #2",
-      description: "Hello World!"
-  }
-]
-
-type ItemTye ={name:string,description:string}
-interface ItemComponentProps   {
-  item:ItemTye
-}
-  function Item({name,description}:ItemTye ){
-    return (
-        <Paper 
-          sx={{background:"#ddd" , mt:3 ,height:250}}
-        >
-            <Typography>{name}</Typography>
-            <p>{description}</p>
-
-            
-
-        </Paper>
-    )
-}
-
-
-
-import type {  GetServerSideProps, GetServerSidePropsResult } from 'next'
+import type { GetServerSideProps, GetServerSidePropsResult } from 'next'
 import axios from 'axios';
 import { ClientEventType } from '@/types/pages-types/admin/new-event-types';
-import ClientLayout from '@/Wrappers/client';
+import ClientWrapper from '@/Wrappers/client';
 import EventCard from '@/pages-components/client/main-page/event-card';
+
 
 export const getServerSideProps: GetServerSideProps<{ Events: ClientEventType[] }> = async (context) => {
   try {
     const baseUrl = `${process.env.NEXTAUTH_URL}`
     const response = await axios.get<ClientEventType[]>(`${baseUrl}/api/client/events/get-events`);
     return {
-      props: { Events: response.status === 200 ? response.data :[] },
+      props: { Events: response.status === 200 ? response.data : [] },
     };
   } catch (error) {
     console.error("Error fetching events:", error);
@@ -59,32 +24,32 @@ export const getServerSideProps: GetServerSideProps<{ Events: ClientEventType[] 
 };
 
 
-interface HomePageProps  {
-  Events:ClientEventType[]
-}
-export default  function Home  ( props : HomePageProps) {
 
-  const  {  Events } =    props
+interface HomePageProps { Events: ClientEventType[] }
 
- const theme = useTheme()
- const scrollContainerRef = useRef<HTMLDivElement>(null);
- const [isDragging, setIsDragging] = useState(false);
- const [startX, setStartX] = useState(0);
- const [scrollToLeft, setScrollToLeft] = useState(0);
- const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
+export default function Home(props: HomePageProps) {
 
-  useEffect(()=>{console.log(Events )},[Events])
+  const { Events } = props
+
+  const theme = useTheme()
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollToLeft, setScrollToLeft] = useState(0);
+  const { xxl, xl, lg, md, sm, xs, xxs } = useContext(WidthContext)
+
+  useEffect(() => { console.log(Events) }, [Events])
 
 
   const scrollLeft = () => {
     if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({behavior:"smooth",left:-310})
+      scrollContainerRef.current.scrollBy({ behavior: "smooth", left: -310 })
     }
   };
 
   const scrollRight = () => {
     if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({behavior:"smooth",left:+310})
+      scrollContainerRef.current.scrollBy({ behavior: "smooth", left: +310 })
     }
   };
 
@@ -116,125 +81,149 @@ export default  function Home  ( props : HomePageProps) {
   //   });
   // };
 
-  
-   const
-     PageWrapper = Container,
-     Placeholder = Box,
-     Scrooler = Box,
-     ScroolerConetnt=Box,
-     RightArrow=Box,
-     LeftArrow =Box,
-     ArowsWrapper = Flex
+
+  const
+    PageWrapper = Container,
+    Placeholder = Box,
+    Scrooler = Box,
+    ScroolerConetnt = Box,
+    RightArrow = Box,
+    LeftArrow = Box,
+    ArowsWrapper = Flex
 
 
 
-      return (
-        <>
-         <ClientLayout  HeaderName='' >
-            <PageWrapper maxWidth='xl'>
-    
-                 <Carousel
-                sx={{background:"black"}}
-                
-                >
-                    {
-                    items.map( (item, i) => <Item key={i} {...item} /> )
-                  }
-                </Carousel>
+  return (
+      <PageWrapper maxWidth='xl'>
 
-                 <Scrooler>
-                  <ArowsWrapper direction={"row"}  justifyContent={"space-between"}  >
-                     <RightArrow
-                           position={"relative"}
-                           left={!xs?-15 : !md?  -25 :"auto"}
-                           zIndex={5}
-                           width={0}
-                 
-                    >
-                        <Button
-                         variant='text'
-                        color='secondary'
-                        sx={{borderRadius:45,opacity:0.7}}
-                  >
-                    <FaCircleArrowRight 
-                        size={!md  ? 40: 50}
-                        onClick={scrollRight}
-                        cursor={'pointer'}
-                      />
-                       </Button>
-                     </RightArrow>
-    
-    
-    
-                      <LeftArrow>
-                    <Button
-                        variant='text'
-                        color='secondary'
-                        sx={{borderRadius:45,opacity:0.7}}
-                  >
-                  <FaCircleArrowLeft
-                    size={!md ? 40 : 50}
-                    onClick={scrollLeft}
-                    cursor={'pointer'}
-                  />
-                   </Button>    
-                      </LeftArrow>
-    
-                  </ArowsWrapper>
-    
-                   <ScroolerConetnt
-                        ref={scrollContainerRef}
-                        onMouseDown={handleMouseDown}
-                        onMouseMove={handleMouseMove}
-                        onMouseUp={handleMouseUpOrLeave}
-                        onMouseLeave={handleMouseUpOrLeave}
-                        // onWheel={handleWheel} // Attach wheel event handler
-                        display={"flex"}
-                        flexDirection={ "row"}
-                        gap={3}
-                       
-                        sx={{
-                          overflowX: 'auto',
-                          '&::-webkit-scrollbar': {
-                            width: '0.2em'
-                          },
-                          '&::-webkit-scrollbar-track': {
-                            boxShadow: `inset 0 0 6px rgba(0,0,0,0.00)`,
-                            webkitBoxShadow: 'inset 0 0 3px rgba(0,0,0,0.00)'
-                          },
-                          '&::-webkit-scrollbar-thumb': {
-                         
-                            outline: `0.5px solid ${theme.palette.secondary.main}`
-                          }
-                
-                          
-    
-                        }}
-                      >
-    
-    
-                        {Events?.map((event) => (
-                            <EventCard key={event._id} {...event} />
-                        ))}
-    
-    
-    
-    
-    
-                  </ScroolerConetnt>
-                </Scrooler>
-                          
-            <Placeholder height={400} />
+        <Carousel
+          sx={{ background: "black" }}
 
-    
-          </PageWrapper>
-       </ClientLayout>
-        </>
-      )
+        >
+          {
+            items.map((item, i) => <Item key={i} {...item} />)
+          }
+        </Carousel>
 
-     
+        <Scrooler>
+          <ArowsWrapper direction={"row"} justifyContent={"space-between"}  >
+            <RightArrow
+              position={"relative"}
+              left={!xs ? -15 : !md ? -25 : "auto"}
+              zIndex={5}
+              width={0}
+
+            >
+              <Button
+                variant='text'
+                color='secondary'
+                sx={{ borderRadius: 45, opacity: 0.7 }}
+              >
+                <FaCircleArrowRight
+                  size={!md ? 40 : 50}
+                  onClick={scrollRight}
+                  cursor={'pointer'}
+                />
+              </Button>
+            </RightArrow>
+
+
+
+            <LeftArrow>
+              <Button
+                variant='text'
+                color='secondary'
+                sx={{ borderRadius: 45, opacity: 0.7 }}
+              >
+                <FaCircleArrowLeft
+                  size={!md ? 40 : 50}
+                  onClick={scrollLeft}
+                  cursor={'pointer'}
+                />
+              </Button>
+            </LeftArrow>
+
+          </ArowsWrapper>
+
+          <ScroolerConetnt
+            ref={scrollContainerRef}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUpOrLeave}
+            onMouseLeave={handleMouseUpOrLeave}
+            // onWheel={handleWheel} // Attach wheel event handler
+            display={"flex"}
+            flexDirection={"row"}
+            gap={3}
+
+            sx={{
+              overflowX: 'auto',
+              '&::-webkit-scrollbar': {
+                width: '0.2em'
+              },
+              '&::-webkit-scrollbar-track': {
+                boxShadow: `inset 0 0 6px rgba(0,0,0,0.00)`,
+                webkitBoxShadow: 'inset 0 0 3px rgba(0,0,0,0.00)'
+              },
+              '&::-webkit-scrollbar-thumb': {
+
+                outline: `0.5px solid ${theme.palette.secondary.main}`
+              }
+
+
+
+            }}
+          >
+            {Events?.map((event) => (
+              <EventCard key={event._id} {...event} />
+            ))}
+
+
+
+
+          </ScroolerConetnt>
+
+        </Scrooler>
+
+        <Placeholder height={400} />
+
+
+      </PageWrapper>
+  )
+
+
 }
 
+
+var items = [
+  {
+    name: "Random Name #1",
+    description: "Probably the most random thing you have ever seen!"
+  },
+  {
+    name: "Random Name #2",
+    description: "Hello World!"
+  }
+]
+
+type ItemTye = { name: string, description: string }
+
+interface ItemComponentProps {
+  item: ItemTye
+}
+function Item({ name, description }: ItemTye) {
+  return (
+    <Paper
+      sx={{ background: "#ddd", mt: 3, height: 250 }}
+    >
+      <Typography>{name}</Typography>
+      <p>{description}</p>
+
+
+
+    </Paper>
+  )
+}
 
 
 
