@@ -31,8 +31,7 @@ const NotFound =  () => {
         "*":{ color:"red"}
       }}
      >
-      <h1>{router.pathname}</h1>
-      <h1>{router.asPath}</h1>
+
 
       <h2>That page cannot be found :(</h2>
       <p>Go back to the <Link href="/">Homepage</Link></p>

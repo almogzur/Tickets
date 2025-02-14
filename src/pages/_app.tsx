@@ -196,9 +196,27 @@ const MyApp = ({ Component, pageProps: { nonce, session, ...pageProps } }: AppPr
    
    const [pageName,setPageName] = useState<string>("")
    const [noScroll,setNoScroll]= useState<boolean>(false)
-   
 
-   const isAdminRoute = /^\/admin(\/|$)/.test(router.pathname);
+   const adminPages = [
+     "billing",
+     "clients",
+     "drafts",
+     "events",
+     "new-event",
+     "regester",
+     "settings",
+     "stats",
+     "supervisor",
+     "ticket-actions",
+   ] 
+   // to prevent  /admin/ * exmple : 'admin/dsadsadsa'   
+   // slugs Catches  this is 404 domain we need to be prosise and not get hydration error
+  // while the if(status === 'unauthenticated' ){  is returning  from admin layout  and the 404 is return too  } 
+
+   
+   const path = router.pathname || router.asPath; // Use pathname or fallback to asPath
+
+   const isAdminRoute = path.startsWith("/admin/") && adminPages.some(page => path.startsWith(`/admin/${page}`));
 
    interface LayoutPropsType  {
     children?:ReactNode,
