@@ -1,5 +1,6 @@
 
 import {CreateMongooseClient} from "@/util/dbs/mongosee-fn";
+import { AdminEventModle } from "@/util/dbs/schma/modles";
 import { rateLimitConfig } from "@/util/fn/api-rate-limit.config";
 import rateLimit from "express-rate-limit";
 import { ObjectId } from "mongodb";
@@ -40,10 +41,14 @@ export default async function handler  ( req: NextApiRequest , res: NextApiRespo
     const EventFindResults = await Promise.all(
       UsersDbs.map(async (db) => {
         const dbConnection = connection.useDb(db.name, { noListener: true }); // Dynamically use the DB
+              
+        const Modle = AdminEventModle(dbConnection)
+
+
+        
          // Bind the model to the DB
-        return  dbConnection
-        .collection(`${process.env.USER_EVENTS_FOLDER_PATH}`)
-        .findOne({_id:ObjectId.createFromHexString(`${event_id}`)},{projection:{log:false,invoices:false}}) // Query the events
+        return  Modle 
+          .findOne({_id:ObjectId.createFromHexString(`${event_id}`)},{projection:{log:false,invoices:false}}) // Query the events
       })
     );
 

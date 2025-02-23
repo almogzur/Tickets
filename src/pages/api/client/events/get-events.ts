@@ -1,5 +1,6 @@
 import { ClientEventType, NewEventType } from "@/types/pages-types/admin/admin-event-types";
 import {CreateMongooseClient} from "@/util/dbs/mongosee-fn";
+import { AdminEventModle } from "@/util/dbs/schma/modles";
 import { rateLimitConfig } from "@/util/fn/api-rate-limit.config";
 import rateLimit from "express-rate-limit";
 
@@ -39,11 +40,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<Clien
 
           const dbConnection = connection.useDb(db.name) // Bind DB
 
-        //  console.log(dbConnection.db?.databaseName)
-
-          const UserCollection =dbConnection.collection<NewEventType>(`${process.env.USER_EVENTS_FOLDER_PATH}`)
+          const Modle = AdminEventModle(dbConnection)
     
-          const userEvents =  await UserCollection.find({},{projection:{log:false,invoices:false}}).toArray()
+          const userEvents =  await Modle.find({},{projection:{log:false,invoices:false}})
 
           return   userEvents
 
