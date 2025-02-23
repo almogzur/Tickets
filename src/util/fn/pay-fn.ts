@@ -68,12 +68,12 @@ export const GetBillingInfoFromEventId = async (eventId: string, authKey: string
                         const { clientSecret, ...restbillingInfoData } = billingInfoData
                         const deCipherSecret = decryptData(clientSecret, ServerKey)
 
-                        const Info = {
+                        const Data = {
                             ...restbillingInfoData,
                             clientSecret: deCipherSecret
                         }
-                        return Info
-     }}))
+                        return Data
+                   }}))
 
      const Info = UserDbsResults.find(( event )=> event )
 
