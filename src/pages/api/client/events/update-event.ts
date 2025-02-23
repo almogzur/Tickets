@@ -1,15 +1,11 @@
-import { Seats, TheaterType } from "@/types/components-typs/admin/theater/admin-theater-types";
-import { ClientEventType } from "@/types/pages-types/admin/new-event-types";
-import { disconnectFromMongooseDb } from "@/util/dbs/mongosee-fn";
-import {  getAllDbList, getDb, getCollectionsFromDb } from "@/util/dbs/mongo-db/db_fn";
+import { SeatsRow, TheaterType } from "@/types/components-typs/admin/theater/admin-theater-types";
 import { ObjectId } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next/types";
-import { json } from "stream/consumers";
-import { Mongo } from "@/util/dbs/mongo-db/mongo";
 import rateLimit from "express-rate-limit";
 import { rateLimitConfig } from "@/util/fn/api-rate-limit.config";
-import { modifieSeatValueType } from "@/types/pages-types/client/client-theater-types";
-import { UpdateTheaterApiValidationSchema } from "@/types/pages-types/client/client-event-type";
+import { modifieSeatValueFunctionType, UpdateTheaterApiVS } from '@/types/pages-types/client/client-event-type'
+import { ClientEventType } from "@/types/pages-types/admin/admin-event-types";
+import {CreateMongooseClient} from "@/util/dbs/mongosee-fn";
 
 
 
@@ -32,7 +28,7 @@ const ValidateNotOcupideSeats = (oldT: TheaterType, newT: TheaterType): boolean 
 
             if (seatValue === 1 && combinedNewSeats[rowName]?.[index] === 2) {
                 // Invalid case found - seat was occupied (1) and new seat value is 2
-                console.log("ValidateNotOcupideSeats", "new:", combinedNewSeats[rowName]?.[index], "old:", seatValue  , "at " ,rowName );
+                console.log("ValidateNotOcupideSeats", "new:", combinedNewSeats[rowName]?.[index], "old:", seatValue, "at ", rowName);
 
                 return false;
             }
@@ -42,12 +38,11 @@ const ValidateNotOcupideSeats = (oldT: TheaterType, newT: TheaterType): boolean 
     return true;
 };
 
+const modifieSeatValue = (TheaterSeates: modifieSeatValueFunctionType): modifieSeatValueFunctionType => {
 
-const modifieSeatValue = ( TheaterSeates : modifieSeatValueType ): modifieSeatValueType => {
+    const newTheaterSeatDetails = { ...TheaterSeates }
 
-    const newTheaterSeatDetails = { ... TheaterSeates}
-
-    const combinedSeats = { ...TheaterSeates.main, ...TheaterSeates.side  };
+    const combinedSeats = { ...TheaterSeates.main, ...TheaterSeates.side };
 
     Object.entries(combinedSeats).forEach(([_, rowSeats]) => {
         rowSeats.forEach((value, index) => {
@@ -63,117 +58,119 @@ const modifieSeatValue = ( TheaterSeates : modifieSeatValueType ): modifieSeatVa
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
-   return  apiLimiter(req, res,
+    return apiLimiter(req, res,
         async () => {
 
             const API_NAME = "Client Update Events (Only PayProvider Invoke)";
+            console.log(API_NAME)
 
             if (req.method !== "POST") {
                 return res.status(401).json({ message: `Method ${req.method} not allowed` });
             }
 
-            const body =req.body
-            const isValideData = UpdateTheaterApiValidationSchema.safeParse(body)
+            const body = req.body
+            const isValideData = UpdateTheaterApiVS.safeParse(body)
 
-            if(!isValideData.success){
-                return res.status(400).json({massage:" bad request data " })
+            if (!isValideData.success) {
+                return res.status(400).json({ massage: " bad request data " })
             }
 
-            const { reqTheater, eventId } = req.body 
+            const { reqTheater, eventId } = req.body
             res.setHeader("Allow", ["POST"]);
 
-             
-            const Client = await Mongo()
-            const dbList = await getAllDbList(Client)
-            const session =  Client?.startSession()
+            const connection = await CreateMongooseClient(null)
+
+            if (!connection) {
+                return res.status(500).json({ err: 'No DB Connection' })
+            }
+
+            const Cluster = (await connection.listDatabases()).databases
+
+            const UsersDbs = Cluster.filter((db) => db.name.includes(`${process.env.USER_DATA_FOLDER_PATH}`))
+
+
+            const session = connection?.startSession()
             //https://mongoosejs.com/docs/transactions.html
             // let you execute multiple operations in isolation and potentially
             //  undo all the operations if one of them fails. 
-            try{ 
-                const TransactionResult = await session?.withTransaction(
-                   async (): Promise<boolean | undefined> => {
-                   //     console.log("TransactionResult Start")
-                        if (!dbList) {
-                            console.log("TransactionResult" , "noDBlist")
-                            return false;
-                        }
-                        for (const { name, empty } of dbList) {
+            try {
+                const TransactionResult = await (await session)?.withTransaction(
+                    async (): Promise<boolean | undefined> => {
+                        //     console.log("TransactionResult Start")
+
+                        for (const { name, empty } of UsersDbs) {
 
                             if (empty) continue; // remove
 
-                            const db = await getDb(name,Client,`${process.env.USER_DATA_FOLDER_PATH}`)
+                            const userDb = connection.useDb(name)
 
-                             if (!db) continue; // no connection
-                         
-                            const UserCollections = await getCollectionsFromDb(db, `${process.env.USER_EVENTS_FOLDER_PATH}`)
+                            const collection = userDb.collection(`${process.env.USER_EVENTS_FOLDER_PATH}`)
 
-                            if(!UserCollections) continue // no data 
+                            //  User db
+                            // looking throu all collections  and retriving the first one ( _id is uniq ) so can only be 1 result 
+                            //  with   _id
+                            const event = await collection.findOne<ClientEventType>({ _id: ObjectId.createFromHexString(eventId) })
 
-                            for (const collection of UserCollections) {             // console.log(collection)
-
-
-                                //  User db
-                                // looking throu all collections  and retriving the first one ( _id is uniq ) so can only be 1 result 
-                                //  with   _id
-                                const event = await collection.findOne<ClientEventType>({ _id: ObjectId.createFromHexString(eventId) }, { session: session })
-    
-                                // if no event to next bd 
-                                if (!event){
-                                    console.log("TransactionResult" , "!event")
-                                     continue
-                                }
-    
-                           // console.log(collection.dbName, collection.collectionName);
-
-                                     const {   info, ...restEvent } = event;
-                                     const { Theater, ...restInfo } = info;
-    
-                                if (!Theater) continue;
-    
-                                const isSeatsFree = ValidateNotOcupideSeats(Theater, reqTheater);
-
-    
-                                 if (!isSeatsFree)   return false
-
-                                 const modifiedSeates = modifieSeatValue({main:reqTheater.mainSeats , side:reqTheater.sideSeats})
-
-                                 const newTheater : TheaterType  = {
-                                     ...Theater,
-                                      mainSeats:modifiedSeates.main,
-                                      sideSeats:modifiedSeates.side
-                                 }
-                                
-                                const newEvent: ClientEventType = { info: { Theater: newTheater, ...restInfo }, ...restEvent };
-
-                                const replaceResult = await collection.findOneAndReplace(
-                                    { _id: ObjectId.createFromHexString(eventId) },
-                                    newEvent,
-                                    { returnDocument: "after", session }
-                                );
-    
-                                if (!replaceResult) {
-                                    return false
-                                }
-                                return true
-    
+                            // if no event to next bd 
+                            if (!event) {
+                                console.log("TransactionResult", "!event")
+                                continue
                             }
-                        }
-                    },
-                );
-                if (!TransactionResult){
-                    console.log("TransactionResult" , "err")
-                    return res.status(206).json({massage:"bad TransactionResult " + API_NAME})
-    
-                } 
-                console.log(`succsess ${API_NAME} ` )
-              return res.status(200).json({ massage: `succsess ${API_NAME} ` })
-             }
-            catch (err){
-                console.log( " Cathch block err withTransaction " ,err)
-                return res.status(404).json({massage:"bad TransactionResult " + API_NAME})
-              }
 
-    
+                            // console.log(collection.dbName, collection.collectionName);
+
+                            const { info, ...restEvent } = event;
+                            const { Theater, ...restInfo } = info;
+
+                            if (!Theater) continue;
+
+                            const isSeatsFree = ValidateNotOcupideSeats(Theater, reqTheater);
+
+
+                            if (!isSeatsFree) return false
+
+                            const modifiedSeates = modifieSeatValue({ main: reqTheater.mainSeats, side: reqTheater.sideSeats })
+
+                            const newTheater: TheaterType = {
+                                ...Theater,
+                                mainSeats: modifiedSeates.main,
+                                sideSeats: modifiedSeates.side
+                            }
+
+                            const newEvent: ClientEventType = {
+                                info: { Theater: newTheater, ...restInfo },
+                                ...restEvent,
+                            };
+
+                            const replaceResult = await collection.findOneAndReplace(
+                                { _id: ObjectId.createFromHexString(eventId) },
+                                newEvent,
+                                { returnDocument: "after" }
+                            );
+
+                            if (!replaceResult) {
+                                return false
+                            }
+                            return true
+
+                        }
+                    }
+
+                );
+                if (!TransactionResult) {
+                    console.log("TransactionResult", "err")
+                    return res.status(206).json({ massage: "bad TransactionResult " + API_NAME })
+
+                }
+                console.log(`succsess ${API_NAME} `)
+                return res.status(200).json({ massage: `succsess ${API_NAME} ` })
+            }
+            catch (err) {
+                console.log(" Cathch block err withTransaction ", err)
+                return res.status(404).json({ massage: "bad TransactionResult " + API_NAME })
+            }
+
+
         })
 };
 
@@ -184,6 +181,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 // see :   https://github.com/vercel/next.js/discussions/40270
 export const config = {
     api: {
-      externalResolver: true,  
+        externalResolver: true,
     },
-  }
+}

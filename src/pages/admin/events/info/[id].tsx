@@ -3,7 +3,7 @@ import {useEffect,useMemo,useState} from 'react'
 import { useRouter } from 'next/router'
 import { useAdminEvents } from '@/hooks/admin/use-admin-events'
 import { GetServerSideProps } from 'next'
-import { ClientEventType } from '@/types/pages-types/admin/new-event-types'
+import { ClientEventType } from '@/types/pages-types/admin/admin-event-types'
 import axios from 'axios'
 import AdminLayout from '@/Wrappers/admin'
 

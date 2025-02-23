@@ -1,28 +1,26 @@
 import { UserPayPalInfo } from "@/types/pages-types/admin/user-biling-info-types";
-import { ClientEventType } from "@/types/pages-types/admin/new-event-types";
+import { ClientEventType } from "@/types/pages-types/admin/admin-event-types";
 import { MongoClient, ObjectId } from "mongodb";
-import { getCollectionsFromDb, getAllDbList, getDb } from "../dbs/mongo-db/db_fn";
 import crypto from 'crypto'
 import { decryptData } from "./crypto";
+import mongoose from "mongoose";
 
 
-export const GetBillingInfoFromEventId = async (eventId: string, authKey: string, Client: MongoClient | null): Promise<{ info: UserPayPalInfo } | undefined> => {
+export const GetBillingInfoFromEventId = async (eventId: string, authKey: string, Client: mongoose.Connection | undefined): Promise<  UserPayPalInfo  | undefined> => {
 
     //console.log("GetBillingInfoFromEventId ", "_ invoked", eventId)
 
-    const ServerKey =`${ process.env.CIPHER_SECRET }`
+    const ServerKey = `${process.env.CIPHER_SECRET}`
 
-    
-    if(!ServerKey){
+    if (!ServerKey) {
         console.log("GetBillingInfoFromEventId", "NO SERVER KEY")
         return
-
     }
-
 
     const encoder = new TextEncoder();
     const authKeyBuffer = encoder.encode(authKey);
     const serverKeyBuffer = encoder.encode(ServerKey);
+
 
     const isKeyValide = crypto.timingSafeEqual(new Uint8Array(authKeyBuffer), new Uint8Array(serverKeyBuffer))
 
@@ -36,52 +34,58 @@ export const GetBillingInfoFromEventId = async (eventId: string, authKey: string
         console.log("!NO client GetBillingInfoFromEventId")
         return
     }
-    const dbList = await getAllDbList(Client)
+    const Cluster = (await Client.listDatabases()).databases
 
-    if (!dbList) {
-        console.log("!GetBillingInfoFromEventId ", "@dbList")
-        return
-    }
+    const UsersDbs = Cluster.filter((db) => db.name.includes(`${process.env.USER_DATA_FOLDER_PATH}`))
 
-    for (const { name, empty } of dbList) {
-        if (empty) {continue}
-            const db = await getDb(name, Client, `${process.env.USER_DATA_FOLDER_PATH}`) // with filted build in 
-        if (!db) { continue }
-        const UserCollections = await getCollectionsFromDb(db, `${process.env.USER_EVENTS_FOLDER_PATH}`)  // with filted build in  
-
-        for (const collection of UserCollections) { // only _Data DBs
-
-                // filter only User_Data Collections 
-                //  in User_Data collection
-                // look for eventID  in user Data 
-            const event = await collection.findOne<ClientEventType>({ _id: ObjectId.createFromHexString(eventId) })
+    const UserDbsResults =
+        await Promise.all(
+            UsersDbs.map(
+                async (db) => {
+                    // eslint-disable-next-line react-hooks/rules-of-hooks
+                    const userDb = Client.useDb(db.name)
 
 
-             if (!event) {continue }// if the event is not in user
+                    const event =
+                        await userDb
+                            .collection(`${process.env.USER_EVENTS_FOLDER_PATH}`)
+                            .findOne<ClientEventType>({ _id: new ObjectId(eventId) });
 
-              // now we know the db name and collection 
-             const billingInfo = await db.collection(`${process.env.BILING_FOLDER_NAME}`).findOne<UserPayPalInfo>();
-           
-              if (billingInfo) {
-                const { clientSecret, ...restbillingInfo } = billingInfo
-                const deCipherSecret = decryptData(clientSecret, ServerKey)
-            
-                const Info = {
-                    ...restbillingInfo,
-                    clientSecret: deCipherSecret
-                }
-              //  console.log("GetBillingInfoFromEventId Succsess")
-                return { info: Info }
-            }
-        }
-    }
+                    if (!event) { return }// if the event is not in user
+
+                    //console.log("GetBillingInfoFromEventId end " , event )
 
 
+                    // now we know the db name and collection 
+                    const billingInfoData = await userDb.collection(`${process.env.PAYPAL_BILING_FOLDER_NAME}`).findOne<UserPayPalInfo>();
 
 
+                    if (billingInfoData) {
 
+                        console.log("GetBillingInfoFromEventId end " ,billingInfoData)
 
-    //  https://developers.cloudflare.com/workers/examples/protect-against-timing-attacks/
+                        
+                        const { clientSecret, ...restbillingInfoData } = billingInfoData
+                        const deCipherSecret = decryptData(clientSecret, ServerKey)
 
+                        const Info = {
+                            ...restbillingInfoData,
+                            clientSecret: deCipherSecret
+                        }
+                        return Info
+     }}))
 
+     const Info = UserDbsResults.find(( event )=> event )
+
+     console.log("GetBillingInfoFromEventId end " , !!Info )
+
+        return  Info
 }
+
+
+
+
+//  https://developers.cloudflare.com/workers/examples/protect-against-timing-attacks/
+
+
+

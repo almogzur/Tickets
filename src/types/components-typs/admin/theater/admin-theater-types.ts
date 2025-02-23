@@ -22,7 +22,7 @@ export const TheaterValidationSchema = z.object({
 
 
 
-export type  Seats = z.infer< typeof SeatValidationSchema>
+export type  SeatsRow = z.infer< typeof SeatValidationSchema>
 export type  SeatStyles = z.infer<typeof SeatStylesValidationSchema>
 export type TheaterLocationType = z.infer<typeof TheaterLocationValidationSchma>
 export type TheaterType = z.infer< typeof TheaterValidationSchema>

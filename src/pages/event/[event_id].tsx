@@ -1,25 +1,46 @@
 import Head from 'next/head'
 
 import { useRouter } from 'next/router'
-import { useState, useEffect, useContext, CSSProperties, useRef, SetStateAction, } from 'react'
-import { Container, Typography as Heading, Stack as Flex, Button, Typography, useTheme, Box, Chip } from '@mui/material';
-import Map from '@/pages-components/client/event-page/tom-map'
+import { useState, useEffect, useContext} from 'react'
+import { Stack as Flex, Button, useTheme, Box } from '@mui/material';
+import Map from '@/pages-components/client/event-page/sidebar/tom-map'
 
 import WidthContext from '@/context/WidthContext';
 import React from 'react';
 import ClineTransformContext from '@/context/client/event-page/client-tranform-contenx'
 import { Positions, TheaterType } from '@/types/components-typs/admin/theater/admin-theater-types';
 import { TiArrowBack } from "react-icons/ti";
-import { ClientEventType, } from '@/types/pages-types/admin/new-event-types';
-import { GetServerSideProps } from 'next';
-import axios from 'axios';
-import ClientWrapper from '@/Wrappers/client';
-import DrawerContent from '@/pages-components/client/event-page/drawer/drawer-content';
-import DrawerWighet from '@/pages-components/client/event-page/drawer/info-drawer-wighet';
+
+import DrawerContent from '@/pages-components/client/event-page/sidebar/sidebar-content';
+import SideBar from '@/pages-components/client/event-page/sidebar/sidebar-wrapper';
 import TheaterMap from '@/pages-components/client/event-page/theater/client-theater-map';
 import { ClientSelectedSeatType } from '@/types/pages-types/client/client-event-type';
+import { useEvents } from '@/context/client/client-events-context';
+import { GetServerSideProps } from 'next';
+import axios from 'axios';
+import { ClientEventType } from '@/types/pages-types/admin/admin-event-types';
 
-import ClientSelectedEventContext from '@/context/client/event-page/selected-event-context'
+
+export const getServerSideProps: GetServerSideProps<{ Event: ClientEventType | null }> = async (context) => {
+  try {
+    const { event_id } = context.query; // Get event ID from URL params
+    if (!event_id || typeof event_id !== "string") {
+      return { props: { Event: null } }; // Handle missing or invalid ID
+    }
+
+    const baseUrl = `${process.env.NEXTAUTH_URL}` // Use proper environment variable
+    const response = await axios.get<ClientEventType>(`${baseUrl}/api/client/events/get-event-by-id`, {
+      params: { event_id }, // Pass ID as query param
+    });
+
+    return {
+      props: { Event: response.status === 200 ? response.data : null },
+    };
+  } catch (error) {
+    console.error("Error fetching event:", error);
+    return { props: { Event: null } }; // Keep consistent type
+  }
+};
 
 
 
@@ -27,10 +48,7 @@ import ClientSelectedEventContext from '@/context/client/event-page/selected-eve
 // mote to theater types  after 
 
 
-const DetailsPage = ({ Events }: { Events: ClientEventType[] }) => {
-
-
-
+const DetailsPage = ({Event}:{ Event:ClientEventType|null}) => {
 
 
   // const { Event } = useContex(LiveEventContext)
@@ -38,38 +56,38 @@ const DetailsPage = ({ Events }: { Events: ClientEventType[] }) => {
   const theme = useTheme()
   const router = useRouter()
   const { xxl, xl, lg, md, sm, xs, xxs } = useContext(WidthContext)
+
+
+  const ClientSelectedEvent = Event
+
+  const [clientEventTheaterState, setClientEventTheaterState] = useState<TheaterType|undefined>()
+  const [eventSelectSeats, setEventSelectedSeats] = useState<ClientSelectedSeatType[]>([])
+ const [  pageMaunted, setPageMaunted] = useState<boolean>(false)
+ 
+  // component leftedUpState
+
+  //Theater
+  const [hendlerSeatOldValues, setHendlerSeatOldValues] = useState<Record<string, number>>({});
   const [ClientMapPositions, setClientMapPositions] = useState<Positions>({ x: 0, y: 0, Scale: undefined })
 
-
- //Page State 
-  const { eventName } = router.query
-
+  // Wighet
   const [wighetIsExp, setWighetIsExp] = useState<boolean>(false)
 
 
-  // Event State 
-  const {  ClientSelectedEvent , setClientSelectedEvent} = useContext(ClientSelectedEventContext)
+  useEffect(()=>{
+    setClientEventTheaterState(ClientSelectedEvent?.info.Theater)
+    setPageMaunted(true)
+  }, [ClientSelectedEvent?.info.Theater]) // refresh pages hendler 
+  
 
-  const [clientEventTheaterState, setClientEventTheaterState] = useState<TheaterType|undefined>(ClientSelectedEvent?.info.Theater)
-  const [eventSelectSeats, setEventSelectedSeats] = useState<ClientSelectedSeatType[]>([])
-  const [hendlerSeatOldValues, setHendlerSeatOldValues] = useState<Record<string, number>>({});
-
-
+ //Page State 
 
   const Wrapper = Flex,
             BackBTN = Button
 
-  useEffect(() => {
-    if (ClientSelectedEvent) {
-      setClientEventTheaterState
-    }
-    // setNoScrool(true) IMPORTENTT ADD THIS 
-  }, [ClientSelectedEvent])
-
-  if ( !ClientSelectedEvent) return <div>loading...</div>
+  if ( !ClientSelectedEvent || ! pageMaunted) return <div>loading...</div>
 
   return (
-
 
       <Wrapper
         direction={!md ? 'column' : "row"}
@@ -90,21 +108,27 @@ const DetailsPage = ({ Events }: { Events: ClientEventType[] }) => {
             zIndex: 5
 
           }}
-          onClick={() => { router.push("/") }}
+          onClick={() => {
+          return    router.push("/")
+            
+
+             }}
         >
           <TiArrowBack size={"2em"} color='black' />
 
         </BackBTN>
 
 
-        <DrawerWighet
+        <SideBar
+          ClientSelectedEvent={ClientSelectedEvent}
           wighetIsExp={wighetIsExp}
           eventSelectSeats={eventSelectSeats}
           setWighetIsExp={setWighetIsExp}
+          
         >
           <DrawerContent
             //event 
-
+            ClientSelectedEvent={ClientSelectedEvent}
             // tikect list
             eventSelectSeats={eventSelectSeats}
             setEventSelectedSeats={setEventSelectedSeats}
@@ -115,14 +139,14 @@ const DetailsPage = ({ Events }: { Events: ClientEventType[] }) => {
             hendlerSeatOldValues={hendlerSeatOldValues}
             setHendlerSeatOldValues={setHendlerSeatOldValues}
           />
-        </DrawerWighet>
+        </SideBar>
 
-        {ClientSelectedEvent?.info.Theater &&
+         {ClientSelectedEvent?.info.Theater &&
           <Box
             width={"100%"}
             height={wighetIsExp && !md ? 0 : undefined}
           >
-            <ClineTransformContext.Provider value={{ ClientMapPositions, setClientMapPositions }}>
+             <ClineTransformContext.Provider value={{ ClientMapPositions, setClientMapPositions }}>
               <TheaterMap
                 event={ClientSelectedEvent}
                 // theater  seates

@@ -44,6 +44,7 @@ const ProdObject = {
             { protocol: 'https', hostname: 'res.cloudinary.com' }, // Ensure correct domain
         ],
     },
+
 };
 
 const DevObject = {

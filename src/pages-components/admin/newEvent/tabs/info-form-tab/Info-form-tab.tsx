@@ -35,18 +35,16 @@ const InfoForm =({}:InfoFormType)=>{
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
   const {infoFileds,setInfoFileds}= useContext(TabsInfoContext)
   const theme = useTheme()
-  const [dateEroor,setDateEroor ]= useState(false)
   const {GetFormErrors} =  useContext(tabsEroorsContext)
-  const {setIsLoading,setTabValue,setLoadingScrenText,setSaevNewEventReqestStatus}= useContext(tabsPageContext)
-    
-  
+  const {setIsLoading,setLoadingScrenText}= useContext(tabsPageContext)
+      
   const removeImageFromCloudinary = async (Public_id:string)=>{
 
       setIsLoading(true)
       setLoadingScrenText("מסיר תמונה")
       
       try {
-        const response = await axios.post("/api/admin/new-event/D/event-image", { Public_id  } );
+        const response = await axios.post("/api/admin/cloudinary-event-image/R-image", { Public_id  } );
 
        if( response.status === 200 ){
           console.log(response.data.result);

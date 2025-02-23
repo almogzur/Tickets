@@ -6,7 +6,7 @@ import { CSSProperties, Dispatch, MouseEventHandler, SetStateAction, useContext,
 import {  Button, Stack as Flex, Typography, useTheme } from "@mui/material"
 import {  grey, orange, pink } from "@mui/material/colors"
 import { TheaterType } from "@/types/components-typs/admin/theater/admin-theater-types"
-import { infoFiledsType } from "@/types/pages-types/admin/new-event-types"
+import { infoFiledsType } from "@/types/pages-types/admin/admin-event-types"
  
 
 

@@ -25,7 +25,7 @@ useEffect(()=>{
 const {children, noScrool, HeaderName} = props
 
 if(status === 'unauthenticated' ){ 
-  return <h4>מאמת משתממש</h4>
+  return <h4>מאמת...</h4>
 }
 if(status==='loading'){
   return <h4>טוען...</h4>

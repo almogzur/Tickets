@@ -28,7 +28,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 // Geo Location  Map  Css
 import '@tomtom-international/web-sdk-maps/dist/maps.css'
 import { Dispatch, ReactNode, SetStateAction, useState } from 'react';
-import { ClientEventType } from '@/types/pages-types/admin/new-event-types';
+import { ClientEventType } from '@/types/pages-types/admin/admin-event-types';
 
 
 export const FullDateOptions :Intl.DateTimeFormatOptions = {
@@ -45,9 +45,9 @@ export const samiDateOptions :Intl.DateTimeFormatOptions = {
         day: '2-digit',
 };
 
-import ClientWrapper from "@/Wrappers/client";
 import { useRouter } from 'next/router';
 
+import ClientWrapper from "@/Wrappers/client";
 import AdminWrrpaer from '@/Wrappers/admin';
 
 
@@ -194,11 +194,17 @@ const MyApp = ({ Component, pageProps: { nonce, session, ...pageProps } }: AppPr
    const xs = useMediaQuery('(min-width : 489px)')
    const xxs = useMediaQuery('(min-width : 310px)')
    
+   // layout Props
    const [pageName,setPageName] = useState<string>("")
    const [noScroll,setNoScroll]= useState<boolean>(false)
 
+
+
+    // to prevent  /admin/ * exmple : 'admin/dsadsadsa'   
+   // slugs Catches wher is 404 job 
+   // while the if (status === 'unauthenticated' ){  is returning  from admin layout  and the 404 is return too  } 
    const adminPages = [
-     "billing",
+     "biling",
      "clients",
      "drafts",
      "events",
@@ -209,54 +215,36 @@ const MyApp = ({ Component, pageProps: { nonce, session, ...pageProps } }: AppPr
      "supervisor",
      "ticket-actions",
    ] 
-   // to prevent  /admin/ * exmple : 'admin/dsadsadsa'   
-   // slugs Catches  this is 404 domain we need to be prosise and not get hydration error
-  // while the if(status === 'unauthenticated' ){  is returning  from admin layout  and the 404 is return too  } 
-
-   
-   const path = router.pathname || router.asPath; // Use pathname or fallback to asPath
-
-   const isAdminRoute = path.startsWith("/admin/") && adminPages.some(page => path.startsWith(`/admin/${page}`));
-
-   interface LayoutPropsType  {
+  
+   interface WrapperPropsType  {
     children?:ReactNode,
     noScroll?:boolean,
     pageName?:string
-    setPageName:Dispatch<SetStateAction<string>>
-    setNoScroll:Dispatch<SetStateAction<boolean>>
+    setPageName?:Dispatch<SetStateAction<string>>
+    setNoScroll?:Dispatch<SetStateAction<boolean>>
    }
    
-
-   const Layout = isAdminRoute ? AdminWrrpaer : ClientWrapper;
-   const LayoutProps : LayoutPropsType ={ pageName , noScroll , setPageName , setNoScroll  }
-
-  
+   const path = router.pathname || router.asPath; // Use pathname or fallback to asPath
+   const isAdminRoute = path === '/admin' || adminPages.some(page => path.startsWith(`/admin/${page}`));
+   const Wrapper = isAdminRoute ? AdminWrrpaer : ClientWrapper;
+   const WrapperProps : WrapperPropsType ={ pageName , noScroll , setPageName , setNoScroll  }
 
 return (
 <>
-
   <SessionProvider session={session}>
   <ThemeProvider theme={theme}>
   <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='he'  >
   <WidthContext.Provider value={{xxl,xl,lg,md,sm,xs,xxs}}>
-      <Layout {...LayoutProps} >  
+      <Wrapper {...WrapperProps} >  
            <Component {...pageProps} /> 
-     </Layout>
+     </Wrapper>
   </WidthContext.Provider>
   </LocalizationProvider>
   </ThemeProvider>
   </SessionProvider>
-
   </>
-
-
-
-
-
   )
 }
-
-
 
 export default MyApp
 

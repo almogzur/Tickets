@@ -41,8 +41,8 @@ export const useAdminBilingInfo = (session: Session | null): ReturendFetcherType
   const SWRconfig: SWRConfiguration = {
     revalidateOnFocus: true,
     revalidateOnMount: true,
-    refreshInterval: 10 * 60 * 1000, // 2 minutes
     refreshWhenHidden: false,
+    
 
   }
 

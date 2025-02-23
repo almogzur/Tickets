@@ -1,7 +1,6 @@
 
 import {Schema} from 'mongoose';
-import { EventSettingType, DraftType, TicketType, ClientEventType, AdminEventType, infoFiledsType } from '../../../types/pages-types/admin/new-event-types';
-import { createModel } from './schema-fn';
+import { EventSettingType, NewDraftType, TicketType, ClientEventType, infoFiledsType, UpdateDraftType, NewEventType } from '../../../types/pages-types/admin/admin-event-types';
 
 
 const EventSettingsShema = new Schema<EventSettingType>({
@@ -51,41 +50,35 @@ const EventLogsSchema   = {
   user:{type:String, required:false},
   ip:{type:String, required:false},
 }
-const EventInvoceSchema   ={
-  payerName: {type:String, required:false},
-  for: {type:String, required:false},
-  price: {type:String, required:false},
-  amout: {type:Number, required:false},
-  timeStamp: {type:String, required:false},
-}
-const DraftSchema =   {
+
+export const  PayedItemInvoce = new Schema({
+  id:{ type:String , required: true },
+  payer:{},
+  payment_source:{},
+  purchase_units:{}
+},{versionKey:false})
+
+
+export const DraftSchema =   {
   info: { type: DraftGlobalFiled },
   tickets: { type: [TicketSchema], required: false },
-  eventSetting: { type: EventSettingsShema, required: false }
+  settings: { type: EventSettingsShema, required: false }
 }
-const EventSchema = {
-  publicId:{ type:String , required: true ,unique:true },
+
+
+export const EventSchema = {
+  public_id:{ type:String , required: true ,unique:true },
   info: { type: EventGlobalFiled , required: true  },
   tickets: { type: [TicketSchema], required: true },
-  eventSetting: { type: EventSettingsShema, required: true },
+  settings: { type: EventSettingsShema, required: true },
   log:{type: [EventLogsSchema] ,required:false },
-  invoices:{ type : [EventInvoceSchema] , required:false}
-
+  invoices:{ type : [PayedItemInvoce] , required:false}
 }
-
 
 // end of week this just start working id remoived no dev recorde saveed
 // all db recored del .. eror on rendreing 
 
-
 //Db Modoles 
-export const DraftModle = createModel<DraftType>("Drafts", DraftSchema)
-export const ClientEventMolde= createModel<ClientEventType>(`${process.env.USER_EVENTS_FOLDER_PATH}`,EventSchema)
-export const AdminEventModle = createModel<AdminEventType>(`${process.env.USER_EVENTS_FOLDER_PATH}`, EventSchema)
-
-
-
-
 
 
 

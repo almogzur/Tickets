@@ -1,4 +1,4 @@
-import { Seats, SeatStyles, TheaterLocationType, TheaterType } from "@/types/components-typs/admin/theater/admin-theater-types"
+import { SeatsRow, SeatStyles, TheaterLocationType, TheaterType } from "@/types/components-typs/admin/theater/admin-theater-types"
 import { CSSProperties } from "react"
 
 
@@ -11,7 +11,7 @@ const positionAtr : CSSProperties = {
    display:"flex",
    flexDirection:"column"
 }
- const Eilat1_mainSeats : Seats = {
+ const Eilat1_mainSeats : SeatsRow = {
     "שורה 1" : [5, 5, 5, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5],
     "שורה 2" : [0,0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     "שורה 3" : [0,0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -33,7 +33,7 @@ const positionAtr : CSSProperties = {
                                    "שורה 19" : [ 0, 0, 0, 0, 0, 0, 0, ],
                                    "שורה 20" : [ 5, 5, 0 ,0, 0, 0, 0, ],
 } 
- const Eilat1_sideSeats : Seats = {
+ const Eilat1_sideSeats : SeatsRow = {
  "שירה 1 קומה 1":[0,0,0,0,0],
  "שירה 1 קומה 2":[0,0,0,0,0],
  "שירה 2 קומה 1":[0,0,0,0],

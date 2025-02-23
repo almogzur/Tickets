@@ -2,25 +2,19 @@ import ClientNavbar from "@/pages-components/client/Navbar";
 import { Box, Container , Stack as Flex, GlobalStyles, useTheme } from "@mui/material";
 import Head from "next/head";
 import { ReactNode, useEffect, useMemo, useState } from "react";
-import ClientSelectedEventContest from '@/context/client/event-page/selected-event-context'
-import { ClientEventType } from "@/types/pages-types/admin/new-event-types";
-import ClientSelectedEventContext from '@/context/client/event-page/selected-event-context'
-import FullHeightPage from "@/HOCs/full-height-page";
+import { ClientEventType } from "@/types/pages-types/admin/admin-event-types";
+import FullHeightPage, { FullHeightPagePropsType } from "@/HOCs/full-height-page";
+import { EventsProvider } from "@/context/client/client-events-context";
 
 
 
-
-interface ClientLayoutPropsType  {
-    children?:ReactNode,
-    noScrool?:boolean,
-    HeaderName?:string
-  }
+interface  ClientLayoutPropsType  extends FullHeightPagePropsType  {
+  
+}
 
 const  ClientWrapper = (props:ClientLayoutPropsType) => {
     
-    const [ ClientSelectedEvent , setClientSelectedEvent ] = useState<ClientEventType>()
-
-  const {children, noScrool, HeaderName} = props
+   const {children, noScrool, HeaderName} = props
 
   return (
     <>
@@ -28,15 +22,15 @@ const  ClientWrapper = (props:ClientLayoutPropsType) => {
           <title>{HeaderName}</title>
           <meta name="viewport" content="width=device-width, user-scalable=no"/>
       </Head>
-    
-      <ClientSelectedEventContext.Provider value={{ClientSelectedEvent,setClientSelectedEvent}} >
-
+     {/*  to prevent re fetching in page navigation  ofter the user click the eventState is set in the global context of client layout */}
+     <EventsProvider>
       <FullHeightPage  noScrool={noScrool}  HeaderName={HeaderName} >
-
-         <ClientNavbar />
-           { children }
+          <ClientNavbar />
+            { children }
       </FullHeightPage>
-      </ClientSelectedEventContext.Provider>
+      </EventsProvider>
+
+
 
       </>
     

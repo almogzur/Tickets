@@ -1,20 +1,13 @@
-import { disconnectFromMongooseDb, MongoseeWithSessionModleDb } from "@/util/dbs/mongosee-fn";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
-import {  DraftType } from "@/types/pages-types/admin/new-event-types";
-import { DraftModle } from "@/util/dbs/schma/new-event";
+import { DraftModle } from "@/util/dbs/schma/modles";
+import  { userDataPrefix , CreateMongooseClient } from "@/util/dbs/mongosee-fn";
 
  // findOne(filter: Filter<TSchema>, options: FindOptions): Promise<WithId<TSchema> | null>;
 
 
-type Message = {
-  massage:string
-}
-
-export type getAdminDraftsApiReturndType =DraftType [] |  Message
-
-export default async function handler(req: NextApiRequest,res: NextApiResponse<getAdminDraftsApiReturndType>) {
+export default async function handler(req: NextApiRequest,res: NextApiResponse) {
 
   const API_NAME = "Admin Get All Drafts Api (Hook)";
   console.log(API_NAME);
@@ -28,32 +21,29 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse<g
     return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 
-  if (!session) {
+  if (!session?.user.name) {
     console.log(API_NAME, 'You Shell Not Pass');
     return res.status(401).json({ massage: 'You Shell Not Pass' });
   }
 
-  const isConnected  = await MongoseeWithSessionModleDb(session)
+  const connection  = await CreateMongooseClient( session.user.name + userDataPrefix)
 
-
- if(!isConnected){
-
-      console.log(API_NAME,"no db");
-      return res.status(500).json({massage:" No DB Connection"})
- 
-  }
+  if(!connection){ 
+    return res.status(500).json({err:'No DB Connection'})
+   }
 
       // calling the Molde Only on Api call prevanting un wanted folder saves 
 
    try{ 
-       const Drafts  = await DraftModle.find({},{},{lean:true})
+       const  Modle = DraftModle(connection)
+
+       const Drafts  = await Modle.find({},{},{lean:true})
        console.log(API_NAME,"Succsess")
-       await disconnectFromMongooseDb(isConnected,API_NAME) 
+
        return   res.send(Drafts)
       }
     catch (err){
-      await disconnectFromMongooseDb(isConnected,API_NAME) 
-        return    res.status(400).json({massage:`${API_NAME} Faled ${err} `})
+        return    res.status(500).json({massage:`  Faled ${err} ${API_NAME} `})
        }
      
 }

@@ -37,13 +37,13 @@ export default function TemporaryDrawer() {
   const links: DrawerLinkType[] = [
     { text: 'צור אירוע', Icon: <FcPuzzle size={"1.5em"} />, link: "/admin/new-event", },
     { text: "טיוטות", Icon: <RiDraftFill size={"1.5em"} color={theme.palette.warning.main} />, link: "/admin/drafts", },
-    { text: 'אירועים ', Icon: <FcDataSheet size={"1.5em"} />, link: "/admin/events" },
+    { text: ' סטטוס  אירועים ', Icon: <FcDataSheet size={"1.5em"} />, link: "/admin/events" },
     { text: "מימוש כרטיסים", Icon: <FcFilingCabinet size={"1.5em"} />, link: "/admin/ticket-actions" },
     { text: "רשימת דיוור", Icon: <PiPaperclipFill size={"1.5em"} color='#f6444d' />, link: "/admin/clients" },
     { text: "סטטיסטיקה", Icon: <FcBullish size={"1.5em"} />, link: "/admin/analytics" },
     { text: "קופאי", Icon: <IoTicketSharp size={"1.5em"} color={blue[700]} />, link: "/admin/regester" },
-    { text: "כספים", Icon: <FcCalculator size={"1.5em"} />, link: "/admin/biling" },
-    { text: "הגדרות", Icon: <FcSettings size={"1.5em"} />, link: "/admin/settings" },
+    { text: "פרטי תשלום", Icon: <FcCalculator size={"1.5em"} />, link: "/admin/biling" },
+    { text: " הגדרות", Icon: <FcSettings size={"1.5em"} />, link: "/admin/settings" },
   ]
 
   const translatePathToHeb = (path: string): string => {
@@ -55,7 +55,7 @@ export default function TemporaryDrawer() {
         break;
       case "/admin/analytics": return "סטטיסטיקה";
         break;
-      case "/admin/events": return "אירועים";
+      case "/admin/events": return " נתוני אירועים";
         break;
       case "/admin/clients": return "רשימית דיוור";
         break;

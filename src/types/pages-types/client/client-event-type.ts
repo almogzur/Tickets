@@ -1,65 +1,95 @@
 import { z }  from 'zod'
 import { ItemCategory, OrderRequest } from '@paypal/paypal-server-sdk'
 import { SeatValidationSchema } from '@/types/components-typs/admin/theater/admin-theater-types'
+import { SeatsRow } from "@/types/components-typs/admin/theater/admin-theater-types"
+import { PayPalOrderVS } from './payment-object'
 
-
-export const PayPalCartItemVlidationShema= z.object({
-    id: z.string().min(1).or(z.undefined()),
-    name: z.string().min(1),
-    quantity: z.string().min(1),
+export const PayPalCartItemVS= z.object({
+    id: z.string().nonempty().or(z.undefined()),
+    name: z.string().nonempty(),
+    quantity: z.string().nonempty(),
     category:z.union([z.literal(ItemCategory.Donation) ,z.literal(ItemCategory.DigitalGoods),z.literal(ItemCategory.PhysicalGoods) ] ),
     unitAmount: z.object( { currencyCode:z.string().min(1), value:z.string().min(1)}),
-  })
-
-export const ClientSelectedValidationSchema= z.object({
-    row: z.string(),
+})
+ 
+export const ClientSelectedSeatsVS= z.object({
+    row: z.string().nonempty(),
     seatNumber: z.number(),
     value: z.number(),
-    price: z.string(),
-    priceInfo: z.string().or(z.undefined()),
+    price: z.string().nonempty(),
+    priceInfo: z.string().nonempty().or(z.undefined()),
   
-  })
-
-export const  PayPalRequestCreateOrderValidationSchema = z.object({
-  cart: z.array(PayPalCartItemVlidationShema),
-  total:z.string(),
-  publicId:z.string(),
-  eventId:z.string()
 })
 
-export const  UpdateTheaterApiValidationSchema = z.object({
-   eventId:z.string(),
+export const  PayPalRequestCreateOrderVS = z.object({
+    cart: z.array(PayPalCartItemVS),
+    total:z.string().nonempty(),
+    publicId:z.string().nonempty(),
+    eventId:z.string().nonempty()
+})
+  
+export const  UpdateTheaterApiVS = z.object({
+   eventId:z.string().nonempty(),
    reqTheater: z.object({
         mainSeats:SeatValidationSchema,
         sideSeats:SeatValidationSchema
      })
 })
 
-export const  PayPalOnApproveResponceDataValidationSchema = z.object({
-  billingToken: z.string().nullable().or(z.undefined()),
-  facilitatorAccessToken: z.string().or(z.undefined()),
-  orderID: z.string(),
-  payerID:  z.string().nullable().or(z.undefined()),
-  paymentID: z.string().nullable().or(z.undefined()),
-  subscriptionID: z.string().nullable().or(z.undefined()),
-  authCode:  z.string().nullable().or(z.undefined()),
+export const  PayPalOnApproveResponceDataVS = z.object({
+  billingToken: z.string().nonempty().nullable().or(z.undefined()),
+  facilitatorAccessToken: z.string().nonempty().or(z.undefined()),
+  orderID: z.string().nonempty(),
+  payerID:  z.string().nonempty().nullable().or(z.undefined()),
+  paymentID: z.string().nonempty().nullable().or(z.undefined()),
+  subscriptionID: z.string().nonempty().nullable().or(z.undefined()),
+  authCode:  z.string().nonempty().nullable().or(z.undefined()),
 })
 
-export const PayPalCapturedRequestOrderValidationSchema= z.object({
-  resData:PayPalOnApproveResponceDataValidationSchema,
-  cart: z.array(PayPalCartItemVlidationShema),
+export const PayPalCapturedRequestOrderVS = z.object({
+  PaypalData:PayPalOnApproveResponceDataVS,
+  eventId:z.string().nonempty(),
+  publicId: z.string().nonempty(),
+})
+
+export const SavePayPalInvoceVS = z.object({
+  invoice:PayPalOrderVS, 
   eventId:z.string(),
-  publicId: z.string(),
+  cart: z.array(PayPalCartItemVS),
+  total:z.string()
+
 })
 
 
-
-export interface CartItemType extends Omit<ClientSelectedSeatType, 'value'> {
-  id: string;
-  name: string;
-  Date:string,
-  Hour:string
+export type  modifieSeatValueFunctionType = {
+  main :SeatsRow , side : SeatsRow 
 }
+export type  UpdateTheaterApiResquestType = z.infer< typeof UpdateTheaterApiVS>
+
+export type RequestStatusType ="Temp"|"Production"|undefined
+
+export type ClientSelectedSeatType = z.infer<typeof ClientSelectedSeatsVS>
+
+export type  PayPalCartItemType  =  z.infer<typeof PayPalCartItemVS>
+
+export type  PayPalRequestCreateOrderType =z.infer<typeof PayPalRequestCreateOrderVS> 
+
+export type PayPalRequestCapturedOrderType= z.infer<typeof PayPalCapturedRequestOrderVS>
+
+export type PayPalResponceCapturedOrderType = z.infer<typeof PayPalOnApproveResponceDataVS>
+
+export type SavePayPalInvoceTpee = z.infer<typeof SavePayPalInvoceVS >
+
+
+
+
+
+
+
+
+
+
+// from PayPal 
 
 export type PayPalClollectInfoObjectType  = { // see Order Controller fn parameters 
   body: OrderRequest;
@@ -69,19 +99,3 @@ export type PayPalClollectInfoObjectType  = { // see Order Controller fn paramet
   prefer?: string;
   paypalAuthAssertion?: string;
 }
-
-
-  
-export type  UpdateTheaterApiResquestType = z.infer< typeof UpdateTheaterApiValidationSchema>
-
-export type RequestStatusType ="Temp"|"Production"|undefined
-
-export type ClientSelectedSeatType = z.infer<typeof ClientSelectedValidationSchema>
-
-export type  PayPalCartItemType  =  z.infer<typeof PayPalCartItemVlidationShema>
-
-export type  PayPalRequestCreateOrderType =z.infer<typeof PayPalRequestCreateOrderValidationSchema> 
-
-export type PayPalRequestCapturedOrderType= z.infer<typeof PayPalCapturedRequestOrderValidationSchema>
-
-export type PayPalResponceCapturedOrderType = z.infer<typeof PayPalOnApproveResponceDataValidationSchema>

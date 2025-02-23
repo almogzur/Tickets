@@ -6,17 +6,18 @@ import WidthContext from '@/context/WidthContext';
 import {      Stack as Flex  , Button, Typography, useTheme, Box,} from '@mui/material';
 import { SetStateAction, useContext, } from 'react'
 import { grey } from '@mui/material/colors';
-import { ClientEventType } from '@/types/pages-types/admin/new-event-types';
+import { ClientEventType } from '@/types/pages-types/admin/admin-event-types';
 import { ClientSelectedSeatType } from '@/types/pages-types/client/client-event-type';
-import ClientSelectedEventContext from '@/context/client/event-page/selected-event-context'
 
 
-interface ClientInfoDrawerType {
+
+interface ClientSideType {
+
     children?:React.ReactNode
+    ClientSelectedEvent:ClientEventType
     wighetIsExp:boolean
     setWighetIsExp:React.Dispatch<SetStateAction<boolean>>
     eventSelectSeats:ClientSelectedSeatType[]
-
 }
 
 
@@ -25,13 +26,13 @@ export default function DrawerWighet({
     wighetIsExp,
     setWighetIsExp,
     eventSelectSeats,
+    ClientSelectedEvent
     
     
     
-    }:ClientInfoDrawerType) {
+    }:ClientSideType) {
   const {xxl,xl,lg,md,sm,xs,xxs} = React.useContext(WidthContext)
   const theme = useTheme()
-  const {  ClientSelectedEvent , setClientSelectedEvent} = useContext(ClientSelectedEventContext)
 
       const
       FooterFlex = Flex,

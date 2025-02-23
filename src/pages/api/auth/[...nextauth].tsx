@@ -6,8 +6,8 @@ import bcrypt from 'bcryptjs'
 
 import jwt from 'jsonwebtoken'
 import {  NewUserValidationShema } from "@/types/pages-types/admin/supervisor-types"
-import { disconnectFromMongooseDb, MongoseeAuthUsersDb } from "@/util/dbs/mongosee-fn"
-import { UsersModle } from "@/util/dbs/schma/new-user"
+import  {CreateMongooseClient,  UserPrefix } from "@/util/dbs/mongosee-fn"
+import { UsersModle } from "@/util/dbs/schma/modles"
 
 
 // Exdenting the type using -  module Augmentation
@@ -70,22 +70,21 @@ export const authOptions: AuthOptions = {
           return null
         }
 
-        const Client = await MongoseeAuthUsersDb()
+        const connection = await CreateMongooseClient(UserPrefix)
 
 
-        if (!Client) {
+        if (!connection) {
           console.log("No connection")
           return null
         }
 
-
-        const user = await UsersModle.findOne({ name: credential.name},{},{lean:true})
-
         
+       const Modle = UsersModle(connection) 
+
+       const user = await Modle.findOne({ name: credential.name }).lean();
 
         if (!user) {
           console.log("User not found")
-          await disconnectFromMongooseDb(Client,"AuthF")
           return null
         }
 
@@ -107,8 +106,6 @@ export const authOptions: AuthOptions = {
                displayName: user.displayName,
                id: user._id.toString()
           }
-          await disconnectFromMongooseDb(Client)
-
           return {
             ...ReturnUser,
              accessToken
@@ -116,7 +113,6 @@ export const authOptions: AuthOptions = {
         }
 
         console.log("Invalid credentials")
-        await disconnectFromMongooseDb(Client)
         return null
       }
 

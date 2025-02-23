@@ -1,7 +1,3 @@
-import { NewUserType } from "@/types/pages-types/admin/supervisor-types";
-import { createModel } from "./schema-fn";
-
-
 
 export const NewUserSchemaDefinition = {
   name: { type: String, required: true , unique:true},
@@ -10,7 +6,6 @@ export const NewUserSchemaDefinition = {
 };
 
 
-export const UsersModle =  createModel<NewUserType>(`${process.env.APP_USERS_FOLDER_PATH}`,NewUserSchemaDefinition)
 
 
 

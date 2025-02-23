@@ -63,7 +63,7 @@ const AdminBillingPage = () => {
     const isValiedData = UserPayPalInfoValidationSchema.safeParse(PayPalBillingInfo)
 
     if(!isValiedData.success){
-      console.log("no valid data  Client "  , "")
+      console.log("no valid data  Client "  , isValiedData.error.issues)
       return
     }
   
@@ -74,8 +74,9 @@ const AdminBillingPage = () => {
 
     try {
        const responce = await axios.post( URL , data )
-      if (responce.status === 200) {} 
-       alert(responce.data)
+      if (responce.status === 200) {
+        router.push("/admin")
+      } 
     }catch (err) {
        alert(err)
     }

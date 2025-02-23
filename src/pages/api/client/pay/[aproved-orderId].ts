@@ -1,6 +1,7 @@
 // File: pages/api/public.ts
 
-import { Mongo } from "@/util/dbs/mongo-db/mongo";
+import { PayPalCapturedRequestOrderVS } from "@/types/pages-types/client/client-event-type";
+import {CreateMongooseClient} from "@/util/dbs/mongosee-fn";
 import { rateLimitConfig } from "@/util/fn/api-rate-limit.config";
 import { GetBillingInfoFromEventId } from "@/util/fn/pay-fn";
 import {
@@ -23,19 +24,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const API_NAME = " payment aproved order api  "
 
       if (req.method !== 'POST') {
-            res.status(401).json({ message: "Not Alowed " + API_NAME });
+            res.status(405).json({ message: "Not Alowed " + API_NAME });
       }
 
-      const Client = await Mongo()
+      const connection  = await CreateMongooseClient(null)
      
-      if(!Client){
-           return res.status(500).json({massage:"no Db" + API_NAME})
-       }
        const body   = req.body 
-       const { orderID , eventId , publicId} =body // const isValidData = Schema.safeParse()
-   
 
-       const userInfo = await GetBillingInfoFromEventId(eventId, `${process.env.CIPHER_SECRET}`, Client)
+       const isValiedData = PayPalCapturedRequestOrderVS.safeParse(body)
+
+       if(!isValiedData.success){
+        return res.status(400).json({massage:"bad data fromat "+API_NAME})
+       }
+
+       const { PaypalData , eventId , publicId } =isValiedData.data // const isValidData = Schema.safeParse()
+       const { orderID  } = PaypalData
+   
+       const userInfo = await GetBillingInfoFromEventId(eventId, `${process.env.CIPHER_SECRET}`, connection)
+
 
         if (!userInfo) {    return res.status(404).json({ massage: "no auth" }) }
 
@@ -43,7 +49,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const client = new PayPalClient({
           clientCredentialsAuthCredentials: {
               oAuthClientId: publicId,
-              oAuthClientSecret: `${userInfo.info.clientSecret}`,
+              oAuthClientSecret: `${userInfo.clientSecret}`,
           },
           timeout: 0,
           environment: Environment.Sandbox,
@@ -53,6 +59,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
               logResponse: { logHeaders: false },
           },
       });
+
       const ordersController = new OrdersController(client);
      
        const captureOrder = async (orderID: string) => {

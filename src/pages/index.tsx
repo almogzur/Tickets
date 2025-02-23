@@ -1,13 +1,15 @@
 import { Button, Container, Stack as Flex, Typography, Box, useTheme, Paper, CircularProgress } from '@mui/material'
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import Carousel from 'react-material-ui-carousel'
 import { FaCircleArrowLeft, FaCircleArrowRight } from 'react-icons/fa6';
 import WidthContext from '@/context/WidthContext';
 import type { GetServerSideProps, GetServerSidePropsResult } from 'next'
 import axios from 'axios';
-import { ClientEventType } from '@/types/pages-types/admin/new-event-types';
+import { ClientEventType } from '@/types/pages-types/admin/admin-event-types';
 import ClientWrapper from '@/Wrappers/client';
 import EventCard from '@/pages-components/client/main-page/event-card';
+import { useEvents } from '@/context/client/client-events-context';
+import LoadingScreen from '@/HOCs/loading';
 
 
 export const getServerSideProps: GetServerSideProps<{ Events: ClientEventType[] }> = async (context) => {
@@ -23,13 +25,10 @@ export const getServerSideProps: GetServerSideProps<{ Events: ClientEventType[] 
   }
 };
 
-
-
 interface HomePageProps { Events: ClientEventType[] }
 
 export default function Home(props: HomePageProps) {
 
-  const { Events } = props
 
   const theme = useTheme()
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -38,7 +37,17 @@ export default function Home(props: HomePageProps) {
   const [scrollToLeft, setScrollToLeft] = useState(0);
   const { xxl, xl, lg, md, sm, xs, xxs } = useContext(WidthContext)
 
-  useEffect(() => { console.log(Events) }, [Events])
+  const { Events } = props // events from getServerProps
+
+  const { ClientEvents, setClientEvents } = useEvents(); // save events to  localStorge 
+  const [pageLoad, setPageLoad] = useState(false)
+
+  useEffect(() => {
+    setPageLoad(true)
+    if (Events.length > 0) {
+      setClientEvents(Events); // Store fetched events in context
+    }
+  }, [ClientEvents, Events, Events.length, setClientEvents]);
 
 
   const scrollLeft = () => {
@@ -52,7 +61,6 @@ export default function Home(props: HomePageProps) {
       scrollContainerRef.current.scrollBy({ behavior: "smooth", left: +310 })
     }
   };
-
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!scrollContainerRef.current) return;
@@ -91,104 +99,108 @@ export default function Home(props: HomePageProps) {
     LeftArrow = Box,
     ArowsWrapper = Flex
 
+  if (!Events || !pageLoad) {
+    return <LoadingScreen />
+  }
 
 
   return (
-      <PageWrapper maxWidth='xl'>
+    <PageWrapper maxWidth='xl'>
 
-        <Carousel
-          sx={{ background: "black" }}
+      <Carousel
+        sx={{ background: "black" }}
 
-        >
-          {
-            items.map((item, i) => <Item key={i} {...item} />)
-          }
-        </Carousel>
+      >
+        {
+          items.map((item, i) => <Item key={i} {...item} />)
+        }
+      </Carousel>
 
-        <Scrooler>
-          <ArowsWrapper direction={"row"} justifyContent={"space-between"}  >
-            <RightArrow
-              position={"relative"}
-              left={!xs ? -15 : !md ? -25 : "auto"}
-              zIndex={5}
-              width={0}
+      <Scrooler>
+        <ArowsWrapper direction={"row"} justifyContent={"space-between"}  >
+          <RightArrow
+            position={"relative"}
+            left={!xs ? -15 : !md ? -25 : "auto"}
+            zIndex={5}
+            width={0}
 
-            >
-              <Button
-                variant='text'
-                color='secondary'
-                sx={{ borderRadius: 45, opacity: 0.7 }}
-              >
-                <FaCircleArrowRight
-                  size={!md ? 40 : 50}
-                  onClick={scrollRight}
-                  cursor={'pointer'}
-                />
-              </Button>
-            </RightArrow>
-
-
-
-            <LeftArrow>
-              <Button
-                variant='text'
-                color='secondary'
-                sx={{ borderRadius: 45, opacity: 0.7 }}
-              >
-                <FaCircleArrowLeft
-                  size={!md ? 40 : 50}
-                  onClick={scrollLeft}
-                  cursor={'pointer'}
-                />
-              </Button>
-            </LeftArrow>
-
-          </ArowsWrapper>
-
-          <ScroolerConetnt
-            ref={scrollContainerRef}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUpOrLeave}
-            onMouseLeave={handleMouseUpOrLeave}
-            // onWheel={handleWheel} // Attach wheel event handler
-            display={"flex"}
-            flexDirection={"row"}
-            gap={3}
-
-            sx={{
-              overflowX: 'auto',
-              '&::-webkit-scrollbar': {
-                width: '0.2em'
-              },
-              '&::-webkit-scrollbar-track': {
-                boxShadow: `inset 0 0 6px rgba(0,0,0,0.00)`,
-                webkitBoxShadow: 'inset 0 0 3px rgba(0,0,0,0.00)'
-              },
-              '&::-webkit-scrollbar-thumb': {
-
-                outline: `0.5px solid ${theme.palette.secondary.main}`
-              }
-
-
-
-            }}
           >
-            {Events?.map((event) => (
-              <EventCard key={event._id} {...event} />
-            ))}
+            <Button
+              variant='text'
+              color='secondary'
+              sx={{ borderRadius: 45, opacity: 0.7 }}
+            >
+              <FaCircleArrowRight
+
+                size={!md ? 40 : 50}
+                onClick={scrollRight}
+                cursor={'pointer'}
+              />
+            </Button>
+          </RightArrow>
+
+
+
+          <LeftArrow>
+            <Button
+              variant='text'
+              color='secondary'
+              sx={{ borderRadius: 45, opacity: 0.7 }}
+            >
+              <FaCircleArrowLeft
+                size={!md ? 40 : 50}
+                onClick={scrollLeft}
+                cursor={'pointer'}
+              />
+            </Button>
+          </LeftArrow>
+
+        </ArowsWrapper>
+
+        <ScroolerConetnt
+          ref={scrollContainerRef}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUpOrLeave}
+          onMouseLeave={handleMouseUpOrLeave}
+          // onWheel={handleWheel} // Attach wheel event handler
+          display={"flex"}
+          flexDirection={"row"}
+          gap={3}
+
+          sx={{
+            overflowX: 'auto',
+            '&::-webkit-scrollbar': {
+              width: '0.2em'
+            },
+            '&::-webkit-scrollbar-track': {
+              boxShadow: `inset 0 0 6px rgba(0,0,0,0.00)`,
+              webkitBoxShadow: 'inset 0 0 3px rgba(0,0,0,0.00)'
+            },
+            '&::-webkit-scrollbar-thumb': {
+
+              outline: `0.5px solid ${theme.palette.secondary.main}`
+            }
+
+
+
+          }}
+        >
+          {ClientEvents?.map((event) => (
+            <EventCard key={event._id} {...event} />
+          ))}
 
 
 
 
-          </ScroolerConetnt>
+        </ScroolerConetnt>
 
-        </Scrooler>
+      </Scrooler>
 
-        <Placeholder height={400} />
+      <Placeholder height={400} />
 
 
-      </PageWrapper>
+    </PageWrapper>
   )
 
 

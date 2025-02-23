@@ -1,19 +1,19 @@
-import { EventSettingType } from "@/types/pages-types/admin/new-event-types";
+import { EventSettingType } from "@/types/pages-types/admin/admin-event-types";
 import { createContext, Dispatch, SetStateAction } from "react";
 
 interface TabEventSettingsContest {
-    eventSetting:EventSettingType
-    setEventSetting:Dispatch<SetStateAction<EventSettingType>>
+    settings:EventSettingType
+    setSetting:Dispatch<SetStateAction<EventSettingType>>
 }
 
 
 export default createContext<TabEventSettingsContest>({
-    eventSetting: {
+    settings: {
         canSelectNotRelatedSites: true,
         limitClientTicket: true,
         ticketLimit: ""
     },
-    setEventSetting: function (value: SetStateAction<EventSettingType>): void {
+    setSetting: function (value: SetStateAction<EventSettingType>): void {
         throw new Error("Function not implemented.");
     }
 })

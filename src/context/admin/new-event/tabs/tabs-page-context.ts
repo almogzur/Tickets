@@ -1,4 +1,4 @@
-import { RequestStatusType } from "@/types/pages-types/admin/new-event-types";
+import { RequestStatusType } from "@/types/pages-types/client/client-event-type";
 import { createContext, Dispatch, SetStateAction } from "react";
 
 

@@ -1,9 +1,9 @@
-import { AdminEventType, DraftType, } from "@/types/pages-types/admin/new-event-types";
+import {  ClientEventType, NewDraftType, NewEventType, } from "@/types/pages-types/admin/admin-event-types";
 import axios, { AxiosRequestConfig } from "axios";
 import { Session } from "next-auth";
 import useSWR, { Fetcher, Key as SWRKey, KeyedMutator, SWRConfiguration } from "swr";
 
-type DataType = AdminEventType[]
+type DataType = ClientEventType[]
 
 
 type ReturendFetcherType<T> = {
@@ -16,7 +16,7 @@ type ReturendFetcherType<T> = {
 
 export const useAdminEvents = (session: Session | null): ReturendFetcherType<DataType> => {
 
-  const fetcherKey: SWRKey = () => session?.user?.name ? '/api/admin/live-events/get-events' : null //no fetch if no session
+  const fetcherKey: SWRKey = () => session?.user?.name ? '/api/admin/live-events/get-admin-events' : null //no fetch if no session
 
   const fetcher: Fetcher<DataType> = async (key: string): Promise<DataType> => {
 
@@ -41,7 +41,6 @@ export const useAdminEvents = (session: Session | null): ReturendFetcherType<Dat
   const SWRconfig: SWRConfiguration = {
     revalidateOnFocus: true,
     revalidateOnMount: true,
-    refreshInterval: 2 * 60 * 1000, // 2 minutes
     refreshWhenHidden: false,
 
   }

@@ -1,9 +1,7 @@
-import { ClientEventType } from "@/types/pages-types/admin/new-event-types";
-import {  getAllDbList, getCollectionsFromDb, getDb } from "@/util/dbs/mongo-db/db_fn";
-import { Mongo } from "@/util/dbs/mongo-db/mongo";
+import { ClientEventType, NewEventType } from "@/types/pages-types/admin/admin-event-types";
+import {CreateMongooseClient} from "@/util/dbs/mongosee-fn";
 import { rateLimitConfig } from "@/util/fn/api-rate-limit.config";
 import rateLimit from "express-rate-limit";
-import { MongoClient } from "mongodb";
 
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -15,49 +13,49 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<Clien
   return apiLimiter(req, res,
     async () => {
       const API_NAME = "Get All Client Active Events  (Hook)";
+      console.log(API_NAME)
 
-      const Client = await Mongo();
+        const connection  = await CreateMongooseClient(null)
 
       if (req.method !== 'GET') {
-        res.setHeader('Allow', ['GET']);
-        console.log(`Method ${req.method} Not Allowed`);
-        res.status(401).end(`Method ${req.method} Not Allowed`);
+        return  res.status(405).end(`Method ${req.method} Not Allowed`);
       }
 
-      if (!Client) {
+      if (!connection) {
         return res.status(500).json({ massage: " No DB Connection" })
-      }
-      const dblist = await getAllDbList(Client)
-
-      if (!dblist) return
       
-       const FinedCrusersArray =await  Promise.all(  // <- [{}] ,[{}] ,[{}] after flat 
-             dblist.map( 
-               async ( db )=>{
-                if (db.empty){return}
-                const UserDB = await getDb(db.name, Client, `${process.env.USER_DATA_FOLDER_PATH}`)
-                 if(!UserDB){return}
-                const UserCollections = await getCollectionsFromDb(UserDB, `${process.env.USER_EVENTS_FOLDER_PATH}`)
-                const FinedCruser =await  Promise.all(  
-                    UserCollections.map(
-                        async (collection) => 
-                         collection
-                             .find( {},{ projection: { invoices: false, log: false } }) // Exclude invoices & logs from the result
-                            .toArray()) 
-                 )
+      }
+      const Cluster = (await connection.listDatabases()).databases
 
-             
-                return FinedCruser.flat() //flat remove the UserCollections wraper array [ [{}]. [{}] .[{}] ] <- this one
-              
-             })
-          )
+      const UsersDbs = Cluster.filter((db)=> db.name.includes(`${process.env.USER_DATA_FOLDER_PATH}`))
+
+      if (!UsersDbs) return
+
+     // console.log(UsersDbs)
+
+
+      const Events = await Promise.all(
+        UsersDbs.map(async (db) => {
+
+          const dbConnection = connection.useDb(db.name) // Bind DB
+
+        //  console.log(dbConnection.db?.databaseName)
+
+          const UserCollection =dbConnection.collection<NewEventType>(`${process.env.USER_EVENTS_FOLDER_PATH}`)
+    
+          const userEvents =  await UserCollection.find({},{projection:{log:false,invoices:false}}).toArray()
+
+          return   userEvents
+
+        })
+      )
           
-           //  findResult will only be returned if its ! null . flat remove the dblist wraper array
-        const Events =FinedCrusersArray.filter((findResult)=> findResult ).flat() //  [[  [{}],[{}],[{}] ] ] <- this one . -> after [ [] ,[], [] ]             
-
-      console.log(API_NAME, 'succsess' )
-       //     console.log(Events)
-     return res.send(Events)
+           //  findResult will only be returned if its ! null . 
+           // flat remove the dblist wraper array
+          
+            console.log( "Number Of events  ", Events.flat().length)
+      
+        return  res.send(Events.flat()) 
         }
     )
 

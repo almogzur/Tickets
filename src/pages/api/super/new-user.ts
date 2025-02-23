@@ -1,10 +1,10 @@
 // File: pages/api/public.ts
 
-import {  MongoseeAuthUsersDb  ,disconnectFromMongooseDb} from "@/util/dbs/mongosee-fn";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
+import  {CreateMongooseClient,  UserPrefix } from "@/util/dbs/mongosee-fn";
+import { UsersModle } from "@/util/dbs/schma/modles";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
-import { UsersModle } from "@/util/dbs/schma/new-user";
 
 
 
@@ -19,26 +19,36 @@ export default async function handler  ( req: NextApiRequest , res: NextApiRespo
   }
 
     const session = await getServerSession(req, res, authOptions);
-    const connection  = await MongoseeAuthUsersDb()
     const Data = req.body
-    const model = new  UsersModle(Data) 
+
+
+
+    // add new user validation schema  
 
   if (!session?.user.name) {
     console.log(API_NAME, 'You Shell Not Pass');
     return res.status(401).json({ message: 'You Shell Not Pass' });
   }
+
+  const connection  = await CreateMongooseClient(UserPrefix)
+
+
   if(!connection){
       return  res.status(500).json({ message: "no db" });
    }
+
+   const Modle = UsersModle(connection)
+
+   const model = new  Modle(Data) 
 
    const doc = await model.save({checkKeys:true})
 
    if( !doc || doc.errors){
       console.log(API_NAME,"Err",doc.errors,doc)
+
       return res.status(500).json({massage:"erros" ,})
    }
 
-    await disconnectFromMongooseDb(connection,API_NAME)
     console.log(API_NAME,"Succsess")
     return res.status(200).json({massage:"new user saved "})
 

@@ -1,4 +1,4 @@
-import { TicketType } from "@/types/pages-types/admin/new-event-types";
+import { TicketType } from "@/types/pages-types/admin/admin-event-types";
 import { createContext, Dispatch, SetStateAction } from "react";
 
 

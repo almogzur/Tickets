@@ -1,18 +1,13 @@
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
+
 import {Typography, useTheme, Stack as Flex} from '@mui/material'
 
 import { CldImage } from 'next-cloudinary';
 import { useRouter } from 'next/router';
 import WidthContext from '@/context/WidthContext';
 import { useContext, useEffect } from 'react';
-import { optimizeImage } from 'next/dist/server/image-optimizer';
-import { ClientEventType } from '@/types/pages-types/admin/new-event-types';
+import { ClientEventType } from '@/types/pages-types/admin/admin-event-types';
 
-import ClientSelectedEventContext from '@/context/client/event-page/selected-event-context'
 
 export default function EventCard(props:ClientEventType) {
   const theme = useTheme()
@@ -20,9 +15,8 @@ export default function EventCard(props:ClientEventType) {
   const Actions = Flex
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
 
-  const {  ClientSelectedEvent , setClientSelectedEvent} = useContext(ClientSelectedEventContext)
 
-  useEffect(()=>{console.log(props, "Event Card Props")},[props])
+  //useEffect(()=>{console.log(props, "Event Card Props")},[props])
 
   
   return (
@@ -45,6 +39,7 @@ export default function EventCard(props:ClientEventType) {
          <CldImage
           src={props.info.preview}
           unselectable='on'
+          unoptimized
           alt="Description of my image"
           width={!xs? 200:  250}
           height={!xs? 240: 280}
@@ -64,14 +59,11 @@ export default function EventCard(props:ClientEventType) {
                  height={'20%'}
                  sx={{ cursor:'pointer'}}
                  onClick={ (e)=> {
-
-                     setClientSelectedEvent(props)
-                     router.push({
-                        pathname:`/event/${props.info.eventName}`,
-                       },
-                      
-                      )}
+                    router.push({
+                      pathname: `/event/${props._id}`,
+                    })
                   }
+                }
 
                    >
                  <Typography 

@@ -16,8 +16,8 @@ import {
 import { GetBillingInfoFromEventId } from "@/util/fn/pay-fn";
 import { ObjectId } from "mongodb";
 import { rateLimitConfig } from "@/util/fn/api-rate-limit.config";
-import { Mongo } from "@/util/dbs/mongo-db/mongo";
-import {   PayPalClollectInfoObjectType, PayPalRequestCreateOrderValidationSchema } from "@/types/pages-types/client/client-event-type";
+import {   PayPalClollectInfoObjectType, PayPalRequestCreateOrderVS, } from "@/types/pages-types/client/client-event-type";
+import {CreateMongooseClient} from "@/util/dbs/mongosee-fn";
 
 const apiLimiter = rateLimit(rateLimitConfig);
 
@@ -34,7 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
 
             const body  = req.body
-            const IsValidData    = PayPalRequestCreateOrderValidationSchema.safeParse( body )
+            const IsValidData    = PayPalRequestCreateOrderVS.safeParse( body )
 
             if( ! IsValidData.success){
                 console.log(IsValidData.error)
@@ -43,28 +43,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
             const  { cart, total, publicId, eventId } =  IsValidData.data
 
-            const Client = await  Mongo()
 
-
-            if(!Client) {
-                console.log(API_NAME,"!db client")
-                return
-            }
-
+             const connection  = await CreateMongooseClient(null)
+            
+             if(!connection){ 
+                return res.status(500).json({err:'No DB Connection'})
+             }
             if (!ObjectId.isValid(eventId)) {
                 return res.status(400).json({ error: "Invalid eventId format" });
             }
 
-            const userInfo = await GetBillingInfoFromEventId(eventId, `${process.env.CIPHER_SECRET}`,Client)
+            const userInfo = await GetBillingInfoFromEventId(eventId, `${process.env.CIPHER_SECRET}`,connection)
 
-            if (!userInfo) {
+            if (!userInfo || ! publicId) {
                 return res.status(400).json({ massage: "no auth" })
             }
 
             const client = new PayPalClient({
                 clientCredentialsAuthCredentials: {
                     oAuthClientId: publicId,
-                    oAuthClientSecret: `${userInfo?.info.clientSecret}`,
+                    oAuthClientSecret: `${userInfo.clientSecret}`,
                 },
                 timeout: 0,
                 environment: Environment.Sandbox,
@@ -102,7 +100,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 try {
                     const { body, ...httpResponse } = await ordersController.ordersCreate(collect);
                     return {
-                        jsonResponse: JSON.parse(body.toString()),
+                        jsonResponse: body,
                         httpStatusCode: httpResponse.statusCode,
                     };
                 }

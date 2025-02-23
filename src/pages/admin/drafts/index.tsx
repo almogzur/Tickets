@@ -105,7 +105,7 @@ const  removeDraft = async (draftId:string)=>{
    const options : AxiosRequestConfig ={ }
   
    try{ 
-       const responce = await axios.post("/api/admin/drafts/D/remove-draft",reqData,options)
+       const responce = await axios.post("/api/admin/drafts/remove-draft",reqData,options)
 
       if(responce.status){
 

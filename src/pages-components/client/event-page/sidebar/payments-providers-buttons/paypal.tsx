@@ -1,10 +1,11 @@
 
 import { TheaterType } from "@/types/components-typs/admin/theater/admin-theater-types";
-import { PayPalCartItemType } from "@/types/pages-types/client/client-event-type";
-import { PayPalScriptProvider, PayPalButtons, ScriptContextState } from "@paypal/react-paypal-js";
+import { PayPalCartItemType, PayPalRequestCapturedOrderType, PayPalRequestCreateOrderType, PayPalResponceCapturedOrderType, SavePayPalInvoceTpee  } from "@/types/pages-types/client/client-event-type";
+import { PayPalScriptProvider, PayPalButtons   } from "@paypal/react-paypal-js";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+
+import { PayPalOrderType } from "@/types/pages-types/client/payment-object";
 
 
 
@@ -13,23 +14,28 @@ export interface PaypalBtnType {
     total: string
     TheaterState: TheaterType | undefined
     publicId: string
-    eventId: string|undefined
+    eventId: string
 }
 
 const PaypalBtn = ({ eventId, publicId, cart, total, TheaterState }: PaypalBtnType) => {
+
+
+const Options ={
+    'client-id':publicId,
+    'clientId':publicId
+
+    }
     const router = useRouter()
 
-    const initialOptions: ScriptContextState['options'] = {
-        "client-id": publicId,
-        "clientId": publicId,
-        environment: 'sandbox',
-    };
 
-    useEffect(() => { console.log(cart) }, [cart])
+    //useEffect(() => { console.log(cart) }, [cart])
 
+
+    
     return (
-        <PayPalScriptProvider options={initialOptions} >
-            <PayPalButtons
+        <PayPalScriptProvider options={ Options}   >
+            <PayPalButtons        
+               // when public id change re render 
                 style={{
                     shape: "rect",
                     layout: "vertical",
@@ -40,10 +46,14 @@ const PaypalBtn = ({ eventId, publicId, cart, total, TheaterState }: PaypalBtnTy
                 //
                 createOrder={async () => {
 
-                    try {
-                        const response = await axios.post("/api/client/pay/create-order", { cart, total, publicId, eventId, });
+                    const PatPalData  :PayPalRequestCreateOrderType = {
+                        cart, total, publicId, eventId,
+                    }
 
-                        const orderData = await response.data
+                    try {
+                        const response = await axios.post("/api/client/pay/create-order", PatPalData);
+
+                        const orderData = await JSON.parse(response.data)
 
                         if (orderData.id) {
                             return orderData.id;
@@ -65,6 +75,7 @@ const PaypalBtn = ({ eventId, publicId, cart, total, TheaterState }: PaypalBtnTy
                     const orderID = data.orderID
                     // on payment  befor proces compliting payment 
                     // see that the seat is open for sale  { avoiding  race conditions }
+                    console.log("on approve")
 
                     const updateEvent = async (): Promise<boolean> => {
                         try {
@@ -75,43 +86,44 @@ const PaypalBtn = ({ eventId, publicId, cart, total, TheaterState }: PaypalBtnTy
                                 eventId,
                                 reqTheater: { mainSeats, sideSeats }
                             }
-
-                            const UpdateEvent = await axios.post("/api/client/events/update-event",
-                                UpdateEventData,
-                                { headers: { "Content-Type": "application/json" } }
-                            )
+                            const UpdateEvent = await axios.post("/api/client/events/update-event",UpdateEventData,)
 
                             return UpdateEvent.status === 200 ? true : false
 
-
                         } catch (err) {
-
                             alert(err)
                             return false
                         }
                     }
-                    const capturePayment = async (): Promise<void> => {
+
+                    const capturePayment = async (): Promise<any|void> => {
                         try {
 
-                            const OrderData = {
-                                ...data,
-                                eventId,
-                                publicId
+                            const OrderData : PayPalRequestCapturedOrderType  = {
+                            PaypalData: data,
+                            eventId,
+                            publicId
                             }
 
                             // paypal builing process 
                             const payPalResponse = await axios.post(`/api/client/pay/${orderID}`, OrderData);
-                            const orderData = await payPalResponse.data
+
+                            const orderData  = await payPalResponse.data // err  or data  
+
+                          /** PAYPAL PROVIDED ERROR HANDLEING */
 
                             // Three cases to handle:
                             //   (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
                             //   (2) Other non-recoverable errors -> Show a failure message
+                        
+
+
+                            // ** CASE 1 AND 2  add rollbacks !!!!  calls to update event theater 
+
+
                             //   (3) Successful transaction -> Show confirmation or thank you message
 
-                            const errorDetail = orderData?.details?.[0];
-
-                                // CASE 1 AND 2  add rollbacks !!!!  calls to update event theater 
-
+                            const errorDetail  = orderData?.details?.[0];
 
 
                             if (errorDetail?.issue === "INSTRUMENT_DECLINED") {
@@ -124,20 +136,14 @@ const PaypalBtn = ({ eventId, publicId, cart, total, TheaterState }: PaypalBtnTy
                                 throw new Error(`${errorDetail.description} (${orderData.debug_id})`);
                             }
 
-
-
-
-
-
                             else {
                                 // (3) Successful transaction -> Show confirmation or thank you message
                                 // Or go to another URL:  actions.redirect('thank_you.html');
-                                console.log(orderData)
+                                
+                                const PayPalData  =  JSON.parse(orderData)
 
-                                router.push({
-                                    pathname: `/thank-you/${orderData.id}/`,  // Dynamic route with transactionId
-                                    query: orderData,  // Query parameter for units
-                                });
+                                  return PayPalData
+
                               //  const transaction = orderData.purchase_units[0].payments.captures[0];
 
 
@@ -149,17 +155,59 @@ const PaypalBtn = ({ eventId, publicId, cart, total, TheaterState }: PaypalBtnTy
 
                     }
 
+                    const saveInvoices = async( PayPalInvoice:PayPalOrderType) : Promise<boolean> =>{
 
-                    if (! await updateEvent()) {
-                        router.push({
+                        const invoice :SavePayPalInvoceTpee  = {
+                         invoice:PayPalInvoice, 
+                          eventId,
+                          cart,
+                          total
+                       }
+
+                      try{ 
+                          const responce = await  axios.post("/api/client/events/new-invoice",invoice)
+                          if(responce.status === 200 || responce.status === 201  ){
+
+                                console.log("responce")
+
+                              
+                          }
+                          return false
+
+                       }
+                      catch (err){  
+                          return false
+                      }
+                      
+                     }
+
+                     const updateTheaterResult= await updateEvent()
+
+
+                    if ( ! updateTheaterResult ) {
+                        
+                        // try to update the theater if it not avalebule push to err page 
+                         // **  cant return from onAprove function 
+
+                        router.push({ 
                             pathname: "/thank-you/err",
                             query: "שגיעה בעדכון האולם"
                         })
+                    }else {
+                         const PayPalInvoice= await capturePayment()
 
-                    }
-                    else {
-                        await capturePayment()
-                    }
+                          if( ! PayPalInvoice ){
+                             router.push({
+                                pathname: "/thank-you/err",
+                                query: "שגיעה במהלך התשלום "
+                            })
+                            }else{    
+                              await saveInvoices(PayPalInvoice)
+
+                          }
+                          
+                        }
+                    
 
                 }}
             />

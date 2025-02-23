@@ -4,7 +4,7 @@ import TooltipButton from './client-seat-btn'
 import { useState, useEffect, useContext, CSSProperties, useRef, Dispatch, SetStateAction, } from 'react'
 import { useTheme , Stack as Flex, Typography, Drawer } from '@mui/material';
 import WidthContext from '@/context/WidthContext';
-import { ClientEventType } from '@/types/pages-types/admin/new-event-types';
+import { ClientEventType } from '@/types/pages-types/admin/admin-event-types';
 import ClientTheaterRTransform from './client-theater-transformer';
 import { ClientSelectedSeatType } from '@/types/pages-types/client/client-event-type';
 import { TheaterType } from '@/types/components-typs/admin/theater/admin-theater-types';
@@ -28,7 +28,6 @@ type TheaterMapType = {
 const  TheaterMap = ({  
       event,
       clientEventTheaterState,
-      eventSelectSeats ,
       hendlerSeatOldValues,
       setHendlerSeatOldValues ,
       setEventSelectedSeats,

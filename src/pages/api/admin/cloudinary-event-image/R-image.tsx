@@ -29,10 +29,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
   // Validate HTTP Method
   if (req.method !== 'POST') {
-    res.setHeader('Allow', ['POST']);
     console.warn(`Method ${req.method} Not Allowed`);
-    return res.status(401).json({ message: `Method ${req.method} Not Allowed` });
+    return res.status(405).json({ message: `Method ${req.method} Not Allowed` });
   }
+  res.setHeader('Allow', ['POST']);
 
 
   // Validate User Session

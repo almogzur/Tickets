@@ -7,16 +7,17 @@ import DOMPurify from "isomorphic-dompurify";
 import ClientTicketList from "./tickets-list";
 import PaypalBtn from "./payments-providers-buttons/paypal";
 import { ItemCategory} from "@paypal/paypal-server-sdk";
-import { ClientEventType  } from "@/types/pages-types/admin/new-event-types";
+import { ClientEventType  } from "@/types/pages-types/admin/admin-event-types";
 import { PayPalCartItemType, ClientSelectedSeatType } from "@/types/pages-types/client/client-event-type";
 import { TheaterType } from "@/types/components-typs/admin/theater/admin-theater-types";
-import ClientSelectedEventContext from '@/context/client/event-page/selected-event-context'
+import { useRouter } from "next/router";
 
 
 
 export type DrawerContentType = {
 
   // event Data 
+  ClientSelectedEvent:ClientEventType,
 
   //Theater to update 
   clientEventTheaterState: TheaterType | undefined
@@ -34,14 +35,15 @@ export type DrawerContentType = {
 const DrawerContent = ({
   eventSelectSeats,
   clientEventTheaterState,
+  ClientSelectedEvent,
   ...restDrawerContentProps
 }: DrawerContentType) => {
   const { xxl, xl, lg, md, sm, xs, xxs } = React.useContext(WidthContext)
 
-  const {  ClientSelectedEvent , setClientSelectedEvent} = useContext(ClientSelectedEventContext)
-
+const router = useRouter()
   
   const sanitizedHtml = DOMPurify.sanitize(ClientSelectedEvent?.info.pre?? "");
+
   const theme = useTheme()
 
   const [open, setOpen] = useState(false);
@@ -58,14 +60,14 @@ const DrawerContent = ({
 
     if(ClientSelectedEvent){
 
-    const { _id, info, ...rest } = ClientSelectedEvent
+    const { public_id, info, ...rest } = ClientSelectedEvent
     const { eventName } = info
 
     if (selectedSeats) {
       // array
       const cart = selectedSeats.map((seat) => {
         return {
-          id: _id,  // assigning event id
+          id: public_id,  // assigning event id
           name: `${eventName} _ ${seat.row}  מושב : ${seat.seatNumber + 1}`,
           quantity: "1",
           category: ItemCategory.DigitalGoods,
@@ -98,8 +100,9 @@ const DrawerContent = ({
   const Pre = Box,
           Tags = Flex,
           PreBox = Box
+
 if(!ClientSelectedEvent){
-  return
+  return 
 }
 
   return (
@@ -150,8 +153,7 @@ if(!ClientSelectedEvent){
       {eventSelectSeats.length > 0 &&
         <>
           <Typography mt={2} > סה״כ {eventSelectSeats.length} מחיר : {getTotalCost()}</Typography>
-
-
+          
           <Button
             color='secondary'
             onClick={handleClickOpen}
@@ -173,22 +175,20 @@ if(!ClientSelectedEvent){
                 cart={createPaymentCart(eventSelectSeats)}
                 total={getTotalCost()}
                 TheaterState={clientEventTheaterState}
-                publicId={ClientSelectedEvent.publicId}
+                publicId={ClientSelectedEvent.public_id}
                 eventId={ClientSelectedEvent._id}
-
               />
 
             </DialogContent>
 
           </Dialog>
 
-
           <ClientTicketList
- 
-            eventSelectSeats={eventSelectSeats}
-            clientEventTheaterState={clientEventTheaterState}
-            {...restDrawerContentProps}
-          />
+          
+          ClientSelectedEvent={ClientSelectedEvent} 
+          eventSelectSeats={eventSelectSeats}
+          clientEventTheaterState={clientEventTheaterState}
+          {...restDrawerContentProps}          />
         </>
       }
 

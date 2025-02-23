@@ -25,7 +25,7 @@ import TabsInfoContext from '@/context/admin/new-event/tabs/tabs-info-context';
 
 import {  ZodError } from 'zod';
 import { IoMdAddCircle } from 'react-icons/io';
-import {  TicketType, TicketValidationSchema } from '@/types/pages-types/admin/new-event-types';
+import {  TicketType, TicketZVS } from '@/types/pages-types/admin/admin-event-types';
 import InputWrap from '@/HOCs/TeextFiledWrpa/input-wrap';
 import SelectWrap from '@/HOCs/select-wrap';
 import { NormalSwitchWrap } from '@/HOCs/switch-wrap';
@@ -104,7 +104,7 @@ export default function MakeNewTicket({setTabValue}:MakeNewTicketType) {
     handleClose()
   }
   const validateFileds = ( State: TicketType ) : { result:boolean,data:TicketType|undefined , errors: ZodError<TicketType> | undefined }=>{
-    const result =  TicketValidationSchema.safeParse(State)
+    const result =  TicketZVS.safeParse(State)
         return {result:result.success , data:result.data  , errors:result.error}
 
   }

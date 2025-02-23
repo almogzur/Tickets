@@ -1,7 +1,8 @@
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { UserPayPalInfo, UserPayPalInfoValidationSchema } from "@/types/pages-types/admin/user-biling-info-types";
-import { disconnectFromMongooseDb, MongoseeWithSessionModleDb } from "@/util/dbs/mongosee-fn";
-import { PayPalModle } from "@/util/dbs/schma/user-biling-info";
+import {CreateMongooseClient} from "@/util/dbs/mongosee-fn";
+import { PayPalModle } from "@/util/dbs/schma/modles";
+
 import { decryptData, encryptData } from "@/util/fn/crypto";
 import { m } from "framer-motion";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -20,18 +21,21 @@ export default async function handler  ( req: NextApiRequest , res: NextApiRespo
  const API_NAME =  ' Add Users PayPal Billing Info Api  ' 
 
    const session = await getServerSession(req, res, authOptions);
-   const connection = await MongoseeWithSessionModleDb(session)
+  
  
    if (req.method !== 'POST') {
-    return   res.status(200).json({ message:API_NAME + "Not Allowd" });
+    return   res.status(405).json({ message:API_NAME + "Not Allowd" });
        }
+       if (!session) {
+        console.log(API_NAME, 'You Shell Not Pass');
+        return res.status(401).json({ message: 'You Shell Not Pass' });
+         }
+         const connection = await CreateMongooseClient(`${session.user.name}${process.env.BILING_FOLDER_NAME}`)
+
    if(!connection){  
   return res.status(500).json({massage:" No DB Connection"})
      }   
-   if (!session) {
-    console.log(API_NAME, 'You Shell Not Pass');
-    return res.status(401).json({ message: 'You Shell Not Pass' });
-     }
+
     
      const body = req.body
     const isValiedData = UserPayPalInfoValidationSchema.safeParse(body)
@@ -49,23 +53,23 @@ export default async function handler  ( req: NextApiRequest , res: NextApiRespo
      clientSecret:ChiperSecret
     }
 
- const doc = new  PayPalModle(toSaveDoc)
-    
- try{ 
-    const result = await doc.save()
-    await disconnectFromMongooseDb(connection,API_NAME)
+    const Modle  = PayPalModle(connection)
 
-       if(! result.isModified()){
+   const doc = new  Modle(toSaveDoc)
+    
+    const result = await doc.save()
+
+
+       if(! result){
+
           console.log(API_NAME ,"faeld" )  
+              
           return   res.status(400).json({massage: API_NAME+  " Save Err"})
       }
       console.log(API_NAME ,"Success" )  
+          
       return res.status(200).json({massage:" Info Saved  " + API_NAME})
       
 
-  } catch (err){ 
-      console.log(API_NAME ,"faeld", err )  
-       return  res.status(400).json({massage: API_NAME +  " err " + err})
-  }
 
 }

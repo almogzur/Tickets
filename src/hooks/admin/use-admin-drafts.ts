@@ -1,9 +1,9 @@
-import { DraftType, } from "@/types/pages-types/admin/new-event-types";
+import {  UpdateDraftType, } from "@/types/pages-types/admin/admin-event-types";
 import axios, { AxiosRequestConfig } from "axios";
 import { Session } from "next-auth";
 import useSWR, { Fetcher, Key as SWRKey , KeyedMutator, SWRConfiguration} from "swr";
 
-type DataType = DraftType[]
+type DataType = UpdateDraftType[]
 
 
 type ReturendFetcherType<T> = {
@@ -42,7 +42,6 @@ export const useAdminDrafts  = (session:Session|null) : ReturendFetcherType<Data
      const SWRconfig : SWRConfiguration = {
        revalidateOnFocus:true,
        revalidateOnMount:true,
-       refreshInterval: 2 * 60 * 1000, // 2 minutes
       refreshWhenHidden:false,
       
      }

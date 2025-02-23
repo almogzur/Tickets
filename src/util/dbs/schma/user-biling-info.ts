@@ -1,5 +1,3 @@
-import { UserBankInfo, UserPayPalInfo } from "@/types/pages-types/admin/user-biling-info-types";
-import { createModel } from "./schema-fn";
 
 
 export const UserBankInfoDBSchema = {
@@ -22,6 +20,3 @@ export  const UserPayPalBillingShema = {
 
 // complite the billing form
 
-
-export const PayPalModle = createModel<UserPayPalInfo>(`${process.env.BILING_FOLDER_NAME}`, UserPayPalBillingShema)
-export const BankModle = createModel<UserBankInfo>(`${process.env.BANK_BLIING_FOLDER_NAME}`, UserBankInfoDBSchema)

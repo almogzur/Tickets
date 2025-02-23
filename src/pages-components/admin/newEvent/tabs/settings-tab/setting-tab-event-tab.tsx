@@ -8,7 +8,7 @@ import SwitchWithTextAndChildren from "@/HOCs/switch-with-text-wrap"
 
 export default  function SettingTabEventTab() {
           const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
-          const { eventSetting, setEventSetting  } =useContext(TabsEventSettingsContext)
+          const { settings, setSetting  } =useContext(TabsEventSettingsContext)
 
     const ColumnA = Flex
     const ColumnB = Flex
@@ -23,8 +23,8 @@ export default  function SettingTabEventTab() {
                variant='outlined'
                mainText={" הגבל מספר מושבים"}
                subText={"הגבל מספר מושבים שהלקוח יכול לקנות   "} 
-               value={eventSetting.limitClientTicket}
-               switchOnChangeHendler={(e,checked)=>{setEventSetting(p=>({...p, limitClientTicket : checked }))} }
+               value={settings.limitClientTicket}
+               switchOnChangeHendler={(e,checked)=>{setSetting(p=>({...p, limitClientTicket : checked }))} }
                   >
                    <SelectWrap 
                       label={"מספר"}
@@ -35,8 +35,8 @@ export default  function SettingTabEventTab() {
                           {} // optinal thisArg  when useing ES5 function this biends to the map function this 
                         )
                      }
-                     value={eventSetting.ticketLimit} 
-                     changeHndler={(e)=>{setEventSetting(p=>({...p,ticketLimit:e.target.value}))}} 
+                     value={settings.ticketLimit} 
+                     changeHndler={(e)=>{setSetting(p=>({...p,ticketLimit:e.target.value}))}} 
                      helpText={""} 
                      labelPositioin={"end"}
                      
@@ -53,8 +53,8 @@ export default  function SettingTabEventTab() {
            variant='outlined'  
             mainText={"רצף מושבים "}
              subText={"הלקוח אינו  יכול לבחור מושבים  שלא ברצף"} 
-             value={eventSetting.canSelectNotRelatedSites}
-            switchOnChangeHendler={()=>{setEventSetting(p=>({...p,canSelectNotRelatedSites:!p.canSelectNotRelatedSites}))} } /
+             value={settings.canSelectNotRelatedSites}
+            switchOnChangeHendler={()=>{setSetting(p=>({...p,canSelectNotRelatedSites:!p.canSelectNotRelatedSites}))} } /
               >
         </ColumnB>
         </Flex>

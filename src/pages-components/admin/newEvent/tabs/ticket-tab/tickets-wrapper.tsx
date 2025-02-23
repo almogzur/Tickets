@@ -24,8 +24,8 @@ import Eilat_2 from "@/constants/theaters/eilat_2";
 
 import TabsInfoContext from "@/context/admin/new-event/tabs/tabs-info-context"
 import { IoTicket } from "react-icons/io5"
-import { infoFiledsType } from "@/types/pages-types/admin/new-event-types"
-import { Seats, TheaterType } from "@/types/components-typs/admin/theater/admin-theater-types"
+import { infoFiledsType } from "@/types/pages-types/admin/admin-event-types"
+import { SeatsRow, TheaterType } from "@/types/components-typs/admin/theater/admin-theater-types"
 import tabsEroorsContext from "@/context/admin/new-event/tabs/tabs-eroors-context"
 import SelectWrap from "@/HOCs/select-wrap"
 
@@ -61,7 +61,7 @@ interface TicketsTabPropsType {  setTabValue : Dispatch<SetStateAction<number>>}
     let totalSeats = 0;
   
     // Combine main and side seat sections
-    const combinedTheaterSeats: Seats[]  = [Theater.mainSeats, Theater.sideSeats];
+    const combinedTheaterSeats: SeatsRow[]  = [Theater.mainSeats, Theater.sideSeats];
   
     // Iterate through each section (main and side seats)
     combinedTheaterSeats.forEach((section) => {
