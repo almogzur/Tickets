@@ -69,13 +69,16 @@ export const GetBillingInfoFromEventId = async (eventId: string, authKey: string
                             clientSecret: deCipherSecret
                         }
 
-                        console.log(Data)
+                        //console.log(Data)
                         return Data
                    }}))
 
      const Info = UserDbsResults.find(( event )=> event )
 
      console.log("GetBillingInfoFromEventId end " , !!Info )
+     
+     // eslint-disable-next-line react-hooks/rules-of-hooks
+     Client.useDb('') // return to global path 
 
         return  Info
 }

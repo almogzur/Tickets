@@ -22,7 +22,7 @@ const Clients: Record<string, Connection> = {
   
   const ClientsLength = Object.keys(Clients).length
 
-  //console.log(ClientsLength)
+  console.log(ClientsLength)
   
   const uri = `${process.env.MONGODB_URI}`
 
@@ -67,6 +67,7 @@ const Clients: Record<string, Connection> = {
   }
 };
 
+// init connection 
 export const  globalClient = await  CreateMongooseClient(null)
 
 

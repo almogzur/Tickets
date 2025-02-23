@@ -46,15 +46,16 @@ export default async function handler  ( req: NextApiRequest , res: NextApiRespo
     const getEvent = await Promise.all(
       UsersDbs.map(async (db) => {
         const dbConnection = connection.useDb(db.name, { noListener: true }); // Dynamically use the DB
+
+        const Modle = AdminEventModle(dbConnection)
          // Bind the model to the DB
-        return  dbConnection
-        .collection(`${process.env.USER_EVENTS_FOLDER_PATH}`)
-        .findOne({_id:ObjectId.createFromHexString(eventId)}) // Query the events
-      })
+        return Modle
+          .findOne({_id:ObjectId.createFromHexString(eventId)}) // Query the events
+        })
     );
 
-
-
+    connection.useDb('') // returning to root 
+  
   console.log(getEvent,API_NAME)
 
 
