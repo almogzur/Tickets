@@ -12,7 +12,9 @@ import { Session } from 'next-auth';
 
 
 
-const Clients: Record<string, Connection> = {}; // Store multiple connections
+const Clients: Record<string, Connection> = {
+
+}; // Store multiple connections
 
 
   export  const CreateMongooseClient = async (dbName: string | null): Promise<Connection | undefined> => {
@@ -64,6 +66,10 @@ const Clients: Record<string, Connection> = {}; // Store multiple connections
     return undefined;
   }
 };
+
+export const  globalClient = await  CreateMongooseClient(null)
+
+
 
 
 

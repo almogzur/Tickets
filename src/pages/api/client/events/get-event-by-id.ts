@@ -1,5 +1,5 @@
 
-import {CreateMongooseClient} from "@/util/dbs/mongosee-fn";
+import {CreateMongooseClient, globalClient} from "@/util/dbs/mongosee-fn";
 import { AdminEventModle } from "@/util/dbs/schma/modles";
 import { rateLimitConfig } from "@/util/fn/api-rate-limit.config";
 import rateLimit from "express-rate-limit";
@@ -17,7 +17,7 @@ export default async function handler  ( req: NextApiRequest , res: NextApiRespo
   if (req.method !== 'GET') {
          return  res.status(405).json({ err: "not Allowed " });
     }
- const connection  = await CreateMongooseClient(null)
+        const connection  = globalClient
 
  if(!connection){ 
     return res.status(500).json({err:'No DB Connection'})
@@ -45,7 +45,6 @@ export default async function handler  ( req: NextApiRequest , res: NextApiRespo
         const Modle = AdminEventModle(dbConnection)
 
 
-        
          // Bind the model to the DB
         return  Modle 
           .findOne({_id:ObjectId.createFromHexString(`${event_id}`)},{projection:{log:false,invoices:false}}) // Query the events
