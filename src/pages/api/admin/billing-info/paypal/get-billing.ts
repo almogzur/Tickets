@@ -23,7 +23,7 @@ export default async function handler  ( req: NextApiRequest , res: NextApiRespo
     return res.status(401).json({ message: 'You Shell Not Pass' });
   }
 
-  const connection  = await CreateMongooseClient( session.user.name+userDataPrefix)
+  const connection  = await CreateMongooseClient(session.user.name+userDataPrefix)
 
   if(!connection){
    return res.status(500).json({massage:" No DB Connection"})

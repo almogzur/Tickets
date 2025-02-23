@@ -16,12 +16,14 @@ import { UserBankInfoDBSchema, UserPayPalBillingShema } from "./user-biling-info
  * new DraftModle(connetion) . modleMethods 
  */
 
+
+
 export const DraftModle = createBindToConnectionModel<UpdateDraftType>(`${process.env.USER_DRAFT_FOLDER_PATH}`, DraftSchema)
 export const ClientEventMolde= createBindToConnectionModel<ClientEventType>(`${process.env.USER_EVENTS_FOLDER_PATH}`,EventSchema)
 export const AdminEventModle = createBindToConnectionModel<NewEventType>(`${process.env.USER_EVENTS_FOLDER_PATH}`, EventSchema)
 
+
 export const UsersModle =  createBindToConnectionModel<NewUserType>(`${process.env.APP_USERS_FOLDER_PATH}`,NewUserSchemaDefinition)
 
-
-export const PayPalModle = createBindToConnectionModel<UserPayPalInfo>(`${process.env.BILING_FOLDER_NAME}`, UserPayPalBillingShema)
+export const PayPalModle = createBindToConnectionModel<UserPayPalInfo>(`${process.env.PAYPAL_BILING_FOLDER_NAME}`, UserPayPalBillingShema)
 export const BankModle = createBindToConnectionModel<UserBankInfo>(`${process.env.BANK_BLIING_FOLDER_NAME}`, UserBankInfoDBSchema)
