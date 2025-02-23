@@ -53,7 +53,7 @@ export default async function handler  ( req: NextApiRequest , res: NextApiRespo
 
     const event =  EventFindResults.find(( event )=> event ) // retrun if not null
 
-    connection.useDb('') // return to global path 
+  //  connection.useDb('') // return to global path 
 
  // console.log(event)
 

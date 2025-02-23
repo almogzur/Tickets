@@ -32,6 +32,7 @@ const Clients: Record<string, Connection> = {
     dbName:databaseKey,
     retryWrites:true,
     retryReads:true ,
+    
     // This is a mongoose-specific option 
     // (not passed to the MongoDB driver) that disables Mongoose's
     //  buffering mechanism
@@ -55,7 +56,7 @@ const Clients: Record<string, Connection> = {
   console.log(`Creating new connection to ${databaseKey}...`);
 
   try {
-    const newConnection = mongoose.createConnection(uri, CliebtOptions);
+    const newConnection = mongoose.createConnection(uri,CliebtOptions );
 
     Clients[databaseKey] = newConnection;
     console.log(`Connected to ${databaseKey}`);

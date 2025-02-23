@@ -48,7 +48,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<Clien
 
         })
       )
-      connection.useDb('') // return to global path 
+  
+      
+  //     connection.useDb('') // return to global path 
           
            //  findResult will only be returned if its ! null . 
            // flat remove the dblist wraper array

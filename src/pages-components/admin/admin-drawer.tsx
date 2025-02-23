@@ -103,6 +103,8 @@ export default function TemporaryDrawer() {
         SlideProps={{ direction: "left" }}
         ModalProps={{ sx: {} }}
         PaperProps={{ sx: { background: "black" } }}
+        variant='temporary'
+        
       >
         <Flex>
           <Typography sx={{ mt: 2, mx: "auto", color: "#fff" }}>{session?.user?.displayName}</Typography>
