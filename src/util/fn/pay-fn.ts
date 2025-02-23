@@ -8,7 +8,7 @@ import mongoose from "mongoose";
 
 export const GetBillingInfoFromEventId = async (eventId: string, authKey: string, Client: mongoose.Connection | undefined): Promise<  UserPayPalInfo  | undefined> => {
 
-    //console.log("GetBillingInfoFromEventId ", "_ invoked", eventId)
+    console.log("GetBillingInfoFromEventId ", "_ invoked", eventId)
 
     const ServerKey = `${process.env.CIPHER_SECRET}`
 
@@ -72,6 +72,8 @@ export const GetBillingInfoFromEventId = async (eventId: string, authKey: string
                             ...restbillingInfoData,
                             clientSecret: deCipherSecret
                         }
+
+                        console.log(Data)
                         return Data
                    }}))
 
