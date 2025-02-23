@@ -62,7 +62,7 @@ export const GetBillingInfoFromEventId = async (eventId: string, authKey: string
 
                     if (billingInfoData) {
 
-                        console.log("GetBillingInfoFromEventId end " ,billingInfoData)
+                 //       console.log("GetBillingInfoFromEventId end " ,billingInfoData)
 
                         
                         const { clientSecret, ...restbillingInfoData } = billingInfoData
