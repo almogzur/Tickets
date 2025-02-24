@@ -32,12 +32,28 @@ const Clients: Record<string, Connection> = {
     dbName:databaseKey,
     retryWrites:true,
     retryReads:true ,
-    
-    // This is a mongoose-specific option 
-    // (not passed to the MongoDB driver) that disables Mongoose's
-    //  buffering mechanism
 
-    // bufferCommands:false ,
+
+    // minPoolSize - The minimum number of sockets the MongoDB driver will keep open for this connection. The MongoDB driver may close sockets that have been inactive for some time. You may want to increase minPoolSize if
+    //  you expect your app to go through long idle times and want to make sure your sockets stay open to avoid slow trains when activity picks up.
+    minPoolSize:2,
+    
+    
+    // bufferCommands - This is a mongoose-specific option (not passed to the MongoDB driver) that disables Mongoose's buffering mechanism
+
+    bufferTimeoutMS: 3000 ,
+
+
+
+    // To get faster feedback on failed connections, 
+    // you can reduce serverSelectionTimeoutMS to 5000 as follows.
+    //  We don't recommend reducing serverSelectionTimeoutMS unless you are running a standalone MongoDB
+    //  server rather than a replica set, or unless you are using a serverless runtime like AWS Lambda.
+    serverSelectionTimeoutMS:5000,
+
+   
+    
+
   
   }
 
