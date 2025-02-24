@@ -1,5 +1,5 @@
 import { ClientEventType, NewEventType } from "@/types/pages-types/admin/admin-event-types";
-import {CreateMongooseClient, globalClient} from "@/util/dbs/mongosee-fn";
+import {CreateMongooseClient,} from "@/util/dbs/mongosee-fn";
 import { AdminEventModle } from "@/util/dbs/schma/modles";
 import { rateLimitConfig } from "@/util/fn/api-rate-limit.config";
 import rateLimit from "express-rate-limit";
@@ -16,7 +16,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<Clien
       const API_NAME = "Get All Client Active Events  (Hook)";
       console.log(API_NAME)
 
-        const connection  = globalClient
+        const connection  = await CreateMongooseClient(null)
 
       if (req.method !== 'GET') {
         return  res.status(405).end(`Method ${req.method} Not Allowed`);
@@ -49,7 +49,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<Clien
         })
       )
   
-      
+
   //     connection.useDb('') // return to global path 
           
            //  findResult will only be returned if its ! null . 

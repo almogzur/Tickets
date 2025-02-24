@@ -69,9 +69,6 @@ const Clients: Record<string, Connection> = {
 };
 
 // init connection 
-export const  globalClient = await  CreateMongooseClient(null)
-
-
 
 
 

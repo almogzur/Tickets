@@ -1,5 +1,5 @@
 
-import {CreateMongooseClient, globalClient} from "@/util/dbs/mongosee-fn";
+import {CreateMongooseClient,} from "@/util/dbs/mongosee-fn";
 import { AdminEventModle } from "@/util/dbs/schma/modles";
 import { rateLimitConfig } from "@/util/fn/api-rate-limit.config";
 import rateLimit from "express-rate-limit";
@@ -17,7 +17,7 @@ export default async function handler  ( req: NextApiRequest , res: NextApiRespo
   if (req.method !== 'GET') {
          return  res.status(405).json({ err: "not Allowed " });
     }
-        const connection  = globalClient
+        const connection  = await CreateMongooseClient(null)
 
  if(!connection){ 
     return res.status(500).json({err:'No DB Connection'})
@@ -34,7 +34,7 @@ export default async function handler  ( req: NextApiRequest , res: NextApiRespo
 }
 
   try{ 
-    const Cluster = (await connection.listDatabases()).databases
+    const Cluster =  (await connection.listDatabases()).databases
 
     const UsersDbs = Cluster.filter((db)=> db.name.includes(`${process.env.USER_DATA_FOLDER_PATH}`))
 
