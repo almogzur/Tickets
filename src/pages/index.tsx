@@ -12,16 +12,27 @@ import { useEvents } from '@/context/client/client-events-context';
 import LoadingScreen from '@/HOCs/loading';
 
 
-export const getServerSideProps: GetServerSideProps<{ Events: ClientEventType[] }> = async (context) => {
-  try {
-    const baseUrl = `${process.env.NEXTAUTH_URL}`
+export const getServerSideProps: GetServerSideProps<{ Events: ClientEventType[] }> =
+   async () => {
+    try {
+    const baseUrl = process.env.NEXTAUTH_URL;
+    if (!baseUrl) {
+      throw new Error("NEXTAUTH_URL environment variable is not set.");
+    }
+ 
     const response = await axios.get<ClientEventType[]>(`${baseUrl}/api/client/events/get-events`);
+
+    if (response.status !== 200) {
+      console.error(`Failed to fetch events: ${response.statusText}`);
+      return { props: { Events: [] } };
+    }
+
     return {
-      props: { Events: response.status === 200 ? response.data : [] },
+      props: { Events: response.data },
     };
   } catch (error) {
     console.error("Error fetching events:", error);
-    return { props: { Events: [] } }; // Ensure fallback
+    return { props: { Events: [] } };
   }
 };
 
