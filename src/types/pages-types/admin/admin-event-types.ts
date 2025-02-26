@@ -1,6 +1,8 @@
 
 import { z }  from 'zod'
 import { TheaterValidationSchema } from "@/types/components-typs/admin/theater/admin-theater-types";
+import { SavePayPalInvoceVS } from '../client/client-event-type';
+import { EventLogsSchema } from '@/util/dbs/schma/db-event';
 
 //ZT (Zod inferd Types) schema
 
@@ -35,6 +37,7 @@ export const SettingsZT = z.object({
 })
 
 
+
 // Zod Validate Form / Api Use 
 
 // Draft 
@@ -50,6 +53,11 @@ export const UpdateDraftZVS= NewDraftZVS.extend({
   _id: z.string().nonempty()
 })
 
+export const EventLogsZVS = z. object( {
+  time_stemp :z.string(),
+  user:z.string(),
+  ip:z.string().ip(),
+})
 
 // Eevent
 
@@ -73,22 +81,17 @@ export const NewEventZVS = z.object({
   settings: SettingsZT,
   public_id:z.string().nonempty()
 })
-export const NewEventAdminZVS= NewEventZVS.extend({
-  logs:z.array(z.any()),
-  invoices:z.array(z.any())
-})
 
 export const EventFromDraftZVS= NewEventZVS.extend({
   _id:z.string().nonempty(), // draft saved object id 
-
 })
 
-export const ClientEventZVS= NewEventAdminZVS.extend({
-  _id:z.string().nonempty()
+export const WithDataAdminEventZVS= EventFromDraftZVS.extend({
+  log:z.array(EventLogsZVS),
+  invoices:z.array(SavePayPalInvoceVS),
 })
 
  
-
 // Bace 
 export type infoFiledsType = z.infer< typeof infoFiledsZT>
 export type TicketType  = z.infer<typeof TicketZVS> 
@@ -97,6 +100,7 @@ export type EventSettingType = z.infer<typeof SettingsZT>
 // derived from bace
 
 //Draft
+
 export type  NewDraftType = z.infer< typeof NewDraftZVS>
 export type  UpdateDraftType = z.infer <typeof UpdateDraftZVS>
 
@@ -104,7 +108,9 @@ export type  UpdateDraftType = z.infer <typeof UpdateDraftZVS>
 
 export type  EventFromDraftType  = z.infer <typeof EventFromDraftZVS>
 
-export type  AdminEventType = z.infer <typeof NewEventAdminZVS >
+export type  NewEventType = z.infer <typeof NewEventZVS >
+
+export type WithDataEventType = z.infer< typeof WithDataAdminEventZVS>
 
 export type ClientEventType = z.infer<typeof EventFromDraftZVS>
 

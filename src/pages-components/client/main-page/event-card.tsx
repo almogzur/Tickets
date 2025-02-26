@@ -59,9 +59,10 @@ export default function EventCard(props:ClientEventType) {
                  height={'20%'}
                  sx={{ cursor:'pointer'}}
                  onClick={ (e)=> {
-                    router.push({
-                      pathname: `/event/${props._id}`,
-                    })
+                    router.push(
+                       `/event/${props._id}`,
+                      
+                    )
                   }
                 }
 

@@ -1,7 +1,7 @@
 import { SavePayPalInvoceVS } from "@/types/pages-types/client/client-event-type";
 import { PayPalOrderVS } from "@/types/pages-types/client/payment-object";
 import { CreateMongooseClient } from "@/util/dbs/mongosee-fn";
-import { AdminEventModel } from "@/util/dbs/schma/models";
+import { EventModel } from "@/util/dbs/schma/models";
 import { rateLimitConfig } from "@/util/fn/api-rate-limit.config";
 import rateLimit from "express-rate-limit";
 import { ObjectId } from "mongodb";
@@ -41,7 +41,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       for (const db of UsersDbs) {
         const dbConnection = connection.useDb(db.name, { noListener: true });
-        const Model = AdminEventModel(dbConnection);
+        const Model = EventModel(dbConnection);
 
         const eventUpdate = await Model.findOneAndUpdate(
           { _id: ObjectId.createFromHexString(eventId) },

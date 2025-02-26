@@ -6,7 +6,7 @@ import { rateLimitConfig } from "@/util/fn/api-rate-limit.config";
 import { modifieSeatValueFunctionType, UpdateTheaterApiVS } from '@/types/pages-types/client/client-event-type';
 import { ClientEventType, NewEventType } from "@/types/pages-types/admin/admin-event-types";
 import { CreateMongooseClient } from "@/util/dbs/mongosee-fn";
-import { AdminEventModel } from "@/util/dbs/schma/models";
+import { EventModel } from "@/util/dbs/schma/models";
 
 const apiLimiter = rateLimit(rateLimitConfig);
 
@@ -82,7 +82,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         for (const db of UsersDbs) {
             const dbConnection = connection.useDb(db.name, { noListener: true });
-            const Modle = AdminEventModel(dbConnection);
+            const Modle = EventModel(dbConnection);
 
             const event = await Modle.findOne(
                 { _id: ObjectId.createFromHexString(eventId) },
@@ -129,7 +129,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         };
 
         const userDb = connection.useDb(Data.userDb);
-        const Model = AdminEventModel(userDb);
+        const Model = EventModel(userDb);
 
         const replaceResult = await Model.findOneAndReplace(
             { _id: ObjectId.createFromHexString(eventId) },

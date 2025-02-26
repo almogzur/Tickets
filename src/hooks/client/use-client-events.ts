@@ -1,26 +1,26 @@
-import {  ClientEventType,  AdminEventType, } from "@/types/pages-types/admin/admin-event-types";
+import {  ClientEventType,  NewEventType, } from "@/types/pages-types/admin/admin-event-types";
 import axios, { AxiosRequestConfig } from "axios";
 import { Session } from "next-auth";
 import useSWR, { Fetcher, Key as SWRKey, KeyedMutator, SWRConfiguration } from "swr";
 
-type DataType = ClientEventType[]
+
 
 
 type ReturendFetcherType<T> = {
-  Events: T; // Allow `undefined` for when data is not yet loaded
+  Events: T[]; // Allow `undefined` for when data is not yet loaded
   isEventsValidating: boolean;
   isEventsError: unknown;
   updateEvents: KeyedMutator<T>;
 };
 
 
-export const useClientEvents = (): ReturendFetcherType<DataType> => {
+export const useClientEvents = (): ReturendFetcherType<ClientEventType> => {
 
   const fetcherKey: SWRKey = () =>  '/api/client/events/get-client-events '
 
-  const fetcher: Fetcher<DataType> = async (key: string): Promise<DataType> => {
+  const fetcher: Fetcher<ClientEventType> = async (key: string): Promise<ClientEventType> => {
 
-    const response = await axios.get<DataType>(key)
+    const response = await axios.get<ClientEventType>(key)
     // return the response to SWR Hook 
 
     return response.data

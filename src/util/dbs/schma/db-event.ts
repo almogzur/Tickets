@@ -75,18 +75,22 @@ export const  PayedItemInvoce = new Schema({
 // createBindToConnectionModel create thes schemas 
 
 export const DraftSchemaDef =  {
+  _id:{type: String, required:false},
   info: { type: DraftGlobalFiled },
   tickets: { type: [TicketSchema], required: false },
   settings: { type: EventSettingsShema, required: false },
-  _id:{type: String, required:false}
 }
 
 export const EventSchemaDef = {
+  ...DraftSchemaDef, // Extending EventSchemaDef with DraftSchemaDef
   public_id: { type: String, required: true, unique: true },
   log: { type: [EventLogsSchema], required: false },
   invoices: { type: [PayedItemInvoce], required: false },
-  ...DraftSchemaDef // Extending EventSchemaDef with DraftSchemaDef
 };
+
+
+export const ClientSchmaDef = DraftSchemaDef
+
 
 
 

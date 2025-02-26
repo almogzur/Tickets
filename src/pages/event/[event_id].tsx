@@ -15,40 +15,15 @@ import DrawerContent from '@/pages-components/client/event-page/sidebar/sidebar-
 import SideBar from '@/pages-components/client/event-page/sidebar/sidebar-wrapper';
 import TheaterMap from '@/pages-components/client/event-page/theater/client-theater-map';
 import { ClientSelectedSeatType } from '@/types/pages-types/client/client-event-type';
-import { useEvents } from '@/context/client/client-events-context';
-import { GetServerSideProps } from 'next';
-import axios from 'axios';
-import { ClientEventType } from '@/types/pages-types/admin/admin-event-types';
 
-
-export const getServerSideProps: GetServerSideProps<{ Event: ClientEventType | null }> = async (context) => {
-  try {
-    const { event_id } = context.query; // Get event ID from URL params
-    if (!event_id || typeof event_id !== "string") {
-      return { props: { Event: null } }; // Handle missing or invalid ID
-    }
-
-    const baseUrl = `${process.env.NEXTAUTH_URL}` // Use proper environment variable
-    const response = await axios.get<ClientEventType>(`${baseUrl}/api/client/events/get-event-by-id`, {
-      params: { event_id }, // Pass ID as query param
-    });
-
-    return {
-      props: { Event: response.status === 200 ? response.data : null },
-    };
-  } catch (error) {
-    console.error("Error fetching event:", error);
-    return { props: { Event: null } }; // Keep consistent type
-  }
-};
-
+import { useClientEvent } from '@/hooks/client/use-client-event';
 
 
 
 // mote to theater types  after 
 
 
-const DetailsPage = ({Event}:{ Event:ClientEventType|null}) => {
+const DetailsPage = () => {
 
 
   // const { Event } = useContex(LiveEventContext)
@@ -56,10 +31,13 @@ const DetailsPage = ({Event}:{ Event:ClientEventType|null}) => {
   const theme = useTheme()
   const router = useRouter()
   const { xxl, xl, lg, md, sm, xs, xxs } = useContext(WidthContext)
+  
+  const { event_id } = router.query
+
+  const { Event, isEventError } = useClientEvent(event_id as string);
 
 
-  const ClientSelectedEvent = Event
-
+ 
   const [clientEventTheaterState, setClientEventTheaterState] = useState<TheaterType|undefined>()
   const [eventSelectSeats, setEventSelectedSeats] = useState<ClientSelectedSeatType[]>([])
  const [  pageMaunted, setPageMaunted] = useState<boolean>(false)
@@ -73,11 +51,21 @@ const DetailsPage = ({Event}:{ Event:ClientEventType|null}) => {
   // Wighet
   const [wighetIsExp, setWighetIsExp] = useState<boolean>(false)
 
+  if(!Event){
+
+  }
+
+
+
+
 
   useEffect(()=>{
-    setClientEventTheaterState(ClientSelectedEvent?.info.Theater)
+
+
+
+    setClientEventTheaterState(Event?.info.Theater)
     setPageMaunted(true)
-  }, [ClientSelectedEvent?.info.Theater]) // refresh pages hendler 
+  }, [Event, event_id]) // refresh pages hendler 
   
 
  //Page State 
@@ -85,7 +73,7 @@ const DetailsPage = ({Event}:{ Event:ClientEventType|null}) => {
   const Wrapper = Flex,
             BackBTN = Button
 
-  if ( !ClientSelectedEvent || ! pageMaunted) return <div>loading...</div>
+  if ( !Event || ! pageMaunted) return <div>loading...</div>
 
   return (
 
@@ -120,7 +108,7 @@ const DetailsPage = ({Event}:{ Event:ClientEventType|null}) => {
 
 
         <SideBar
-          ClientSelectedEvent={ClientSelectedEvent}
+          ClientSelectedEvent={Event}
           wighetIsExp={wighetIsExp}
           eventSelectSeats={eventSelectSeats}
           setWighetIsExp={setWighetIsExp}
@@ -128,7 +116,7 @@ const DetailsPage = ({Event}:{ Event:ClientEventType|null}) => {
         >
           <DrawerContent
             //event 
-            ClientSelectedEvent={ClientSelectedEvent}
+            ClientSelectedEvent={Event}
             // tikect list
             eventSelectSeats={eventSelectSeats}
             setEventSelectedSeats={setEventSelectedSeats}
@@ -141,14 +129,14 @@ const DetailsPage = ({Event}:{ Event:ClientEventType|null}) => {
           />
         </SideBar>
 
-         {ClientSelectedEvent?.info.Theater &&
+         {Event?.info?.Theater &&
           <Box
             width={"100%"}
             height={wighetIsExp && !md ? 0 : undefined}
           >
              <ClineTransformContext.Provider value={{ ClientMapPositions, setClientMapPositions }}>
               <TheaterMap
-                event={ClientSelectedEvent}
+                event={Event}
                 // theater  seates
                 clientEventTheaterState={clientEventTheaterState}
                 setClientEventTheaterState={setClientEventTheaterState}

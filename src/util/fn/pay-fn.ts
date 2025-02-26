@@ -4,7 +4,7 @@ import { MongoClient, ObjectId } from "mongodb";
 import crypto from 'crypto'
 import { decryptData } from "./crypto";
 import mongoose from "mongoose";
-import { AdminEventModel, PayPalModel } from "../dbs/schma/models";
+import { EventModel, PayPalModel } from "../dbs/schma/models";
 import qs from "qs";
 import axios from "axios";
 
@@ -48,7 +48,7 @@ export const GetBillingInfoFromEventId = async (
       // eslint-disable-next-line react-hooks/rules-of-hooks
       const userDb = Client.useDb(db.name);
 
-      const eventModel = AdminEventModel(userDb);
+      const eventModel = EventModel(userDb);
 
       const event = await eventModel.findOne<ClientEventType>({
         _id:  ObjectId.createFromHexString(eventId)

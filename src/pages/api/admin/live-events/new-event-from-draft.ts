@@ -5,7 +5,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]";
 import { EventFromDraftZVS } from "@/types/pages-types/admin/admin-event-types";
-import { AdminEventModel, DraftModel } from "@/util/dbs/schma/models";
+import { EventModel, DraftModel } from "@/util/dbs/schma/models";
 import  {CreateMongooseClient, userDataPrefix } from "@/util/dbs/mongosee-fn";
 
 const apiLimiter = rateLimit(rateLimitConfig);
@@ -44,7 +44,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const delOriginDraft = async (): Promise<boolean> => {
          try {
 
-            const Model = AdminEventModel(connection)
+            const Model = EventModel(connection)
             const Drafts = await Model.findOneAndDelete({ _id: isValidData.data._id })
 
             if (Drafts) {
@@ -62,7 +62,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       // un sucssesful operation dosent need to cancell save , just to prevent duplicates 
 
-      const Model = AdminEventModel(connection)
+      const Model = EventModel(connection)
 
       const doc = new Model(isValidData.data)
 

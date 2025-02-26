@@ -1,6 +1,6 @@
 import { ClientEventType } from "@/types/pages-types/admin/admin-event-types";
 import {CreateMongooseClient,} from "@/util/dbs/mongosee-fn";
-import { AdminEventModel } from "@/util/dbs/schma/models";
+import {  EventModel,  filterAdminDataQuryOptions } from "@/util/dbs/schma/models";
 import { rateLimitConfig } from "@/util/fn/api-rate-limit.config";
 import rateLimit from "express-rate-limit";
 
@@ -40,9 +40,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<Clien
 
           const dbConnection = connection.useDb(db.name) // Bind DB
 
-          const Modle = AdminEventModel(dbConnection)
+          const Modle = EventModel(dbConnection)
     
-          const userEvents =  await Modle.find({},{projection:{log:false,invoices:false}})
+          const userEvents =  await Modle.find({},{},filterAdminDataQuryOptions)
 
           return   userEvents
 

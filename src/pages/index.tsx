@@ -30,17 +30,15 @@ export default function Home(props: HomePageProps) {
   const {Events , isEventsError,isEventsValidating,updateEvents} = useClientEvents()
 
 
-  const { ClientEvents, setClientEvents } = useEvents(); // save events to  localStorge 
+  
   const [pageLoad, setPageLoad] = useState(false)
 
 
 
   useEffect(() => {
     setPageLoad(true)
-    if (Events?.length > 0) {
-      setClientEvents(Events); // Store fetched events in context
-    }
-  }, [ClientEvents, Events, Events?.length, setClientEvents]);
+
+  }, []);
 
 
   
@@ -185,7 +183,7 @@ export default function Home(props: HomePageProps) {
 
           }}
         >
-          {ClientEvents?.map((event) => (
+          {Events?.map((event) => (
             <EventCard key={event._id} {...event} />
           ))}
 

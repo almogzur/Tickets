@@ -1,9 +1,9 @@
-import {    AdminEventType, } from "@/types/pages-types/admin/admin-event-types";
+import {WithDataEventType, } from "@/types/pages-types/admin/admin-event-types";
 import axios, { AxiosRequestConfig } from "axios";
 import { Session } from "next-auth";
 import useSWR, { Fetcher, Key as SWRKey, KeyedMutator, SWRConfiguration } from "swr";
 
-type DataType = AdminEventType[]
+type DataType = WithDataEventType[]
 
 
 type ReturendFetcherType<T> = {
