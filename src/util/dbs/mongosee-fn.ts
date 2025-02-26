@@ -75,7 +75,7 @@ maxPoolSize:3,
  // bufferCommands - This is a mongoose-specific option (not passed to the MongoDB driver)
  //  that disables Mongoose's buffering mechanism 
  
- bufferTimeoutMS: 5000 ,
+ bufferTimeoutMS: 10000 , // 10 sec 
 
 
     // To get faster feedback on failed connections, 
