@@ -1,4 +1,4 @@
-import { ClientEventType, NewEventType } from "@/types/pages-types/admin/admin-event-types";
+import { ClientEventType } from "@/types/pages-types/admin/admin-event-types";
 import {CreateMongooseClient,} from "@/util/dbs/mongosee-fn";
 import { AdminEventModel } from "@/util/dbs/schma/models";
 import { rateLimitConfig } from "@/util/fn/api-rate-limit.config";

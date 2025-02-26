@@ -82,13 +82,11 @@ export const DraftSchemaDef =  {
 }
 
 export const EventSchemaDef = {
-  public_id:{ type:String , required: true ,unique:true },
-  info: { type: EventGlobalFiled , required: true  },
-  tickets: { type: [TicketSchema], required: true },
-  settings: { type: EventSettingsShema, required: true },
-  log:{type: [EventLogsSchema] ,required:false },
-  invoices:{ type: [PayedItemInvoce], required:false }
-}
+  public_id: { type: String, required: true, unique: true },
+  log: { type: [EventLogsSchema], required: false },
+  invoices: { type: [PayedItemInvoce], required: false },
+  ...DraftSchemaDef // Extending EventSchemaDef with DraftSchemaDef
+};
 
 
 

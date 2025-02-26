@@ -1,9 +1,9 @@
-import {    AdminEventType, } from "@/types/pages-types/admin/admin-event-types";
+import {  ClientEventType,  AdminEventType, } from "@/types/pages-types/admin/admin-event-types";
 import axios, { AxiosRequestConfig } from "axios";
 import { Session } from "next-auth";
 import useSWR, { Fetcher, Key as SWRKey, KeyedMutator, SWRConfiguration } from "swr";
 
-type DataType = AdminEventType[]
+type DataType = ClientEventType[]
 
 
 type ReturendFetcherType<T> = {
@@ -14,24 +14,13 @@ type ReturendFetcherType<T> = {
 };
 
 
-export const useAdminEvents = (session: Session | null): ReturendFetcherType<DataType> => {
+export const useClientEvents = (): ReturendFetcherType<DataType> => {
 
-  const fetcherKey: SWRKey = () => session?.user?.name ? '/api/admin/live-events/get-admin-events' : null //no fetch if no session
+  const fetcherKey: SWRKey = () =>  '/api/client/events/get-client-events '
 
   const fetcher: Fetcher<DataType> = async (key: string): Promise<DataType> => {
 
-    const params: any = {
-      name: session?.user?.name,
-    }
-
-
-    const FatchConfig: AxiosRequestConfig = {
-      params: params,
-      //withCredentials:true,
-      //withXSRFToken:true
-    }
-
-    const response = await axios.get<DataType>(key, FatchConfig)
+    const response = await axios.get<DataType>(key)
     // return the response to SWR Hook 
 
     return response.data

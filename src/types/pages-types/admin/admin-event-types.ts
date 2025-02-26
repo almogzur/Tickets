@@ -74,6 +74,8 @@ export const NewEventZVS = z.object({
   public_id:z.string().nonempty()
 })
 export const NewEventAdminZVS= NewEventZVS.extend({
+  logs:z.array(z.any()),
+  invoices:z.array(z.any())
 })
 
 export const EventFromDraftZVS= NewEventZVS.extend({
@@ -101,8 +103,8 @@ export type  UpdateDraftType = z.infer <typeof UpdateDraftZVS>
 // Event 
 
 export type  EventFromDraftType  = z.infer <typeof EventFromDraftZVS>
-export type  NewEventType = z.infer <typeof NewEventAdminZVS >
 
+export type  AdminEventType = z.infer <typeof NewEventAdminZVS >
 
 export type ClientEventType = z.infer<typeof EventFromDraftZVS>
 

@@ -10,31 +10,10 @@ import ClientWrapper from '@/Wrappers/client';
 import EventCard from '@/pages-components/client/main-page/event-card';
 import { useEvents } from '@/context/client/client-events-context';
 import LoadingScreen from '@/HOCs/loading';
+import { useClientEvents } from '@/hooks/client/use-client-events';
 
 
-export const getServerSideProps: GetServerSideProps<{ Events: ClientEventType[] }> =
-   async () => {
-    try {
-    const baseUrl = process.env.NEXTAUTH_URL;
-    if (!baseUrl) {
-      throw new Error("NEXTAUTH_URL environment variable is not set.");
-    }
- 
-    const response = await axios.get<ClientEventType[]>(`${baseUrl}/api/client/events/get-events`);
 
-    if (response.status !== 200) {
-      console.error(`Failed to fetch events: ${response.statusText}`);
-      return { props: { Events: [] } };
-    }
-
-    return {
-      props: { Events: response.data },
-    };
-  } catch (error) {
-    console.error("Error fetching events:", error);
-    return { props: { Events: [] } };
-  }
-};
 
 interface HomePageProps { Events: ClientEventType[] }
 
@@ -48,17 +27,20 @@ export default function Home(props: HomePageProps) {
   const [scrollToLeft, setScrollToLeft] = useState(0);
   const { xxl, xl, lg, md, sm, xs, xxs } = useContext(WidthContext)
 
-  const { Events } = props // events from getServerProps
+  const {Events , isEventsError,isEventsValidating,updateEvents} = useClientEvents()
+
 
   const { ClientEvents, setClientEvents } = useEvents(); // save events to  localStorge 
   const [pageLoad, setPageLoad] = useState(false)
 
+
+
   useEffect(() => {
     setPageLoad(true)
-    if (Events.length > 0) {
+    if (Events?.length > 0) {
       setClientEvents(Events); // Store fetched events in context
     }
-  }, [ClientEvents, Events, Events.length, setClientEvents]);
+  }, [ClientEvents, Events, Events?.length, setClientEvents]);
 
 
   
