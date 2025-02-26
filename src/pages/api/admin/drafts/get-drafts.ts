@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
-import { DraftModle } from "@/util/dbs/schma/modles";
+import { DraftModel } from "@/util/dbs/schma/models";
 import  { userDataPrefix , CreateMongooseClient } from "@/util/dbs/mongosee-fn";
 
  // findOne(filter: Filter<TSchema>, options: FindOptions): Promise<WithId<TSchema> | null>;
@@ -35,7 +35,7 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse) 
       // calling the Molde Only on Api call prevanting un wanted folder saves 
 
    try{ 
-       const  Modle = DraftModle(connection)
+       const  Modle = DraftModel(connection)
 
        const Drafts  = await Modle.find({},{},{lean:true})
        console.log(API_NAME,"Succsess")

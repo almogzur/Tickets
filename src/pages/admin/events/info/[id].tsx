@@ -5,45 +5,57 @@ import { useAdminEvents } from '@/hooks/admin/use-admin-events'
 import { GetServerSideProps } from 'next'
 import { ClientEventType } from '@/types/pages-types/admin/admin-event-types'
 import axios from 'axios'
-import AdminLayout from '@/Wrappers/admin'
-
-export const getServerSideProps: GetServerSideProps<{Events: ClientEventType[];}> =
-   async (context) => {
-      try {
-        const response = await axios.get<ClientEventType[]>(
-         "http://localhost:8888/api/client/events/get-events"
-       );
-       if(response.status=== 200){
-         return { props: { Events: response.data } };
-       }
-       return{ notFound:true}
-     }
-    catch (error) {
-      console.error("Error fetching events:", error);
-    
-    return { props: { Events: [] } }; // Return an empty array as a fallback
-  }
-};
 
 
-const EventInfoPage=({Events}:{Events:ClientEventType[]})=>{
+
+const EventInfoPage=()=>{
+
+
 
   const router = useRouter()
   const { data: session ,status ,update} = useSession()
+  const { Events,isEventsError,isEventsValidating ,updateEvents }  =  useAdminEvents(session)
+  
+
   const { id } = router.query
 
+  const PageEvent=  Events?.find((event) => event._id === id);
 
-  const PageEvent = useMemo(() => {
-    return Events?.filter((event) => event._id === id);
-  }, [Events, id]); 
 
-  useEffect(()=>{ console.log(PageEvent)},[PageEvent])
+
+  const getPaymenys = async ()=>{
+
+    const payment = axios.get(
+      '/api/admin/live-events/get-event-payments',
+      {
+        params:{id} // back end its query
+      }
+      
+   )
+
+  }
+
+
+
+  useEffect(()=>{ 
+
+    console.log(PageEvent)},[PageEvent]
+
+  )
+
+  if(!PageEvent){
+     return
+  }
+
+
+
+
 
 
 
     if (status === 'loading') {
-     return <h1 style={{textAlign:'center'}}>Loading...</h1>
-}
+      return <h1 style={{textAlign:'center'}}>Loading...</h1>
+   }
 
 return (    <>
                     logs,

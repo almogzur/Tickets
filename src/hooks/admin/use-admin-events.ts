@@ -39,9 +39,18 @@ export const useAdminEvents = (session: Session | null): ReturendFetcherType<Dat
   }
 
   const SWRconfig: SWRConfiguration = {
-    revalidateOnFocus: true,
+    revalidateOnFocus: false,
     revalidateOnMount: true,
     refreshWhenHidden: false,
+    revalidateIfStale:false,
+    revalidateOnReconnect: false,
+    refreshInterval: undefined,
+    shouldRetryOnError: false,
+    dedupingInterval: 0,
+    focusThrottleInterval: 0,
+    loadingTimeout: 0,
+    errorRetryInterval: 0,
+    
 
   }
 

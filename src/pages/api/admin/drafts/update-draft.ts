@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
-import {  DraftModle } from "@/util/dbs/schma/modles";
+import {  DraftModel } from "@/util/dbs/schma/models";
 import { delEmptyFolders, moveToEventNameFolder } from "../../../../util/fn/cloudinary_helper_functions";
 import { UpdateDraftZVS } from "@/types/pages-types/admin/admin-event-types";
 import { ObjectId } from "mongodb";
@@ -76,7 +76,7 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse) 
       console.log(API_NAME,"delFolders", err);
      }
 
-     const Modle = DraftModle(connection)
+     const Modle = DraftModel(connection)
     
    const updatedDraft  = await Modle.findOneAndUpdate({_id:_id},isValidData.data,{new:true,lean:true})
 

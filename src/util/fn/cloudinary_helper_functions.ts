@@ -25,11 +25,13 @@ export const moveToEventNameFolder = async (publicId:string  , eventName :string
           }
             );
             if(data){
+              console.log("cloudinary moveToEventNameFolder ", "succsess" ,data)
+
               return true
             }
          }
         catch (err){
-          console.log()
+          console.log("cloudinary moveToEventNameFolder  err" , err )
           return false 
           }
         
@@ -39,14 +41,14 @@ export const moveToEventNameFolder = async (publicId:string  , eventName :string
 export const delFolder = async(Path:string):Promise<boolean|undefined>=>{
                try{ 
                   const  data = await cloudinary.api.delete_folder(Path);
-                  console.log("delFolder", true ,"Path:",Path );
+                  console.log("cloudinary- delFolder" ,"Path:",Path );
                   if(data){
                     return true
                   }
                   }  
                 
                catch (err){ 
-                   console.log("delFolder", false  ,"Path:",Path );
+                   console.log(  " cloudinary del-folder ERR" , err );
                    return false
            
                 }
@@ -56,13 +58,11 @@ export const findSubFolders =  async(Path?:string|null)=>{
          try {
                    // Fetch all subfolders under the root path
                     const { folders } = await cloudinary.api.sub_folders(Path??"") 
-                   
-               
-                    
+
                    return folders
              } 
          catch (error) {
-                   console.log(`find_result  Error:`, error);
+                   console.log(`cloudinary find_result  Error:`, error);
                    return false
                
                }

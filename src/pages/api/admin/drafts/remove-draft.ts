@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
-import {  DraftModle } from "@/util/dbs/schma/modles"
+import {  DraftModel } from "@/util/dbs/schma/models"
 import { ObjectId } from "mongodb";
 import { z } from "zod";
 import  {CreateMongooseClient, userDataPrefix } from "@/util/dbs/mongosee-fn";
@@ -46,7 +46,7 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse) 
 }
 
 
-const Modle = DraftModle(connection)
+const Modle = DraftModel(connection)
 
       const Drafts  = await Modle.findOneAndDelete({_id:isValidData.data.id})
 

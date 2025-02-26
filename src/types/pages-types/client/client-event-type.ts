@@ -2,15 +2,9 @@ import { z }  from 'zod'
 import { ItemCategory, OrderRequest } from '@paypal/paypal-server-sdk'
 import { SeatValidationSchema } from '@/types/components-typs/admin/theater/admin-theater-types'
 import { SeatsRow } from "@/types/components-typs/admin/theater/admin-theater-types"
-import { PayPalOrderVS } from './payment-object'
+import { PayPalCartItemVS, PayPalOrderVS } from './payment-object'
 
-export const PayPalCartItemVS= z.object({
-    id: z.string().nonempty().or(z.undefined()),
-    name: z.string().nonempty(),
-    quantity: z.string().nonempty(),
-    category:z.union([z.literal(ItemCategory.Donation) ,z.literal(ItemCategory.DigitalGoods),z.literal(ItemCategory.PhysicalGoods) ] ),
-    unitAmount: z.object( { currencyCode:z.string().min(1), value:z.string().min(1)}),
-})
+
  
 export const ClientSelectedSeatsVS= z.object({
     row: z.string().nonempty(),
@@ -33,7 +27,8 @@ export const  UpdateTheaterApiVS = z.object({
    reqTheater: z.object({
         mainSeats:SeatValidationSchema,
         sideSeats:SeatValidationSchema
-     })
+     }),
+    numerOfSeatsSealected : z.number()  
 })
 
 export const  PayPalOnApproveResponceDataVS = z.object({
@@ -52,13 +47,12 @@ export const PayPalCapturedRequestOrderVS = z.object({
   publicId: z.string().nonempty(),
 })
 
-export const SavePayPalInvoceVS = z.object({
-  invoice:PayPalOrderVS, 
-  eventId:z.string(),
-  cart: z.array(PayPalCartItemVS),
-  total:z.string()
-
-})
+export const SavePayPalInvoceVS = PayPalOrderVS.extend({
+  eventId: z.string().nonempty(),
+  total: z.string().nonempty(),
+  purchase_date: z.string().nonempty(),
+  cart: z.array(PayPalCartItemVS)
+});
 
 
 export type  modifieSeatValueFunctionType = {
@@ -70,8 +64,6 @@ export type RequestStatusType ="Temp"|"Production"|undefined
 
 export type ClientSelectedSeatType = z.infer<typeof ClientSelectedSeatsVS>
 
-export type  PayPalCartItemType  =  z.infer<typeof PayPalCartItemVS>
-
 export type  PayPalRequestCreateOrderType =z.infer<typeof PayPalRequestCreateOrderVS> 
 
 export type PayPalRequestCapturedOrderType= z.infer<typeof PayPalCapturedRequestOrderVS>
@@ -79,14 +71,6 @@ export type PayPalRequestCapturedOrderType= z.infer<typeof PayPalCapturedRequest
 export type PayPalResponceCapturedOrderType = z.infer<typeof PayPalOnApproveResponceDataVS>
 
 export type SavePayPalInvoceTpee = z.infer<typeof SavePayPalInvoceVS >
-
-
-
-
-
-
-
-
 
 
 // from PayPal 

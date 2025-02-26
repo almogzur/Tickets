@@ -29,6 +29,9 @@ TO_DO
 2. purches err page 
 
 
+3. remove the cart item legth form the available seat amout 
+
+
 
 
 ===================

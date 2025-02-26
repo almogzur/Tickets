@@ -50,6 +50,13 @@ export default function Home(props: HomePageProps) {
   }, [ClientEvents, Events, Events.length, setClientEvents]);
 
 
+  
+  const generageImageCarousel =( events:[] ) : [] =>{
+ 
+    return [] 
+  }
+
+
   const scrollLeft = () => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollBy({ behavior: "smooth", left: -310 })
@@ -109,7 +116,6 @@ export default function Home(props: HomePageProps) {
 
       <Carousel
         sx={{ background: "black" }}
-
       >
         {
           items.map((item, i) => <Item key={i} {...item} />)
@@ -207,10 +213,11 @@ export default function Home(props: HomePageProps) {
 }
 
 
-var items = [
+const  items = [
   {
     name: "Random Name #1",
-    description: "Probably the most random thing you have ever seen!"
+    description: "Probably the most random thing you have ever seen!",
+    image: 'dasdas'
   },
   {
     name: "Random Name #2",
@@ -218,18 +225,19 @@ var items = [
   }
 ]
 
-type ItemTye = { name: string, description: string }
+type ItemTye = { name: string, description: string,image?:string }
 
 interface ItemComponentProps {
   item: ItemTye
 }
-function Item({ name, description }: ItemTye) {
+function Item({ name, description,image }: ItemTye) {
   return (
     <Paper
       sx={{ background: "#ddd", mt: 3, height: 250 }}
     >
       <Typography>{name}</Typography>
       <p>{description}</p>
+      <p>{image}</p>
 
 
 

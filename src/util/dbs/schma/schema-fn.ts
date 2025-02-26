@@ -1,7 +1,7 @@
 import mongoose, { model, Schema, SchemaDefinition } from "mongoose";
 
 
-export const createModelOld = <T> (name: string, schemaDefinition: SchemaDefinition<T>): mongoose.Model<T> => {
+ const createModelOld = <T> (name: string, schemaDefinition: SchemaDefinition<T>): mongoose.Model<T> => {
   if (!name) {
     throw new Error("Name is required to create a model");
   }
@@ -27,6 +27,8 @@ export const createBindToConnectionModel = <T>(
     collection: name,
     autoCreate: false,
     autoIndex: false,
+    versionKey:false,
+    
   });
 
    // returns a functun that requerd a connection  so that 

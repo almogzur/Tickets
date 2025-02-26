@@ -7,9 +7,7 @@ import { useAdminEvents } from '@/hooks/admin/use-admin-events'
 import { GetServerSideProps } from 'next'
 import { ClientEventType } from '@/types/pages-types/admin/admin-event-types'
 import axios from 'axios'
-import AdminLayout from '@/Wrappers/admin'
 import DataGridWrap from '@/HOCs/data-grid-wrapper/grid-wrapper'
-
 
 
 
@@ -21,7 +19,10 @@ const ManageEventsPage=()=>{
   const { Events,isEventsError,isEventsValidating ,updateEvents }  =  useAdminEvents(session)
 
 
-  useEffect(()=>{ console.log(Events) },[Events])
+
+  useEffect(()=>{
+    console.log(Events) },[Events]
+   )
 
   const Na = "לא זמין "
 

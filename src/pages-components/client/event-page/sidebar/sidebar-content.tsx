@@ -8,9 +8,10 @@ import ClientTicketList from "./tickets-list";
 import PaypalBtn from "./payments-providers-buttons/paypal";
 import { ItemCategory} from "@paypal/paypal-server-sdk";
 import { ClientEventType  } from "@/types/pages-types/admin/admin-event-types";
-import { PayPalCartItemType, ClientSelectedSeatType } from "@/types/pages-types/client/client-event-type";
+import {  ClientSelectedSeatType } from "@/types/pages-types/client/client-event-type";
 import { TheaterType } from "@/types/components-typs/admin/theater/admin-theater-types";
 import { useRouter } from "next/router";
+import { PayPalCartItemType } from "@/types/pages-types/client/payment-object";
 
 
 

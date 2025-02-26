@@ -1,11 +1,11 @@
 
 import { TheaterType } from "@/types/components-typs/admin/theater/admin-theater-types";
-import { PayPalCartItemType, PayPalRequestCapturedOrderType, PayPalRequestCreateOrderType, PayPalResponceCapturedOrderType, SavePayPalInvoceTpee  } from "@/types/pages-types/client/client-event-type";
-import { PayPalScriptProvider, PayPalButtons   } from "@paypal/react-paypal-js";
+import { PayPalRequestCapturedOrderType, PayPalRequestCreateOrderType, PayPalResponceCapturedOrderType, SavePayPalInvoceTpee, UpdateTheaterApiResquestType } from "@/types/pages-types/client/client-event-type";
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import axios from "axios";
 import { useRouter } from "next/router";
 
-import { PayPalOrderType } from "@/types/pages-types/client/payment-object";
+import { PayPalCartItemType, PayPalOrderType } from "@/types/pages-types/client/payment-object";
 
 
 
@@ -20,9 +20,9 @@ export interface PaypalBtnType {
 const PaypalBtn = ({ eventId, publicId, cart, total, TheaterState }: PaypalBtnType) => {
 
 
-const Options ={
-    'client-id':publicId,
-    'clientId':publicId
+    const Options = {
+        'client-id': publicId,
+        'clientId': publicId
 
     }
     const router = useRouter()
@@ -31,22 +31,24 @@ const Options ={
     //useEffect(() => { console.log(cart) }, [cart])
 
 
-    
+
     return (
-        <PayPalScriptProvider options={ Options}   >
-            <PayPalButtons        
-               // when public id change re render 
+        <PayPalScriptProvider options={Options}   >
+            <PayPalButtons
+                // when public id change re render 
                 style={{
                     shape: "rect",
                     layout: "vertical",
                     color: "blue",
                     label: "paypal",
-                }}
+                  }}
+
+
                 // send array of object to back end to create a list of item to display and cala price 
                 //
                 createOrder={async () => {
 
-                    const PatPalData  :PayPalRequestCreateOrderType = {
+                    const PatPalData: PayPalRequestCreateOrderType = {
                         cart, total, publicId, eventId,
                     }
 
@@ -67,7 +69,7 @@ const Options ={
 
                     } catch (error) {
                         console.error(error);
-     
+
                     }
                 }}
                 onApprove={async (data, actions) => {
@@ -82,11 +84,12 @@ const Options ={
                             if (!TheaterState) { return false }
                             const { mainSeats, sideSeats } = TheaterState
 
-                            const UpdateEventData = {
+                            const UpdateEventData : UpdateTheaterApiResquestType = {
                                 eventId,
-                                reqTheater: { mainSeats, sideSeats }
+                                reqTheater: { mainSeats, sideSeats },
+                                numerOfSeatsSealected : cart.length
                             }
-                            const UpdateEvent = await axios.post("/api/client/events/update-event",UpdateEventData,)
+                            const UpdateEvent = await axios.post("/api/client/events/update-event", UpdateEventData,)
 
                             return UpdateEvent.status === 200 ? true : false
 
@@ -95,27 +98,26 @@ const Options ={
                             return false
                         }
                     }
-
-                    const capturePayment = async (): Promise<any|void> => {
+                    const capturePayment = async (): Promise<any | void> => {
                         try {
 
-                            const OrderData : PayPalRequestCapturedOrderType  = {
-                            PaypalData: data,
-                            eventId,
-                            publicId
+                            const OrderData: PayPalRequestCapturedOrderType = {
+                                PaypalData: data,
+                                eventId,
+                                publicId
                             }
 
                             // paypal builing process 
                             const payPalResponse = await axios.post(`/api/client/pay/${orderID}`, OrderData);
 
-                            const orderData  = await payPalResponse.data // err  or data  
+                            const orderData = await payPalResponse.data // err  or data  
 
-                          /** PAYPAL PROVIDED ERROR HANDLEING */
+                            /** PAYPAL PROVIDED ERROR HANDLEING */
 
                             // Three cases to handle:
                             //   (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
                             //   (2) Other non-recoverable errors -> Show a failure message
-                        
+
 
 
                             // ** CASE 1 AND 2  add rollbacks !!!!  calls to update event theater 
@@ -123,7 +125,7 @@ const Options ={
 
                             //   (3) Successful transaction -> Show confirmation or thank you message
 
-                            const errorDetail  = orderData?.details?.[0];
+                            const errorDetail = orderData?.details?.[0];
 
 
                             if (errorDetail?.issue === "INSTRUMENT_DECLINED") {
@@ -139,12 +141,12 @@ const Options ={
                             else {
                                 // (3) Successful transaction -> Show confirmation or thank you message
                                 // Or go to another URL:  actions.redirect('thank_you.html');
-                                
-                                const PayPalData  =  JSON.parse(orderData)
 
-                                  return PayPalData
+                                const PayPalData = JSON.parse(orderData)
 
-                              //  const transaction = orderData.purchase_units[0].payments.captures[0];
+                                return PayPalData
+
+                                //  const transaction = orderData.purchase_units[0].payments.captures[0];
 
 
                             }
@@ -154,60 +156,65 @@ const Options ={
                         }
 
                     }
+                    const saveInvoices = async (PayPalInvoice: PayPalOrderType): Promise<boolean> => {
 
-                    const saveInvoices = async( PayPalInvoice:PayPalOrderType) : Promise<boolean> =>{
 
-                        const invoice :SavePayPalInvoceTpee  = {
-                         invoice:PayPalInvoice, 
-                          eventId,
-                          cart,
-                          total
-                       }
+                        const currentDate = new Date();
+                        const dateString = currentDate.toLocaleDateString(); // Date part only.
+                        const timeString = currentDate.toLocaleTimeString();
 
-                      try{ 
-                          const responce = await  axios.post("/api/client/events/new-invoice",invoice)
-                          if(responce.status === 200 || responce.status === 201  ){
+                        const invoice: SavePayPalInvoceTpee = {
+                            ...PayPalInvoice,
+                            cart,
+                            eventId,
+                            total,
+                            purchase_date: `${dateString} ${timeString}`,
+                        }
+
+                        try {
+                            const responce = await axios.post("/api/client/events/new-event-invoice", invoice)
+                            if (responce.status === 200 || responce.status === 201) {
 
                                 console.log("responce")
-
-                              
-                          }
-                          return false
-
-                       }
-                      catch (err){  
-                          return false
-                      }
-                      
-                     }
-
-                     const updateTheaterResult= await updateEvent()
+                                return true
 
 
-                    if ( ! updateTheaterResult ) {
-                        
-                        // try to update the theater if it not avalebule push to err page 
-                         // **  cant return from onAprove function 
+                            }
+                            return false
 
-                        router.push({ 
-                            pathname: "/thank-you/err",
-                            query: "שגיעה בעדכון האולם"
-                        })
-                    }else {
-                         const PayPalInvoice= await capturePayment()
-
-                          if( ! PayPalInvoice ){
-                             router.push({
-                                pathname: "/thank-you/err",
-                                query: "שגיעה במהלך התשלום "
-                            })
-                            }else{    
-                              await saveInvoices(PayPalInvoice)
-
-                          }
-                          
                         }
-                    
+                        catch (err) {
+                            return false
+                        }
+
+                    }
+
+                    // send user sms and qr code 
+
+                    const updateTheaterResult = await updateEvent()
+
+                    if (!updateTheaterResult) {
+
+                        // try to update the theater if it not avalebule push to err page 
+                        // **  cant return from onAprove function 
+                        router.push("/thank-you/err")
+
+                    } else {
+                        const PayPalInvoice = await capturePayment()
+
+                        if (!PayPalInvoice) {
+
+                            router.push("/thank-you/err")
+
+
+                        }
+
+                        await saveInvoices(PayPalInvoice)
+
+                        router.push(`/thank-you/${PayPalInvoice.id}`)
+
+                    }
+
 
                 }}
             />

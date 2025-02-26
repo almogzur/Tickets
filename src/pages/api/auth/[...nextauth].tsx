@@ -7,7 +7,17 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import {  NewUserValidationShema } from "@/types/pages-types/admin/supervisor-types"
 import  {CreateMongooseClient,  UserPrefix } from "@/util/dbs/mongosee-fn"
-import { UsersModle } from "@/util/dbs/schma/modles"
+import { UsersModel } from "@/util/dbs/schma/models"
+
+
+/**
+ * 
+ * use on password validate 
+ *   const authKeyBuffer = encoder.encode(user,pass);
+     const inputKeyBuffer = encoder.encode(input.pass);
+ 
+     const isKeyValide = crypto.timingSafeEqual(new Uint8Array(authKeyBuffer), new Uint8Array(inputKeyBuffer))
+ */
 
 
 // Exdenting the type using -  module Augmentation
@@ -79,9 +89,9 @@ export const authOptions: AuthOptions = {
         }
 
         
-       const Modle = UsersModle(connection) 
+       const Model = UsersModel(connection) 
 
-       const user = await Modle.findOne({ name: credential.name }).lean();
+       const user = await Model.findOne({ name: credential.name }).lean();
 
         if (!user) {
           console.log("User not found")

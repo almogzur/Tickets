@@ -5,7 +5,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]";
 import { EventFromDraftZVS } from "@/types/pages-types/admin/admin-event-types";
-import { AdminEventModle, DraftModle } from "@/util/dbs/schma/modles";
+import { AdminEventModel, DraftModel } from "@/util/dbs/schma/models";
 import  {CreateMongooseClient, userDataPrefix } from "@/util/dbs/mongosee-fn";
 
 const apiLimiter = rateLimit(rateLimitConfig);
@@ -44,8 +44,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const delOriginDraft = async (): Promise<boolean> => {
          try {
 
-            const Modle = DraftModle(connection)
-            const Drafts = await Modle.findOneAndDelete({ _id: isValidData.data._id })
+            const Model = AdminEventModel(connection)
+            const Drafts = await Model.findOneAndDelete({ _id: isValidData.data._id })
 
             if (Drafts) {
                return true
@@ -62,9 +62,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       // un sucssesful operation dosent need to cancell save , just to prevent duplicates 
 
-      const Modle = AdminEventModle(connection)
+      const Model = AdminEventModel(connection)
 
-      const doc = new Modle(isValidData.data)
+      const doc = new Model(isValidData.data)
 
       const saveResult = await doc.save()
 

@@ -1,4 +1,6 @@
+import { cartItemSchema } from "@/util/dbs/schma/db-event";
 import { z } from "zod";
+import { ItemCategory } from "@paypal/paypal-server-sdk";
 
 // Define the schema for each payment source type
 const CardVS = z.object({
@@ -81,6 +83,14 @@ const PurchaseUnitVS = z.object({
     }).optional(),
 });
 
+export const PayPalCartItemVS= z.object({
+  id: z.string().nonempty().or(z.undefined()),
+  name: z.string().nonempty(),
+  quantity: z.string().nonempty(),
+  category:z.union([z.literal(ItemCategory.Donation) ,z.literal(ItemCategory.DigitalGoods),z.literal(ItemCategory.PhysicalGoods) ] ),
+  unitAmount: z.object( { currencyCode:z.string().min(1), value:z.string().min(1)}),
+})
+
 export const PayPalOrderVS = z.object({
     id: z.string(),
     status: z.string(),
@@ -88,9 +98,11 @@ export const PayPalOrderVS = z.object({
     payment_source: PaymentSourceVS,
     purchase_units: z.array(PurchaseUnitVS),
     links: z.array(LinkVS).optional(),
+
 });
 
 export type  PayPalOrderType =  z.infer<typeof PayPalOrderVS>
+export type  PayPalCartItemType  =  z.infer<typeof PayPalCartItemVS>
 
 
 

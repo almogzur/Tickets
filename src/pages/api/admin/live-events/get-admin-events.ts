@@ -3,7 +3,7 @@
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
-import { AdminEventModle } from "@/util/dbs/schma/modles";
+import { AdminEventModel } from "@/util/dbs/schma/models";
 import  {CreateMongooseClient, userDataPrefix } from "@/util/dbs/mongosee-fn";
 
 export default async function handler  ( req: NextApiRequest , res: NextApiResponse ):Promise<any>{
@@ -32,8 +32,8 @@ if(!connection){
 
  try{ 
 
-   const Modle = AdminEventModle(connection)
-    const Events = await Modle.find({},{},{lean:true})
+   const Model = AdminEventModel(connection)
+    const Events = await Model.find().lean()
 
     if(!  Events.length ){
         

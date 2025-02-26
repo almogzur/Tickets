@@ -1,7 +1,7 @@
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { UserPayPalInfo, UserPayPalInfoValidationSchema } from "@/types/pages-types/admin/user-biling-info-types";
 import {CreateMongooseClient} from "@/util/dbs/mongosee-fn";
-import { PayPalModle } from "@/util/dbs/schma/modles";
+import { PayPalModel } from "@/util/dbs/schma/models";
 
 import { decryptData, encryptData } from "@/util/fn/crypto";
 import { m } from "framer-motion";
@@ -53,7 +53,7 @@ export default async function handler  ( req: NextApiRequest , res: NextApiRespo
      clientSecret:ChiperSecret
     }
 
-    const Modle  = PayPalModle(connection)
+    const Modle  = PayPalModel(connection)
 
    const doc = new  Modle(toSaveDoc)
     

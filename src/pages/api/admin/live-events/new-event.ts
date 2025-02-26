@@ -1,6 +1,6 @@
 // File: pages/api/public.ts
 
-import { AdminEventModle } from "@/util/dbs/schma/modles";
+import { AdminEventModel } from "@/util/dbs/schma/models";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
 import { NextApiRequest, NextApiResponse } from "next";
@@ -37,9 +37,9 @@ export default async function handler  ( req: NextApiRequest , res: NextApiRespo
        return res.status(400).json({massage:'invalide data ' + API_NAME })
     }
  
-      const Modle = AdminEventModle(connection)
+      const Model = AdminEventModel(connection)
 
-      const doc =  new Modle(isValidData.data)
+      const doc =  new Model(isValidData.data)
   
       const saveResult =  await doc.save();
 

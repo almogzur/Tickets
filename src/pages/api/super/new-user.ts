@@ -2,7 +2,7 @@
 
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import  {CreateMongooseClient,  UserPrefix } from "@/util/dbs/mongosee-fn";
-import { UsersModle } from "@/util/dbs/schma/modles";
+import { UsersModel } from "@/util/dbs/schma/models";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 
@@ -37,9 +37,9 @@ export default async function handler  ( req: NextApiRequest , res: NextApiRespo
       return  res.status(500).json({ message: "no db" });
    }
 
-   const Modle = UsersModle(connection)
+   const Model = UsersModel(connection)
 
-   const model = new  Modle(Data) 
+   const model = new  Model(Data) 
 
    const doc = await model.save({checkKeys:true})
 

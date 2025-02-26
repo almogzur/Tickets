@@ -5,7 +5,7 @@ import  {CreateMongooseClient,   userDataPrefix } from "@/util/dbs/mongosee-fn";
 import { moveToEventNameFolder } from '@/util/fn/cloudinary_helper_functions';
 
 import { NewDraftZVS } from '@/types/pages-types/admin/admin-event-types';
-import { DraftModle } from '@/util/dbs/schma/modles';
+import { DraftModel } from '@/util/dbs/schma/models';
 
 
  
@@ -53,7 +53,7 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse) 
 
          // calling the Molde Only on Api call prevanting un wanted folder saves 
 
-       const Modle = DraftModle(connection)
+       const Modle = DraftModel(connection)
 
      const doc = new Modle(isValideDate.data) // Pass body to the model
       

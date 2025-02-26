@@ -1,7 +1,7 @@
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import {CreateMongooseClient} from "@/util/dbs/mongosee-fn";
 import  {  userDataPrefix } from "@/util/dbs/mongosee-fn";
-import { PayPalModle } from "@/util/dbs/schma/modles";
+import { PayPalModel } from "@/util/dbs/schma/models";
 
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
@@ -31,7 +31,7 @@ export default async function handler  ( req: NextApiRequest , res: NextApiRespo
 
   try{ 
 
-     const Modle = PayPalModle(connection)
+     const Modle = PayPalModel(connection)
 
      const result = await Modle.findOne({},{},{lean:true})
 

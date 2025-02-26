@@ -1,6 +1,7 @@
 
 import {Schema} from 'mongoose';
-import { EventSettingType, NewDraftType, TicketType, ClientEventType, infoFiledsType, UpdateDraftType, NewEventType } from '../../../types/pages-types/admin/admin-event-types';
+import { EventSettingType, TicketType, infoFiledsType } from '../../../types/pages-types/admin/admin-event-types';
+import { SavePayPalInvoceTpee } from '@/types/pages-types/client/client-event-type';
 
 
 const EventSettingsShema = new Schema<EventSettingType>({
@@ -45,42 +46,49 @@ const EventGlobalFiled = new Schema<infoFiledsType>({
   Theater: { type: Object, required: true },
 }, { _id: false })
 
-const EventLogsSchema   = {
+export const EventLogsSchema = new Schema( {
   time_stemp :{type:String, required:false},
   user:{type:String, required:false},
   ip:{type:String, required:false},
-}
+})
+
+export const cartItemSchema = new Schema({
+  name: { type: String,required: true},
+  quantity: {type: String,required: true},
+  unitAmount: {
+    value: { type: String,required: true},
+    currencyCode: { type: String,required: true }
+   },
+},{versionKey:false,_id:false});
 
 export const  PayedItemInvoce = new Schema({
   id:{ type:String , required: true },
   payer:{},
   payment_source:{},
-  purchase_units:{}
-},{versionKey:false})
+  purchase_units:{},
+  cart:{type : [cartItemSchema], required: true },
+  total: { type: String, required: true },
+  purchase_date: { type: String, required: true }
+},{versionKey:false,_id:false})
 
 
-export const DraftSchema =   {
+// createBindToConnectionModel create thes schemas 
+
+export const DraftSchemaDef =  {
   info: { type: DraftGlobalFiled },
   tickets: { type: [TicketSchema], required: false },
-  settings: { type: EventSettingsShema, required: false }
+  settings: { type: EventSettingsShema, required: false },
+  _id:{type: String, required:false}
 }
 
-
-export const EventSchema = {
+export const EventSchemaDef = {
   public_id:{ type:String , required: true ,unique:true },
   info: { type: EventGlobalFiled , required: true  },
   tickets: { type: [TicketSchema], required: true },
   settings: { type: EventSettingsShema, required: true },
   log:{type: [EventLogsSchema] ,required:false },
-  invoices:{ type : [PayedItemInvoce] , required:false}
+  invoices:{ type: [PayedItemInvoce], required:false }
 }
-
-// end of week this just start working id remoived no dev recorde saveed
-// all db recored del .. eror on rendreing 
-
-//Db Modoles 
-
-
 
 
 
