@@ -40,8 +40,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const dbConnection = connection.useDb(db.name)
         ;
         const Model = EventModel(dbConnection);
-        
-        const event = await Model.findById(
+
+        const event = await Model.findOne(
             ObjectId.createFromHexString(`${event_id}`), //  id
             {},
             filterAdminDataQuryOptions

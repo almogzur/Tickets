@@ -26,7 +26,7 @@ export const useClientEvent = (id: string): ReturendFetcherType<ClientEventType 
   };
 
   const SWRconfig: SWRConfiguration = {
-    revalidateOnFocus: false,
+    revalidateOnFocus: true,
     revalidateOnMount: true,
     shouldRetryOnError: false,
   };
