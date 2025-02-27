@@ -198,30 +198,33 @@ const PaypalBtn = ({ eventId, publicId, cart, total, TheaterState }: PaypalBtnTy
                         // try to update the theater if it not avalebule push to err page 
                         // **  cant return from onAprove function 
                         router.push("/thank-you/err")
-                        actions.restart()
 
 
                     } else {
+
                         const PayPalInvoice = await capturePayment()
 
                         if (!PayPalInvoice) {
-                            actions.restart()
+             
 
-                            router.push("/thank-you/err")
+                             router.push("/thank-you/err")
                             
 
 
                         }
 
                         await saveInvoices(PayPalInvoice)
-                        actions.restart()
 
-                        router.push(`/thank-you/${PayPalInvoice.id}`)
+              
+                        
+
+                       router.push(`/thank-you/${PayPalInvoice.id}`)
 
                     }
 
 
                 }}
+
             />
         </PayPalScriptProvider>
     )

@@ -29,6 +29,8 @@ export const useClientEvent = (id: string): ReturendFetcherType<ClientEventType 
     revalidateOnFocus: true,
     revalidateOnMount: true,
     shouldRetryOnError: true,
+    revalidateOnReconnect:true,
+    
   };
 
   const { data, error, isValidating, mutate } = useSWR(fetcherKey, fetcher, SWRconfig);

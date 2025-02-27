@@ -36,13 +36,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const UsersDbs = Cluster.filter((db) => db.name.includes(`${process.env.USER_DATA_FOLDER_PATH}`));
 
       let eventFound;
+
       for (const db of UsersDbs) {
         const dbConnection = connection.useDb(db.name)
         ;
         const Model = EventModel(dbConnection);
 
         const event = await Model.findOne(
-            ObjectId.createFromHexString(`${event_id}`), //  id
+            {_id: ObjectId.createFromHexString(`${event_id}`)}, //  id
             {},
             filterAdminDataQuryOptions
         )

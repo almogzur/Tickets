@@ -17,7 +17,7 @@ const FullHeightPage = ({children,noScrool}:FullHeightPagePropsType) => {
   
      return<Box sx={{
       direction:"rtl",
-      height:"100vh",
+      height:"100dvh",
       background:"black",
       overflowY: noScrool? 'clip' : 'scroll', 
       overflowX:"clip",
