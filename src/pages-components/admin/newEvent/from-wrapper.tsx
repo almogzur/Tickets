@@ -163,11 +163,21 @@ const NewEventFormWraper = ({ Draft, DraftId }: NewEventFormWrapperProps) => {
 
         const ReqData: NewDraftType =isValidData.data
 
-        const response = await axios.post("/api/admin/drafts/new-draft", ReqData, {});
+        try{ 
+          const response = await axios.post("/api/admin/drafts/new-draft", ReqData, {});
 
-        if (response.status === 200) {
-          router.push("/admin")
-        }
+          if (response.status === 200) {
+            router.push("/admin")
+          }
+
+         }
+        catch (err){
+          console.log(err)
+          }
+
+
+
+ 
       }
       else {
         // focuse name 
@@ -207,7 +217,9 @@ const NewEventFormWraper = ({ Draft, DraftId }: NewEventFormWrapperProps) => {
  
       try { 
          const response = await axios.post("/api/admin/drafts/update-draft", ReqData);
-         if (response.status === 200) { }
+         if (response.status === 200) {
+
+          }
       }
       catch (err) {
         console.log("Update_`Draft", err);

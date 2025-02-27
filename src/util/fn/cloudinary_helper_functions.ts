@@ -83,7 +83,7 @@ export const findSubFolders =  async(Path?:string|null)=>{
                    console.log( " folders.map :  del_result ", del_result, "Path " , folder.path );
                    }
                  catch (err){  
-                   console.log("delFolders Map_Over : Del Error",err ,  "Path " , folder.path ) ;
+           //        console.log("delFolders Map_Over : Del Error",err ,  "Path " , folder.path ) ;
                  }
             })
             return true
@@ -99,7 +99,7 @@ export const findSubFolders =  async(Path?:string|null)=>{
           
         }
         catch (err){
-          console.log("delFolders folders singel : Del Error",err , "Path " , folders.path , "folders is not array " );
+     //     console.log("delFolders folders singel : Del Error",err , "Path " , folders.path , "folders is not array " );
             return false
          }
      }

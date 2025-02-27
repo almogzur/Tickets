@@ -58,27 +58,14 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse) 
   const _id = isValidData.data._id
 
   // console.log(preview);
-  
-   try{ 
-    const result = await moveToEventNameFolder(preview,eventName,session,API_NAME)
-     console.log(" moveToEventNameFolder Succsess",  eventName , API_NAME, result);
-    }catch (err){
-     console.log ("moveToEventNameFolder", err , eventName, API_NAME);
-  }
 
-    try{
-      const data = await delEmptyFolders(session.user?.name)
-      if(data){
-        console.log(API_NAME,"delFolders","Seccsess");
-      }
-        
-     }catch (err){ 
-      console.log(API_NAME,"delFolders", err);
-     }
+      await delEmptyFolders(session.user?.name)
+
+      await moveToEventNameFolder(preview,eventName,session,API_NAME)
 
      const Modle = DraftModel(connection)
     
-   const updatedDraft  = await Modle.findOneAndUpdate({_id:_id},isValidData.data,{new:true,lean:true})
+    const updatedDraft  = await Modle.findOneAndReplace({_id:_id},isValidData.data,{new:true,lean:true})
 
     if(!updatedDraft){
       console.warn("No Draft Updated")

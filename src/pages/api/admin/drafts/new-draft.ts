@@ -61,21 +61,13 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse) 
      const preview = body.info.preview
      const eventName = body.info.eventName
  
-   //Stage 1  -- move image to folder baced on event name 
-   if(!preview){}  
+   // 1  -- move image to folder baced on event name 
 
-   try{ 
-      const result = await moveToEventNameFolder(preview,eventName,session,API_NAME)
-        if(result){
-          console.log(API_NAME,"MoveFile Succsess");
-         }
-      }
-   catch (err){
-      console.log(API_NAME, " Falied MoveFile" , err );
- }
-  
+   if(preview){
+      await moveToEventNameFolder(preview,eventName,session,API_NAME)
+   }  
 
-   //Stage 2 
+   // 2 
    const saveResult =  await doc.save(); 
 
     if(saveResult.errors){
@@ -90,7 +82,6 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse) 
    return res.status(200).json({ massage: "Saved New Modle" });
      
 
-  // Stage 2 on file re-location continue saving 
 
 
 }
