@@ -3,7 +3,7 @@ import { createBindToConnectionModel } from "./schema-fn"
 import {  DraftSchemaDef, EventSchemaDef } from "./db-event"
 import { NewUserType } from "@/types/pages-types/admin/supervisor-types"
 import { NewUserSchemaDefinition } from "./new-user"
-import { UserBankInfo, UserPayPalInfo } from "@/types/pages-types/admin/user-biling-info-types"
+import {  UserIsracardInfo, UserPayPalInfo } from "@/types/pages-types/admin/user-biling-info-types"
 import { UserBankInfoDBSchema, UserPayPalBillingShema } from "./user-biling-info"
 
 
@@ -31,5 +31,5 @@ export const UsersModel =  createBindToConnectionModel<NewUserType>(`${process.e
 
 export const PayPalModel = createBindToConnectionModel<UserPayPalInfo>(`${process.env.PAYPAL_BILING_FOLDER_NAME}`, UserPayPalBillingShema)
 
-export const BankModel = createBindToConnectionModel<UserBankInfo>(`${process.env.BANK_BLIING_FOLDER_NAME}`, UserBankInfoDBSchema)
+export const IsracardModel = createBindToConnectionModel<UserIsracardInfo>(`${process.env.BANK_BLIING_FOLDER_NAME}`, UserBankInfoDBSchema)
 

@@ -85,18 +85,26 @@ export default function TemporaryDrawer() {
   return (
     <>
       <nav dir='rtl' style={{ height: 60, background: "black", display: "flex", flexDirection: "row", width: "100%" }}  >
-        <>
-          <Flex direction={"row"} alignItems={'center'} width={"20%"} >
-            <FcPrevious size={'1.5em'} onClick={toggleDrawer(true)} style={{ padding: 10, margin: 10, cursor: 'pointer' }} />
+        
+          <Flex direction={"row"} alignItems={'center'}  >
+
+            <FcPrevious 
+               size={'2em'} 
+               onClick={toggleDrawer(true)}
+               style={{ padding: 10, margin: 10, cursor: 'pointer' }}
+               />
+               
             <Typography variant='h6' sx={{ color: "#ddd" }}>{translatePathToHeb(router.pathname)}</Typography>
 
           </Flex>
+
           <Flex width={"inherit"} direction={"row"} justifyContent={"end"} alignItems={"center"} >
             <Button variant='text' size={!xs ? 'small' : "large"} sx={{ justifySelf: "start", mx: 2 }} onClick={() => { router.push('/') }} > <FcHome size={"2em"} /></Button>
           </Flex>
-        </>
+        
       </nav>
-      <Drawer
+
+       <Drawer
         open={open}
         onClose={toggleDrawer(false)}
         anchor='right'

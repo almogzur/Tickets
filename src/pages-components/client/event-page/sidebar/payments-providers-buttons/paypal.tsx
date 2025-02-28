@@ -1,11 +1,10 @@
 
 import { TheaterType } from "@/types/components-typs/admin/theater/admin-theater-types";
-import { PayPalRequestCapturedOrderType, PayPalRequestCreateOrderType, PayPalResponceCapturedOrderType, SavePayPalInvoceTpee, UpdateTheaterApiResquestType } from "@/types/pages-types/client/client-event-type";
+import { PayPalCartItemType, PayPalOrderType, PayPalRequestCapturedOrderType, PayPalRequestCreateOrderType, PayPalResponceCapturedOrderType, SavePayPalInvoceTpee, UpdateTheaterApiResquestType } from "@/types/pages-types/client/client-event-type";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import axios from "axios";
 import { useRouter } from "next/router";
 
-import { PayPalCartItemType, PayPalOrderType } from "@/types/pages-types/client/payment-object";
 
 
 
@@ -53,7 +52,7 @@ const PaypalBtn = ({ eventId, publicId, cart, total, TheaterState }: PaypalBtnTy
                     }
 
                     try {
-                        const response = await axios.post("/api/client/pay/create-order", PatPalData);
+                        const response = await axios.post("/api/client/providers/paypal/create-order", PatPalData);
 
                         const orderData = await JSON.parse(response.data)
 
@@ -108,7 +107,7 @@ const PaypalBtn = ({ eventId, publicId, cart, total, TheaterState }: PaypalBtnTy
                             }
 
                             // paypal builing process 
-                            const payPalResponse = await axios.post(`/api/client/pay/${orderID}`, OrderData);
+                            const payPalResponse = await axios.post(`/api/client/providers/paypal/${orderID}`, OrderData);
 
                             const orderData = await payPalResponse.data // err  or data  
 
@@ -135,7 +134,9 @@ const PaypalBtn = ({ eventId, publicId, cart, total, TheaterState }: PaypalBtnTy
                             }
                             else if (errorDetail) {
                                 // (2) Other non-recoverable errors -> Show a failure message
-                                throw new Error(`${errorDetail.description} (${orderData.debug_id})`);
+
+                                router.push(`/thank-you/err/${errorDetail.description} ( ${orderData.debug_id} )`)
+
                             }
 
                             else {
@@ -216,7 +217,6 @@ const PaypalBtn = ({ eventId, publicId, cart, total, TheaterState }: PaypalBtnTy
                         await saveInvoices(PayPalInvoice)
 
               
-                        
 
                        router.push(`/thank-you/${PayPalInvoice.id}`)
 

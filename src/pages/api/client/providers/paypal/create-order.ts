@@ -22,6 +22,14 @@ import {CreateMongooseClient} from "@/util/dbs/mongosee-fn";
 const apiLimiter = rateLimit(rateLimitConfig);
 
 
+/**
+ * Creates an order.
+ *  Merchants and partners can add Level 2 and 3 data to payments to
+ *  reduce risk and payment processing costs. 
+ * For more information about processing payments,
+ *  see checkout or multiparty checkout.
+ */
+
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     
@@ -32,6 +40,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             if (req.method !== 'POST') {
                 return res.status(405).json({ message: `Method ${req.method} not allowed` });
             }
+
+
+            // add validate soucre 
 
             const body  = req.body
             const IsValidData    = PayPalRequestCreateOrderVS.safeParse( body )

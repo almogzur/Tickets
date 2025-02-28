@@ -28,7 +28,7 @@ import { IoMdAddCircle } from 'react-icons/io';
 import {  TicketType, TicketZVS } from '@/types/pages-types/admin/admin-event-types';
 import InputWrap from '@/HOCs/TeextFiledWrpa/input-wrap';
 import SelectWrap from '@/HOCs/select-wrap';
-import { NormalSwitchWrap } from '@/HOCs/switch-wrap';
+import { NormalSwitchWrap } from '@/HOCs/ios-switch-wrap';
 import DatePickerWrap from '@/HOCs/time-date/date-picker-wrap';
 import TimePickerWrap from '@/HOCs/time-date/time-picker-wrap';
 

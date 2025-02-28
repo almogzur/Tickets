@@ -1,4 +1,3 @@
-// File: pages/api/public.ts
 
 import { PayPalCapturedRequestOrderVS } from "@/types/pages-types/client/client-event-type";
 import {CreateMongooseClient} from "@/util/dbs/mongosee-fn";
@@ -18,6 +17,18 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 const apiLimiter = rateLimit(rateLimitConfig);
 
+
+/**
+ * 
+Orders Capture#
+Captures payment for an order. To successfully capture payment for an order,
+ the buyer must first approve the order or a valid payment_source must 
+ be provided in the request.
+ A buyer can approve the order upon being redirected to  
+ the rel:approve URL that was returned in
+ the HATEOAS links in the create order response.
+ */
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<any> {
   return apiLimiter(req, res,
     async () => {
@@ -25,10 +36,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       if (req.method !== 'POST') {
             res.status(405).json({ message: "Not Alowed " + API_NAME });
-      }
+      }     
 
-      const connection  = await CreateMongooseClient(null)
-     
+
+
+      // add validate soucre 
+
        const body   = req.body 
 
        const isValiedData = PayPalCapturedRequestOrderVS.safeParse(body)

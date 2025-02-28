@@ -4,7 +4,7 @@ import { Box, Container , Divider, Stack as Flex, SelectChangeEvent, Tab, Tabs, 
 import { useContext, useEffect, useState } from "react"
 import TabsEventSettingsContext from "@/context/admin/new-event/tabs/tabs-event-settings-context"
 import SelectWrap from "@/HOCs/select-wrap"
-import SwitchWithTextAndChildren from "@/HOCs/switch-with-text-wrap"
+import SwitchWithTextAndChildren from "@/HOCs/bg-colored-switch-with-text-wrap"
 
 export default  function SettingTabEventTab() {
           const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)

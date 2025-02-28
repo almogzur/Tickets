@@ -3,24 +3,23 @@ import axios, { AxiosRequestConfig } from "axios";
 import { Session } from "next-auth";
 import useSWR, { Fetcher, Key as SWRKey, KeyedMutator, SWRConfiguration } from "swr";
 
-type DataType = UserPayPalInfo
 
 
-type ReturendFetcherType<DataType> = {
-    PayPalInfo: DataType; // Allow `undefined` for when data is not yet loaded
+type ReturendFetcherType<T> = {
+     UserDBPayPalInfo: T; // Allow `undefined` for when data is not yet loaded
     isPayPalInfoValidating: boolean;
     isPayPalInfoError: unknown;
-    updatePayPalInfo: KeyedMutator<DataType>;
+    updatePayPalInfo: KeyedMutator<T>;
 };
 
 
-export const useAdminBilingInfo = (session: Session | null): ReturendFetcherType<DataType> => {
+export const useAdminBilingInfo = (session: Session | null): ReturendFetcherType<UserPayPalInfo> => {
 
   const fetcherKey: SWRKey = () => session?.user?.name ? '/api/admin/billing-info/paypal/get-billing' : null //no fetch if no session
 
-  const fetcher: Fetcher<DataType> = async (key: string): Promise<DataType> => {
+  const fetcher: Fetcher<UserPayPalInfo> = async (key: string): Promise<UserPayPalInfo> => {
 
-    const params: any = {
+    const params = {
       name: session?.user?.name,
     }
 
@@ -31,7 +30,7 @@ export const useAdminBilingInfo = (session: Session | null): ReturendFetcherType
       //withXSRFToken:true
     }
 
-    const response = await axios.get<DataType>(key, FatchConfig)
+    const response = await axios.get<UserPayPalInfo>(key, FatchConfig)
     // return the response to SWR Hook 
 
     return response.data
@@ -50,7 +49,7 @@ export const useAdminBilingInfo = (session: Session | null): ReturendFetcherType
   const { data, error, isValidating, mutate } = useSWR(fetcherKey, fetcher, SWRconfig)
 
   return {
-    PayPalInfo: data,
+    UserDBPayPalInfo: data,
     isPayPalInfoValidating: isValidating,
     isPayPalInfoError: error,
     updatePayPalInfo: mutate,
