@@ -5,14 +5,14 @@ console.log(isProduction, " NEXT-CONFIG");
 
 
 const cspHeader = `
-    default-src 'self' *.cloudinary.com *.sandbox.paypal.com *.paypal.com *.paypalobjects.com;
-    script-src 'self' ${isProduction ? "" : "'unsafe-eval' 'unsafe-inline'"}  *.cloudinary.com *.paypal.com *.paypalobjects.com  *.sandbox.paypal.com ;
+    default-src 'self' *.cloudinary.com *.sandbox.paypal.com *.paypal.com *.paypalobjects.com *.sandbox.payme.io *.payme.io ;
+    script-src 'self' ${isProduction ? "" : "'unsafe-eval' 'unsafe-inline'"}  *.cloudinary.com *.paypal.com *.paypalobjects.com  *.sandbox.paypal.com *.sandbox.payme.io *.payme.io;
     style-src 'self' 'unsafe-inline';
-    img-src 'self' *.cloudinary.com *.sandbox.paypal.com *.paypal.com *.paypalobjects.com;
+    img-src 'self' *.cloudinary.com *.sandbox.paypal.com *.paypal.com *.paypalobjects.com *.sandbox.payme.io *.payme.io;
     font-src 'self';
     object-src 'none';
     base-uri 'self';
-    form-action 'self' *.cloudinary.com *.sandbox.paypal.com *.paypal.com *.paypalobjects.com;
+    form-action 'self' *.cloudinary.com *.sandbox.paypal.com *.paypal.com *.paypalobjects.com *.sandbox.payme.io *.payme.io ;
     frame-ancestors 'none';
     upgrade-insecure-requests;
 `.replace(/\n/g, ''); // Remove newlines for compatibility
@@ -61,7 +61,11 @@ const DevObject = {
           {
             protocol:"https",
             hostname:'**.sandbox.paypal.com'
+          },
+          {
+            hostname:'**.sandbox.payme.io'
           }
+
         ],
       },
 

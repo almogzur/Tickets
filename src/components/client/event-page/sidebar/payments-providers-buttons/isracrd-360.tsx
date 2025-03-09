@@ -52,18 +52,19 @@ const IsracardBtn = (props: any) => {
         </DialogTitle>
 
         <DialogContent sx={{ height: "80vh", display: "flex", justifyContent: "center", alignItems: "center", p: 0 }}>
-          {loading ? (
+          {
+          loading ? 
             <CircularProgress  color='primary' />
-          ) : paymentLink ? (
+          : paymentLink ? 
             <iframe
               src={paymentLink}
               width="100%"
               height="100%"
               style={{ border: "none" }}
             />
-          ) : (
+           : 
             <p>שגיאה בדף תשלום </p>
-          )}
+          }
         </DialogContent>
       </Dialog>
     </>
