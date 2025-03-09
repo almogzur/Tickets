@@ -26,15 +26,11 @@ export default async function handler  ( req: NextApiRequest , res: NextApiRespo
       return  res.status(405).json({ message: "not allowed" + API_NAME })
 }
 
- const session = await getServerSession(req, res, authOptions);
-
 const connection  = await CreateMongooseClient(null)
 
 if(!connection){  
      return res.status(500).json({massage:'No DB Connection'})
   }
-
-
  const body = req.body 
 
  console.log(req)
