@@ -72,7 +72,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         sale_callback_url: "https://styled-tickets.netlify.app/api/client/events/providers/isracard/sale",
 
-        sale_return_url: "https://tyled-tickets.netlify.app/thank-you/",
+        sale_return_url: "https://styled-tickets.netlify.app/thank-you/",
 
 
         language: "he",
