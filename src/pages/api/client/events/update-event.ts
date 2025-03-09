@@ -5,8 +5,9 @@ import rateLimit from "express-rate-limit";
 import { rateLimitConfig } from "@/util/fn/api-rate-limit.config";
 import { modifieSeatValueFunctionType, UpdateTheaterApiVS } from '@/types/pages-types/client/client-event-type';
 import { ClientEventType, NewEventType } from "@/types/pages-types/admin/admin-event-types";
-import { CreateMongooseClient } from "@/util/dbs/mongosee-fn";
-import { EventModel } from "@/util/dbs/schma/models";
+import { CreateMongooseClient } from "@/util/db/mongosee-connect";
+import { EventModel } from "@/util/db/mongosee-models";
+
 
 const apiLimiter = rateLimit(rateLimitConfig);
 

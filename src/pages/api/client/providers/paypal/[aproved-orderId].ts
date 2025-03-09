@@ -1,8 +1,8 @@
 
 import { PayPalCapturedRequestOrderVS } from "@/types/pages-types/client/client-event-type";
-import {CreateMongooseClient} from "@/util/dbs/mongosee-fn";
+import {CreateMongooseClient} from "@/util/db/mongosee-connect";
 import { rateLimitConfig } from "@/util/fn/api-rate-limit.config";
-import { GetBillingInfoFromEventId } from "@/util/fn/pay-fn";
+import {  GetPayPalBillingInfoFromEventId } from "@/util/fn/pay-fn";
 import {
   ApiError,
   CheckoutPaymentIntent,
@@ -37,6 +37,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       if (req.method !== 'POST') {
             res.status(405).json({ message: "Not Alowed " + API_NAME });
       }     
+      const connection  = await CreateMongooseClient(null)
+      
+
+      if(!connection){  
+        return res.status(500).json({massage:'No DB Connection'})
+      }
+   
+   
 
 
 
@@ -50,10 +58,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(400).json({massage:"bad data fromat "+API_NAME})
        }
 
-       const { PaypalData , eventId , publicId } =isValiedData.data // const isValidData = Schema.safeParse()
+       const { PaypalData , eventId  } =isValiedData.data // const isValidData = Schema.safeParse()
        const { orderID  } = PaypalData
    
-       const userInfo = await GetBillingInfoFromEventId(eventId, `${process.env.CIPHER_SECRET}`, connection)
+       const userInfo = await GetPayPalBillingInfoFromEventId(eventId, `${process.env.CIPHER_SECRET}`, connection)
 
 
         if (!userInfo) {    return res.status(404).json({ massage: "no auth" }) }
@@ -61,7 +69,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         const client = new PayPalClient({
           clientCredentialsAuthCredentials: {
-              oAuthClientId: publicId,
+              oAuthClientId: userInfo.clientId,
               oAuthClientSecret: `${userInfo.clientSecret}`,
           },
           timeout: 0,

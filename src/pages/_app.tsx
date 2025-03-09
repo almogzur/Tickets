@@ -47,8 +47,8 @@ export const samiDateOptions :Intl.DateTimeFormatOptions = {
 
 import { useRouter } from 'next/router';
 
-import ClientWrapper from "@/Wrappers/client";
-import AdminWrrpaer from '@/Wrappers/admin';
+import ClientWrapper from "@/layouts/client";
+import AdminWrrpaer from '@/layouts/admin';
 
 
 

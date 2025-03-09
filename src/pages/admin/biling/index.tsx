@@ -1,15 +1,17 @@
 import { getCsrfToken, useSession } from 'next-auth/react'
-import router, { useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 import { Typography, Stack as Flex, Button, Container } from '@mui/material'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { grey } from '@mui/material/colors'
-import AdminLayout from '@/Wrappers/admin'
-import { UserIsracardInfo, UserPayPalInfoZVS, UserPayPalInfo } from '@/types/pages-types/admin/user-biling-info-types'
+import {  UserPayPalInfoType, UserIsracardInfoType, PayPalInfoZVS, IsracardZVS } from '@/types/pages-types/admin/user-biling-info-types'
 import axios from 'axios'
-import { useAdminBilingInfo } from '@/hooks/admin/use-admin-biiling-info'
-import SelectWrap from '@/HOCs/select-wrap'
-import InputWrap from '@/HOCs/TeextFiledWrpa/input-wrap'
-import IosWithTextSwitchWrap from '@/HOCs/ios-switch-wrap'
+import { useAdminPaypalBilingInfo } from '@/hooks/admin/use-admin-paypal-biiling-info'
+import InputWrap from '@/mui-components/TeextFiledWrpa/input-wrap'
+import IosWithTextSwitchWrap from '@/mui-components/ios-switch-wrap'
+import { ZodIssue } from 'zod'
+import { useAdminIsracardBilingInfo } from '@/hooks/admin/use-admin-isracard-billing-info'
+import IsracardForm from '../../../components/admin/billing/istacard-from'
+import PayPalForm from '../../../components/admin/billing/paypal-from'
 
 // page is secure under JWT token 
 // https uses  (Advanced Encryption Standard)  AES  chiper 
@@ -21,40 +23,58 @@ export type BillingAccountStateType = {
   isracard: boolean
 }
 
+export type IsracardPropsType =  {
+  isracardBillingInfo: UserIsracardInfoType,
+  setIsracardBillingInfo: Dispatch<SetStateAction<UserIsracardInfoType>>
+}
+export type PayPalFormPropsType = {
+  PayPalBillingInfo: UserPayPalInfoType
+  setPayPalBillingInfo: Dispatch<SetStateAction<UserPayPalInfoType>>
+}
 
-const Wrapper = Flex,
-  Switches = Flex,
-  Buttons = Flex
+
+const PageWrapper = Flex,
+  Switches = Flex
 
 const AdminBillingPage = () => {
 
   const { data: session, status, update } = useSession()
   const [pageMounte, setPageMaount] = useState<boolean>(false)
 
+  const { UserDBPayPalInfo } = useAdminPaypalBilingInfo(session)
+  const { UserDBIsracardlInfo } = useAdminIsracardBilingInfo(session)
 
   const [biilingType, setBiilingType] = useState<BillingAccountStateType>({
     paypal: false,
     isracard: false
   })
 
-  const { UserDBPayPalInfo } = useAdminBilingInfo(session)
-
-  const [PayPalBillingInfo, setPayPalBillingInfo] = useState<UserPayPalInfo>({
-    payEmail: "",
-    AccountId: "",
+  const [PayPalBillingInfo, setPayPalBillingInfo] = useState<UserPayPalInfoType>({
+    
+    email: "",
+    accountId: "",
     type: "business",
     phone: "",
     clientId: "",
-    clientSecret: ""
-  })
+    clientSecret: "",
 
-  const [isracardBillingInfo, setIsracardBillingInfo] = useState<UserIsracardInfo>({
-    bank: "",
-    bankNumber: 0,
-    bankBranch: 0,
-    ankAccountNumber: "",
-    accountName: "",
-    benifitName: "",
+  })
+  const [isracardBillingInfo, setIsracardBillingInfo] = useState<UserIsracardInfoType>({
+    firstName: '',
+    lastName: '',
+    socialId: '',
+    phone: '',
+    email: '',
+
+    businessName: '',
+    businessNumber: '',
+    
+    bankNumber: '',
+    bankBranch: '',
+
+    accountNumber: '',
+    accountName: '',
+    apiKey: '',
   })
 
 
@@ -62,17 +82,23 @@ const AdminBillingPage = () => {
 
     setPageMaount(true)
 
-    if (UserDBPayPalInfo) {
-      const { AccountId, payEmail, phone } = UserDBPayPalInfo
+   // console.log(UserDBIsracardlInfo, UserDBPayPalInfo)
 
-      if (AccountId && payEmail && phone) {
-        setBiilingType(p => ({ ...p, paypal: true }))
-        setPayPalBillingInfo(UserDBPayPalInfo)
-      }
+    if (UserDBPayPalInfo) {
+
+      setBiilingType(p => ({ ...p, paypal: true }))
+      setPayPalBillingInfo(UserDBPayPalInfo)
+
+    }
+    
+    if(UserDBIsracardlInfo){
+      setBiilingType(p => ({ ...p, isracard: true }))
+
+      setIsracardBillingInfo(UserDBIsracardlInfo)
     }
 
 
-  }, [UserDBPayPalInfo])
+  }, [UserDBIsracardlInfo, UserDBPayPalInfo])
 
 
   if (!pageMounte) {
@@ -81,8 +107,7 @@ const AdminBillingPage = () => {
 
 
   return (
-    <Wrapper
-
+     <PageWrapper
       justifyContent={"center"}
       flexWrap={'wrap'}
       gap={2}
@@ -92,14 +117,15 @@ const AdminBillingPage = () => {
       p={4}
       borderRadius={4}
     >
-      <Typography variant='h5' fontWeight={"bold"} textAlign={"center"} >   חשבון סליקה אשראי </Typography>
+
+      <Typography variant='h5' fontWeight={"bold"} textAlign={"center"} >חשבון סליקה אשראי </Typography>
 
       <Switches direction={"row"}>
 
         <IosWithTextSwitchWrap
           switchValue={biilingType.isracard}
           switchOnChangeHendler={(e, checked) => { setBiilingType(p => ({ ...p, isracard: checked })) }}
-          title={'ישראכרט'}
+          title={'בנקאי'}
           labelPlacement={'top'}
           textColor='black'
         />
@@ -111,162 +137,16 @@ const AdminBillingPage = () => {
           labelPlacement={'top'}
           textColor='black'
         />
+
       </Switches>
 
-      {biilingType.paypal &&
-        <PayPalForm PayPalBillingInfo={PayPalBillingInfo} setPayPalBillingInfo={setPayPalBillingInfo} />
-      }
+     { biilingType.isracard && <IsracardForm   isracardBillingInfo={isracardBillingInfo} setIsracardBillingInfo={setIsracardBillingInfo}/> }
 
-      {biilingType.isracard &&
-        <BankForm isracardBillingInfo={isracardBillingInfo} setIsracardBillingInfo={setIsracardBillingInfo} />
-      }
+     { biilingType.paypal && <PayPalForm  PayPalBillingInfo={PayPalBillingInfo}setPayPalBillingInfo={setPayPalBillingInfo}/>}
 
-    </Wrapper>
+    </PageWrapper>
   )
 }
-
-type PayPalFormPropsType = {
-  PayPalBillingInfo: UserPayPalInfo
-  setPayPalBillingInfo: Dispatch<SetStateAction<UserPayPalInfo>>
-}
-type IsracardPropsType = {
-  isracardBillingInfo: UserIsracardInfo,
-  setIsracardBillingInfo: Dispatch<SetStateAction<UserIsracardInfo>>
-
-}
-
-
-const PayPalForm = ({ PayPalBillingInfo, setPayPalBillingInfo }: PayPalFormPropsType) => {
-
-  const router = useRouter()
-
-  const savePayPalInfo = async (e: React.SyntheticEvent<HTMLButtonElement>,) => {
-
-    const isValiedData = UserPayPalInfoZVS.safeParse(PayPalBillingInfo)
-
-    if (!isValiedData.success) {
-      console.log("no valid data  Client ", isValiedData.error.issues)
-      return
-    }
-
-
-    // hasing sring befor sending the req , so if db is gets hacked the haker letf with  *hit 
-    const URL = "/api/admin/billing-info/paypal/add-billing-info"
-    const data: UserPayPalInfo = isValiedData.data
-
-    try {
-      const responce = await axios.post(URL, data)
-      if (responce.status === 200) {
-        router.push("/admin")
-      }
-    } catch (err) {
-      alert(err)
-    }
-  }
-
-
-
-
-
-  return (
-    <Flex width={"100%"} maxWidth={600}    >
-      <Typography>חשבון PayPal </Typography>
-      <InputWrap
-        variant='outlined'
-        label={'מייל'}
-        value={PayPalBillingInfo.payEmail}
-        onChangeHndler={(e) => {
-          const value = e.target.value
-          setPayPalBillingInfo(p => ({ ...p, payEmail: value }))
-        }}
-        helpText={''}
-        labelPositioin={'top'}
-      />
-      <InputWrap
-        variant='outlined'
-        label={'  מזהה חשבון'}
-        value={PayPalBillingInfo.AccountId}
-        onChangeHndler={(e) => {
-          const value = e.target.value
-          setPayPalBillingInfo(p => ({ ...p, AccountId: value }))
-        }}
-        helpText={''}
-        labelPositioin={'top'}
-      />
-      <InputWrap variant='outlined'
-        label={'טלפון'}
-        value={PayPalBillingInfo.phone}
-        onChangeHndler={(e) => {
-          const value = e.target.value
-          setPayPalBillingInfo(p => ({ ...p, phone: value }))
-        }}
-        helpText={''}
-        labelPositioin={'top'}
-      />
-
-      <InputWrap
-        variant='outlined'
-        label={'מזהה אפליקצה '}
-        value={PayPalBillingInfo.clientId}
-        onChangeHndler={(e) => {
-          const value = e.target.value
-          setPayPalBillingInfo(p => ({ ...p, clientId: value }))
-        }}
-        helpText={''}
-        labelPositioin={'top'}
-      />
-
-      <InputWrap
-        type='password'
-        variant='outlined'
-        label={' סוד '}
-        value={PayPalBillingInfo.clientSecret}
-        onChangeHndler={(e) => {
-          const value = e.target.value
-          setPayPalBillingInfo(p => ({ ...p, clientSecret: value }))
-        }}
-        helpText={''}
-        labelPositioin={'top'}
-      />
-
-      <Buttons direction={"row"} gap={1} >
-        <Button> שמור</Button>
-        <Button> עדכן</Button>
-        <Button> הסר</Button>
-      </Buttons>
-    </Flex>
-  )
-}
-
-
-const BankForm = ({ isracardBillingInfo, setIsracardBillingInfo }: IsracardPropsType) => {
-
-  const router = useRouter()
-
-  const saveIsracardInfo = (e: React.SyntheticEvent<HTMLButtonElement>,) => { }
-
-
-  return (
-    <Flex width={"100%"} maxWidth={600}   >
-      <Typography>חשבון   בנק </Typography>
-      <InputWrap variant='outlined' label={'בנק'} value={undefined} onChangeHndler={() => { }} helpText={''} labelPositioin={'top'} disabled />
-      <InputWrap variant='outlined' label={'מספר בנק'} value={undefined} onChangeHndler={() => { }} helpText={''} labelPositioin={'top'} disabled />
-      <InputWrap variant='outlined' label={'מספר סניף'} value={undefined} onChangeHndler={() => { }} helpText={''} labelPositioin={'top'} disabled />
-      <InputWrap variant='outlined' label={'שם החשבון'} value={undefined} onChangeHndler={() => { }} helpText={''} labelPositioin={'top'} disabled />
-      <InputWrap variant='outlined' label={'מספר חשבון'} value={undefined} onChangeHndler={() => { }} helpText={''} labelPositioin={'top'} disabled />
-
-      <InputWrap variant='outlined' label={'שם המוטב'} value={undefined} onChangeHndler={() => { }} helpText={''} labelPositioin={'top'} disabled />
-
-      <Buttons direction={"row"} gap={1} >
-        <Button> שמור</Button>
-        <Button> עדכן</Button>
-        <Button> הסר</Button>
-      </Buttons>
-
-    </Flex>
-  )
-}
-
 
 
 

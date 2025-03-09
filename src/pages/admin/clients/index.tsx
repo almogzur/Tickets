@@ -2,7 +2,7 @@ import { useSession } from 'next-auth/react'
 import {useEffect,useState} from 'react'
 import { useRouter } from 'next/router'
 
-import AdminWrapper from '@/Wrappers/admin'
+import AdminWrapper from '@/layouts/admin'
 
 const ClientListPage=()=>{
 

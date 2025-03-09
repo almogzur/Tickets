@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
-import { DraftModel } from "@/util/dbs/schma/models";
-import  { userDataPrefix , CreateMongooseClient } from "@/util/dbs/mongosee-fn";
+import  { userDataPrefix , CreateMongooseClient } from "@/util/db/mongosee-connect";
+import { DraftModel } from "@/util/db/mongosee-models";
 
  // findOne(filter: Filter<TSchema>, options: FindOptions): Promise<WithId<TSchema> | null>;
 

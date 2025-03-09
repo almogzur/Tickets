@@ -6,11 +6,11 @@ import WidthContext from '@/context/WidthContext';
 import type { GetServerSideProps, GetServerSidePropsResult } from 'next'
 import axios from 'axios';
 import { ClientEventType } from '@/types/pages-types/admin/admin-event-types';
-import ClientWrapper from '@/Wrappers/client';
-import EventCard from '@/pages-components/client/main-page/event-card';
+import ClientWrapper from '@/layouts/client';
 import { useEvents } from '@/context/client/client-events-context';
-import LoadingScreen from '@/HOCs/loading';
-import { useClientEvents } from '@/hooks/client/use-client-events';
+import LoadingScreen from '@/mui-components/loading';
+import { useClientEvents } from '@/hooks/client/use-events';
+import EventCard from '@/components/client/main-page/event-card';
 
 
 

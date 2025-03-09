@@ -35,13 +35,8 @@ export type  modifieSeatValueFunctionType = {
   main :SeatsRow , side : SeatsRow 
 }
 
-
 // GLOBAL
 export type RequestStatusType ="Temp"|"Production"|undefined
-
-
-
-
 
 
 // PayPal 
@@ -145,12 +140,12 @@ export const PayPalOrderVS = z.object({
     purchase_units: z.array(PurchaseUnitVS),
     links: z.array(LinkVS).optional(),
 
-});
+})
 
 export const  PayPalRequestCreateOrderVS = z.object({
     cart: z.array(PayPalCartItemVS),
     total:z.string().nonempty(),
-    publicId:z.string().nonempty(),
+
     eventId:z.string().nonempty()
 })
   
@@ -167,7 +162,6 @@ export const  PayPalOnApproveResponceDataVS = z.object({
 export const PayPalCapturedRequestOrderVS = z.object({
   PaypalData:PayPalOnApproveResponceDataVS,
   eventId:z.string().nonempty(),
-  publicId: z.string().nonempty(),
 })
 
 export const SavePayPalInvoceVS = PayPalOrderVS.extend({
@@ -203,8 +197,31 @@ export type PayPalClollectInfoObjectType  = {
 
 
 
-// ISRACARD 360 
+
+// ISRACARD
 // https://payme.stoplight.io/docs/payments/d7da26bb42da8-generate-payment
+
+
+
+export const IsracartCartItemZVS = z.object({
+  id:z.string(),
+  name:z.string(),
+  price:z.string(),
+  currency:z.string(),
+  quantity:z.number(),
+})
+export type  IsracartCartItemType = z.infer<typeof IsracartCartItemZVS>
+
+
+
+export const IsracardCreateOrderZVS = z.object({
+  cart: z.array(IsracartCartItemZVS),
+  total:z.string().nonempty(),
+  eventId:z.string().nonempty()
+})
+
+export type IsracardCreateOrderType = z.infer<typeof IsracardCreateOrderZVS>
+
 
 export const IsracardGanerateSaleRequestZVS = z.object({
 
@@ -213,19 +230,24 @@ export const IsracardGanerateSaleRequestZVS = z.object({
   sale_price: z.number(), // Example: 100
   currency: z.string().nonempty(), // Example: ILS
   product_name: z.string().nonempty(), // Example: Phone
+  buyer_perform_validation:z.boolean().or(z.string()),
+
+ 
+  //sale url
+  sale_callback_url: z.string().url().optional(), // Example: https://www.example.com/payment/callback
+  sale_return_url: z.string().url().optional(), // Example: https://www.example.com/payment/success
+  
 
   // Optional fields
   transaction_id: z.string().optional(), // Example: 12345
   installments: z.string().optional(), // Example: 1
   market_fee: z.number().optional(), // Example: 0.5
   sale_send_notification: z.boolean().optional(),
-  sale_callback_url: z.string().url().optional(), // Example: https://www.example.com/payment/callback
   sale_email: z.string().email().optional(), // Example: test@testmail.com
-  sale_return_url: z.string().url().optional(), // Example: https://www.example.com/payment/success
   sale_mobile: z.string().optional(), // Example: +972525888888
   sale_name: z.string().optional(), // Example: John Doe
-  capture_buyer: z.string().optional(), // Example: 0
-  buyer_perform_validation: z.string().optional(),
+  capture_buyer: z.string().optional().or(z.boolean() ), // Example: 0
+
   sale_type: z.string().optional(), // Example: sale
   sale_payment_method: z.string().optional(), // Example: credit-card
   layout: z.string().optional(), // Example: dynamic
@@ -268,6 +290,10 @@ export const IsracardGanerateSaleRequestZVS = z.object({
   buyer_email: z.string().email().optional(), // Example: buyer@email.com
   buyer_phone: z.string().optional(), // Example: 0501234567
 });
+
+
+
+
 
 export const IsracardGanerateSaleResponseZVS = z.object({
   status_code: z.number(), // Represents the status of the request (0 for success, 1 for error)
@@ -320,10 +346,14 @@ const IsaracdCaptureSaleCallbackNotificationAttributesZVS = z.object({
 
 
 export type IsracardGanerateSaleRequestType = z.infer<typeof IsracardGanerateSaleRequestZVS>
-export type IsracardGanerateSaleResponseType = z.infer<typeof IsracardGanerateSaleResponseZVS  >
 
+export type IsracardGanerateSaleResponseType = z.infer<typeof IsracardGanerateSaleResponseZVS  >
 
 export type IsracardSaleCallbackNotificationAttributes = z.infer<typeof IsaracdCaptureSaleCallbackNotificationAttributesZVS >
 
 
+
+
+
+// global 
 

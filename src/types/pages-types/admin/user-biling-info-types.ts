@@ -1,29 +1,35 @@
+
 import { z } from 'zod'
 
+const phoneRegex = new RegExp(/^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/);
 
-export const UserIsracardZVS = z.object({
-    bank: z.string(),
-    bankNumber: z.number(),
-    bankBranch: z.number(),
-    ankAccountNumber: z.string(),
-    accountName: z.string(),
-    benifitName: z.string(),
+
+export const IsracardZVS = z.object({
+    firstName: z.string().nonempty(),
+    lastName: z.string().nonempty(),
+    socialId: z.string().nonempty(),
+    phone: z.string().nonempty(),
+    email: z.string().nonempty(),
+
+    businessName: z.string().nonempty(),
+    businessNumber: z.string().nonempty(),
+    accountName: z.string().nonempty(),
+
+    bankNumber: z.string().optional(),
+    bankBranch: z.string().optional(),
+    accountNumber: z.string().optional(),
+
+    apiKey: z.string().nonempty(),
 })
 
-const phoneRegex = new RegExp( /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/);
-
-export const UserPayPalInfoZVS = z.object({
-    payEmail: z.string().email(),
-    AccountId: z.string().min(6),
+export const PayPalInfoZVS = z.object({
+    email: z.string().email(),
+    accountId: z.string().min(6),
     type: z.literal('business'),
     phone: z.string().regex(phoneRegex, 'מספר לא תקין '),
-    clientId:z.string().min(1),
-    clientSecret:z.string().min(1)
+    clientId: z.string().nonempty(),
+    clientSecret: z.string().nonempty(),
 })
 
-export type UserPayPalInfo = z.infer<typeof UserPayPalInfoZVS>
-export type UserIsracardInfo = z.infer<typeof UserIsracardZVS>
-
-
-
-
+export type UserPayPalInfoType = z.infer<typeof PayPalInfoZVS>
+export type UserIsracardInfoType = z.infer<typeof IsracardZVS>

@@ -3,7 +3,6 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useState, useEffect, useContext} from 'react'
 import { Stack as Flex, Button, useTheme, Box } from '@mui/material';
-import Map from '@/pages-components/client/event-page/sidebar/tom-map'
 
 import WidthContext from '@/context/WidthContext';
 import React from 'react';
@@ -11,12 +10,12 @@ import ClineTransformContext from '@/context/client/event-page/client-tranform-c
 import { Positions, TheaterType } from '@/types/components-typs/admin/theater/admin-theater-types';
 import { TiArrowBack } from "react-icons/ti";
 
-import DrawerContent from '@/pages-components/client/event-page/sidebar/sidebar-content';
-import SideBar from '@/pages-components/client/event-page/sidebar/sidebar-wrapper';
-import TheaterMap from '@/pages-components/client/event-page/theater/client-theater-map';
 import { ClientSelectedSeatType } from '@/types/pages-types/client/client-event-type';
 
-import { useClientEvent } from '@/hooks/client/use-client-event';
+import { useClientEvent } from '@/hooks/client/use-event';
+import DrawerContent from '@/components/client/event-page/sidebar/sidebar-content';
+import TheaterMap from '@/components/client/event-page/theater/client-theater-map';
+import SideBarWraper from '@/components/client/event-page/sidebar/sidebar-wrapper';
 
 
 
@@ -34,10 +33,9 @@ const DetailsPage = () => {
   
   const { event_id } = router.query
 
-  const { Event, isEventError } = useClientEvent(event_id as string);
+  const { Event, isEventError } = useClientEvent(`${event_id}`);
 
 
- 
   const [clientEventTheaterState, setClientEventTheaterState] = useState<TheaterType|undefined>()
   const [eventSelectSeats, setEventSelectedSeats] = useState<ClientSelectedSeatType[]>([])
  const [  pageMaunted, setPageMaunted] = useState<boolean>(false)
@@ -50,13 +48,6 @@ const DetailsPage = () => {
 
   // Wighet
   const [wighetIsExp, setWighetIsExp] = useState<boolean>(false)
-
-  if(!Event){
-
-  }
-
-
-
 
 
   useEffect(()=>{
@@ -73,7 +64,7 @@ const DetailsPage = () => {
   const Wrapper = Flex,
             BackBTN = Button
 
-  if ( !Event || ! pageMaunted) return <div>loading...</div>
+  if ( !Event || ! pageMaunted){ return <div>loading...</div>;}
 
   return (
 
@@ -107,7 +98,7 @@ const DetailsPage = () => {
         </BackBTN>
 
 
-        <SideBar
+        <SideBarWraper
           ClientSelectedEvent={Event}
           wighetIsExp={wighetIsExp}
           eventSelectSeats={eventSelectSeats}
@@ -127,7 +118,7 @@ const DetailsPage = () => {
             hendlerSeatOldValues={hendlerSeatOldValues}
             setHendlerSeatOldValues={setHendlerSeatOldValues}
           />
-        </SideBar>
+        </SideBarWraper>
 
          {Event?.info?.Theater &&
           <Box

@@ -5,7 +5,7 @@ import axios from 'axios';
 import { grey } from '@mui/material/colors';
 import { NewUserType } from '@/types/pages-types/admin/supervisor-types';
 import { hashString } from '@/util/fn/hase';
-import InputWrap from '@/HOCs/TeextFiledWrpa/input-wrap';
+import InputWrap from '@/mui-components/TeextFiledWrpa/input-wrap';
 
 
 const UserForm = () => {

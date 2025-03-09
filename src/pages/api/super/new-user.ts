@@ -1,8 +1,8 @@
 // File: pages/api/public.ts
 
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
-import  {CreateMongooseClient,  UserPrefix } from "@/util/dbs/mongosee-fn";
-import { UsersModel } from "@/util/dbs/schma/models";
+import  {CreateMongooseClient,  UserPrefix } from "@/util/db/mongosee-connect";
+import { UsersModel } from "@/util/db/mongosee-models";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 

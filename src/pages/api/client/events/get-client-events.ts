@@ -1,6 +1,6 @@
 import { ClientEventType } from "@/types/pages-types/admin/admin-event-types";
-import {CreateMongooseClient,} from "@/util/dbs/mongosee-fn";
-import {  EventModel,  filterAdminDataQuryOptions } from "@/util/dbs/schma/models";
+import {CreateMongooseClient,} from "@/util/db/mongosee-connect";
+import { EventModel, filterAdminDataQuryOptions } from "@/util/db/mongosee-models";
 import { rateLimitConfig } from "@/util/fn/api-rate-limit.config";
 import rateLimit from "express-rate-limit";
 

@@ -1,11 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
-import {  DraftModel } from "@/util/dbs/schma/models";
 import { delEmptyFolders, moveToEventNameFolder } from "../../../../util/fn/cloudinary_helper_functions";
 import { UpdateDraftZVS } from "@/types/pages-types/admin/admin-event-types";
 import { ObjectId } from "mongodb";
-import  {CreateMongooseClient, userDataPrefix } from "@/util/dbs/mongosee-fn";
+import  {CreateMongooseClient, userDataPrefix } from "@/util/db/mongosee-connect";
+import { DraftModel } from "@/util/db/mongosee-models";
 
 
 

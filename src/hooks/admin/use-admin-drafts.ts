@@ -3,8 +3,8 @@ import axios, { AxiosRequestConfig } from "axios";
 import { Session } from "next-auth";
 import useSWR, { Fetcher, Key as SWRKey , KeyedMutator, SWRConfiguration} from "swr";
 
-type DataType = UpdateDraftType[]
-
+ 
+type FeatcherType = UpdateDraftType[] 
 
 type ReturendFetcherType<T> = {
   Drafts: T ; // Allow `undefined` for when data is not yet loaded
@@ -14,11 +14,11 @@ type ReturendFetcherType<T> = {
 };
 
 
-export const useAdminDrafts  = (session:Session|null) : ReturendFetcherType<DataType>=> { 
+export const useAdminDrafts  = (session:Session|null) : ReturendFetcherType< FeatcherType > => { 
 
      const fetcherKey : SWRKey = ()=> session?.user?.name? '/api/admin/drafts/get-drafts' : null // will not fetch if no session
 
-     const fetcher : Fetcher<DataType> = async ( key: string ) : Promise<DataType> => {
+     const fetcher  = async ( key: string ) : Promise<UpdateDraftType|void> => {
 
        const params : any = {
          name: session?.user?.name,
@@ -31,23 +31,25 @@ export const useAdminDrafts  = (session:Session|null) : ReturendFetcherType<Data
         //withCredentials:true,
         //withXSRFToken:true
       }
-          
-       const response = await  axios.get<DataType>( key , FatchConfig )
-        // return the response to SWR Hook 
-        
-       return response.data
-      
+      try{ 
+           
+       const response = await  axios.get<UpdateDraftType>( key , FatchConfig )
+        if(response.status === 200){
+          return response.data
+        }
+      }
+      catch (err){ }
+     
+       
      }
 
      const SWRconfig : SWRConfiguration = {
        revalidateOnFocus:true,
        revalidateOnMount:true,
       refreshWhenHidden:false,
-      
      }
 
-
-    const { data, error, isValidating , mutate } = useSWR(fetcherKey, fetcher , SWRconfig)
+    const { data, error, isValidating , mutate } = useSWR< any,any  >(fetcherKey, fetcher , SWRconfig)
    
     return {
       Drafts: data,
@@ -55,6 +57,7 @@ export const useAdminDrafts  = (session:Session|null) : ReturendFetcherType<Data
       isDraftsError: error,
       updateDrafts: mutate,
     }
+
 }
 
 

@@ -7,7 +7,7 @@ import { useAdminEvents } from '@/hooks/admin/use-admin-events'
 import { GetServerSideProps } from 'next'
 import { ClientEventType } from '@/types/pages-types/admin/admin-event-types'
 import axios from 'axios'
-import DataGridWrap from '@/HOCs/data-grid-wrapper/grid-wrapper'
+import DataGridWrap from '@/mui-components/data-grid-wrapper/grid-wrapper'
 
 
 

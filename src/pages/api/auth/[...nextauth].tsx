@@ -6,8 +6,8 @@ import bcrypt from 'bcryptjs'
 
 import jwt from 'jsonwebtoken'
 import {  NewUserValidationShema } from "@/types/pages-types/admin/supervisor-types"
-import  {CreateMongooseClient,  UserPrefix } from "@/util/dbs/mongosee-fn"
-import { UsersModel } from "@/util/dbs/schma/models"
+import  {CreateMongooseClient,  UserPrefix } from "@/util/db/mongosee-connect"
+import { UsersModel } from "@/util/db/mongosee-models"
 
 
 /**

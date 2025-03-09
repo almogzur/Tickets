@@ -1,12 +1,13 @@
 // File: pages/api/public.ts
 
-import { EventModel } from "@/util/dbs/schma/models";
+
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession  } from "next-auth";
 import { NewEventZVS } from "@/types/pages-types/admin/admin-event-types";
-import  {CreateMongooseClient, userDataPrefix } from "@/util/dbs/mongosee-fn";
+import  {CreateMongooseClient, userDataPrefix } from "@/util/db/mongosee-connect";
+import { EventModel } from "@/util/db/mongosee-models";
 
 export default async function handler  ( req: NextApiRequest , res: NextApiResponse ):Promise<any>{
  

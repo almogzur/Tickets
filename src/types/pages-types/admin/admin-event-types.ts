@@ -2,7 +2,7 @@
 import { z }  from 'zod'
 import { TheaterValidationSchema } from "@/types/components-typs/admin/theater/admin-theater-types";
 import { SavePayPalInvoceVS } from '../client/client-event-type';
-import { EventLogsSchema } from '@/util/dbs/schma/db-event';
+import { EventLogsSchema } from '@/util/db/schma/db-event';
 
 //ZT (Zod inferd Types) schema
 
@@ -79,11 +79,14 @@ export const NewEventZVS = z.object({
   info:EventInfoFiledsZVS,
   tickets: EventSettingZVS,
   settings: SettingsZT,
-  public_id:z.string().nonempty()
+  public_id:z.string().optional()
 })
+
+
 
 export const EventFromDraftZVS= NewEventZVS.extend({
   _id:z.string().nonempty(), // draft saved object id 
+
 })
 
 export const WithDataAdminEventZVS= EventFromDraftZVS.extend({
@@ -109,6 +112,7 @@ export type  UpdateDraftType = z.infer <typeof UpdateDraftZVS>
 export type  EventFromDraftType  = z.infer <typeof EventFromDraftZVS>
 
 export type  NewEventType = z.infer <typeof NewEventZVS >
+
 
 export type WithDataEventType = z.infer< typeof WithDataAdminEventZVS>
 

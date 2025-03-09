@@ -2,14 +2,13 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { Button, Typography } from '@mui/material'
 import { useAdminDrafts } from '@/hooks/admin/use-admin-drafts'
-import { useEffect, useMemo, useState } from 'react'
+import { useState } from 'react'
 import {   GridColDef, GridRowsProp } from '@mui/x-data-grid'
 import axios, { AxiosRequestConfig } from 'axios'
 import { ImRedo2 } from "react-icons/im";
-import AdminLayout from '@/Wrappers/admin'
-import DataGridWrap from '@/HOCs/data-grid-wrapper/grid-wrapper'
-import LoadingScreen from '@/HOCs/loading'
-import NewEventFormWraper from '@/pages-components/admin/newEvent/from-wrapper'
+import DataGridWrap from '@/mui-components/data-grid-wrapper/grid-wrapper'
+import LoadingScreen from '@/mui-components/loading'
+import NewEventFormWraper from '@/components/admin/newEvent/from-wrapper'
 
 
 
@@ -90,7 +89,6 @@ const AdminDrafts=()=>{
 // Eed Table Data 
 
 const Draft = Drafts?.find((draft) => draft._id === draftId);
-
 
 
 

@@ -1,7 +1,6 @@
 import { SavePayPalInvoceVS } from "@/types/pages-types/client/client-event-type";
-import { PayPalOrderVS } from "@/types/pages-types/client/payment-object";
-import { CreateMongooseClient } from "@/util/dbs/mongosee-fn";
-import { EventModel } from "@/util/dbs/schma/models";
+import { CreateMongooseClient } from "@/util/db/mongosee-connect";
+import { EventModel } from "@/util/db/mongosee-models";
 import { rateLimitConfig } from "@/util/fn/api-rate-limit.config";
 import rateLimit from "express-rate-limit";
 import { ObjectId } from "mongodb";
