@@ -291,6 +291,7 @@ export const IsracardGanerateSaleRequestZVS = z.object({
   buyer_phone: z.string().optional(), // Example: 0501234567
 });
 
+export type IsracardGanerateSaleRequestType = z.infer<typeof IsracardGanerateSaleRequestZVS>
 
 
 
@@ -304,6 +305,10 @@ export const IsracardGanerateSaleResponseZVS = z.object({
   transaction_id: z.string(), // Transaction ID as a string
   currency: z.string(), // Currency as a string (3-letter ISO 4217 code)
 });
+
+export type IsracardGanerateSaleResponseType = z.infer<typeof IsracardGanerateSaleResponseZVS  >
+
+
 
 const IsaracdCaptureSaleCallbackNotificationTypeZVS = z.enum([
   'sale-complete',
@@ -345,9 +350,7 @@ const IsaracdCaptureSaleCallbackNotificationAttributesZVS = z.object({
 });
 
 
-export type IsracardGanerateSaleRequestType = z.infer<typeof IsracardGanerateSaleRequestZVS>
 
-export type IsracardGanerateSaleResponseType = z.infer<typeof IsracardGanerateSaleResponseZVS  >
 
 export type IsracardSaleCallbackNotificationAttributes = z.infer<typeof IsaracdCaptureSaleCallbackNotificationAttributesZVS >
 

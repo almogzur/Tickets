@@ -21,7 +21,7 @@ const SaleLinkRequest = async (e: React.SyntheticEvent<HTMLButtonElement> )=>{
     
     try{
           const responce  = await axios.post("/api/client/providers/isracard/create-payment-link",props)
-          console.log(responce)
+          console.log(responce.data)
           return responce.data
          }
     catch (err){ 

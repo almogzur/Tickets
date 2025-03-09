@@ -140,6 +140,7 @@ export const  GetIsracardBillingInfoFromEventId = async (
     const billingInfoData = await Model.findOne().lean();
 
     if (billingInfoData) {
+      
       const { apiKey, ...restBillingInfoData } = billingInfoData;
 
       const decryptedSecret = decryptData(apiKey, serverKey);
@@ -153,6 +154,9 @@ export const  GetIsracardBillingInfoFromEventId = async (
 
       return { ...restBillingInfoData, apiKey: decryptedSecret };
     }
+
+    console.log("GetIsracardBillingInfoFromEventId - " ,false);
+
   }
 
 }

@@ -1,6 +1,6 @@
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { UserIsracardInfoType } from "@/types/pages-types/admin/user-biling-info-types";
-import { IsracardCreateOrderZVS, IsracardGanerateSaleRequestType } from "@/types/pages-types/client/client-event-type";
+import { IsracardCreateOrderZVS, IsracardGanerateSaleRequestType, IsracardGanerateSaleResponseType } from "@/types/pages-types/client/client-event-type";
 import { CreateMongooseClient } from "@/util/db/mongosee-connect";
 import { rateLimitConfig } from "@/util/fn/api-rate-limit.config";
 import { GetIsracardBillingInfoFromEventId } from "@/util/fn/pay-fn";
@@ -60,7 +60,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(401).json({ massage: "no auth" })
     }
 
-    const CreateSaleLink = async (UserInfo: UserIsracardInfoType, total: string,) => {
+    const CreateSaleLink = async (UserInfo: UserIsracardInfoType, total: string) : Promise<IsracardGanerateSaleResponseType|undefined> => {
 
       const saleParameters: IsracardGanerateSaleRequestType = {
         buyer_perform_validation:false,
@@ -71,7 +71,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         currency: "ILS",
 
         sale_callback_url: "https://www.payme.io",
-        
+
         sale_return_url: "https://www.payme.io",
 
 
@@ -97,27 +97,28 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 
 
-        console.log(saleParameters)
+    //    console.log(saleParameters)
         
       try {
         const responce  = await axios.post(options.url,saleParameters);
-        return responce
-        //console.log(responce);
+        return responce.data
+        console.log(responce);
        
       } catch (error : any) {
         console.log( API_NAME, error.toJSON());
-        return
+        return 
       }
     }
-
 
     const link = await CreateSaleLink(userInfo, total)
 
     console.log(link, "back")
 
+  if(!link){
+    return res.status(400).json({massage: 'bad Payment Request' + API_NAME })
+  }
 
-
-
+  return res.send(link)
 
     // this return Ifram 
 
