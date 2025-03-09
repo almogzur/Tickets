@@ -13,27 +13,33 @@ import { getServerSession } from "next-auth";
  */
 
 
-
 const apiLimiter = rateLimit(rateLimitConfig);
 
 export default async function handler  ( req: NextApiRequest , res: NextApiResponse ):Promise<void>{
   return apiLimiter(req, res,async () => {
 
-    const API_NAME =  '' 
+    const API_NAME =  'Isracard Sale CallBack api' 
 
-  if (req.method !== '') { 
-      return  res.status(405).json({ message: 'API_NAME' })
+    console.log(API_NAME)
+
+  if (req.method !== 'POST') { 
+      return  res.status(405).json({ message: "not allowed" + API_NAME })
 }
 
  const session = await getServerSession(req, res, authOptions);
-if(!session){
-       return res.status(401).json({massage:'you SHELL NOT PASS @!!' }) }
 
-const connection  = await CreateMongooseClient( session.user.name + userDataPrefix)
+const connection  = await CreateMongooseClient(null)
 
 if(!connection){  
-     return res.status(500).json({massage:'No DB Connection'})}
+     return res.status(500).json({massage:'No DB Connection'})
+  }
+
+
  const body = req.body 
+
+ console.log(req)
+
+
 })
 }
 

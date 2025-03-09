@@ -70,9 +70,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         product_name: eventId,
         currency: "ILS",
 
-        sale_callback_url: "https://www.payme.io",
+        sale_callback_url: "https://tyled-tickets.netlify.app/api/client/event/providers/sale",
 
-        sale_return_url: "https://www.payme.io",
+        sale_return_url: "https://tyled-tickets.netlify.app/thank-you/",
 
 
         language: "he",
@@ -110,15 +110,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
     }
 
-    const link = await CreateSaleLink(userInfo, total)
+    const IsrcardResponce = await CreateSaleLink(userInfo, total)
 
-    console.log(link, "back")
 
-  if(!link){
+
+  if(!IsrcardResponce){
     return res.status(400).json({massage: 'bad Payment Request' + API_NAME })
   }
 
-  return res.send(link)
+  return res.send(IsrcardResponce.sale_url)
 
     // this return Ifram 
 
