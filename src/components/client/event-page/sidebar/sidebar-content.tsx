@@ -67,6 +67,17 @@ const sanitizedHtml = DOMPurify.sanitize(ClientSelectedEvent?.info.pre ?? "");
   const getNoramlPrice = () => {
     return getNormailTicket()?.price ?? "N/A"
   }
+
+  const getIsracardTotal = (): string => {
+    let total = 0;
+  
+    eventSelectSeats.forEach(seat => {
+      total += parseInt(seat.price); // Ensure proper number conversion
+    });
+  
+    return `${total}00`; // Append "00" at the end
+  };
+
   const getTotalCost = (): string => {
     let total = 0;
 
@@ -199,7 +210,7 @@ const sanitizedHtml = DOMPurify.sanitize(ClientSelectedEvent?.info.pre ?? "");
 
           <IsracardBtn 
             cart={createIsrcardCart(eventSelectSeats)}
-            total={getTotalCost()}
+            total={getIsracardTotal()}
             eventId={ClientSelectedEvent._id}
              />
 

@@ -64,12 +64,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       const saleParameters: IsracardGanerateSaleRequestType = {
         buyer_perform_validation:false,
+
         seller_payme_id: "MPL15282-97137EVV-KOAOAOIT-VWCZPB8V",
         sale_price: parseInt(total),
         product_name: eventId,
         currency: "ILS",
+
         sale_callback_url: "https://www.payme.io",
+        
         sale_return_url: "https://www.payme.io",
+
+
         language: "he",
         sale_email: UserInfo.email,
         sale_name: "API TEST",
