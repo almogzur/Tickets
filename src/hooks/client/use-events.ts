@@ -27,7 +27,9 @@ export const useClientEvents = (): ReturendFetcherType<ClientEventType> => {
 
   }
 
-  const SWRconfig: SWRConfiguration = { }
+  const SWRconfig: SWRConfiguration = { 
+    revalidateOnMount:true
+  }
 
 
   const { data, error, isValidating, mutate } = useSWR(fetcherKey, fetcher, SWRconfig)
