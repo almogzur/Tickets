@@ -13,7 +13,7 @@ const cspHeader = `
     object-src 'none';
     base-uri 'self';
     form-action 'self' *.cloudinary.com *.sandbox.paypal.com *.paypal.com *.paypalobjects.com *.sandbox.payme.io *.payme.io ;
-    frame-ancestors 'none';
+    frame-ancestors 'self' *.sandbox.payme.io *.payme.io;
     upgrade-insecure-requests;
 `.replace(/\n/g, ''); // Remove newlines for compatibility
 
