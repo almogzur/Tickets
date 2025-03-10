@@ -77,7 +77,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         language: "he",
         sale_email: UserInfo.email,
-        sale_name: "API TEST",
+        sale_name: "מכירת כרטיס",
         sale_type: "sale", // or "template" if needed
         sale_payment_method: "credit-card",
         capture_buyer: false,
