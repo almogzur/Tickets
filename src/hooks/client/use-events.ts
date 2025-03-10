@@ -27,21 +27,7 @@ export const useClientEvents = (): ReturendFetcherType<ClientEventType> => {
 
   }
 
-  const SWRconfig: SWRConfiguration = {
-    revalidateOnFocus: false,
-    revalidateOnMount: true,
-    refreshWhenHidden: false,
-    revalidateIfStale:false,
-    revalidateOnReconnect: false,
-    refreshInterval: undefined,
-    shouldRetryOnError: false,
-    dedupingInterval: 0,
-    focusThrottleInterval: 0,
-    loadingTimeout: 0,
-    errorRetryInterval: 0,
-    
-
-  }
+  const SWRconfig: SWRConfiguration = { }
 
 
   const { data, error, isValidating, mutate } = useSWR(fetcherKey, fetcher, SWRconfig)
