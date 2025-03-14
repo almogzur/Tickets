@@ -2,20 +2,31 @@ import { useState } from "react";
 import { Dialog, DialogTitle, DialogContent, IconButton, CircularProgress, Button } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
-import { IsracardCreateOrderZVS } from "@/types/pages-types/client/client-event-type";
+import { IsracardCreateOrderZVS, IsracartCartItemType } from "@/types/pages-types/client/client-event-type";
+import { TheaterType } from "@/types/components-typs/admin/theater/admin-theater-types";
 
-const IsracardBtn = (props: any) => {
+
+type IsracardBtnPropsType = {
+  cart:IsracartCartItemType[]
+  total:string
+  eventId:string
+  TheaterState:TheaterType|undefined
+  eventName:string
+}
+
+const IsracardBtn = (props: IsracardBtnPropsType) => {
   const [open, setOpen] = useState(false);
   const [paymentLink, setPaymentLink] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const SaleLinkRequest = async (e: React.SyntheticEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+
+  const SaleLinkRequest = async (): Promise<string|undefined> => {
 
     const isValidData = IsracardCreateOrderZVS.safeParse(props);
 
     if (!isValidData.success) {
-      return alert(isValidData.error.issues);
+      alert(JSON.stringify(isValidData.error.issues));
+      return
     }
 
     try {
@@ -24,18 +35,23 @@ const IsracardBtn = (props: any) => {
       console.log(response.data);
       setPaymentLink(response.data); // Set the payment link
       setOpen(true); // Open dialog after getting link
+      return response.data
     } catch (err) {
       console.log(err, "err front");
+      setOpen(false)
+      return
     } finally {
       setLoading(false);
     }
   };
 
+
+  
   return (
     <>
-      <Button variant="contained" color="primary" onClick={SaleLinkRequest}>
+       <Button variant="contained" color="primary" onClick={SaleLinkRequest}>
        ישראכאט
-      </Button>
+       </Button>
 
        <Dialog open={open} onClose={() => setOpen(false)} maxWidth="md" fullWidth>
         
@@ -62,10 +78,11 @@ const IsracardBtn = (props: any) => {
               height="100%"
               style={{ border: "none" }}
             />
-           : 
+            : 
             <p>שגיאה בדף תשלום </p>
           }
         </DialogContent>
+        
       </Dialog>
     </>
   );

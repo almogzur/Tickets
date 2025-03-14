@@ -1,7 +1,8 @@
 import { z }  from 'zod'
 import {  OrderRequest } from '@paypal/paypal-server-sdk'
-import { SeatValidationSchema } from '@/types/components-typs/admin/theater/admin-theater-types'
+import { SeatValidationSchema, TheaterValidationSchema } from '@/types/components-typs/admin/theater/admin-theater-types'
 import { SeatsRow } from "@/types/components-typs/admin/theater/admin-theater-types"
+import { ItemCategory } from "@paypal/paypal-server-sdk";
 
 
 
@@ -31,19 +32,43 @@ export const  UpdateTheaterApiVS = z.object({
    numerOfSeatsSealected : z.number()  
 })
 
+
+ 
+
+export type  RollbackTheaterApiResquestType  = z.infer <typeof RollbackTheaterApiVS>
+
 export type  modifieSeatValueFunctionType = {
   main :SeatsRow , side : SeatsRow 
 }
 
+
+
+
+
+
+
+
 // GLOBAL
 export type RequestStatusType ="Temp"|"Production"|undefined
 
+/**
+ * 
+ * 
+ * 
+ * 
+ // PayPal  
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * https://developer.paypal.com/tools/sandbox/
+ */
 
-// PayPal 
 
-import { ItemCategory } from "@paypal/paypal-server-sdk";
-
-// Define the schema for each payment source type
 const CardVS = z.object({
   name: z.string(),
   last_digits: z.string(),
@@ -171,7 +196,6 @@ export const SavePayPalInvoceVS = PayPalOrderVS.extend({
   cart: z.array(PayPalCartItemVS)
 });
 
-
 export type  PayPalOrderType =  z.infer<typeof PayPalOrderVS>
 
 export type  PayPalCartItemType  =  z.infer<typeof PayPalCartItemVS>
@@ -197,30 +221,63 @@ export type PayPalClollectInfoObjectType  = {
 
 
 
+/**
+ * 
+ * 
+ * 
+ * 
+ * 
+// ISRACARD 
+ * 
+ * 
+ * 
+   // https://payme.stoplight.io/docs/payments/d7da26bb42da8-generate-payment* 
+ */
 
-// ISRACARD
-// https://payme.stoplight.io/docs/payments/d7da26bb42da8-generate-payment
+
+
+
+
+
 
 
 
 export const IsracartCartItemZVS = z.object({
-  id:z.string(),
-  name:z.string(),
-  price:z.string(),
-  currency:z.string(),
-  quantity:z.number(),
+    name: z.string().nonempty(), // Example: shirt
+    quantity: z.number().int().nonnegative(), // Example: 1
+    unit_price: z.number().nonnegative(), // Example: 500
+    unit_measurement: z.string().optional(), // Example: "pounds"
+    total: z.number().nonnegative(), // Example: 100
+    discount_total: z.number().optional(), // Example: 50
+    description: z.string().optional(), // Example: "free text"
+    product_code: z.string().optional(), // Example: "ab123"
+    commodity_code: z.number().optional(), // Example: 123456789101
+    fees: z.object({
+      tax: z.number().optional(), // Example: 5200
+      duty: z.number().optional(), // Example: 6000
+      discount: z.number().optional(), // Example: 8000
+    }).optional()
 })
 export type  IsracartCartItemType = z.infer<typeof IsracartCartItemZVS>
+
+
+
+
 
 
 
 export const IsracardCreateOrderZVS = z.object({
   cart: z.array(IsracartCartItemZVS),
   total:z.string().nonempty(),
-  eventId:z.string().nonempty()
+  eventId:z.string().nonempty(), 
+  eventName:z.string().nonempty(),
+  TheaterState:TheaterValidationSchema,
 })
 
 export type IsracardCreateOrderType = z.infer<typeof IsracardCreateOrderZVS>
+
+
+
 
 
 export const IsracardGanerateSaleRequestZVS = z.object({
@@ -254,23 +311,7 @@ export const IsracardGanerateSaleRequestZVS = z.object({
   language: z.string().optional(), // Example: he
   order_number: z.string().optional(), // Example: 6545584
 
-  items: z.array(z.object({
-    name: z.string().nonempty(), // Example: shirt
-    quantity: z.number().int().nonnegative(), // Example: 1
-    unit_price: z.number().nonnegative(), // Example: 500
-    unit_measurement: z.string().optional(), // Example: "pounds"
-    total: z.number().nonnegative(), // Example: 100
-    discount_total: z.number().optional(), // Example: 50
-    description: z.string().optional(), // Example: "free text"
-    product_code: z.string().optional(), // Example: "ab123"
-    commodity_code: z.number().optional(), // Example: 123456789101
-    fees: z.object({
-      tax: z.number().optional(), // Example: 5200
-      duty: z.number().optional(), // Example: 6000
-      discount: z.number().optional(), // Example: 8000
-      shipping: z.number().optional(), // Example: 10000
-    }).optional(),
-  })).optional(),
+  items: z.array(IsracartCartItemZVS),
 
   shipping_details: z.object({
     name: z.string().nonempty(), // Example: John Doe
@@ -296,6 +337,9 @@ export type IsracardGanerateSaleRequestType = z.infer<typeof IsracardGanerateSal
 
 
 
+
+
+
 export const IsracardGanerateSaleResponseZVS = z.object({
   status_code: z.number(), // Represents the status of the request (0 for success, 1 for error)
   sale_url: z.string(), // URL as a string
@@ -307,6 +351,14 @@ export const IsracardGanerateSaleResponseZVS = z.object({
 });
 
 export type IsracardGanerateSaleResponseType = z.infer<typeof IsracardGanerateSaleResponseZVS  >
+
+
+
+
+
+
+
+
 
 
 
@@ -360,3 +412,10 @@ export type IsracardSaleCallbackNotificationAttributes = z.infer<typeof IsaracdC
 
 // global 
 
+export const RollbackTheaterApiVS = z.object({
+  eventId:z.string(),
+  selectedSeats : z.array(ClientSelectedSeatsVS),
+  Theater:TheaterValidationSchema,
+  cart:z.array(IsracartCartItemZVS).or(z.array(PayPalCartItemVS))
+  
+})

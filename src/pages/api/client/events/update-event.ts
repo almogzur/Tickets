@@ -3,53 +3,18 @@ import { ObjectId } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next/types";
 import rateLimit from "express-rate-limit";
 import { rateLimitConfig } from "@/util/fn/api-rate-limit.config";
-import { modifieSeatValueFunctionType, UpdateTheaterApiVS } from '@/types/pages-types/client/client-event-type';
-import { ClientEventType, NewEventType } from "@/types/pages-types/admin/admin-event-types";
+import { UpdateTheaterApiVS } from '@/types/pages-types/client/client-event-type';
+import {  NewEventType } from "@/types/pages-types/admin/admin-event-types";
 import { CreateMongooseClient } from "@/util/db/mongosee-connect";
 import { EventModel } from "@/util/db/mongosee-models";
+import { selectSeats, ValidateNotOcupideSeats } from "@/util/fn/event-api-fn";
 
 
 const apiLimiter = rateLimit(rateLimitConfig);
 
-const ValidateNotOcupideSeats = (oldT: TheaterType, newT: Partial<TheaterType>): boolean => {
-    console.log("Validating Inoket");
 
-    const existingTheaterSeats = { ...oldT };
-    const newSeats = { ...newT };
 
-    const combinedExistingSeats = { ...existingTheaterSeats.mainSeats, ...existingTheaterSeats.sideSeats };
-    const combinedNewSeats = { ...newSeats.mainSeats, ...newSeats.sideSeats };
-
-    for (const [rowName, rowSeats] of Object.entries(combinedExistingSeats)) {
-        for (let index = 0; index < rowSeats.length; index++) {
-            const seatValue = rowSeats[index];
-
-            if (seatValue === 1 && combinedNewSeats[rowName]?.[index] === 2) {
-                console.log("ValidateNotOcupideSeats", "new:", combinedNewSeats[rowName]?.[index], "old:", seatValue, "at ", rowName);
-                return false;
-            }
-        }
-    }
-
-    return true;
-};
-
-const modifieSeatValue = (TheaterSeates: modifieSeatValueFunctionType): modifieSeatValueFunctionType => {
-    const newTheaterSeatDetails = { ...TheaterSeates };
-    const combinedSeats = { ...TheaterSeates.main, ...TheaterSeates.side };
-
-    Object.entries(combinedSeats).forEach(([_, rowSeats]) => {
-        rowSeats.forEach((value, index) => {
-            if (value === 2) {
-                rowSeats[index] = 1;
-            }
-        });
-    });
-
-    return newTheaterSeatDetails;
-};
-
-export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
+export default async function eventUpdateApi(req: NextApiRequest, res: NextApiResponse): Promise<void> {
     return apiLimiter(req, res, async () => {
         const API_NAME = "Client Update Events (Only PayProvider Invoke)";
         console.log(API_NAME);
@@ -110,7 +75,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             return res.status(400).json({ massage: "not open seat" });
         }
 
-        const modifiedSeates = modifieSeatValue({ main: reqTheater.mainSeats, side: reqTheater.sideSeats });
+        const modifiedSeates = selectSeats({ main: reqTheater.mainSeats, side: reqTheater.sideSeats });
 
         const newAvailableSeatsAmount = availableSeatsAmount - numerOfSeatsSealected
 
@@ -143,6 +108,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
             return res.status(400).json({ massage: API_NAME +   "err" });
         }
+        
         console.log(API_NAME  + " Succsess")
 
         return res.status(200).json({ massage: API_NAME +' succsess ' });

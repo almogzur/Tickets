@@ -1,6 +1,4 @@
-import { MongoClient } from 'mongodb';
 import mongoose, { Connection, } from 'mongoose';
-import { Session } from 'next-auth';
 
 
 

@@ -18,7 +18,7 @@ const apiLimiter = rateLimit(rateLimitConfig);
 export default async function handler  ( req: NextApiRequest , res: NextApiResponse ):Promise<void>{
   return apiLimiter(req, res,async () => {
 
-    const API_NAME =  'Isracard Sale CallBack api' 
+    const API_NAME = 'Isracard Sale CallBack api ' 
 
     console.log(API_NAME)
 
@@ -33,7 +33,7 @@ if(!connection){
   }
  const body = req.body 
 
- console.log(req)
+ console.log(body,req.headers, req._read(100))
 
 
 })

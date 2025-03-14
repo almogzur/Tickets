@@ -1,23 +1,14 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import rateLimit from 'express-rate-limit';
-import {
-    ApiError,
-    CheckoutPaymentIntent,
-    Client as PayPalClient ,
-    Environment,
-    LogLevel,
-    OrdersController,
-    PaymentsController,
-    OrderApplicationContextShippingPreference,
-    Item
-} from "@paypal/paypal-server-sdk";
+import {Client as PayPalClient ,LogLevel, Environment,} from "@paypal/paypal-server-sdk";
 
 
-import { GetPayPalBillingInfoFromEventId } from "@/util/fn/pay-fn";
+import {  GetPayPalBillingInfoFromEventId } from "@/util/fn/pay-fn";
 import { ObjectId } from "mongodb";
 import { rateLimitConfig } from "@/util/fn/api-rate-limit.config";
 import {CreateMongooseClient} from "@/util/db/mongosee-connect";
-import { PayPalClollectInfoObjectType, PayPalRequestCreateOrderVS } from "@/types/pages-types/client/client-event-type";
+import {  PayPalRequestCreateOrderVS } from "@/types/pages-types/client/client-event-type";
+import { createPayPalOrder } from "@/util/fn/event-api-fn";
 
 const apiLimiter = rateLimit(rateLimitConfig);
 
@@ -38,7 +29,7 @@ const apiLimiter = rateLimit(rateLimitConfig);
  */
 
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function createOrderApi(req: NextApiRequest, res: NextApiResponse) {
     
     return apiLimiter(req, res,async () => {
 
@@ -91,59 +82,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 },
             });
 
-
-            const createOrder = async (cart: Item[], total: string) => {
-                const collect: PayPalClollectInfoObjectType = {
-                    body: {
-                        intent: CheckoutPaymentIntent.Capture,
-                        purchaseUnits: [
-                            {
-                                amount: {
-                                    currencyCode: "USD",
-                                    value: total,
-                                    breakdown: { itemTotal: { value: total, currencyCode: "USD" } }
-                                },
-                                items: cart
-                            },
-                        ],
-                        applicationContext: {
-                            brandName: "Styled-Tickets",
-                            locale: "he",
-                            shippingPreference: OrderApplicationContextShippingPreference.NoShipping,
-                        },
-                    },
-                    prefer: "return=minimal",
-                };
-
-                try {
-                    const { body, ...httpResponse } = await ordersController.ordersCreate(collect);
-                    return {
-                        jsonResponse: body,
-                        httpStatusCode: httpResponse.statusCode,
-                    };
-                }
-                catch (error) {
-                    if (error instanceof ApiError) {
-                        const { statusCode } = error;
-                        return {
-                            jsonResponse: { error: error.message },
-                            httpStatusCode: statusCode
-                        };
-                    }
-                    // Handle non-ApiError cases
-                    return {
-                        jsonResponse: { error: 'An unexpected error occurred' },
-                        httpStatusCode: 500
-                    };
-                }
-            };
-
-
-           const ordersController = new OrdersController(client);
-
-
             try {
-                const data = await createOrder(cart, total)
+                const data = await createPayPalOrder(cart , total , client)
                 if (!data) 
                      return res.status(200).json({ massage: 'no_Data' + API_NAME })
                      return res.status(data.httpStatusCode).json(data.jsonResponse);

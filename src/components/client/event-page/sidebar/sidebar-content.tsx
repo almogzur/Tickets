@@ -8,14 +8,10 @@ import ClientTicketList from "./tickets-list";
 import PaypalBtn, { PaypalBtnType } from "./payments-providers-buttons/paypal";
 import { ItemCategory } from "@paypal/paypal-server-sdk";
 import { ClientEventType } from "@/types/pages-types/admin/admin-event-types";
-import { ClientSelectedSeatType, IsracartCartItemType, PayPalCartItemType } from "@/types/pages-types/client/client-event-type";
+import { ClientSelectedSeatType, IsracardGanerateSaleRequestType, IsracartCartItemType, PayPalCartItemType } from "@/types/pages-types/client/client-event-type";
 import { TheaterType } from "@/types/components-typs/admin/theater/admin-theater-types";
 import { useRouter } from "next/router";
 import IsracardBtn from "./payments-providers-buttons/isracrd-360";
-import axios from "axios";
-import { GetServerSideProps } from "next";
-
-
 
 
 
@@ -109,7 +105,7 @@ const sanitizedHtml = DOMPurify.sanitize(ClientSelectedEvent?.info.pre ?? "");
     return []
   }
 
-   const createIsrcardCart = (selectedSeats:ClientSelectedSeatType[]):IsracartCartItemType[] => {
+ const createIsrcardCart = (selectedSeats:ClientSelectedSeatType[]):IsracardGanerateSaleRequestType['items'] => {
 
     if(ClientSelectedEvent){
 
@@ -118,12 +114,14 @@ const sanitizedHtml = DOMPurify.sanitize(ClientSelectedEvent?.info.pre ?? "");
 
    const cart = selectedSeats.map((seat) => {
           return {
-               id:ClientSelectedEvent._id,
-               name: `${eventName} _ ${seat.row}  מושב : ${seat.seatNumber + 1}`,
-               price:seat.price,
-               quantity:1,
-               currency:'ILS',
-               }
+             name:eventName,
+             quantity: 1,
+             unit_price: 1,
+             total: 1,
+             discount_total: 1,
+             description:`${eventName} _ ${seat.row}  מושב : ${seat.seatNumber + 1}`,
+             product_code: ClientSelectedEvent._id,
+           }
     })
 
     return cart
@@ -205,6 +203,7 @@ const sanitizedHtml = DOMPurify.sanitize(ClientSelectedEvent?.info.pre ?? "");
               eventId={ClientSelectedEvent._id}
               TheaterState={clientEventTheaterState}
               publicId={ClientSelectedEvent.public_id}
+              selectedSeats={eventSelectSeats}
             />
           }
 
@@ -212,6 +211,8 @@ const sanitizedHtml = DOMPurify.sanitize(ClientSelectedEvent?.info.pre ?? "");
             cart={createIsrcardCart(eventSelectSeats)}
             total={getIsracardTotal()}
             eventId={ClientSelectedEvent._id}
+            TheaterState={clientEventTheaterState}
+            eventName={ClientSelectedEvent.info.eventName}
              />
 
           <ClientTicketList
@@ -242,12 +243,6 @@ const sanitizedHtml = DOMPurify.sanitize(ClientSelectedEvent?.info.pre ?? "");
   )
 
 }
-
-
-
-
-
-
 
 
 
