@@ -269,7 +269,7 @@ export const createPayPalOrder = async (cart: Item[], total: string, client: Pay
       product_name: eventId,
       currency: "ILS",
   
-      sale_callback_url: "http://37.142.96.179/api/client/providers/isracard/sale",
+      sale_callback_url: `${process.env.ISRACARD_SALE_URL}`,
       // sale_return_url: "https://styled-tickets.netlify.app/thank-you/",
   
       items: cart,
