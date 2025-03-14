@@ -62,7 +62,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 
    if(!EventUpdated){
-    return res.redirect('/thank-you/err')
+    return res.status(400).json({massage: 'bad Payment Request' + API_NAME })
    }
 
    const IsrcardResponce = await CreateIsracardSaleLink(userInfo, total , eventId, cart)
