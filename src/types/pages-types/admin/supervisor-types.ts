@@ -2,14 +2,14 @@
 import {z} from 'zod'
 
 
-export const NewUserValidationShema = z.object({
+export const NewUserValidationSchema = z.object({
   name: z.string(),
   password: z.string(),
   displayName:z.string().optional(),
 })
 
-export type NewUserType = z.infer<typeof NewUserValidationShema>
+export type NewUserType = z.infer<typeof NewUserValidationSchema>
 
 
 
- // const UsersModle = createSchmaAndModel<NewUserType>("ActiveUsers",NewUserSchemaDefinition)
+ // const UsersModel = createSchemaAndModel<NewUserType>("ActiveUsers",NewUserSchemaDefinition)

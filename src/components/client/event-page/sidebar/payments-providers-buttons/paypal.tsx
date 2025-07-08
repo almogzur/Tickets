@@ -1,13 +1,13 @@
 
-import { TheaterType } from "@/types/components-typs/admin/theater/admin-theater-types";
+import { TheaterType } from "@/types/components-types/admin/theater/admin-theater-types";
 import {
-        ClientSelectedSeatType,
-        PayPalCartItemType,
-        PayPalRequestCreateOrderType,
-        RollbackTheaterApiResquestType,
-     } from "@/types/pages-types/client/client-event-type";
-import { capturePayPalPayment, roolBackEvent, saveInvoices, updateEvent } from "@/util/fn/event-api-fn";
-import { PayPalScriptProvider, PayPalButtons, ScriptProviderProps   } from "@paypal/react-paypal-js";
+    ClientSelectedSeatType,
+    PayPalCartItemType,
+    PayPalRequestCreateOrderType,
+    RollbackTheaterApiRequestType,
+} from "@/types/pages-types/client/client-event-type";
+import { capturePayPalPayment, rollBack, saveInvoices, updateEvent } from "@/util/fn/frontend_api-fn";
+import { PayPalScriptProvider, PayPalButtons, ScriptProviderProps } from "@paypal/react-paypal-js";
 import axios from "axios";
 import { useRouter } from "next/router";
 
@@ -23,10 +23,10 @@ export interface PaypalBtnType {
     TheaterState: TheaterType | undefined
     publicId: string
     eventId: string
-    selectedSeats:ClientSelectedSeatType[]
+    selectedSeats: ClientSelectedSeatType[]
 }
 
-const PaypalBtn = ({ publicId, eventId, cart, total, TheaterState , selectedSeats }: PaypalBtnType) => {
+const PaypalBtn = ({ publicId, eventId, cart, total, TheaterState, selectedSeats }: PaypalBtnType) => {
 
 
     const Options: ScriptProviderProps['options'] = {
@@ -55,14 +55,21 @@ const PaypalBtn = ({ publicId, eventId, cart, total, TheaterState , selectedSeat
                 }}
 
 
-                // send array of object to back end to create a list of item to display and cala price 
+                // send array of object to back end to create a list of item to display and calc price 
                 //
                 createOrder={async () => {
+
+                    if (!TheaterState) {
+                        return
+                    }
+
+                    // update the Theater in backend 
 
                     const PatPalData: PayPalRequestCreateOrderType = {
                         cart,
                         total,
                         eventId,
+                        Theater: TheaterState,
                     }
 
                     try {
@@ -84,6 +91,9 @@ const PaypalBtn = ({ publicId, eventId, cart, total, TheaterState , selectedSeat
                         console.error(error);
 
                     }
+                    finally{
+                        
+                    }
                 }}
                 onApprove={async (data, actions) => {
 
@@ -93,46 +103,34 @@ const PaypalBtn = ({ publicId, eventId, cart, total, TheaterState , selectedSeat
 
                     const orderID = data.orderID
 
-                    // on payment  befor proces compliting payment 
+                    // on payment  before  process completing  payment 
                     // see that the seat is open for sale  { avoiding  race conditions }
 
                     // send user sms and qr code 
 
-                    const updateTheaterResult = await updateEvent(TheaterState,eventId,cart)
-
-                    if (!updateTheaterResult) {
-
-                        // try to update the theater if it not avalebule push to err page 
-                        // **  cant return from onAprove function 
-                        router.push("/thank-you/err")
 
 
-                    } else {
+                    const PayPalInvoice = await capturePayPalPayment(data, eventId, orderID, actions)
 
-                    const PayPalInvoice = await capturePayPalPayment( data , eventId , orderID, actions )
+                    if (!PayPalInvoice) {
 
-                        if (!PayPalInvoice) {
-
-                            const RollBackData  : RollbackTheaterApiResquestType= {
-                                eventId,
-                                selectedSeats, 
-                                Theater:TheaterState, 
-                                cart
-                            }
-
-                            await roolBackEvent(RollBackData)
-
-                            router.push("/thank-you/err")
-
+                        const RollBackData: RollbackTheaterApiRequestType = {
+                            eventId,
+                            selectedSeats,
+                            Theater: TheaterState,
+                            cart
                         }
 
-                       await saveInvoices(PayPalInvoice , cart,  eventId ,total)
+                        //await rollBack(RollBackData)
 
-
-                        router.push(`/thank-you/${PayPalInvoice.id}`)
+                        router.push("/thank-you/err")
 
                     }
 
+                    await saveInvoices(PayPalInvoice, cart, eventId, total)
+
+
+                    router.push(`/thank-you/${PayPalInvoice.id}`)
 
                 }}
 

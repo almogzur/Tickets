@@ -6,9 +6,9 @@ import {Client as PayPalClient ,LogLevel, Environment,} from "@paypal/paypal-ser
 import {  GetPayPalBillingInfoFromEventId } from "@/util/fn/pay-fn";
 import { ObjectId } from "mongodb";
 import { rateLimitConfig } from "@/util/fn/api-rate-limit.config";
-import {CreateMongooseClient} from "@/util/db/mongosee-connect";
+import {CreateMongooseClient} from "@/util/db/mongoose-connect";
 import {  PayPalRequestCreateOrderVS } from "@/types/pages-types/client/client-event-type";
-import { createPayPalOrder } from "@/util/fn/event-api-fn";
+import { createPayPalOrder, updateEvent } from "@/util/fn/frontend_api-fn";
 
 const apiLimiter = rateLimit(rateLimitConfig);
 
@@ -40,17 +40,17 @@ export default async function createOrderApi(req: NextApiRequest, res: NextApiRe
             }
 
 
-            // add validate soucre 
+            // add validate source 
 
             const body  = req.body
-            const IsValidData    = PayPalRequestCreateOrderVS.safeParse(body)
+            const IsValidData   = PayPalRequestCreateOrderVS.safeParse(body)
 
             if( ! IsValidData.success){
                 console.log(IsValidData.error)
                 return res.status(400).json({massage:"bad format Data"})
             }
 
-            const  { cart, total,  eventId } =  IsValidData.data
+            const  { cart, total,  eventId , Theater } =  IsValidData.data
 
 
              const connection  = await CreateMongooseClient(null)
@@ -84,9 +84,19 @@ export default async function createOrderApi(req: NextApiRequest, res: NextApiRe
 
             try {
                 const data = await createPayPalOrder(cart , total , client)
-                if (!data) 
-                     return res.status(200).json({ massage: 'no_Data' + API_NAME })
-                     return res.status(data.httpStatusCode).json(data.jsonResponse);
+
+                if (!data) {
+                    return res.status(400).json({ massage: 'createPayPalOrder Failed' + API_NAME })    
+                }
+                const updateTheaterResult = await updateEvent(Theater,eventId,cart)
+
+                   if (!updateTheaterResult) {
+                    return res.status(400).json({ massage: 'Event Update Failed' + API_NAME })    
+
+                    } 
+                    return res.status(data.httpStatusCode).json(data.jsonResponse);
+
+                
             } catch (error) {
                 console.error("Failed to create order:", error);
                 return res.status(500).json(error)
@@ -97,6 +107,6 @@ export default async function createOrderApi(req: NextApiRequest, res: NextApiRe
 
 export const config = {
     api: {
-      externalResolver: true,  // resolve by the rate limeter
+      externalResolver: true,  // resolve by the rate limiter
     },
   }

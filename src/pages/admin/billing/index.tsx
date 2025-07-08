@@ -1,21 +1,17 @@
-import { getCsrfToken, useSession } from 'next-auth/react'
-import { useRouter } from 'next/router'
+import {  useSession } from 'next-auth/react'
 import { Typography, Stack as Flex, Button, Container } from '@mui/material'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { grey } from '@mui/material/colors'
-import {  UserPayPalInfoType, UserIsracardInfoType, PayPalInfoZVS, IsracardZVS } from '@/types/pages-types/admin/user-biling-info-types'
-import axios from 'axios'
-import { useAdminPaypalBilingInfo } from '@/hooks/admin/use-admin-paypal-biiling-info'
-import InputWrap from '@/mui-components/TeextFiledWrpa/input-wrap'
+import {  UserPayPalInfoType, UserIsracardInfoType, PayPalInfoZVS, IsracardZVS } from '@/types/pages-types/admin/user-billing-info-types'
 import IosWithTextSwitchWrap from '@/mui-components/ios-switch-wrap'
-import { ZodIssue } from 'zod'
-import { useAdminIsracardBilingInfo } from '@/hooks/admin/use-admin-isracard-billing-info'
-import IsracardForm from '../../../components/admin/billing/istacard-from'
+import { useAdminPaypalBillingInfo } from '@/hooks/admin/use-admin-paypal-billing-info'
+import { useAdminIsracardBillingInfo } from '@/hooks/admin/use-admin-isracard-billing-info'
+import IsracardForm from '@/components/admin/billing/isracard-form'
 import PayPalForm from '../../../components/admin/billing/paypal-from'
 
 // page is secure under JWT token 
-// https uses  (Advanced Encryption Standard)  AES  chiper 
-// back end uses same AES chiper  
+// https uses  (Advanced Encryption Standard)  AES  chipper 
+// back end uses same AES chipper  
 
 
 export type BillingAccountStateType = {
@@ -39,12 +35,12 @@ const PageWrapper = Flex,
 const AdminBillingPage = () => {
 
   const { data: session, status, update } = useSession()
-  const [pageMounte, setPageMaount] = useState<boolean>(false)
+  const [pageLoad, setPageLoad] = useState<boolean>(false)
 
-  const { UserDBPayPalInfo } = useAdminPaypalBilingInfo(session)
-  const { UserDBIsracardlInfo } = useAdminIsracardBilingInfo(session)
+  const { UserDBPayPalInfo } = useAdminPaypalBillingInfo(session)
+  const { UserDBIsracardInfo } = useAdminIsracardBillingInfo(session)
 
-  const [biilingType, setBiilingType] = useState<BillingAccountStateType>({
+  const [billingType, setBillingType] = useState<BillingAccountStateType>({
     paypal: false,
     isracard: false
   })
@@ -80,28 +76,28 @@ const AdminBillingPage = () => {
 
   useEffect(() => {
 
-    setPageMaount(true)
+    setPageLoad(true)
 
-   // console.log(UserDBIsracardlInfo, UserDBPayPalInfo)
+   // console.log(UserDBIsracardInfo, UserDBPayPalInfo)
 
     if (UserDBPayPalInfo) {
 
-      setBiilingType(p => ({ ...p, paypal: true }))
+      setBillingType(p => ({ ...p, paypal: true }))
       setPayPalBillingInfo(UserDBPayPalInfo)
 
     }
     
-    if(UserDBIsracardlInfo){
-      setBiilingType(p => ({ ...p, isracard: true }))
+    if(UserDBIsracardInfo){
+      setBillingType(p => ({ ...p, isracard: true }))
 
-      setIsracardBillingInfo(UserDBIsracardlInfo)
+      setIsracardBillingInfo(UserDBIsracardInfo)
     }
 
 
-  }, [UserDBIsracardlInfo, UserDBPayPalInfo])
+  }, [UserDBIsracardInfo, UserDBPayPalInfo])
 
 
-  if (!pageMounte) {
+  if (!pageLoad) {
     return <h3>loading...</h3>
   }
 
@@ -123,16 +119,16 @@ const AdminBillingPage = () => {
       <Switches direction={"row"}>
 
         <IosWithTextSwitchWrap
-          switchValue={biilingType.isracard}
-          switchOnChangeHendler={(e, checked) => { setBiilingType(p => ({ ...p, isracard: checked })) }}
+          switchValue={billingType.isracard}
+          switchOnChangeHandler={(e, checked) => { setBillingType(p => ({ ...p, isracard: checked })) }}
           title={'בנקאי'}
           labelPlacement={'top'}
           textColor='black'
         />
 
         <IosWithTextSwitchWrap
-          switchValue={biilingType.paypal}
-          switchOnChangeHendler={(e, checked) => { setBiilingType(p => ({ ...p, paypal: checked })) }}
+          switchValue={billingType.paypal}
+          switchOnChangeHandler={(e, checked) => { setBillingType(p => ({ ...p, paypal: checked })) }}
           title={'פייפאל'}
           labelPlacement={'top'}
           textColor='black'
@@ -140,9 +136,9 @@ const AdminBillingPage = () => {
 
       </Switches>
 
-     { biilingType.isracard && <IsracardForm   isracardBillingInfo={isracardBillingInfo} setIsracardBillingInfo={setIsracardBillingInfo}/> }
+     { billingType.isracard && <IsracardForm   isracardBillingInfo={isracardBillingInfo} setIsracardBillingInfo={setIsracardBillingInfo}/> }
 
-     { biilingType.paypal && <PayPalForm  PayPalBillingInfo={PayPalBillingInfo}setPayPalBillingInfo={setPayPalBillingInfo}/>}
+     { billingType.paypal && <PayPalForm  PayPalBillingInfo={PayPalBillingInfo}setPayPalBillingInfo={setPayPalBillingInfo}/>}
 
     </PageWrapper>
   )

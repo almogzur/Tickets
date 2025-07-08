@@ -9,7 +9,7 @@ import { z, ZodIssue } from "zod";
 // Import Types
 import {
   EventSettingType,
-  infoFiledsType,
+  infoFieldsType,
   NewDraftZVS,
   TicketType,
   NewDraftType,
@@ -23,9 +23,9 @@ import {
 } from '@/types/pages-types/admin/admin-event-types'
 import {
   Positions,
-  TheaterMultiTipeInfoType,
-  TheaterTipinfoType
-} from "../../../types/components-typs/admin/theater/admin-theater-types";
+  TheaterMultiTipInfoType,
+  TheaterTipInfoType
+} from "../../../types/components-types/admin/theater/admin-theater-types";
 
 // Import Contexts
 import TabsTicketsContext from '@/context/admin/new-event/tabs/tabs-ticket-context';
@@ -34,26 +34,27 @@ import SingleTipContext from '@/context/admin/new-event/map/single-tip-context';
 import MultiSelectContext from '@/context/admin/new-event/map/multi-select-context';
 import AdminTransformContext from '@/context/admin/new-event/map/admin-map-positions-context';
 import TabsPageContext from '@/context/admin/new-event/tabs/tabs-page-context';
-import TabsEroorsContext from '@/context/admin/new-event/tabs/tabs-eroors-context';
+import TabsErrorsContext from '@/context/admin/new-event/tabs/tabs-errors-context';
 import TabsEventSettingsContext from '@/context/admin/new-event/tabs/tabs-event-settings-context';
 import WidthContext from "@/context/WidthContext";
 
 // Import Hooks
 import { useAdminDrafts } from "@/hooks/admin/use-admin-drafts";
-import { useAdminPaypalBilingInfo } from "@/hooks/admin/use-admin-paypal-biiling-info";
 
 // Import Icons
 import { SlOptions, SlOptionsVertical } from "react-icons/sl";
 import { MdPublic } from "react-icons/md";
 import { RiDraftFill } from "react-icons/ri";
-import { UserPayPalInfoType, PayPalInfoZVS, IsracardZVS, UserIsracardInfoType, } from "@/types/pages-types/admin/user-biling-info-types";
+import { UserPayPalInfoType, PayPalInfoZVS, IsracardZVS, UserIsracardInfoType, } from "@/types/pages-types/admin/user-billing-info-types";
 import { RequestStatusType } from "@/types/pages-types/client/client-event-type";
-import { useAdminIsracardBilingInfo } from "@/hooks/admin/use-admin-isracard-billing-info";
+import { useAdminIsracardBillingInfo } from "@/hooks/admin/use-admin-isracard-billing-info";
+import { Session } from "next-auth/core/types";
+import { useAdminPaypalBillingInfo } from "@/hooks/admin/use-admin-paypal-billing-info";
 
 // Dynamic Component Imports (Lazy Loading)
-const TabsWraper = dynamic(() => import("@/components/admin/newEvent/tabs/tabs-wraper"), { ssr: false });
+const TabsWrap = dynamic(() => import("@/components/admin/newEvent/tabs/tabs-wrap"), { ssr: false });
 const TheaterComponent = dynamic(() => import("@/components/admin/newEvent/theater/theater"), { ssr: false });
-const SpeedDialWrap = dynamic(() => import("@/mui-components/speed-dail-wrap"), { ssr: false });
+const SpeedDialWrap = dynamic(() => import("@/mui-components/speed-dial-wrap"), { ssr: false });
 const LoadingScreen = dynamic(() => import('@/mui-components/loading'), { ssr: false });
 
 type NewEventFormWrapperProps = {
@@ -61,18 +62,18 @@ type NewEventFormWrapperProps = {
   DraftId?: string
 }
 
-const NewEventFormWraper = ({ Draft, DraftId }: NewEventFormWrapperProps) => {
+const NewEventFormWrap = ({ Draft, DraftId }: NewEventFormWrapperProps) => {
 
   const { data: session, status, update } = useSession()
 
-  const { UserDBPayPalInfo } = useAdminPaypalBilingInfo(session)
+  const { UserDBPayPalInfo } = useAdminPaypalBillingInfo(session)
 
-  const { UserDBIsracardlInfo } = useAdminIsracardBilingInfo(session)
+  const { UserDBIsracardInfo } = useAdminIsracardBillingInfo(session)
 
   useEffect(() => {
     if (Draft) {
       const { settings, tickets, info } = Draft
-      setInfoFileds(info)
+      setInfoFields(info)
       setSetting(settings)
       if (tickets) { setTickets(tickets) }
     }
@@ -80,7 +81,7 @@ const NewEventFormWraper = ({ Draft, DraftId }: NewEventFormWrapperProps) => {
 
 
   // For DB Data 
-  const [infoFileds, setInfoFileds] = useState<infoFiledsType>({
+  const [infoFields, setInfoFields] = useState<infoFieldsType>({
     eventName: "",
     cat: "",
     TheaterName: "",
@@ -97,44 +98,44 @@ const NewEventFormWraper = ({ Draft, DraftId }: NewEventFormWrapperProps) => {
   const [tickets, setTickets] = useState<TicketType[]>([])
 
   const [settings, setSetting] = useState<EventSettingType>({
-    limitClientTicket: true, // true is disabled flase enabled
+    limitClientTicket: true, // true is disabled false enabled
     ticketLimit: '5', // mum start at 0 array form()
     canSelectNotRelatedSites: true,
   })
 
   // useEffect(()=>{
-  // console.log(eventSetting,"form maunted  wrapper snapshot  ")},[eventSetting])
+  // console.log(eventSetting,"form   wrapper snapshot  ")},[eventSetting])
 
   const { xxl, xl, lg, md, sm, xs, xxs } = useContext(WidthContext)
   const router = useRouter()
   const theme = useTheme()
   const [tabValue, setTabValue] = useState(0);
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [loadingScrenText, setLoadingScrenText] = useState<string | undefined>(undefined)
-  const [SaevNewEventReqestStatus, setSaevNewEventReqestStatus] = useState<RequestStatusType>(undefined)
+  const [loadingScreenText, setLoadingScreenText] = useState<string | undefined>(undefined)
+  const [saveNewEventRequestStatus, setSaveNewEventRequestStatus] = useState<RequestStatusType>(undefined)
 
   // Theater State 
   const [singleTipPositions, setSingleTipPositions] = useState<Positions>({ x: 0, y: 0, Scale: 0, disabled: false })
   const [multiTipPositions, setMutiTipPositions] = useState<Positions>({ x: 0, y: 0 })
   const [AdminMapPositions, setAdminMapPositions] = useState<Positions>({ x: 0, y: 0, Scale: 0, disabled: false })
-  const [seatTipInfo, setSeatTipInfo] = useState<TheaterTipinfoType>({ initValue: 0, row: "", seatNumber: 0 })
+  const [seatTipInfo, setSeatTipInfo] = useState<TheaterTipInfoType>({ initValue: 0, row: "", seatNumber: 0 })
   const resetSingleTip = (): void => { setSingleTipPositions({ x: 0, y: 0 }); setSeatTipInfo({ initValue: 0, row: "", seatNumber: 0 }) }
-  const [multiTipInfo, setMultiTipInfo] = useState<TheaterMultiTipeInfoType>({ first: undefined, second: undefined, totalselected: 0, row: "", err: "", seatNumber: undefined, selectdir: undefined })
-  const resetMultiTip = (): void => { setMutiTipPositions({ x: 0, y: 0 }); setMultiTipInfo(p => ({ first: undefined, second: undefined, totalselected: 0, row: "", err: "", seatNumber: undefined, selectdir: undefined })) }
+  const [multiTipInfo, setMultiTipInfo] = useState<TheaterMultiTipInfoType>({ first: undefined, second: undefined, totalSelected: 0, row: "", err: "", seatNumber: undefined, selectDir: undefined })
+  const resetMultiTip = (): void => { setMutiTipPositions({ x: 0, y: 0 }); setMultiTipInfo(p => ({ first: undefined, second: undefined, totalSelected: 0, row: "", err: "", seatNumber: undefined, selectDir: undefined })) }
   const resetErr = (): void => { setMultiTipInfo(p => ({ ...p, err: "" })) }
 
-  // ganerate  errors for form inputs  
+  // create  errors for form inputs  
   const GetFormErrors = (filed: string) => {
 
-    const DraftIssues = NewDraftZVS.safeParse({ info: infoFileds, tickets, settings }).error?.issues
-    const EvenntIssues = NewEventZVS.safeParse({ info: infoFileds, tickets, settings }).error?.issues // sparidng both to create 1 continues object 
+    const DraftIssues = NewDraftZVS.safeParse({ info: infoFields, tickets, settings }).error?.issues
+    const EventIssues = NewEventZVS.safeParse({ info: infoFields, tickets, settings }).error?.issues // spreading both to create 1 continues object 
 
     const issues =
-      SaevNewEventReqestStatus === 'Temp'
+      saveNewEventRequestStatus === 'Temp'
         ? DraftIssues?.find(item => item.path?.[1] === filed)
         :
-        SaevNewEventReqestStatus === 'Production'
-          ? EvenntIssues?.find(item => item.path?.[1] === filed)
+        saveNewEventRequestStatus === 'Production'
+          ? EventIssues?.find(item => item.path?.[1] === filed)
           :
           undefined;
 
@@ -153,7 +154,7 @@ const NewEventFormWraper = ({ Draft, DraftId }: NewEventFormWrapperProps) => {
 
   const ValidateIsracardInfo = (): ValidateUserPaymentInfoReturnType<UserIsracardInfoType> => {
 
-    const validateIsracard = IsracardZVS.safeParse(UserDBIsracardlInfo);
+    const validateIsracard = IsracardZVS.safeParse(UserDBIsracardInfo);
 
     if (validateIsracard.success) {
       return { success: true, errors: undefined, data: validateIsracard.data };
@@ -182,12 +183,12 @@ const NewEventFormWraper = ({ Draft, DraftId }: NewEventFormWrapperProps) => {
 
   const saveDraft = async (): Promise<void> => {
 
-    setSaevNewEventReqestStatus('Temp')
+    setSaveNewEventRequestStatus('Temp')
 
-    const isValidData = NewDraftZVS.safeParse({ info: infoFileds, tickets, settings }); //validate form on click 
+    const isValidData = NewDraftZVS.safeParse({ info: infoFields, tickets, settings }); //validate form on click 
 
     if (!isValidData.success) {
-      // make llist of errs and payments errs
+      // make list of errs and payments errs
       alert("  אנא הזן  את כול הפרטים המסומנים ב ❌")
       return
     }
@@ -195,7 +196,7 @@ const NewEventFormWraper = ({ Draft, DraftId }: NewEventFormWrapperProps) => {
     try {
       if (isValidData.success) {
         setIsLoading(true)
-        setLoadingScrenText("שומר")
+        setLoadingScreenText("שומר")
 
         const ReqData: NewDraftType = isValidData.data
 
@@ -216,8 +217,6 @@ const NewEventFormWraper = ({ Draft, DraftId }: NewEventFormWrapperProps) => {
 
       }
       else {
-        // focuse name 
-
         setTabValue(0)
         console.log('no ref');
 
@@ -235,15 +234,15 @@ const NewEventFormWraper = ({ Draft, DraftId }: NewEventFormWrapperProps) => {
     }
     finally {
       setIsLoading(false)
-      setLoadingScrenText("")
+      setSaveNewEventRequestStatus('Temp')
     }
   };
 
   const updateDraft = async (EventId: string) => {
     //   setIsLoading(true)
-    setLoadingScrenText("מעדכן")
+    setLoadingScreenText("מעדכן")
 
-    const isValidData = UpdateDraftZVS.safeParse({ info: infoFileds, tickets, settings, _id: EventId })
+    const isValidData = UpdateDraftZVS.safeParse({ info: infoFields, tickets, settings, _id: EventId })
 
     if (!isValidData.success) {
       console.log(" No Validation ", "updateDraft", isValidData.error.issues)
@@ -264,7 +263,7 @@ const NewEventFormWraper = ({ Draft, DraftId }: NewEventFormWrapperProps) => {
     finally {
       router.push("/admin")
       setIsLoading(false)
-      setLoadingScrenText("")
+      setSaveNewEventRequestStatus('Production')
     }
 
 
@@ -275,11 +274,11 @@ const NewEventFormWraper = ({ Draft, DraftId }: NewEventFormWrapperProps) => {
 
 
 
-// Eeents 
+// Event 
 
   const saveEvent = async () => {
 
-    setSaevNewEventReqestStatus('Production')
+    setSaveNewEventRequestStatus('Production')
 
     if( ! ValidateIsracardInfo().success && ! ValidatePayPalInfo().success ) {
       return alert(" 🏦 אנא הזן  פרטי חשבון להעברת כספים  ")
@@ -288,7 +287,7 @@ const NewEventFormWraper = ({ Draft, DraftId }: NewEventFormWrapperProps) => {
     if( ValidatePayPalInfo().success ) {
 
       const isValidData = NewEventZVS.safeParse({
-        info: infoFileds,
+        info: infoFields,
         tickets,
         settings,
         public_id: UserDBPayPalInfo.clientId
@@ -311,7 +310,7 @@ const NewEventFormWraper = ({ Draft, DraftId }: NewEventFormWrapperProps) => {
     }
 
     const isValidData = NewEventZVS.safeParse({
-      info: infoFileds,
+      info: infoFields,
       tickets,
       settings,
     })
@@ -336,7 +335,7 @@ const NewEventFormWraper = ({ Draft, DraftId }: NewEventFormWrapperProps) => {
 
   const saveEventFromDraft = async (id: string) => {
 
-    setSaevNewEventReqestStatus('Production')
+    setSaveNewEventRequestStatus('Production')
 
     if ( ! ValidateIsracardInfo().success && !ValidatePayPalInfo().success) {
       return alert(" 🏦 אנא הזן  פרטי חשבון להעברת כספים  ")
@@ -345,7 +344,7 @@ const NewEventFormWraper = ({ Draft, DraftId }: NewEventFormWrapperProps) => {
     if (ValidatePayPalInfo().success) {
 
       const isValidData = EventFromDraftZVS.safeParse({
-        info: infoFileds,
+        info: infoFields,
         tickets,
         settings,
         _id: id,
@@ -354,9 +353,9 @@ const NewEventFormWraper = ({ Draft, DraftId }: NewEventFormWrapperProps) => {
 
       if (!isValidData.success) {
 
-        setSaevNewEventReqestStatus('Production')
+        setSaveNewEventRequestStatus('Production')
 
-        // make llist of errs and payments errs
+        // make list of errs and payments errs
         alert("  אנא הזן  את כול הפרטים המסומנים ב ❌" + JSON.stringify(isValidData.error.issues))
 
         return
@@ -381,7 +380,7 @@ const NewEventFormWraper = ({ Draft, DraftId }: NewEventFormWrapperProps) => {
 
       const isValidData = EventFromDraftZVS.safeParse(
         {
-          info: infoFileds,
+          info: infoFields,
           tickets,
           settings,
           _id: id,
@@ -414,7 +413,7 @@ const NewEventFormWraper = ({ Draft, DraftId }: NewEventFormWrapperProps) => {
       {
         icon: <RiDraftFill size={"2em"} />,
         name: DraftId ? 'עדכן טיוטה ' : "שמור טיוטה ",
-        ClickHendler: (e: React.MouseEvent<HTMLDivElement>) => {
+        ClickHandler: (e: React.MouseEvent<HTMLDivElement>) => {
           DraftId
             ? updateDraft(DraftId)
             : saveDraft()
@@ -423,7 +422,7 @@ const NewEventFormWraper = ({ Draft, DraftId }: NewEventFormWrapperProps) => {
       {
         icon: <MdPublic size={"2.5em"} />,
         name: DraftId ? " פרסם טיוטה" : 'פרסם ',
-        ClickHendler: (e: React.MouseEvent<HTMLDivElement>) => {
+        ClickHandler: (e: React.MouseEvent<HTMLDivElement>) => {
           DraftId ?
             saveEventFromDraft(DraftId) :
             saveEvent()
@@ -434,22 +433,22 @@ const NewEventFormWraper = ({ Draft, DraftId }: NewEventFormWrapperProps) => {
 
 
   if (isLoading) {
-    return <LoadingScreen text={loadingScrenText} />
+    return <LoadingScreen text={loadingScreenText} />
   }
 
   return (
-    <TabsEroorsContext.Provider value={{ GetFormErrors }}>
-      <TabsPageContext.Provider value={{ tabValue, setTabValue, isLoading, setIsLoading, SaevNewEventReqestStatus, setSaevNewEventReqestStatus, loadingScrenText, setLoadingScrenText }}>
-        <TabInfoContext.Provider value={{ infoFileds, setInfoFileds }}>
+    <TabsErrorsContext.Provider value={{ GetFormErrors }}>
+      <TabsPageContext.Provider value={{ tabValue, setTabValue, isLoading, setIsLoading, saveNewEventRequestStatus, loadingScreenText, setLoadingScreenText , setSaveNewEventRequestStatus }}>
+        <TabInfoContext.Provider value={{ infoFields, setInfoFields }}>
           <TabsTicketsContext.Provider value={{ tickets, setTickets }} >
             <TabsEventSettingsContext.Provider value={{ settings, setSetting }} >
-              <TabsWraper DraftId={DraftId} />
+              <TabsWrap DraftId={DraftId} />
               {
-                infoFileds.Theater &&
+                infoFields.Theater &&
                 <AdminTransformContext.Provider value={{ AdminMapPositions, setAdminMapPositions }}>
                   <MultiSelectContext.Provider value={{ multiTipPositions, setMutiTipPositions, resetMultiTip, multiTipInfo, setMultiTipInfo, resetErr }} >
                     <SingleTipContext.Provider value={{ singleTipPositions, setSingleTipPositions, seatTipInfo, setSeatTipInfo, resetSingleTip }}>
-                      <TheaterComponent TheaterDate={infoFileds.Theater} />
+                      <TheaterComponent TheaterDate={infoFields.Theater} />
                     </SingleTipContext.Provider>
                   </MultiSelectContext.Provider>
                 </AdminTransformContext.Provider>
@@ -466,11 +465,12 @@ const NewEventFormWraper = ({ Draft, DraftId }: NewEventFormWrapperProps) => {
           </TabsTicketsContext.Provider>
         </TabInfoContext.Provider>
       </TabsPageContext.Provider>
-    </TabsEroorsContext.Provider>
+    </TabsErrorsContext.Provider>
   )
 }
 
 
-export default NewEventFormWraper
+export default NewEventFormWrap
+
 
 

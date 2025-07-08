@@ -1,4 +1,4 @@
-import { UserIsracardInfoType, UserPayPalInfoType } from "@/types/pages-types/admin/user-biling-info-types";
+import { UserIsracardInfoType, UserPayPalInfoType } from "@/types/pages-types/admin/user-billing-info-types";
 import axios, { AxiosRequestConfig } from "axios";
 import { Session } from "next-auth";
 import useSWR, { Fetcher, Key as SWRKey, KeyedMutator, SWRConfiguration } from "swr";
@@ -6,15 +6,15 @@ import useSWR, { Fetcher, Key as SWRKey, KeyedMutator, SWRConfiguration } from "
 
 
 
-type ReturendFetcherType<T> = {
-    UserDBIsracardlInfo: T; // Allow `undefined` for when data is not yet loaded
+type ReturnedFetcherType<T> = {
+    UserDBIsracardInfo: T; // Allow `undefined` for when data is not yet loaded
     isIsracardInfoValidating: boolean;
     isIsracardInfoError: unknown;
     updateIsracardInfo: KeyedMutator<T|undefined>;
 };
 
 
-export const useAdminIsracardBilingInfo = (session: Session | null): ReturendFetcherType<UserIsracardInfoType> => {
+export const useAdminIsracardBillingInfo = (session: Session | null): ReturnedFetcherType<UserIsracardInfoType> => {
 
   const fetcherKey: SWRKey = () => session?.user?.name ? '/api/admin/billing/isracard/get-isracard-info' : null //no fetch if no session
 
@@ -25,14 +25,14 @@ export const useAdminIsracardBilingInfo = (session: Session | null): ReturendFet
     }
 
 
-    const FatchConfig: AxiosRequestConfig = {
+    const FetchConfig: AxiosRequestConfig = {
       params: params,
       //withCredentials:true,
       //withXSRFToken:true
     }
 
     try{ 
-      const response = await axios.get<any,any>(key, FatchConfig)
+      const response = await axios.get<any,any>(key, FetchConfig)
       if(response.status=== 200){
         return response.data
       }
@@ -58,7 +58,7 @@ export const useAdminIsracardBilingInfo = (session: Session | null): ReturendFet
   const { data, error, isValidating, mutate } = useSWR<  any,any >(fetcherKey, fetcher, SWRconfig)
 
   return {
-    UserDBIsracardlInfo: data,
+    UserDBIsracardInfo: data,
     isIsracardInfoValidating: isValidating,
     isIsracardInfoError: error,
     updateIsracardInfo: mutate,

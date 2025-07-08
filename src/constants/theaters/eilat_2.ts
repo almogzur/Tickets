@@ -1,4 +1,4 @@
-import { SeatsRow, SeatStyles, TheaterType } from "@/types/components-typs/admin/theater/admin-theater-types"
+import { SeatsRow, SeatStyles, TheaterType } from "@/types/components-types/admin/theater/admin-theater-types"
 import { CSSProperties } from "react";
 
 
@@ -138,17 +138,25 @@ export const Eilat2_sideTextStyles  : SeatStyles={
 "אופרה 2ב שורה 3 קומה 3": {position:"relative", top:88 , left:215   , fontSize:6 , fontWeight:700 },
 
 }
-const ThaeaterName="2 אילת"
+const TheaterName="2 אילת"
 
 const TheaterLocation = {alt:"",lot:"",city:"אילת", address:"שדרות התמרים הקניון האדום" }
 const TheaterMainPhone = '09-8888888'
 
-const Eilat_2 :TheaterType ={ mainSeats: Eilat2_mainSeats , sideSeats: Eilat2_sideSeats, textsStyle: Eilat2_sideTextStyles ,styles:  Eilat2_sideStyles, ThaeaterName, TheaterLocation, TheaterMainPhone}
+const Eilat_2 :TheaterType ={ 
+   mainSeats: Eilat2_mainSeats ,
+    sideSeats: Eilat2_sideSeats,
+     textsStyle: Eilat2_sideTextStyles 
+     ,styles:  Eilat2_sideStyles,
+      theaterName:TheaterName,
+       theaterLocation: TheaterLocation,
+        theaterMainPhone: TheaterMainPhone
+      }
 
 export default Eilat_2
 
 
-// export const theatherSurroundSeatsMobileTextPositons={
+// export const theaterSurroundSeatsMobileTextPositions={
 // "שירה 1 קומה 1":{top:0,left:0},
 // "שירה 1 קומה 2":{top:0,left:0},
 // "שירה 2 קומה 1":{top:0,left:0},

@@ -26,7 +26,7 @@ import TabsInfoContext from '@/context/admin/new-event/tabs/tabs-info-context';
 import {  ZodError } from 'zod';
 import { IoMdAddCircle } from 'react-icons/io';
 import {  TicketType, TicketZVS } from '@/types/pages-types/admin/admin-event-types';
-import InputWrap from '@/mui-components/TeextFiledWrpa/input-wrap';
+import InputWrap from '@/mui-components/text_filed_wrap/input-wrap';
 import SelectWrap from '@/mui-components/select-wrap';
 import {  IosWithTextSwitchWrap} from '@/mui-components/ios-switch-wrap';
 import DatePickerWrap from '@/mui-components/time-date/date-picker-wrap';

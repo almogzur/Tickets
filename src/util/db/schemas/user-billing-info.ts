@@ -21,7 +21,7 @@ export const UserIsracardSchema = {
 }
 
 
-export  const UserPayPalBillingShema = {
+export  const UserPayPalBillingSchema = {
     email: { type: String, requierd: true ,unique:true },
     accountId: { type: String, requierd: true ,unique:true},
     type: { type: String, requierd: true },

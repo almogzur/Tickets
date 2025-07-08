@@ -1,16 +1,16 @@
-import { infoFiledsType } from "@/types/pages-types/admin/admin-event-types";
+import { infoFieldsType } from "@/types/pages-types/admin/admin-event-types";
 import { createContext, Dispatch, SetStateAction } from "react";
 
 interface InfoTabContextType {
-    infoFileds:infoFiledsType
-    setInfoFileds:Dispatch<SetStateAction<infoFiledsType>>
+    infoFields:infoFieldsType
+    setInfoFields:Dispatch<SetStateAction<infoFieldsType>>
 }
 
-// explane the context why need to be here  ?
+// example the context why need to be here  ?
 
 export default createContext<InfoTabContextType>(
         {
-        infoFileds:{
+        infoFields:{
             eventName: "",
             pre: "",
             cat: "",
@@ -23,7 +23,7 @@ export default createContext<InfoTabContextType>(
             OpenDoors: "",
             availableSeatsAmount: 0
         },
-        setInfoFileds: function (value: SetStateAction<infoFiledsType>): void {
+        setInfoFields: function (value: SetStateAction<infoFieldsType>): void {
             throw new Error("Function not implemented.");
         }
     }

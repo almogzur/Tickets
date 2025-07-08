@@ -1,5 +1,5 @@
-import { CreateMongooseClient } from "@/util/db/mongosee-connect";
-import { EventModel, filterAdminDataQuryOptions } from "@/util/db/mongosee-models";
+import { CreateMongooseClient } from "@/util/db/mongoose-connect";
+import { EventModel, filterAdminDataQueryOptions } from "@/util/db/mongoose-models";
 
 import { rateLimitConfig } from "@/util/fn/api-rate-limit.config";
 import rateLimit from "express-rate-limit";
@@ -46,7 +46,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const event = await Model.findOne(
             {_id: ObjectId.createFromHexString(`${event_id}`)}, //  id
             {},
-            filterAdminDataQuryOptions
+            filterAdminDataQueryOptions
         )
 
         if (event) {

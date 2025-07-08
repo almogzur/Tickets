@@ -29,7 +29,7 @@ export default function Editor() {
   const rteRef = useRef<RichTextEditorRef>(null);
   const [isEditable, setIsEditable] = useState(true);
   const [showMenuBar, setShowMenuBar] = useState(true);
-  const {infoFileds,setInfoFileds}= useContext(TabsInfoContext)
+  const {infoFields,setInfoFields}= useContext(TabsInfoContext)
   const [submittedContent, setSubmittedContent] = useState("");
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
 
@@ -45,12 +45,12 @@ useEffect(() => {
       const currentSelection = editor.state.selection;
       editor
         .chain()
-        .setContent(infoFileds.pre)
+        .setContent(infoFields.pre)
         .setTextSelection(currentSelection)
         .run();
     });
   }
-}, [editor,  infoFileds.pre]);
+}, [editor,  infoFields.pre]);
 
 
 
@@ -110,13 +110,13 @@ useEffect(() => {
           extensions={extensions} 
           editable={isEditable}
           shouldRerenderOnTransaction
-          content={infoFileds.pre }
+          content={infoFields.pre }
           
 
           
           onUpdate={({editor,transaction})=>{
             const cleanEditorContent = DOMPurify.sanitize(editor.getHTML(),{})
-            setInfoFileds(p => ({ ...p, pre: cleanEditorContent }));
+            setInfoFields(p => ({ ...p, pre: cleanEditorContent }));
           }}
           
           renderControls={() => <Box sx={{  p:1, m:0 ,borderRadius:1,   }}><EditorMenuControls  /> </Box> }

@@ -1,20 +1,20 @@
-import { SeatsRow, TheaterType } from "@/types/components-typs/admin/theater/admin-theater-types";
+import { SeatsRow, TheaterType } from "@/types/components-types/admin/theater/admin-theater-types";
 import { ObjectId } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next/types";
 import rateLimit from "express-rate-limit";
 import { rateLimitConfig } from "@/util/fn/api-rate-limit.config";
 import { UpdateTheaterApiVS } from '@/types/pages-types/client/client-event-type';
 import {  NewEventType } from "@/types/pages-types/admin/admin-event-types";
-import { CreateMongooseClient } from "@/util/db/mongosee-connect";
-import { EventModel } from "@/util/db/mongosee-models";
-import { selectSeats, ValidateNotOcupideSeats } from "@/util/fn/event-api-fn";
+import { CreateMongooseClient } from "@/util/db/mongoose-connect";
+import { EventModel } from "@/util/db/mongoose-models";
+import { selectSeats, ValidateNotOccupiedSeats } from "@/util/fn/backend_api_fn";
 
 
 const apiLimiter = rateLimit(rateLimitConfig);
 
 
 
-export default async function eventUpdateApi(req: NextApiRequest, res: NextApiResponse): Promise<void> {
+export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
     return apiLimiter(req, res, async () => {
         const API_NAME = "Client Update Events (Only PayProvider Invoke)";
         console.log(API_NAME);
@@ -24,13 +24,13 @@ export default async function eventUpdateApi(req: NextApiRequest, res: NextApiRe
         }
 
         const body = req.body;
-        const isValideData = UpdateTheaterApiVS.safeParse(body);
+        const isValidData = UpdateTheaterApiVS.safeParse(body);
 
-        if (!isValideData.success) {
+        if (!isValidData.success) {
             return res.status(400).json({ massage: " bad request data " });
         }
 
-        const { reqTheater, eventId ,numerOfSeatsSealected} = isValideData.data;
+        const { reqTheater, eventId ,numberOfSeatsSelected} = isValidData.data;
 
 
         res.setHeader("Allow", ["POST"]);
@@ -42,15 +42,18 @@ export default async function eventUpdateApi(req: NextApiRequest, res: NextApiRe
         }
 
         const Cluster = (await connection.listDatabases()).databases;
+
         const UsersDbs = Cluster.filter((db) => db.name.includes(`${process.env.USER_DATA_FOLDER_PATH}`));
 
         let Data 
 
         for (const db of UsersDbs) {
-            const dbConnection = connection.useDb(db.name, { noListener: true });
-            const Modle = EventModel(dbConnection);
 
-            const event = await Modle.findOne(
+            const dbConnection = connection.useDb(db.name);
+
+            const model = EventModel(dbConnection);
+
+            const event = await model.findOne(
                 { _id: ObjectId.createFromHexString(eventId) },
                 { projection: { log: false, invoices: false } },
                 { lean: true }
@@ -69,20 +72,20 @@ export default async function eventUpdateApi(req: NextApiRequest, res: NextApiRe
         const { info,   ...restEvent } = Data.userEvent;
         const { Theater,  availableSeatsAmount, ...restInfo } = info;
 
-        const isSeatsFree = ValidateNotOcupideSeats(Theater, reqTheater);
+        const isSeatsFree = ValidateNotOccupiedSeats(Theater, reqTheater);
 
         if (!isSeatsFree) {
             return res.status(400).json({ massage: "not open seat" });
         }
 
-        const modifiedSeates = selectSeats({ main: reqTheater.mainSeats, side: reqTheater.sideSeats });
+        const modifiedSates = selectSeats({ main: reqTheater.mainSeats, side: reqTheater.sideSeats });
 
-        const newAvailableSeatsAmount = availableSeatsAmount - numerOfSeatsSealected
+        const newAvailableSeatsAmount = availableSeatsAmount - numberOfSeatsSelected
 
         const newTheater: TheaterType = {
             ...Theater,
-            mainSeats: modifiedSeates.main,
-            sideSeats: modifiedSeates.side
+            mainSeats: modifiedSates.main,
+            sideSeats: modifiedSates.side
         };
    
         const newEvent: NewEventType = {
@@ -109,13 +112,13 @@ export default async function eventUpdateApi(req: NextApiRequest, res: NextApiRe
             return res.status(400).json({ massage: API_NAME +   "err" });
         }
         
-        console.log(API_NAME  + " Succsess")
+        console.log(API_NAME  + " success")
 
-        return res.status(200).json({ massage: API_NAME +' succsess ' });
+        return res.status(200).json({ massage: API_NAME +' success ' });
     });
 }
 
-// resolve by the rate limeter 
+// resolve by the rate limiter 
 // see :   https://github.com/vercel/next.js/discussions/40270
 export const config = {
     api: {

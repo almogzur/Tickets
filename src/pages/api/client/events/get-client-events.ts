@@ -1,6 +1,6 @@
 import { ClientEventType } from "@/types/pages-types/admin/admin-event-types";
-import {CreateMongooseClient,} from "@/util/db/mongosee-connect";
-import { EventModel, filterAdminDataQuryOptions } from "@/util/db/mongosee-models";
+import {CreateMongooseClient,} from "@/util/db/mongoose-connect";
+import { EventModel, filterAdminDataQueryOptions } from "@/util/db/mongoose-models";
 import { rateLimitConfig } from "@/util/fn/api-rate-limit.config";
 import rateLimit from "express-rate-limit";
 
@@ -40,9 +40,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<Clien
 
           const dbConnection = connection.useDb(db.name) // Bind DB
 
-          const Modle = EventModel(dbConnection)
+          const model = EventModel(dbConnection)
     
-          const userEvents =  await Modle.find({},{},filterAdminDataQuryOptions)
+          const userEvents =  await model.find({},{},filterAdminDataQueryOptions)
 
           return   userEvents
 
@@ -53,7 +53,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<Clien
   //     connection.useDb('') // return to global path 
           
            //  findResult will only be returned if its ! null . 
-           // flat remove the dblist wraper array
+           // flat remove the dblist wrap array
           
           //  console.log( "Number Of events  ", Events.flat().length)
       
@@ -68,7 +68,7 @@ export default handler
 
 export const config = {
   api: {
-    externalResolver: true,  // resolve by the rate limeter
+    externalResolver: true,  // resolve by the rate limiter
   },
 }
 

@@ -3,8 +3,8 @@
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
-import  {CreateMongooseClient, userDataPrefix } from "@/util/db/mongosee-connect";
-import { EventModel } from "@/util/db/mongosee-models";
+import  {CreateMongooseClient, userDataPrefix } from "@/util/db/mongoose-connect";
+import { EventModel } from "@/util/db/mongoose-models";
 
 export default async function handler  ( req: NextApiRequest , res: NextApiResponse ):Promise<any>{
  const API_NAME =  "Admin Get All Events (hook)"

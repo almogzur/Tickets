@@ -3,8 +3,8 @@ import {  TextField, TextFieldProps, TextFieldVariants,  } from "@mui/material"
 import {ChangeEventHandler, CSSProperties, ReactNode, RefObject} from "react";
 
 
-import ControledHelperText from "./controled-helper-text";
-import ControledLabel from "./controled-form-label";
+import ControlledHelperText from "./controlled-helper-text";
+import ControlledLabel from "./controlled-form-label";
 
 type HTMLInputTypes = 
   | "color"
@@ -33,11 +33,11 @@ type HTMLInputTypes =
 
   export interface  InputWrapPropsType extends  Omit<TextFieldProps, 'variant'>  {
 
-  /** Requierd Fileds  */    
+  /** required Fields  */    
     
     label:string
     value:string|number|undefined
-    onChangeHndler:ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement|HTMLSelectElement>
+    onChangeHandler:ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement|HTMLSelectElement>
     helpText:string|undefined
 
   /** util  */
@@ -48,17 +48,16 @@ type HTMLInputTypes =
      ref?:RefObject<HTMLInputElement>
      icon?:ReactNode
 
-  // if provided alone will use lable and place holder 
+  // if provided alone will use label and place holder 
      placeholder?:string
      placeholderStyle?:CSSProperties
 
   // if provided will remove label and only display placeholder 
      placeholderMode?:boolean
 
-  /** !!! this is extiontion for Text-atea-wrap . if you chanfe this also change the ref wraper  */
+  /** !!! this is extension for Text-input-wrap . if you change this also change the ref wrap  */
      multiline?: true;
      rows?: number;
-  /** !!! this is extiontion for Text-atea-wrap . if you chanfe this also change the ref wraper  */
 
  
      /** Styles Options  */
@@ -67,7 +66,7 @@ type HTMLInputTypes =
 
       /*Labels*/
       isLabelBold?:boolean
-      labelTextcolor?:CSSProperties['color']
+      labelTextColor?:CSSProperties['color']
       
 
       isValueBold?:boolean
@@ -86,7 +85,7 @@ type HTMLInputTypes =
     
     /**   Style Positions */
      helpTextPotionsEnd?:boolean
-     labelPositioin:"top"|"end"
+     labelPosition:"top"|"end"
 
 
 
@@ -99,7 +98,7 @@ const InputWrap = ({
      inputType,
      label,
      value, 
-     onChangeHndler,
+     onChangeHandler,
      isRequired,
      stateName,
      variant,
@@ -112,7 +111,7 @@ const InputWrap = ({
      isDisabled,
      hoverColor,
      icon,
-     labelPositioin,
+     labelPosition,
      ref,
      styles,
      rows,
@@ -123,7 +122,7 @@ const InputWrap = ({
      placeholderStyle,
      valueTextColor,
      isValueBold,
-     labelTextcolor,
+     labelTextColor,
      ...rest 
     }:InputWrapPropsType)=>{
 
@@ -142,21 +141,21 @@ const InputWrap = ({
       "& .MuiInputBase-input::placeholder":placeholderStyle
     }}
       id={label}
-      type={inputType} //defult to text
+      type={inputType} //default to text
       value={value ?? ""}
-      onChange={onChangeHndler}
+      onChange={onChangeHandler}
       required={isRequired}
       disabled={isDisabled}
       name={stateName}
-      helperText={helpText ? <ControledHelperText text={helpText} helpTextPotionsEnd={helpTextPotionsEnd??false} /> : null}
+      helperText={helpText ? <ControlledHelperText text={helpText} helpTextPotionsEnd={helpTextPotionsEnd??false} /> : null}
       variant={variant ?? 'standard'}
-      label={ placeholderMode ? null : <ControledLabel labelPositioin={labelPositioin?? "top"} label={label} isLabelBold={isLabelBold} labelTextcolor={labelTextcolor}/>}
+      label={ placeholderMode ? null : <ControlledLabel labelPosition={labelPosition?? "top"} label={label} isLabelBold={isLabelBold} labelTextColor={labelTextColor}/>}
       error={error}
       ref={ref}
       style={{...styles}}
       multiline={multiline}
       rows={rows}
-      placeholder={placeholder} // string can't extedn with ReactNode in SxProps
+      placeholder={placeholder} // string can't extends with ReactNode in SxProps
       slotProps={{input:{placeholder,style:{fontWeight:isValueBold?"bold":undefined, color:valueTextColor}}}}
       {...rest}
      />

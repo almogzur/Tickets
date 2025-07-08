@@ -1,7 +1,7 @@
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
-import {CreateMongooseClient} from "@/util/db/mongosee-connect";
-import  {  userDataPrefix } from "@/util/db/mongosee-connect";
-import { PayPalModel } from "@/util/db/mongosee-models";
+import {CreateMongooseClient} from "@/util/db/mongoose-connect";
+import  {  userDataPrefix } from "@/util/db/mongoose-connect";
+import { PayPalModel } from "@/util/db/mongoose-models";
 
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
@@ -12,7 +12,7 @@ export default async function handler  ( req: NextApiRequest , res: NextApiRespo
 
   
  if (req.method !== 'GET') {
-    return   res.status(405).json({ message:API_NAME + "Not Allowd" });
+    return   res.status(405).json({ message:API_NAME + "Not allowed" });
  }
 
  const session = await getServerSession(req, res, authOptions);
@@ -31,9 +31,9 @@ export default async function handler  ( req: NextApiRequest , res: NextApiRespo
 
   try{ 
 
-     const Modle = PayPalModel(connection)
+     const Model = PayPalModel(connection)
 
-     const result = await Modle.findOne({},{},{lean:true})
+     const result = await Model.findOne({},{},{lean:true})
 
      return res.status(200).send(result)
 

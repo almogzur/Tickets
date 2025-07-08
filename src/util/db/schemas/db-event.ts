@@ -1,24 +1,23 @@
 
 import {Schema} from 'mongoose';
-import { EventSettingType, TicketType, infoFiledsType } from '../../../types/pages-types/admin/admin-event-types';
-import { SavePayPalInvoceTpee } from '@/types/pages-types/client/client-event-type';
+import { EventSettingType, TicketType, infoFieldsType } from '../../../types/pages-types/admin/admin-event-types';
 
 
-const EventSettingsShema = new Schema<EventSettingType>({
+const EventSettingsSchema = new Schema<EventSettingType>({
   limitClientTicket: { type: Boolean, required: false },
   ticketLimit: { type: String, required: false },
   canSelectNotRelatedSites: { type: Boolean, required: false }
 }, {_id: false,versionKey: false,})
 
 const TicketSchema = new Schema<TicketType>({
-  EndSealesHour: { type: String, required: false },
-  EndSealesDate: { type: String, required: false },
+  EndSalesHour: { type: String, required: false },
+  EndSalesDate: { type: String, required: false },
   selectedType: { type: String, required: true },
   priceInfo: { type: String, required: false },
   price: { type: String, required: true }
 }, {_id: false,  versionKey: false,})
 
-const DraftGlobalFiled = new Schema<infoFiledsType>({
+const DraftGlobalFiled = new Schema<infoFieldsType>({
   eventName: { type: String, required: true, unique: true },
   cat: { type: String, require: false },
   TheaterName: { type: String, require: false },
@@ -32,7 +31,7 @@ const DraftGlobalFiled = new Schema<infoFiledsType>({
   Theater: { type: Object, required: false },
 }, { _id: false })
 
-const EventGlobalFiled = new Schema<infoFiledsType>({
+const EventGlobalFiled = new Schema<infoFieldsType>({
   eventName: { type: String, required: true, unique: true },
   cat: { type: String, require: true },
   TheaterName: { type: String, require: true },
@@ -47,12 +46,12 @@ const EventGlobalFiled = new Schema<infoFiledsType>({
 }, { _id: false })
 
 export const EventLogsSchema = new Schema( {
-  time_stemp :{type:String, required:false},
+  time_stamp :{type:String, required:false},
   user:{type:String, required:false},
   ip:{type:String, required:false},
 })
 
-export const cartItemSchema = new Schema({
+export const CartItemSchema = new Schema({
   name: { type: String,required: true},
   quantity: {type: String,required: true},
   unitAmount: {
@@ -66,30 +65,29 @@ export const  PayedItemInvoce = new Schema({
   payer:{},
   payment_source:{},
   purchase_units:{},
-  cart:{type : [cartItemSchema], required: true },
+  cart:{type : [CartItemSchema], required: true },
   total: { type: String, required: true },
   purchase_date: { type: String, required: true }
 },{versionKey:false,_id:false})
 
 
-// createBindToConnectionModel create thes schemas 
+// createBindToConnectionModel create schemas 
 
-export const DraftSchemaDef =  {
+export const DraftSchema =  {
   info: { type: DraftGlobalFiled },
   tickets: { type: [TicketSchema], required: false },
-  settings: { type: EventSettingsShema, required: false },
+  settings: { type: EventSettingsSchema, required: false },
 }
 
-export const EventSchemaDef = {
+export const EventSchema = {
   _id:{type: String, required:false},
-  ...DraftSchemaDef, // Extending EventSchemaDef with DraftSchemaDef
+  ...DraftSchema, // Extending EventSchemaDef with DraftSchemaDef
   public_id: { type: String, required: false, unique: true },  // only if client save paypal  info , id is added to the event for sdk 
   log: { type: [EventLogsSchema], required: false },
   invoices: { type: [PayedItemInvoce], required: false },
 };
 
 
-export const ClientSchmaDef = DraftSchemaDef
 
 
 

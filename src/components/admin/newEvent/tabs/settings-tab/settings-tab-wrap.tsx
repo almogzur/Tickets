@@ -7,10 +7,10 @@ import { blue } from "@mui/material/colors"
 import tabsPageContext from "@/context/admin/new-event/tabs/tabs-page-context"
 
 import SettingTabEventTab from "./setting-tab-event-tab"
-import SettingTabMassageTab from "./setting-tab-maseages-tab"
+import SettingTabMassagesTab from "./setting-tab-massages-tab"
 import SettingTabWebsiteTab from "./setting-tab-website-tab"
 
-interface SetingsTabPropsType {}
+interface SettingsTabPropsType {}
 
 
 
@@ -21,7 +21,7 @@ const SettingTab= ()=>{
   
       const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
       
-          const TabComonStyleAttribute :CSSProperties = {
+          const TabStyleAttribute :CSSProperties = {
              color:"#fff",
              fontWeight:700,
           }
@@ -51,9 +51,9 @@ const SettingTab= ()=>{
               variant='scrollable'
       >
 
-        <Tab value={0} label="אירוע"  sx={{...TabComonStyleAttribute}}  icon={<FcDataSheet size={"1.5em"} />}    /> 
-        <Tab value={1} label="הודעות "  sx={{...TabComonStyleAttribute}} icon={<FcSms size={"1.5em"} color={theme.palette.primary.main} />} />  
-        <Tab value={2} label="באתר"  sx={{...TabComonStyleAttribute}} icon={<FcGlobe size={"1.5em"} color={theme.palette.primary.main} />} />  
+        <Tab value={0} label="אירוע"  sx={{...TabStyleAttribute}}  icon={<FcDataSheet size={"1.5em"} />}    /> 
+        <Tab value={1} label="הודעות "  sx={{...TabStyleAttribute}} icon={<FcSms size={"1.5em"} color={theme.palette.primary.main} />} />  
+        <Tab value={2} label="באתר"  sx={{...TabStyleAttribute}} icon={<FcGlobe size={"1.5em"} color={theme.palette.primary.main} />} />  
 
         </Tabs>
         <Flex
@@ -61,14 +61,14 @@ const SettingTab= ()=>{
          justifyContent={"center"}   
          height={'calc(100% - 80px)'} 
          overflow={"auto"} 
-         minWidth={"100%"} // dont remove ***
+         minWidth={"100%"} // don't remove ***
         >
          {
           settingsTabsValue === 0? 
           <SettingTabEventTab/>
          :
           settingsTabsValue === 1? 
-          <SettingTabMassageTab/>
+          <SettingTabMassagesTab/>
          :
           settingsTabsValue === 2 ?
           <SettingTabWebsiteTab/>

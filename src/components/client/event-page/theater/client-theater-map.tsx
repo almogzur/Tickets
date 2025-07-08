@@ -7,7 +7,7 @@ import WidthContext from '@/context/WidthContext';
 import { ClientEventType } from '@/types/pages-types/admin/admin-event-types';
 import ClientTheaterRTransform from './client-theater-transformer';
 import { ClientSelectedSeatType } from '@/types/pages-types/client/client-event-type';
-import { TheaterType } from '@/types/components-typs/admin/theater/admin-theater-types';
+import { TheaterType } from '@/types/components-types/admin/theater/admin-theater-types';
 
 type TheaterMapType = {
 
@@ -20,33 +20,33 @@ type TheaterMapType = {
     setClientEventTheaterState:Dispatch<SetStateAction<TheaterType|undefined>>
 
 
-    hendlerSeatOldValues:Record<string, number>
-    setHendlerSeatOldValues:Dispatch<SetStateAction<Record<string,number>>>
+    handlerSeatOldValues:Record<string, number>
+    setHandlerSeatOldValues:Dispatch<SetStateAction<Record<string,number>>>
   }
 
 
 const  TheaterMap = ({  
       event,
       clientEventTheaterState,
-      hendlerSeatOldValues,
-      setHendlerSeatOldValues ,
+      handlerSeatOldValues,
+      setHandlerSeatOldValues ,
       setEventSelectedSeats,
        setClientEventTheaterState
        }:TheaterMapType) => {
 
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
   const theme = useTheme()
-  const MapFlexContaner = Flex
+  const MapFlexContainer = Flex
 
 
 
-    // to hndle remove item in sebling component in the tree 
-    // hendler function cant be exported  or made ganric  
-    // insted State is  lifted to perent 
+    // to  remove item in Sibling component in the tree 
+    // handler function cant be exported  or made generic  
+    // instead State is  lifted to parent 
 
 
 
-    // henlder need event in the global+scope
+    // handler need event in the global+scope
 
      
     const updateTheater = ( seatValue: number, seatNumber: number, row: string,theater:TheaterType ,price:string , priceInfo?:string ) => {
@@ -80,13 +80,13 @@ const  TheaterMap = ({
         const oldNumber = updatedRow[seatNumber];
 
         // Store the original seat value if not already stored
-        setHendlerSeatOldValues((prev) => ({
+        setHandlerSeatOldValues((prev) => ({
             ...prev,
             [seatKey]: prev[seatKey] ?? oldNumber,
         }));
 
         // Toggle between 2 and the stored original value
-        updatedRow[seatNumber] = oldNumber === 2 ? hendlerSeatOldValues[seatKey] ?? seatValue : 2;
+        updatedRow[seatNumber] = oldNumber === 2 ? handlerSeatOldValues[seatKey] ?? seatValue : 2;
 
         updatedSeats[row] = updatedRow;
         newState[seatCollection] = updatedSeats;
@@ -122,16 +122,14 @@ const  TheaterMap = ({
 
    const MainSeatS  =  clientEventTheaterState &&  Object.entries(clientEventTheaterState.mainSeats).map(([row, rowContent]) => {
     const colValue  = rowContent.map((seatValue: number, i: number) => {
-      const textset = "מושב";
-      const textrow = "שורה";
   
       return (
         <TooltipButton // uses Context
           key={`${row}.${i}`}
           seatValue={seatValue}
-          seatnumber={i}
+          seatNumber={i}
           row={row}
-          hendler={updateTheater}
+          handler={updateTheater}
            event={event}
             />
       );
@@ -161,9 +159,9 @@ const  TheaterMap = ({
           <TooltipButton
             key={`${row}.${i}`}
             seatValue={seatValue}
-            seatnumber={i}
+            seatNumber={i}
             row={row}
-            hendler={updateTheater}
+            handler={updateTheater}
             event={event}
             />
         );
@@ -192,14 +190,14 @@ return (
  
        <ClientTheaterRTransform >    
 
-          <MapFlexContaner  
+          <MapFlexContainer  
               sx={{direction:"ltr" }} 
             >
                <Stage />
                 {MainSeatS}
                 {Text}
                 {SideSeats}
-         </MapFlexContaner>      
+         </MapFlexContainer>      
 
       </ClientTheaterRTransform>         
   

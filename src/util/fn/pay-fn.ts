@@ -5,8 +5,8 @@ import { decryptData } from "./crypto";
 import { Connection } from "mongoose";
 import qs from "qs";
 import axios from "axios";
-import { UserPayPalInfoType } from "@/types/pages-types/admin/user-biling-info-types";
-import { EventModel, IsracardModel, PayPalModel } from "../db/mongosee-models";
+import { UserPayPalInfoType } from "@/types/pages-types/admin/user-billing-info-types";
+import { EventModel, IsracardModel, PayPalModel } from "../db/mongoose-models";
 
 
 

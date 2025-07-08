@@ -6,8 +6,8 @@ import { Stack as Flex, Button, useTheme, Box } from '@mui/material';
 
 import WidthContext from '@/context/WidthContext';
 import React from 'react';
-import ClineTransformContext from '@/context/client/event-page/client-tranform-contenx'
-import { Positions, TheaterType } from '@/types/components-typs/admin/theater/admin-theater-types';
+import ClineTransformContext from '@/context/client/event-page/client-transform-context'
+import { Positions, TheaterType } from '@/types/components-types/admin/theater/admin-theater-types';
 import { TiArrowBack } from "react-icons/ti";
 
 import { ClientSelectedSeatType } from '@/types/pages-types/client/client-event-type';
@@ -15,7 +15,7 @@ import { ClientSelectedSeatType } from '@/types/pages-types/client/client-event-
 import { useClientEvent } from '@/hooks/client/use-event';
 import DrawerContent from '@/components/client/event-page/sidebar/sidebar-content';
 import TheaterMap from '@/components/client/event-page/theater/client-theater-map';
-import SideBarWraper from '@/components/client/event-page/sidebar/sidebar-wrapper';
+import SideBarWrap from '@/components/client/event-page/sidebar/sidebar-wrapper';
 
 
 
@@ -25,7 +25,7 @@ import SideBarWraper from '@/components/client/event-page/sidebar/sidebar-wrappe
 const DetailsPage = () => {
 
 
-  // const { Event } = useContex(LiveEventContext)
+  // const { Event } = useContext(LiveEventContext)
 
   const theme = useTheme()
   const router = useRouter()
@@ -38,16 +38,16 @@ const DetailsPage = () => {
 
   const [clientEventTheaterState, setClientEventTheaterState] = useState<TheaterType|undefined>()
   const [eventSelectSeats, setEventSelectedSeats] = useState<ClientSelectedSeatType[]>([])
- const [  pageMaunted, setPageMaunted] = useState<boolean>(false)
+ const [  pageLoad, setPageLoad] = useState<boolean>(false)
  
-  // component leftedUpState
+  // component liftedUpState
 
   //Theater
-  const [hendlerSeatOldValues, setHendlerSeatOldValues] = useState<Record<string, number>>({});
+  const [handleSeatOldValues, setHandleSeatOldValues] = useState<Record<string, number>>({});
   const [ClientMapPositions, setClientMapPositions] = useState<Positions>({ x: 0, y: 0, Scale: undefined })
 
-  // Wighet
-  const [wighetIsExp, setWighetIsExp] = useState<boolean>(false)
+  // wight
+  const [wightIsExp, setWightIsExpIsExp] = useState<boolean>(false)
 
 
   useEffect(()=>{
@@ -55,8 +55,8 @@ const DetailsPage = () => {
 
 
     setClientEventTheaterState(Event?.info.Theater)
-    setPageMaunted(true)
-  }, [Event, event_id]) // refresh pages hendler 
+    setPageLoad(true)
+  }, [Event, event_id]) // refresh pages handler 
   
 
  //Page State 
@@ -64,18 +64,15 @@ const DetailsPage = () => {
   const Wrapper = Flex,
             BackBTN = Button
 
-  if ( !Event || ! pageMaunted){ return <div>loading...</div>;}
+  if ( !Event || ! pageLoad || !clientEventTheaterState){ return <div>loading...</div>;}
 
   return (
 
       <Wrapper
         direction={!md ? 'column' : "row"}
-        sx={{
-          width: "100%",
-          height: "100%",
-        }}
+        sx={{ width: "100%", height: "100%"}}
       >
-        <BackBTN
+         <BackBTN
           color='secondary'
           sx={{
             position: "absolute",
@@ -98,45 +95,46 @@ const DetailsPage = () => {
         </BackBTN>
 
 
-        <SideBarWraper
+
+        <SideBarWrap
           ClientSelectedEvent={Event}
-          wighetIsExp={wighetIsExp}
+          weightIsExp={wightIsExp}
           eventSelectSeats={eventSelectSeats}
-          setWighetIsExp={setWighetIsExp}
+          setWeightIsExp={setWightIsExpIsExp}
           
         >
           <DrawerContent
             //event 
             ClientSelectedEvent={Event}
-            // tikect list
+            // ticket list
             eventSelectSeats={eventSelectSeats}
             setEventSelectedSeats={setEventSelectedSeats}
-            // theater  seates
+            // theater  sates
             clientEventTheaterState={clientEventTheaterState}
             setClientEventTheaterState={setClientEventTheaterState}
-            // old seate valuse  ( state to return the orgin icons and colors at  un-select )
-            hendlerSeatOldValues={hendlerSeatOldValues}
-            setHendlerSeatOldValues={setHendlerSeatOldValues}
+            // old setae values  ( state to return the origin icons and colors at  un-select )
+            handlerSeatOldValues={handleSeatOldValues}
+            setHandlerSeatOldValues={setHandleSeatOldValues}
           />
-        </SideBarWraper>
+        </SideBarWrap>
 
          {Event?.info?.Theater &&
           <Box
             width={"100%"}
-            height={wighetIsExp && !md ? 0 : undefined}
+            height={wightIsExp && !md ? 0 : undefined}
           >
              <ClineTransformContext.Provider value={{ ClientMapPositions, setClientMapPositions }}>
               <TheaterMap
                 event={Event}
-                // theater  seates
+                // theater  sates
                 clientEventTheaterState={clientEventTheaterState}
                 setClientEventTheaterState={setClientEventTheaterState}
-                // tikect list
+                // ticket list
                 eventSelectSeats={eventSelectSeats}
                 setEventSelectedSeats={setEventSelectedSeats}
-                // old seate valuse  ( state to return the orgin icons and colors at  un-select )
-                hendlerSeatOldValues={hendlerSeatOldValues}
-                setHendlerSeatOldValues={setHendlerSeatOldValues}
+                // old seats values  ( state to return the origin icons and colors at  un-select )
+                handlerSeatOldValues={handleSeatOldValues}
+                setHandlerSeatOldValues={setHandleSeatOldValues}
               />
             </ClineTransformContext.Provider>
           </Box>

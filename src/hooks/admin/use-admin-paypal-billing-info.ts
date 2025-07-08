@@ -1,4 +1,4 @@
-import { UserPayPalInfoType } from "@/types/pages-types/admin/user-biling-info-types";
+import { UserPayPalInfoType } from "@/types/pages-types/admin/user-billing-info-types";
 import axios, { AxiosRequestConfig } from "axios";
 import { Session } from "next-auth";
 import useSWR, { Fetcher, Key as SWRKey, KeyedMutator, SWRConfiguration } from "swr";
@@ -6,7 +6,7 @@ import useSWR, { Fetcher, Key as SWRKey, KeyedMutator, SWRConfiguration } from "
 
 
 
-type ReturendFetcherType<T> = {
+type ReturnedFetcherType<T> = {
     UserDBPayPalInfo: T; // Allow `undefined` for when data is not yet loaded
     isPayPalInfoValidating: boolean;
     isPayPalInfoError: unknown;
@@ -14,7 +14,7 @@ type ReturendFetcherType<T> = {
 };
 
 
-export const useAdminPaypalBilingInfo = (session: Session | null): ReturendFetcherType<UserPayPalInfoType> => {
+export const useAdminPaypalBillingInfo = (session: Session | null): ReturnedFetcherType<UserPayPalInfoType> => {
 
   const fetcherKey: SWRKey = () => session?.user?.name ? '/api/admin/billing/paypal/get-paypal-info' : null //no fetch if no session
 
@@ -25,14 +25,14 @@ export const useAdminPaypalBilingInfo = (session: Session | null): ReturendFetch
     }
 
 
-    const FatchConfig: AxiosRequestConfig = {
+    const FetchConfig: AxiosRequestConfig = {
       params: params,
       //withCredentials:true,
       //withXSRFToken:true
     }
 
     try{ 
-      const response = await axios.get<any,any>(key, FatchConfig)
+      const response = await axios.get<any,any>(key, FetchConfig)
       if(response.status=== 200){
         return response.data
       }

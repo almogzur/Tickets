@@ -6,7 +6,7 @@ import useSWR, { Fetcher, Key as SWRKey, KeyedMutator, SWRConfiguration } from "
 type DataType = WithDataEventType[]
 
 
-type ReturendFetcherType<T> = {
+type ReturnedFetcherType<T> = {
   Events: T; // Allow `undefined` for when data is not yet loaded
   isEventsValidating: boolean;
   isEventsError: unknown;
@@ -14,7 +14,7 @@ type ReturendFetcherType<T> = {
 };
 
 
-export const useAdminEvents = (session: Session | null): ReturendFetcherType<DataType> => {
+export const useAdminEvents = (session: Session | null): ReturnedFetcherType<DataType> => {
 
   const fetcherKey: SWRKey = () => session?.user?.name ? '/api/admin/live-events/get-admin-events' : null //no fetch if no session
 
@@ -25,13 +25,13 @@ export const useAdminEvents = (session: Session | null): ReturendFetcherType<Dat
     }
 
 
-    const FatchConfig: AxiosRequestConfig = {
+    const FetchConfig: AxiosRequestConfig = {
       params: params,
       //withCredentials:true,
       //withXSRFToken:true
     }
 
-    const response = await axios.get<DataType>(key, FatchConfig)
+    const response = await axios.get<DataType>(key, FetchConfig)
     // return the response to SWR Hook 
 
     return response.data

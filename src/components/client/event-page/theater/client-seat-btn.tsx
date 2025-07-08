@@ -9,14 +9,14 @@ import Button from "@mui/material/Button";
 import {  Typography, useTheme } from "@mui/material";
 import { LuTicket } from "react-icons/lu";
 import { ClientEventType } from "@/types/pages-types/admin/admin-event-types";
-import { TheaterType } from "@/types/components-typs/admin/theater/admin-theater-types";
+import { TheaterType } from "@/types/components-types/admin/theater/admin-theater-types";
 import SelectWrap, { SelectItemType } from "@/mui-components/select-wrap";
 
 interface ToolTipButtonType {
   seatValue: number;
-  seatnumber: number;
+  seatNumber: number;
   row: string;
-  hendler: (seatValue: number, seatnumber: number, row: string ,theater:TheaterType, price:string ,  priceInfo?:string ) => void;
+  handler: (seatValue: number, seatNumber: number, row: string ,theater:TheaterType, price:string ,  priceInfo?:string ) => void;
   event:ClientEventType|undefined
 }
 
@@ -39,29 +39,29 @@ display:"flex",
   seatSelected: { backgroundColor: purple[300] },
   seatBlocked: { color: "black", background: "black", cursor: "auto" },
   seatDiscounted: {},
-  seatAccsesble: {},
+  seatAccessible: {},
 };
 
-const TooltipButton = ({ seatValue, seatnumber, row, hendler, event }: ToolTipButtonType) => {
+const TooltipButton = ({ seatValue, seatNumber, row, handler, event }: ToolTipButtonType) => {
 
   const [originalSeatType] = useState(seatValue);
 
   const theme = useTheme()
 
-  const [openDiscounteDialog, setOpenopenDiscounteDialog] = useState(false);
-  const [openAccsessableDialog, setOpenAccsessableDialog] = useState(false);
+  const [openDiscountDialog, setOpenDiscountDialog] = useState(false);
+  const [openAccessibleDialog, setOpenAccessibleDialog] = useState(false);
 
-  const [SelectedDiscounteInfo ,setSelectedDiscounteInfo ] = useState<{ price:string,priceInfo:string}>({
+  const [SelectedDiscountInfo ,setSelectedDiscountInfo ] = useState<{ price:string,priceInfo:string}>({
       price:'',
       priceInfo:''
     })
 
 
-  const getDiscountesTickets = ()=>{
-         return event?.tickets?.filter((tikect)=> tikect.selectedType === 'discount').flat()
+  const getDiscountsTickets = ()=>{
+         return event?.tickets?.filter((ticket)=> ticket.selectedType === 'discount').flat()
   }
-  const getDiscountesValues= () : SelectItemType[] | undefined=>{
-    const list =  getDiscountesTickets()?.map((discount)=>{
+  const getDiscountsValues= () : SelectItemType[] | undefined=>{
+    const list =  getDiscountsTickets()?.map((discount)=>{
           return {value :discount.price , label:discount.priceInfo}
         })
         if(list){
@@ -69,25 +69,25 @@ const TooltipButton = ({ seatValue, seatnumber, row, hendler, event }: ToolTipBu
         }
 }
 
-  const getNormailTicket = ()=>{
-    return event?.tickets?.find((tikect)=> tikect.selectedType === 'normal' )
+  const getNormalTicket = ()=>{
+    return event?.tickets?.find((ticket)=> ticket.selectedType === 'normal' )
   }
-  const getNoramlPrice = ()=>{
-     return getNormailTicket()?.price ?? "" 
+  const getNormalPrice = ()=>{
+     return getNormalTicket()?.price ?? "" 
   }
 
 
   // Function to open the dialog
   const handleClick = (seatValue:number) => {
-    if (seatValue === 5) {// discount of accses seat 
-      setOpenAccsessableDialog(true); // dialog invoke the hendler
+    if (seatValue === 5) {// discount of access seat 
+      setOpenAccessibleDialog(true); // dialog invoke the handler
     } 
     else if( seatValue === 4   ){
-      setOpenopenDiscounteDialog(true) // dialog invoke the hendler
+      setOpenDiscountDialog(true) // dialog invoke the handler
     }
     else {
       if(event?.info.Theater){
-        hendler(seatValue, seatnumber, row ,event.info.Theater, getNoramlPrice() ); // no dialog
+        handler(seatValue, seatNumber, row ,event.info.Theater, getNormalPrice() ); // no dialog
       }
     }
   };
@@ -98,36 +98,36 @@ const TooltipButton = ({ seatValue, seatnumber, row, hendler, event }: ToolTipBu
     if (seatValue === 2) return { ...styles.seats, ...styles.seatSelected };
     if (seatValue === 3) return { ...styles.seats, ...styles.seatBlocked };
     if (seatValue === 4) return { ...styles.seats, ...styles.seatDiscounted };
-    if (seatValue === 5) return { ...styles.seats, ...styles.seatAccsesble };
+    if (seatValue === 5) return { ...styles.seats, ...styles.seatAccessible };
     return styles.seats;
   }, [seatValue]);
 
 
 
-  const handleDiscounteConfirm = () => {
+  const handleDiscountConfirm = () => {
      if(event?.info.Theater){
 
-          hendler(seatValue, seatnumber, row , event.info.Theater , SelectedDiscounteInfo.price , SelectedDiscounteInfo.priceInfo);
+          handler(seatValue, seatNumber, row , event.info.Theater , SelectedDiscountInfo.price , SelectedDiscountInfo.priceInfo);
 
-        setOpenopenDiscounteDialog(false); 
+        setOpenDiscountDialog(false); 
      }
   };
 
-  const handleDiscounteCancel = () => {
-    setOpenopenDiscounteDialog(false); 
+  const handleDiscountCancel = () => {
+    setOpenDiscountDialog(false); 
   };
 
 
-  const handleAccsessableConfirm = () => {
+  const handleAccessibleConfirm = () => {
     if(event?.info.Theater){
-      hendler(seatValue, seatnumber, row,event?.info.Theater, getNoramlPrice());
-      setOpenAccsessableDialog(false); 
+      handler(seatValue, seatNumber, row,event?.info.Theater, getNormalPrice());
+      setOpenAccessibleDialog(false); 
 
     }
   };
 
-  const handleAccsessableCancel = () => {
-    setOpenAccsessableDialog(false); 
+  const handleAccessibleCancel = () => {
+    setOpenAccessibleDialog(false); 
   };
 
   
@@ -141,14 +141,14 @@ const TooltipButton = ({ seatValue, seatnumber, row, hendler, event }: ToolTipBu
 
       </button>
 
-      {/* Discounte  Confirmation Dialog */}
-          {/* accsessable Confirmation Dialog */}
+      {/* discount  Confirmation Dialog */}
+      {/* accessible Confirmation Dialog */}
 
 
 {  seatValue === 4 ? 
       <Dialog
-           open={openDiscounteDialog}
-            onClose={handleDiscounteCancel}
+           open={openDiscountDialog}
+            onClose={handleDiscountCancel}
             sx={{direction:"rtl"}}
             >
         <DialogTitle>בחר הנחה </DialogTitle>
@@ -156,34 +156,34 @@ const TooltipButton = ({ seatValue, seatnumber, row, hendler, event }: ToolTipBu
 
         <SelectWrap 
              label={"בחר ההנחה"} 
-             items={getDiscountesValues()??[]} 
-             value={SelectedDiscounteInfo.price} 
-             changeHndler={(e,child)=> {
+             items={getDiscountsValues()??[]} 
+             value={SelectedDiscountInfo.price} 
+             changeHandler={(e,child)=> {
 
-                const childElement = child as React.ReactElement<{children:ReactNode}>; // bootsraping the component
+                const childElement = child as React.ReactElement<{children:ReactNode}>; // bootstrapping the component
 
                 if(childElement.props.children){
-                    setSelectedDiscounteInfo(p=>({ price: e.target.value, priceInfo:childElement.props.children?.toString()??""}))
+                    setSelectedDiscountInfo(p=>({ price: e.target.value, priceInfo:childElement.props.children?.toString()??""}))
                   }
                   else{
-                      throw new Error("Client Select Discoune Elemnt Err line 170 , ")
+                      throw new Error("Client Select discount element Err line 170 , ")
                   }
                 }
                    }
                   
           
              helpText={""} 
-             labelPositioin={"top"}
+             labelPosition={"top"}
              />
 
           <Typography>יש להציג קופון/ תעודה </Typography>
           <Typography>בעת ההגעה לאירוע </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleDiscounteCancel} color="primary">
+          <Button onClick={handleDiscountCancel} color="primary">
             ביטול
           </Button>
-          <Button disabled={!SelectedDiscounteInfo.price}  onClick={handleDiscounteConfirm} color="primary">
+          <Button disabled={!SelectedDiscountInfo.price}  onClick={handleDiscountConfirm} color="primary">
             אישור
           </Button>
         </DialogActions>
@@ -191,8 +191,8 @@ const TooltipButton = ({ seatValue, seatnumber, row, hendler, event }: ToolTipBu
     
   : seatValue ===5 ?
       <Dialog
-           open={openAccsessableDialog}
-            onClose={handleAccsessableCancel}
+           open={openAccessibleDialog}
+            onClose={handleAccessibleCancel}
             sx={{direction:"rtl"}}
             >
         <DialogTitle> מושב נגיש  </DialogTitle>
@@ -201,10 +201,10 @@ const TooltipButton = ({ seatValue, seatnumber, row, hendler, event }: ToolTipBu
 
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleAccsessableCancel} color="primary">
+          <Button onClick={handleAccessibleCancel} color="primary">
             ביטול
           </Button>
-          <Button onClick={handleAccsessableConfirm} color="primary">
+          <Button onClick={handleAccessibleConfirm} color="primary">
             אישור
           </Button>
         </DialogActions>

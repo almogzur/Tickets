@@ -1,4 +1,4 @@
-const  ImageUploaderHebtexts =  {
+const  ImageUploaderHebTexts =  {
     "en":{
         "or": "או",
         "menu":{
@@ -13,15 +13,15 @@ const  ImageUploaderHebtexts =  {
 
         "local": {
             "browse": "חיפוש",
-                 "dd_title_single": "גרור קובף לכאן",
-                 "drop_title_single": "גרור קובך לכאן כדי להעלות",
+                 "dd_title_single": "גרור קובץ לכאן",
+                 "drop_title_single": "גרור קובץ לכאן כדי להעלות",
         },
         "google_drive": {
           "no_auth_title": "העלה קובץ מגוגל דרייב.",
           "no_auth_action": "התחבר דרך גוגל",
           "search": {
               "placeholder": "מחפש...",
-              "reset": "איפוס חיפוס"
+              "reset": "איפוס חיפוש"
           },
         },
         "dropbox": {
@@ -42,7 +42,7 @@ const  ImageUploaderHebtexts =  {
             "authenticating": "Authenticating..."
         },
         "queue": {
-            "title": "בהמתנה להעלאה",
+            "title": "בהצלחה להעלאה",
             "title_uploading_with_counter": "מעלה מסמכים ",
             "title_processing_with_counter": "מעבד מסמכים ",
             "title_uploading_processing_with_counters": "מעלה  {{מעלה}} מסמכים, מעבד {{מעבד}} מסמכים",
@@ -50,7 +50,7 @@ const  ImageUploaderHebtexts =  {
             "mini_title": "העלה",
             "mini_title_uploading": "מעלה",
             "mini_title_processing": "מעבד",
-            "show_completed": "הראה פריטים",
+            "show_completed": "הראה פרטים",
             "retry_failed": "נסה שוב",
             "abort_all": "בטל הכול",
             "upload_more": "העלה עוד",
@@ -69,4 +69,4 @@ const  ImageUploaderHebtexts =  {
           }
 
 }
-export default ImageUploaderHebtexts
+export default ImageUploaderHebTexts

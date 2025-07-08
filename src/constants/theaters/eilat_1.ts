@@ -1,4 +1,4 @@
-import { SeatsRow, SeatStyles, TheaterLocationType, TheaterType } from "@/types/components-typs/admin/theater/admin-theater-types"
+import { SeatsRow, SeatStyles, TheaterLocationType, TheaterType } from "@/types/components-types/admin/theater/admin-theater-types"
 import { CSSProperties } from "react"
 
 
@@ -141,7 +141,7 @@ const positionAtr : CSSProperties = {
 
 
 }
-const ThaeaterName :string = "תיאטראות אילת"
+const TheaterName :string = "תיאטראות אילת"
 const TheaterLocation : TheaterLocationType = {alt:"",lot:"",city:"אילת", address:"שדרות התמרים הקניון האדום" }
 const TheaterMainPhone : string = '09-8888888'
 
@@ -150,14 +150,14 @@ const Eilat_1 :  TheaterType ={
       sideSeats: Eilat1_sideSeats,
       textsStyle: Eilat1_sideTextStyles ,
       styles:  Eilat1_sideStyles,
-      ThaeaterName,
-      TheaterLocation,
-      TheaterMainPhone
+      theaterName:TheaterName,
+      theaterLocation: TheaterLocation,
+      theaterMainPhone:TheaterMainPhone
    }
 
 export default   Eilat_1
 
-// export const theatherSurroundSeatsMobileTextPositons={
+// export const theaterSurroundSeatsMobileTextPositions={
 // "שירה 1 קומה 1":{top:0,left:0},
 // "שירה 1 קומה 2":{top:0,left:0},
 // "שירה 2 קומה 1":{top:0,left:0},

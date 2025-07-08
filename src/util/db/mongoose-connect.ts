@@ -2,7 +2,7 @@ import mongoose, { Connection, } from 'mongoose';
 
 
 
-// add public adccsess ip for domain
+// add public address  ip for domain
 
 
 

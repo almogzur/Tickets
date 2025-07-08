@@ -17,7 +17,7 @@ interface SelectWrapType {
     label:string
     items:SelectItemType[]
     value:string,
-    changeHndler :(event: SelectChangeEvent<string>, child: ReactNode) => void
+    changeHandler :(event: SelectChangeEvent<string>, child: ReactNode) => void
     helpText:string
     
     /** Util  */
@@ -48,7 +48,7 @@ interface SelectWrapType {
     bg?:CSSProperties['color']
 
     /** Labels - Style Positions */
-    labelPositioin:"top"|"end"
+    labelPosition:"top"|"end"
     helpTextPotionsEnd?:boolean
 
 }
@@ -56,7 +56,7 @@ interface SelectWrapType {
 const SelectWrap = ({ 
     helpText,
     items,
-    changeHndler,
+    changeHandler,
     m,
     hoverColor ,
     bg,
@@ -64,7 +64,7 @@ const SelectWrap = ({
     label,
     icon, 
     variant,
-    labelPositioin,
+    labelPosition,
     value,
     isListItemBold,
     isValueBold,
@@ -103,25 +103,25 @@ const SelectWrap = ({
 
                  "&.Mui-focused":{ 
                   width: 
-                     labelPositioin === "top" ? "130%" 
+                     labelPosition === "top" ? "130%" 
                      :
-                     labelPositioin === "end" ? 130 
+                     labelPosition === "end" ? 130 
                      :
                     null,
                  top: 13,
-                 mx:labelPositioin === 'top'? 0 : -1 ,
+                 mx:labelPosition === 'top'? 0 : -1 ,
                  fontWeight:isLabelBold ? 'bold': null, 
         
                  },
                   "&.MuiFormLabel-filled":{
                     width: 
-                       labelPositioin === "top" ? "130%" 
+                       labelPosition === "top" ? "130%" 
                         :
-                       labelPositioin === "end" ? 130 
+                       labelPosition === "end" ? 130 
                         :
                        null,
                    top: 13,
-                   mx:labelPositioin === 'top'? 0 : -1 ,
+                   mx:labelPosition === 'top'? 0 : -1 ,
  
                   }
                 
@@ -135,17 +135,17 @@ const SelectWrap = ({
                          labelId="demo-simple-select-readonly-label"
           id="demo-simple-select-readonly"
                value={value??""}
-               onChange={changeHndler}
+               onChange={changeHandler}
                
                variant={ variant}
-               endAdornment={labelPositioin === "top" ? icon : null}
-               startAdornment={labelPositioin === "end"?   icon : null}
+               endAdornment={labelPosition === "top" ? icon : null}
+               startAdornment={labelPosition === "end"?   icon : null}
                label={label}
                
                // selected item 
                style={{ fontWeight: isValueBold ? "bold" : undefined, ...styles, color:valueColor  }} 
                sx={{ 
-                   // add icon postion add option baced on top and end titile postions
+                   // add icon position add option based on top and end title positions
                    flexGrow:Fgrow?? null, 
                    bgcolor:bg,
                     m: m?m:0.5,

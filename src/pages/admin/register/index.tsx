@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { Typography } from '@mui/material'
 import AdminLayout from '@/layouts/admin'
 
-const AdminHomePage=()=>{
+const RegisterPage=()=>{
 
   const router = useRouter()
   const { data: session ,status ,update} = useSession()
@@ -25,6 +25,6 @@ return (
   ) 
 }
 
-export default AdminHomePage 
+export default RegisterPage 
 
 

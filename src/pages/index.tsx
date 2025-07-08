@@ -42,7 +42,7 @@ export default function Home(props: HomePageProps) {
 
 
   
-  const generageImageCarousel =( events:[] ) : [] =>{
+  const generateImageCarousel =( events:[] ) : [] =>{
  
     return [] 
   }
@@ -91,11 +91,11 @@ export default function Home(props: HomePageProps) {
   const
     PageWrapper = Container,
     Placeholder = Box,
-    Scrooler = Box,
-    ScroolerConetnt = Box,
+    Scroller = Box,
+    ScrollerContent = Box,
     RightArrow = Box,
     LeftArrow = Box,
-    ArowsWrapper = Flex
+    ArrowsWrapper = Flex
 
   if (!Events || !pageLoad) {
     return <LoadingScreen />
@@ -113,8 +113,8 @@ export default function Home(props: HomePageProps) {
         }
       </Carousel>
 
-      <Scrooler>
-        <ArowsWrapper direction={"row"} justifyContent={"space-between"}  >
+      <Scroller>
+        <ArrowsWrapper direction={"row"} justifyContent={"space-between"}  >
           <RightArrow
             position={"relative"}
             left={!xs ? -15 : !md ? -25 : "auto"}
@@ -152,9 +152,9 @@ export default function Home(props: HomePageProps) {
             </Button>
           </LeftArrow>
 
-        </ArowsWrapper>
+        </ArrowsWrapper>
 
-        <ScroolerConetnt
+        <ScrollerContent
           ref={scrollContainerRef}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
@@ -190,9 +190,9 @@ export default function Home(props: HomePageProps) {
 
 
 
-        </ScroolerConetnt>
+        </ScrollerContent>
 
-      </Scrooler>
+      </Scroller>
 
       <Placeholder height={400} />
 
@@ -208,7 +208,7 @@ const  items = [
   {
     name: "Random Name #1",
     description: "Probably the most random thing you have ever seen!",
-    image: 'dasdas'
+    image: 'abc'
   },
   {
     name: "Random Name #2",

@@ -1,5 +1,5 @@
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
-import { CreateMongooseClient, userDataPrefix } from "@/util/db/mongosee-connect";
+import { CreateMongooseClient, userDataPrefix } from "@/util/db/mongoose-connect";
 import { rateLimitConfig } from "@/util/fn/api-rate-limit.config";
 import rateLimit from "express-rate-limit";
 import { NextApiRequest, NextApiResponse } from "next";

@@ -5,8 +5,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]";
 import { EventFromDraftZVS } from "@/types/pages-types/admin/admin-event-types";
-import  {CreateMongooseClient, userDataPrefix } from "@/util/db/mongosee-connect";
-import { EventModel } from "@/util/db/mongosee-models";
+import  {CreateMongooseClient, userDataPrefix } from "@/util/db/mongoose-connect";
+import { EventModel } from "@/util/db/mongoose-models";
 
 const apiLimiter = rateLimit(rateLimitConfig);
 
@@ -37,7 +37,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const isValidData = EventFromDraftZVS.safeParse(body)
 
       if (!isValidData.success) {
-         return res.status(400).json({ massage: 'invalide data ' + API_NAME })
+         return res.status(400).json({ massage: 'invalid data ' + API_NAME })
       }
       const delOriginDraft = async (): Promise<boolean> => {
          try {
@@ -58,7 +58,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
          }
       }
 
-      // un sucssesful operation dosent need to cancell save , just to prevent duplicates 
+      // un successful operation doesn't need to cancel save , just to prevent duplicates 
 
       const Model = EventModel(connection)
 
@@ -67,11 +67,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const saveResult = await doc.save()
 
       if (saveResult.errors) {
-         return res.status(500).json({ massage: "faled Saving " + API_NAME, saveResult })
+         return res.status(500).json({ massage: "failed Saving " + API_NAME, saveResult })
       }
 
      // const delOld = await delOriginDraft() // return bool , for now not use 
-      return res.status(200).json({ massage: "succsess save " + API_NAME })
+      return res.status(200).json({ massage: "success's save " + API_NAME })
 
    })
 }

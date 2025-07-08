@@ -10,7 +10,7 @@ import {  useContext, useState } from "react"
 import Editor from "./text-editor/editor"
 import dayjs from "dayjs"
 
-import tabsEroorsContext from "@/context/admin/new-event/tabs/tabs-eroors-context"
+import tabsErrorsContext from "@/context/admin/new-event/tabs/tabs-errors-context"
 
 import { CldImage, CldUploadWidget } from 'next-cloudinary';
 import { RiImageAddFill } from "react-icons/ri"
@@ -19,12 +19,12 @@ import { useSession } from "next-auth/react"
 import axios from "axios"
 import tabsPageContext from "@/context/admin/new-event/tabs/tabs-page-context"
 import { LuImageMinus } from "react-icons/lu"
-import InputWrap from "@/mui-components/TeextFiledWrpa/input-wrap"
+import InputWrap from "@/mui-components/text_filed_wrap/input-wrap"
 import SelectWrap from "@/mui-components/select-wrap"
 import DatePickerWrap from "@/mui-components/time-date/date-picker-wrap"
 import TimePickerWrap from "@/mui-components/time-date/time-picker-wrap"
 import { DateTimeValidationError } from "@mui/x-date-pickers"
-import ImageUploaderHebtexts from "./image-uploader-heb-text"
+import ImageUploaderHebTexts from "./image-uploader-heb-text"
 
 
 interface InfoFormType {}
@@ -33,15 +33,15 @@ const InfoForm =({}:InfoFormType)=>{
 
   const { data: session ,status ,update} = useSession()
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
-  const {infoFileds,setInfoFileds}= useContext(TabsInfoContext)
+  const {infoFields,setInfoFields}= useContext(TabsInfoContext)
   const theme = useTheme()
-  const {GetFormErrors} =  useContext(tabsEroorsContext)
-  const {setIsLoading,setLoadingScrenText}= useContext(tabsPageContext)
+  const {GetFormErrors} =  useContext(tabsErrorsContext)
+  const {setIsLoading,setLoadingScreenText}= useContext(tabsPageContext)
       
   const removeImageFromCloudinary = async (Public_id:string)=>{
 
       setIsLoading(true)
-      setLoadingScrenText("מסיר תמונה")
+      setLoadingScreenText("מסיר תמונה")
       
       try {
         const response = await axios.post("/api/admin/cloudinary-event-image/R-image", { Public_id  } );
@@ -49,7 +49,7 @@ const InfoForm =({}:InfoFormType)=>{
        if( response.status === 200 ){
           console.log(response.data.result);
           setIsLoading(false)
-          setInfoFileds(p=>({...p,preview:''}))
+          setInfoFields(p=>({...p,preview:''}))
           }
       else{
           console.log("Status not Ok err ", response.status);
@@ -69,14 +69,14 @@ const InfoForm =({}:InfoFormType)=>{
 
   }
 
-  const ErrorHndler = (e:DateTimeValidationError, context:dayjs.Dayjs|null ):void=>{
+  const ErrorHandler = (e:DateTimeValidationError, context:dayjs.Dayjs|null ):void=>{
 //    console.log(e,context)
   }
   // eslint-disable-next-line react-hooks/exhaustive-deps
 
   
   // return live ver of infoFiled.event value see -> https://react.dev/learn/state-as-a-snapshot
-//  const folderName = useMemo(() => getFolderName(infoFileds.eventName), [getFolderName, infoFileds.eventName]) 
+//  const folderName = useMemo(() => getFolderName(infoFields.eventName), [getFolderName, infoFields.eventName]) 
 
 
 interface EventCategoryType {
@@ -110,9 +110,9 @@ return(
                 <InputWrap 
                   label={"כותרת"}
                   variant='outlined'
-                  value={infoFileds.eventName}
-                  onChangeHndler={(e) => { setInfoFileds(p => ({ ...p, eventName: e.target.value })) } }
-                  labelPositioin={"end"} 
+                  value={infoFields.eventName}
+                  onChangeHandler={(e) => { setInfoFields(p => ({ ...p, eventName: e.target.value })) } }
+                  labelPosition={"end"} 
                   helpText={GetFormErrors("eventName")?? ""}
                   helpTextPotionsEnd
               
@@ -121,10 +121,10 @@ return(
                  />
                  <SelectWrap 
                     items={EventCategories}
-                    value={infoFileds.cat}
-                    changeHndler={(e) => { setInfoFileds(p => ({ ...p, cat: e.target.value })) } }
+                    value={infoFields.cat}
+                    changeHandler={(e) => { setInfoFields(p => ({ ...p, cat: e.target.value })) } }
                     label={"קטגוריה"}
-                    labelPositioin={"end"}
+                    labelPosition={"end"}
                     variant='outlined' 
                     helpTextPotionsEnd
                     helpText={GetFormErrors("cat")?? ""}
@@ -139,56 +139,56 @@ return(
          
              <DatePickerWrap                 
                MediaQuery={theme.breakpoints.up("sm")}
-               value={infoFileds.Date}
+               value={infoFields.Date}
                variant='outlined'
                helpText={GetFormErrors("Date")?? ""}
                helpTextPotionsEnd
                label={" תאריך"}
-               labelPositioin={'end'}
+               labelPosition={'end'}
                color='secondary'
-               onChangeHendler={(e) => e !== null ?
-                 setInfoFileds(p => ({ ...p, Date: e.toDate().toLocaleDateString() }))
+               onChangeHandler={(e) => e !== null ?
+                 setInfoFields(p => ({ ...p, Date: e.toDate().toLocaleDateString() }))
                  :
                  null
                }         
-               onEroorHndler={ErrorHndler} 
+              onErrorHandler  ={ErrorHandler} 
                   />
 
               <TimePickerWrap             
                 helpTextPotionsEnd    
                 MediaQuery={theme.breakpoints.up("sm")}
-                value={infoFileds.OpenDoors}
+                value={infoFields.OpenDoors}
                 
-                onAcceptHendler={(e) => {
+                onAcceptHandler={(e) => {
                   if (e !== null) {
                       const formattedTime = dayjs(e).format('HH:mm');
-                      setInfoFileds((p) => ({ ...p, OpenDoors: formattedTime }));
+                      setInfoFields((p) => ({ ...p, OpenDoors: formattedTime }));
                   }
               }}
                helpText={GetFormErrors("OpenDoors")?? ""}
                label={"  שעת פתיחת דלתות"} 
-                labelPositioin={'end'}
+                labelPosition={'end'}
                 color='secondary'
-                onEroorHndler={ErrorHndler}
+                onErrorHandler={ErrorHandler}
                   />
 
             <TimePickerWrap                 
                 MediaQuery={theme.breakpoints.up("sm")}
-                value={infoFileds.Hour}
+                value={infoFields.Hour}
                 helpText={GetFormErrors("Hour")?? ""}
                 variant='outlined'
                 helpTextPotionsEnd
-                onAcceptHendler={(e) => {
+                onAcceptHandler={(e) => {
                   if (e !== null) {
                       const formattedTime = dayjs(e).format('HH:mm');
-                      setInfoFileds((p) => ({ ...p, Hour: formattedTime }));
+                      setInfoFields((p) => ({ ...p, Hour: formattedTime }));
                   }
               }}
 
                 label={" שעה"} 
-                labelPositioin={'end'}
+                labelPosition={'end'}
                 color='secondary'
-                onEroorHndler={ErrorHndler}
+                onErrorHandler={ErrorHandler}
                   />
              </Flex>
 
@@ -203,7 +203,7 @@ return(
            <CldUploadWidget     
               
                uploadPreset="fx9hpz2j"
-               onClose={(statues,widgt)=>{
+               onClose={(statues,widget)=>{
                  
               }}
                onQueuesStart={(e)=>{console.log("q start", e.event , e.info );}} // event &&  strings are strings 
@@ -214,7 +214,7 @@ return(
                             files.map((file,i)=>{
                                const id = file?.uploadInfo?.public_id  as string
                                if(id){
-                                 setInfoFileds(p=>({...p,preview:id}))   
+                                 setInfoFields(p=>({...p,preview:id}))   
                                }
                                else{
                                   console.log(" שגאיה בשמירת נסה שוב ");
@@ -237,7 +237,7 @@ return(
                  showUploadMoreButton:false,
                  showAdvancedOptions:false,
                  
-                 text:{...ImageUploaderHebtexts},
+                 text:{...ImageUploaderHebTexts},
                  styles:{
                      palette: {
                          window: "#F5F5F5",
@@ -262,7 +262,7 @@ return(
                <Typography sx={{color:"red"}} >{GetFormErrors('preview')}</Typography>
                <Button
                  sx={{ gap:1, p:0.5 , boxShadow:0, background:grey[200], mt:1 }} 
-                 disabled={!!infoFileds.preview} // converts its to boll then if info filed it ther its flase else it true 
+                 disabled={!!infoFields.preview} // converts its to boll then if info filed it the'r its false else it true 
                  variant='text'
                  onClick={() => {  open() }}
                  >הוסף תמונה 
@@ -277,8 +277,8 @@ return(
           <Button
            sx={{ gap:1, p:0.5 , boxShadow:0, background:grey[200], mt:1  }} 
            variant='text'
-           onClick={()=>removeImageFromCloudinary(infoFileds.preview)}
-           disabled={!infoFileds.preview} 
+           onClick={()=>removeImageFromCloudinary(infoFields.preview)}
+           disabled={!infoFields.preview} 
          >הסר תמונה 
            <LuImageMinus size={"2em"}   />
 
@@ -286,10 +286,10 @@ return(
 
          </Flex>
 
-        { infoFileds.preview &&      
+        { infoFields.preview &&      
          <Flex justifyContent={"center"} direction={"row"}   > 
 
-           <CldImage alt={""} src={infoFileds.preview}              
+           <CldImage alt={""} src={infoFields.preview}              
             width={!xs?260 : !sm?400 : !md? 450 : 600}
             height={!sm?300:400}
             

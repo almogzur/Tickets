@@ -1,10 +1,10 @@
-import InputWrap from "@/mui-components/TeextFiledWrpa/input-wrap"
-import { PayPalInfoZVS, UserPayPalInfoType } from "@/types/pages-types/admin/user-biling-info-types"
+import InputWrap from "@/mui-components/text_filed_wrap/input-wrap"
+import { PayPalInfoZVS, UserPayPalInfoType } from "@/types/pages-types/admin/user-billing-info-types"
 import { Typography, Button, Stack as Flex } from "@mui/material"
 import axios from "axios"
 import { useRouter } from "next/router"
 import { ZodIssue } from "zod"
-import { PayPalFormPropsType } from "../../../pages/admin/biling"
+import { PayPalFormPropsType } from "../../../pages/admin/billing"
 
 
 const Buttons = Flex
@@ -22,18 +22,18 @@ const PayPalForm = ({ PayPalBillingInfo, setPayPalBillingInfo }: PayPalFormProps
   
     const savePayPalInfo = async (e: React.SyntheticEvent<HTMLButtonElement>,) => {
   
-      const isValiedData = PayPalInfoZVS.safeParse(PayPalBillingInfo)
+      const isValidData = PayPalInfoZVS.safeParse(PayPalBillingInfo)
   
-      if (!isValiedData.success) {
-        console.log("savePayPalInfo no valid data", isValiedData.error.issues)
+      if (!isValidData.success) {
+        console.log("savePayPalInfo no valid data", isValidData.error.issues)
         return
       }
   
-      // hasing sring befor sending the req , so if db is gets hacked the haker letf with  *hit 
+      // hashing string before sending the req , so if db is gets hacked the hacker left with  *hit 
   
       const URL = "/api/admin/billing/paypal/save-paypal-info"
   
-      const data: UserPayPalInfoType = isValiedData.data
+      const data: UserPayPalInfoType = isValidData.data
   
       try {
         const responce = await axios.post(URL, data)
@@ -59,47 +59,47 @@ const PayPalForm = ({ PayPalBillingInfo, setPayPalBillingInfo }: PayPalFormProps
           variant='outlined'
           label={'מייל'}
           value={PayPalBillingInfo.email}
-          onChangeHndler={(e) => {
+          onChangeHandler={(e) => {
             const value = e.target.value
             setPayPalBillingInfo(p => ({ ...p, email: value }))
           }}
           helpText={''}
-          labelPositioin={'top'}
+          labelPosition={'top'}
         />
   
         <InputWrap
           variant='outlined'
           label={'  מזהה חשבון'}
           value={PayPalBillingInfo.accountId}
-          onChangeHndler={(e) => {
+          onChangeHandler={(e) => {
             const value = e.target.value
             setPayPalBillingInfo(p => ({ ...p, accountId: value }))
           }}
           helpText={''}
-          labelPositioin={'top'}
+          labelPosition={'top'}
         />
   
         <InputWrap variant='outlined'
           label={'טלפון'}
           value={PayPalBillingInfo.phone}
-          onChangeHndler={(e) => {
+          onChangeHandler={(e) => {
             const value = e.target.value
             setPayPalBillingInfo(p => ({ ...p, phone: value }))
           }}
           helpText={''}
-          labelPositioin={'top'}
+          labelPosition={'top'}
         />
   
         <InputWrap
           variant='outlined'
           label={'מזהה אפליקצה '}
           value={PayPalBillingInfo.clientId}
-          onChangeHndler={(e) => {
+          onChangeHandler={(e) => {
             const value = e.target.value
             setPayPalBillingInfo(p => ({ ...p, clientId: value }))
           }}
           helpText={''}
-          labelPositioin={'top'}
+          labelPosition={'top'}
         />
   
         <InputWrap
@@ -107,12 +107,12 @@ const PayPalForm = ({ PayPalBillingInfo, setPayPalBillingInfo }: PayPalFormProps
           variant='outlined'
           label={' סוד '}
           value={PayPalBillingInfo.clientSecret}
-          onChangeHndler={(e) => {
+          onChangeHandler={(e) => {
             const value = e.target.value
             setPayPalBillingInfo(p => ({ ...p, clientSecret: value }))
           }}
           helpText={''}
-          labelPositioin={'top'}
+          labelPosition={'top'}
         />
   
         <Buttons direction={"row"} gap={1} >

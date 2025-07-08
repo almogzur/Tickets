@@ -5,15 +5,15 @@ console.log(isProduction, " NEXT-CONFIG");
 
 
 const cspHeader = `
-    default-src 'self' *.cloudinary.com *.sandbox.paypal.com *.paypal.com *.paypalobjects.com *.sandbox.payme.io *.payme.io ;
-    script-src 'self' ${isProduction ? "" : "'unsafe-eval' 'unsafe-inline'"}  *.cloudinary.com *.paypal.com *.paypalobjects.com  *.sandbox.paypal.com *.sandbox.payme.io *.payme.io;
+    default-src 'self' *.cloudinary.com;
+    script-src 'self' ${isProduction ? "" : "'unsafe-eval' 'unsafe-inline'"}  *.cloudinary.com;
     style-src 'self' 'unsafe-inline';
-    img-src 'self' *.cloudinary.com *.sandbox.paypal.com *.paypal.com *.paypalobjects.com *.sandbox.payme.io *.payme.io;
+    img-src 'self' *.cloudinary.com;
     font-src 'self';
     object-src 'none';
     base-uri 'self';
-    form-action 'self' *.cloudinary.com *.sandbox.paypal.com *.paypal.com *.paypalobjects.com *.sandbox.payme.io *.payme.io ;
-    frame-ancestors 'self' *.sandbox.payme.io *.payme.io;
+    form-action 'self' *.cloudinary.com';
+    frame-ancestors 'self';
     upgrade-insecure-requests;
 `.replace(/\n/g, ''); // Remove newlines for compatibility
 
@@ -54,18 +54,6 @@ const DevObject = {
             protocol:'https',
             hostname:'**.cloudinary.com',
           },
-          {
-            protocol:'https',
-            hostname:'**.paypal.com ',
-          },
-          {
-            protocol:"https",
-            hostname:'**.sandbox.paypal.com'
-          },
-          {
-            hostname:'**.sandbox.payme.io'
-          }
-
         ],
       },
 

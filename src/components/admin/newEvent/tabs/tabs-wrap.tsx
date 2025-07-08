@@ -1,9 +1,9 @@
-//Cmponents
+//components
 import {  Stack as Flex ,useTheme, Box, Tabs, Tab, Button, SpeedDial} from "@mui/material"
 
 import {  CSSProperties,  RefObject,  useContext, useState } from "react"
 
-// Context Useg
+// Context use
 import WidthContext from "@/context/WidthContext"
 
 //Icons 
@@ -16,11 +16,11 @@ import { FcInfo } from "react-icons/fc";
 
 // Tabs 
 import TicketsTab from './ticket-tab/tickets-wrapper'
-import SettingTab from "./settings-tab/settings-tab-wraper"
+import SettingTab from "./settings-tab/settings-tab-wrap"
 import ColorTab from "./colors-tab"
 import AdOptionsTab from "./ad-options-tab"
 import InfoFormTab from "./info-form-tab/Info-form-tab"
-import PrevieTab from "./preview-tab"
+import PreviewTab from "./preview-tab"
 import { IoTicket } from "react-icons/io5";
 import tabsPageContext from "@/context/admin/new-event/tabs/tabs-page-context";
 import { blue } from "@mui/material/colors";
@@ -31,18 +31,18 @@ import { blue } from "@mui/material/colors";
 
 
 
-interface TabsWraperPropsType { 
+interface TabsWrapPropsType { 
   DraftId?:string
  }
 
-const TabsWraper = ({ DraftId}:TabsWraperPropsType)=>{
+const TabsWraper = ({ DraftId}:TabsWrapPropsType)=>{
 
     const theme = useTheme()
     const {tabValue, setTabValue} = useContext(tabsPageContext);
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
 
 
-    const TabComonStyleAttribute :CSSProperties = {
+    const TabStyleAttribute :CSSProperties = {
        color:"#fff",
        fontWeight:700,
     }
@@ -81,12 +81,12 @@ const TabsWraper = ({ DraftId}:TabsWraperPropsType)=>{
           
           
          >
-        <Tab value={0} label="מידע כללי"  sx={{...TabComonStyleAttribute}}  icon={<FcInfo size={"2em"} />}    /> 
-        <Tab value={1} label="כרטיסים"  sx={{...TabComonStyleAttribute}} icon={<IoTicket size={"2em"} color={theme.palette.primary.main} />} />
-        <Tab value={2} label="הגדרות"  sx={{...TabComonStyleAttribute}}   icon={<FcSettings size={"2em"} />}  />
-        <Tab value={3} label="צבעים"  sx={{...TabComonStyleAttribute}} icon={<FcStackOfPhotos size={"2em"} />}  />
-        <Tab value={4} label="תצוגה מקדימה "  sx={{...TabComonStyleAttribute}} icon={<FcBinoculars size={"2em"}/>} />
-        <Tab value={5} label="פירסום"  sx={{...TabComonStyleAttribute}} icon={<FcIntegratedWebcam size={"2em"}/>}  />
+        <Tab value={0} label="מידע כללי"  sx={{...TabStyleAttribute}}  icon={<FcInfo size={"2em"} />}    /> 
+        <Tab value={1} label="כרטיסים"  sx={{...TabStyleAttribute}} icon={<IoTicket size={"2em"} color={theme.palette.primary.main} />} />
+        <Tab value={2} label="הגדרות"  sx={{...TabStyleAttribute}}   icon={<FcSettings size={"2em"} />}  />
+        <Tab value={3} label="צבעים"  sx={{...TabStyleAttribute}} icon={<FcStackOfPhotos size={"2em"} />}  />
+        <Tab value={4} label="תצוגה מקדימה "  sx={{...TabStyleAttribute}} icon={<FcBinoculars size={"2em"}/>} />
+        <Tab value={5} label="פירסום"  sx={{...TabStyleAttribute}} icon={<FcIntegratedWebcam size={"2em"}/>}  />
 
        </Tabs>
   
@@ -95,7 +95,7 @@ const TabsWraper = ({ DraftId}:TabsWraperPropsType)=>{
            justifyContent={"center"}   
            height={'calc(100% - 80px)'} 
            overflow={"auto"} 
-           minWidth={"100%"} // dont remove ***
+           minWidth={"100%"} // don't remove ***
 
       >
         {
@@ -112,7 +112,7 @@ const TabsWraper = ({ DraftId}:TabsWraperPropsType)=>{
        <ColorTab/>
        :
        tabValue === 4 ?
-       <PrevieTab/>
+       <PreviewTab/>
        :
        tabValue=== 5?
        <AdOptionsTab/>

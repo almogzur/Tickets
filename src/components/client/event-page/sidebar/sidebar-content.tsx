@@ -8,10 +8,11 @@ import ClientTicketList from "./tickets-list";
 import PaypalBtn, { PaypalBtnType } from "./payments-providers-buttons/paypal";
 import { ItemCategory } from "@paypal/paypal-server-sdk";
 import { ClientEventType } from "@/types/pages-types/admin/admin-event-types";
-import { ClientSelectedSeatType, IsracardGanerateSaleRequestType, IsracartCartItemType, PayPalCartItemType } from "@/types/pages-types/client/client-event-type";
-import { TheaterType } from "@/types/components-typs/admin/theater/admin-theater-types";
+import { ClientSelectedSeatType, 
+  IsracardCartItemType, PayPalCartItemType , IsracardGenerateSaleRequestType } from "@/types/pages-types/client/client-event-type";
+import { TheaterType } from "@/types/components-types/admin/theater/admin-theater-types";
 import { useRouter } from "next/router";
-import IsracardBtn from "./payments-providers-buttons/isracrd-360";
+import IsracardBtn from './payments-providers-buttons/isracard-360'
 
 
 
@@ -21,23 +22,21 @@ export type DrawerContentType = {
   // event Data 
   ClientSelectedEvent: ClientEventType,
 
-
   //Theater to update 
-  clientEventTheaterState: TheaterType | undefined
-  setClientEventTheaterState: Dispatch<SetStateAction<TheaterType | undefined>>
+  clientEventTheaterState: TheaterType 
+  setClientEventTheaterState: Dispatch<SetStateAction<TheaterType|undefined>>
 
-  /// Selected Seates 
+  /// Selected sates 
   eventSelectSeats: ClientSelectedSeatType[]
   setEventSelectedSeats: Dispatch<SetStateAction<ClientSelectedSeatType[]>>
 
 
-  // old seate valuse  ( state to return the orgin icons and colors at  un-select )
-  hendlerSeatOldValues: Record<string, number>
-  setHendlerSeatOldValues: Dispatch<SetStateAction<Record<string, number>>>
-
-
+  // old setae values  ( state to return the origin icons and colors at  un-select )
+   handlerSeatOldValues: Record<string, number>
+   setHandlerSeatOldValues: Dispatch<SetStateAction<Record<string, number>>>
 
 }
+
 
 const DrawerContent = ({
   eventSelectSeats,
@@ -57,11 +56,11 @@ const DrawerContent = ({
 const sanitizedHtml = DOMPurify.sanitize(ClientSelectedEvent?.info.pre ?? "");
 
 
-  const getNormailTicket = () => {
-    return ClientSelectedEvent?.tickets?.find((tikect) => tikect.selectedType === 'normal')
+  const getNormalTicket = () => {
+    return ClientSelectedEvent?.tickets?.find((ticket) => ticket.selectedType === 'normal')
   }
-  const getNoramlPrice = () => {
-    return getNormailTicket()?.price ?? "N/A"
+  const getNormalPrice = () => {
+    return getNormalTicket()?.price ?? "N/A"
   }
 
   const getIsracardTotal = (): string => {
@@ -105,7 +104,7 @@ const sanitizedHtml = DOMPurify.sanitize(ClientSelectedEvent?.info.pre ?? "");
     return []
   }
 
- const createIsrcardCart = (selectedSeats:ClientSelectedSeatType[]):IsracardGanerateSaleRequestType['items'] => {
+ const createIsracardCart = (selectedSeats:ClientSelectedSeatType[]):IsracardGenerateSaleRequestType['items'] => {
 
     if(ClientSelectedEvent){
 
@@ -148,7 +147,7 @@ const sanitizedHtml = DOMPurify.sanitize(ClientSelectedEvent?.info.pre ?? "");
     <Flex
       alignItems={"center"}
       sx={{
-        height: undefined // ! importent dont limit 
+        height: undefined // ! impotent don't limit 
       }}
     >
 
@@ -183,12 +182,12 @@ const sanitizedHtml = DOMPurify.sanitize(ClientSelectedEvent?.info.pre ?? "");
         <Typography  > תאריך: {ClientSelectedEvent.info.Date}</Typography>
         <Typography  >שעה :{ClientSelectedEvent.info.Hour}</Typography>
         <Typography >שעת פתיחת דלתוד:{ClientSelectedEvent.info.OpenDoors?.toString().slice(0, 10)}</Typography>
-        <Typography> מחיר :   {getNoramlPrice()}</Typography>
+        <Typography> מחיר :   {getNormalPrice()}</Typography>
       </Tags>
 
 
 
-      {/*  pay btn and tickets counte */}
+      {/*  pay btn and tickets count */}
 
      { eventSelectSeats.length > 0  ?
         <>
@@ -208,11 +207,13 @@ const sanitizedHtml = DOMPurify.sanitize(ClientSelectedEvent?.info.pre ?? "");
           }
 
           <IsracardBtn 
-            cart={createIsrcardCart(eventSelectSeats)}
+            cart={createIsracardCart(eventSelectSeats)}
             total={getIsracardTotal()}
             eventId={ClientSelectedEvent._id}
             TheaterState={clientEventTheaterState}
             eventName={ClientSelectedEvent.info.eventName}
+            selectedSeats={eventSelectSeats}
+
              />
 
           <ClientTicketList

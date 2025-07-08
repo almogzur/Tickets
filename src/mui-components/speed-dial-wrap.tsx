@@ -12,7 +12,7 @@ import WidthContext from '@/context/WidthContext';
 interface ActionType {
     icon:React.ReactElement,
     name:string
-    ClickHendler:(e:React.MouseEvent<HTMLDivElement>) => void
+    ClickHandler:(e:React.MouseEvent<HTMLDivElement>) => void
 } 
 
 type SpeedDailPositionsType = 

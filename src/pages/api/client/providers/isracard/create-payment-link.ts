@@ -1,8 +1,8 @@
 
 import { IsracardCreateOrderZVS} from "@/types/pages-types/client/client-event-type";
-import { CreateMongooseClient } from "@/util/db/mongosee-connect";
+import { CreateMongooseClient } from "@/util/db/mongoose-connect";
 import { rateLimitConfig } from "@/util/fn/api-rate-limit.config";
-import { CreateIsracardSaleLink, updateEvent } from "@/util/fn/event-api-fn";
+import { CreateIsracardSaleLink, updateEvent } from "@/util/fn/frontend_api-fn";
 import {  GetIsracardBillingInfoFromEventId } from "@/util/fn/pay-fn";
 import rateLimit from "express-rate-limit";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -25,7 +25,7 @@ const apiLimiter = rateLimit(rateLimitConfig);
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
   return apiLimiter(req, res, async () => {
 
-    const API_NAME = 'Creat Iracard Payment Link Api '
+    const API_NAME = 'Create isracard Payment Link Api '
 
 
     console.log(API_NAME)
@@ -40,7 +40,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(500).json({ massage: 'No DB Connection' })
     }
 
-    // add validate soucre 
+    // add validate source 
 
     const body = req.body
     const isValidData = IsracardCreateOrderZVS.safeParse(body)
@@ -62,16 +62,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 
    if(!EventUpdated){
-    return res.status(400).json({massage: 'bad Payment Request' + API_NAME })
+    console.log("EventUpdated", "Update Error" , API_NAME)
+     return res.status(400).json({massage: 'bad Event Update Responce' + API_NAME })
    }
 
-   const IsrcardResponce = await CreateIsracardSaleLink(userInfo, total , eventId, cart)
+   console.log("EventUpdated", "Update success", API_NAME)
+   const isracardResponce = await CreateIsracardSaleLink(userInfo, total , eventId, cart)
 
-   if(!IsrcardResponce){
+   if(!isracardResponce){
       return res.status(400).json({massage: 'bad Payment Request' + API_NAME })
    }
 
-  return res.send(IsrcardResponce.sale_url)
+  return res.send(isracardResponce.sale_url)
 
   })
 }

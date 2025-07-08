@@ -1,14 +1,14 @@
 import { z }  from 'zod'
 import {  OrderRequest } from '@paypal/paypal-server-sdk'
-import { SeatValidationSchema, TheaterValidationSchema } from '@/types/components-typs/admin/theater/admin-theater-types'
-import { SeatsRow } from "@/types/components-typs/admin/theater/admin-theater-types"
+import { SeatValidationSchema, TheaterValidationSchema } from '@/types/components-types/admin/theater/admin-theater-types'
+import { SeatsRow } from "@/types/components-types/admin/theater/admin-theater-types"
 import { ItemCategory } from "@paypal/paypal-server-sdk";
 
 
 
 // EVENT 
  
-export type  UpdateTheaterApiResquestType = z.infer< typeof UpdateTheaterApiVS>
+export type  UpdateTheaterApiRequestType = z.infer< typeof UpdateTheaterApiVS>
 
 export type ClientSelectedSeatType = z.infer<typeof ClientSelectedSeatsVS>
 
@@ -29,15 +29,15 @@ export const  UpdateTheaterApiVS = z.object({
        mainSeats:SeatValidationSchema,
        sideSeats:SeatValidationSchema
     }),
-   numerOfSeatsSealected : z.number()  
+   numberOfSeatsSelected : z.number()  
 })
 
 
  
 
-export type  RollbackTheaterApiResquestType  = z.infer <typeof RollbackTheaterApiVS>
+export type  RollbackTheaterApiRequestType  = z.infer <typeof RollbackTheaterApiVS>
 
-export type  modifieSeatValueFunctionType = {
+export type  modifySeatValueFunctionType = {
   main :SeatsRow , side : SeatsRow 
 }
 
@@ -88,7 +88,7 @@ const PayPalVS = z.object({
   phone: z.string().optional(),
 });
 
-const BancontactVS = z.object({
+const BanContactVS = z.object({
   name: z.string(),
   country_code: z.string(),
   bic: z.string(),
@@ -114,7 +114,7 @@ const EpsVS = z.object({
 const PaymentSourceVS = z.object({
     card: CardVS.optional(),
     paypal: PayPalVS.optional(),
-    bancontact: BancontactVS.optional(),
+    banContact: BanContactVS.optional(),
     blik: BlikVS.optional(),
     eps: EpsVS.optional(),
  });
@@ -170,11 +170,11 @@ export const PayPalOrderVS = z.object({
 export const  PayPalRequestCreateOrderVS = z.object({
     cart: z.array(PayPalCartItemVS),
     total:z.string().nonempty(),
-
+    Theater:TheaterValidationSchema,
     eventId:z.string().nonempty()
 })
   
-export const  PayPalOnApproveResponceDataVS = z.object({
+export const  PayPalOnApproveResponseDataVS = z.object({
   billingToken: z.string().nonempty().nullable().or(z.undefined()),
   facilitatorAccessToken: z.string().nonempty().or(z.undefined()),
   orderID: z.string().nonempty(),
@@ -185,7 +185,7 @@ export const  PayPalOnApproveResponceDataVS = z.object({
 })
 
 export const PayPalCapturedRequestOrderVS = z.object({
-  PaypalData:PayPalOnApproveResponceDataVS,
+  PaypalData:PayPalOnApproveResponseDataVS,
   eventId:z.string().nonempty(),
 })
 
@@ -204,13 +204,13 @@ export type  PayPalRequestCreateOrderType =z.infer<typeof PayPalRequestCreateOrd
 
 export type PayPalRequestCapturedOrderType= z.infer<typeof PayPalCapturedRequestOrderVS>
 
-export type PayPalResponceCapturedOrderType = z.infer<typeof PayPalOnApproveResponceDataVS>
+export type PayPalResponceCapturedOrderType = z.infer<typeof PayPalOnApproveResponseDataVS>
 
-export type SavePayPalInvoceTpee = z.infer<typeof SavePayPalInvoceVS >
+export type SavePayPalInvoceType = z.infer<typeof SavePayPalInvoceVS >
 
 
 // Order Controller fn parameters 
-export type PayPalClollectInfoObjectType  = {
+export type PayPalCollectInfoObjectType  = {
   body: OrderRequest;
   paypalRequestId?: string;
   paypalPartnerAttributionId?: string;
@@ -242,7 +242,7 @@ export type PayPalClollectInfoObjectType  = {
 
 
 
-export const IsracartCartItemZVS = z.object({
+export const isracardCartItemZVS = z.object({
     name: z.string().nonempty(), // Example: shirt
     quantity: z.number().int().nonnegative(), // Example: 1
     unit_price: z.number().nonnegative(), // Example: 500
@@ -258,7 +258,7 @@ export const IsracartCartItemZVS = z.object({
       discount: z.number().optional(), // Example: 8000
     }).optional()
 })
-export type  IsracartCartItemType = z.infer<typeof IsracartCartItemZVS>
+export type  IsracardCartItemType = z.infer<typeof isracardCartItemZVS>
 
 
 
@@ -267,7 +267,7 @@ export type  IsracartCartItemType = z.infer<typeof IsracartCartItemZVS>
 
 
 export const IsracardCreateOrderZVS = z.object({
-  cart: z.array(IsracartCartItemZVS),
+  cart: z.array(isracardCartItemZVS),
   total:z.string().nonempty(),
   eventId:z.string().nonempty(), 
   eventName:z.string().nonempty(),
@@ -280,10 +280,10 @@ export type IsracardCreateOrderType = z.infer<typeof IsracardCreateOrderZVS>
 
 
 
-export const IsracardGanerateSaleRequestZVS = z.object({
+export const IsracardGenerateSaleRequestZVS = z.object({
 
   // Required fields
-  seller_payme_id: z.string().nonempty(), // Example: MPLDEMO-MPLDEMO-MPLDEMO-1234567
+  seller_payme_id: z.string().nonempty(), // Example: xxxxxxx-xxxxxxx-xxxxxxx-1234567
   sale_price: z.number(), // Example: 100
   currency: z.string().nonempty(), // Example: ILS
   product_name: z.string().nonempty(), // Example: Phone
@@ -311,7 +311,7 @@ export const IsracardGanerateSaleRequestZVS = z.object({
   language: z.string().optional(), // Example: he
   order_number: z.string().optional(), // Example: 6545584
 
-  items: z.array(IsracartCartItemZVS),
+  items: z.array(isracardCartItemZVS),
 
   shipping_details: z.object({
     name: z.string().nonempty(), // Example: John Doe
@@ -332,7 +332,7 @@ export const IsracardGanerateSaleRequestZVS = z.object({
   buyer_phone: z.string().optional(), // Example: 0501234567
 });
 
-export type IsracardGanerateSaleRequestType = z.infer<typeof IsracardGanerateSaleRequestZVS>
+export type IsracardGenerateSaleRequestType = z.infer<typeof IsracardGenerateSaleRequestZVS>
 
 
 
@@ -340,7 +340,7 @@ export type IsracardGanerateSaleRequestType = z.infer<typeof IsracardGanerateSal
 
 
 
-export const IsracardGanerateSaleResponseZVS = z.object({
+export const IsracardGenerateSaleResponseZVS = z.object({
   status_code: z.number(), // Represents the status of the request (0 for success, 1 for error)
   sale_url: z.string(), // URL as a string
   payme_sale_id: z.string(), // Unique sale ID as a string
@@ -350,7 +350,7 @@ export const IsracardGanerateSaleResponseZVS = z.object({
   currency: z.string(), // Currency as a string (3-letter ISO 4217 code)
 });
 
-export type IsracardGanerateSaleResponseType = z.infer<typeof IsracardGanerateSaleResponseZVS  >
+export type IsracardGenerateSaleResponseType = z.infer<typeof IsracardGenerateSaleResponseZVS  >
 
 
 
@@ -362,7 +362,7 @@ export type IsracardGanerateSaleResponseType = z.infer<typeof IsracardGanerateSa
 
 
 
-const IsaracdCaptureSaleCallbackNotificationTypeZVS = z.enum([
+const isracardCaptureSaleCallbackNotificationTypeZVS = z.enum([
   'sale-complete',
   'sale-authorized',
   'refund',
@@ -371,14 +371,14 @@ const IsaracdCaptureSaleCallbackNotificationTypeZVS = z.enum([
   'sale-chargeback-refund',
 ]);
 
-const IsaracdCaptureSaleCallbackNotificationAttributesZVS = z.object({
+const isracardCaptureSaleCallbackNotificationAttributesZVS = z.object({
   status_code: z.number(), // 0 for success, 1 for error
   sale_created: z.string(), // e.g., '2016-01-01 15:15:15'
   transaction_id: z.string(), // Merchant's unique sale ID
   status_error_code: z.string().optional(), // Optional, only present in case of an error
   payme_sale_id: z.string(), // Our unique sale ID
   status_error_details: z.string().optional(), // Optional, only present in case of an error
-  notify_type: IsaracdCaptureSaleCallbackNotificationTypeZVS, // Use the enum defined above
+  notify_type: isracardCaptureSaleCallbackNotificationTypeZVS, // Use the enum defined above
   payme_sale_code: z.string(), // Our unique sale code
   payme_transaction_id: z.string(), // Our unique transaction ID
   price: z.number(), // Sale final price in smallest currency unit
@@ -404,7 +404,7 @@ const IsaracdCaptureSaleCallbackNotificationAttributesZVS = z.object({
 
 
 
-export type IsracardSaleCallbackNotificationAttributes = z.infer<typeof IsaracdCaptureSaleCallbackNotificationAttributesZVS >
+export type IsracardSaleCallbackNotificationAttributes = z.infer<typeof isracardCaptureSaleCallbackNotificationAttributesZVS >
 
 
 
@@ -416,6 +416,6 @@ export const RollbackTheaterApiVS = z.object({
   eventId:z.string(),
   selectedSeats : z.array(ClientSelectedSeatsVS),
   Theater:TheaterValidationSchema,
-  cart:z.array(IsracartCartItemZVS).or(z.array(PayPalCartItemVS))
+  cart:z.array(isracardCartItemZVS).or(z.array(PayPalCartItemVS))
   
 })

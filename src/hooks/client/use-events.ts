@@ -6,7 +6,7 @@ import useSWR, { Fetcher, Key as SWRKey, KeyedMutator, SWRConfiguration } from "
 
 
 
-type ReturendFetcherType<T> = {
+type ReturnedFetcherType<T> = {
   Events: T[]; // Allow `undefined` for when data is not yet loaded
   isEventsValidating: boolean;
   isEventsError: unknown;
@@ -14,7 +14,7 @@ type ReturendFetcherType<T> = {
 };
 
 
-export const useClientEvents = (): ReturendFetcherType<ClientEventType> => {
+export const useClientEvents = (): ReturnedFetcherType<ClientEventType> => {
 
   const fetcherKey: SWRKey = () =>  '/api/client/events/get-client-events '
 

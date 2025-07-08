@@ -5,21 +5,21 @@ import { ReactNode } from "react"
 
 export type  FullHeightPagePropsType =   {
   children?:ReactNode,
-  noScrool?:boolean,
+  noScroll?:boolean,
   HeaderName?:string
 }
 
 
 
 
-const FullHeightPage = ({children,noScrool}:FullHeightPagePropsType) => {
+const FullHeightPage = ({children,noScroll}:FullHeightPagePropsType) => {
     const theme = useTheme()
   
      return<Box sx={{
       direction:"rtl",
       height:"100dvh",
       background:"black",
-      overflowY: noScrool? 'clip' : 'scroll', 
+      overflowY: noScroll? 'clip' : 'scroll', 
       overflowX:"clip",
       scrollbarWidth: 'none', // "auto", "thin",  "none"
       scrollbarColor: `${theme.palette.secondary.main} transparent`, // thumb and track colors

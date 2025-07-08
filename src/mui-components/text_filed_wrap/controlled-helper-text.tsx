@@ -3,12 +3,12 @@ import { FormHelperText, SxProps, Typography, useFormControl, useTheme } from "@
 import { useContext } from "react";
 
 
-interface ControledHelperText {
+interface ControlledHelperText {
     text:string
     helpTextPotionsEnd:boolean
 }
 
-export default function ControledHelperText ({text , helpTextPotionsEnd}:ControledHelperText){
+export default function ControlledHelperText ({text , helpTextPotionsEnd}:ControlledHelperText){
   const theme = useTheme()
   const { focused , filled, variant, required ,error,color, ...rest } = useFormControl() || {};
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
@@ -43,7 +43,7 @@ export default function ControledHelperText ({text , helpTextPotionsEnd}:Control
     return (
         <Typography 
         // avoiding <p> in a <p> err
-        // span can be a chiled of p 
+        // span can be a childe of p 
         component={'span'}
         
         

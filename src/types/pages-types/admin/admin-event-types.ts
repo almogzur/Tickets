@@ -1,14 +1,14 @@
 
 import { z }  from 'zod'
-import { TheaterValidationSchema } from "@/types/components-typs/admin/theater/admin-theater-types";
+import { TheaterValidationSchema } from "@/types/components-types/admin/theater/admin-theater-types";
 import { SavePayPalInvoceVS } from '../client/client-event-type';
-import { EventLogsSchema } from '@/util/db/schma/db-event';
+import { EventLogsSchema } from '@/util/db/schemas/db-event';
 
-//ZT (Zod inferd Types) schema
+//ZT (Zod infer Types) schema
 
 
-// Bace ZT for Global Use
-export const infoFiledsZT = z.object({
+// Base ZT for Global Use
+export const infoFieldsZT = z.object({
   eventName:z.string() ,
   cat:z.string(),
   pre:z.string(),
@@ -22,8 +22,8 @@ export const infoFiledsZT = z.object({
   OpenDoors:z.string()
 })
 export const TicketZVS = z.object({
-  EndSealesHour :z.string().nullable(), // Date Component need null do display label 
-  EndSealesDate: z.string().nullable(),
+  EndSalesHour :z.string().nullable(), // Date Component need null do display label 
+  EndSalesDate: z.string().nullable(),
   selectedType:z.union([z.literal("normal"),z.literal("discount"),z.literal("")]),
   priceInfo:z.string().min(3),
   price: z
@@ -41,11 +41,11 @@ export const SettingsZT = z.object({
 // Zod Validate Form / Api Use 
 
 // Draft 
-export const DraftInfoFiledsZVS = infoFiledsZT.extend({
+export const DraftInfoFieldsZVS = infoFieldsZT.extend({
   eventName: z.string().min(3, "❌ לפחות 3 תווים").max(30),
 });
 export const NewDraftZVS= z.object({
-  info:DraftInfoFiledsZVS,
+  info:DraftInfoFieldsZVS,
   tickets: z.array(TicketZVS).optional(),
   settings:SettingsZT
 })
@@ -54,14 +54,14 @@ export const UpdateDraftZVS= NewDraftZVS.extend({
 })
 
 export const EventLogsZVS = z. object( {
-  time_stemp :z.string(),
+  time_stamp :z.string(),
   user:z.string(),
   ip:z.string().ip(),
 })
 
-// Eevent
+// event
 
-export const  EventInfoFiledsZVS = infoFiledsZT.extend({ 
+export const  EventInfoFieldsZVS = infoFieldsZT.extend({ 
   eventName: z.string().min(3, "❌ לפחות 3 תווים").max(30),
   cat: z.string().min(1,{message:"❌ בחר קטגוריה"}),
   pre: z.string().min(5,"❌ הוסף תוכן או פרטים  על האירוע"),
@@ -76,7 +76,7 @@ export const  EventInfoFiledsZVS = infoFiledsZT.extend({
 export const EventSettingZVS = TicketZVS.array().nonempty({message:"❌ הוסף לפחות כרטיס 1"})
 
 export const NewEventZVS = z.object({
-  info:EventInfoFiledsZVS,
+  info:EventInfoFieldsZVS,
   tickets: EventSettingZVS,
   settings: SettingsZT,
   public_id:z.string().optional()
@@ -95,12 +95,12 @@ export const WithDataAdminEventZVS= EventFromDraftZVS.extend({
 })
 
  
-// Bace 
-export type infoFiledsType = z.infer< typeof infoFiledsZT>
+// Base 
+export type infoFieldsType = z.infer< typeof infoFieldsZT>
 export type TicketType  = z.infer<typeof TicketZVS> 
 export type EventSettingType = z.infer<typeof SettingsZT>
 
-// derived from bace
+// derived from base
 
 //Draft
 

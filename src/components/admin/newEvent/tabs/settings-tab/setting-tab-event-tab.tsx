@@ -24,21 +24,21 @@ export default  function SettingTabEventTab() {
                mainText={" הגבל מספר מושבים"}
                subText={"הגבל מספר מושבים שהלקוח יכול לקנות   "} 
                value={settings.limitClientTicket}
-               switchOnChangeHendler={(e,checked)=>{setSetting(p=>({...p, limitClientTicket : checked }))} }
+               switchOnChangeHandler={(e,checked)=>{setSetting(p=>({...p, limitClientTicket : checked }))} }
                   >
                    <SelectWrap 
                       label={"מספר"}
                       items={
                         Array.from(
-                          {length:10}, // array are json in js and this tell the array constractor JSON length property is 10 
-                          (_,i)=>{  return { label : `${i+1}` ,value:i }}, // map function Es6 => dont have This binds
-                          {} // optinal thisArg  when useing ES5 function this biends to the map function this 
+                          {length:10}, // array are json in js and this tell the array Constructor JSON length property is 10 
+                          (_,i)=>{  return { label : `${i+1}` ,value:i }}, // map function Es6 => don't have This binds
+                          {} // optional thisArg  when using ES5 function this binds to the map function this 
                         )
                      }
                      value={settings.ticketLimit} 
-                     changeHndler={(e)=>{setSetting(p=>({...p,ticketLimit:e.target.value}))}} 
+                     changeHandler={(e)=>{setSetting(p=>({...p,ticketLimit:e.target.value}))}} 
                      helpText={""} 
-                     labelPositioin={"end"}
+                     labelPosition={"end"}
                      
                      />
            </SwitchWithTextAndChildren>
@@ -54,7 +54,7 @@ export default  function SettingTabEventTab() {
             mainText={"רצף מושבים "}
              subText={"הלקוח אינו  יכול לבחור מושבים  שלא ברצף"} 
              value={settings.canSelectNotRelatedSites}
-            switchOnChangeHendler={()=>{setSetting(p=>({...p,canSelectNotRelatedSites:!p.canSelectNotRelatedSites}))} } /
+            switchOnChangeHandler={()=>{setSetting(p=>({...p,canSelectNotRelatedSites:!p.canSelectNotRelatedSites}))} } /
               >
         </ColumnB>
         </Flex>

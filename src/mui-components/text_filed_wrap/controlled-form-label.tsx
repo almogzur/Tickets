@@ -2,15 +2,15 @@ import WidthContext from "@/context/WidthContext"
 import { Typography, useFormControl ,useTheme} from "@mui/material"
 import { CSSProperties, useContext } from "react"
 
-interface ControledLabelType {
-    labelPositioin:"top"|"end"
+interface controlledLabelType {
+    labelPosition:"top"|"end"
     label:string
     isLabelBold?:boolean
-    labelTextcolor?:CSSProperties['color']
+    labelTextColor?:CSSProperties['color']
 
 
 }
- const ControledLabel =({labelPositioin,label ,isLabelBold  ,labelTextcolor}:ControledLabelType)=>{
+ const ControlledLabel =({labelPosition,label ,isLabelBold  ,labelTextColor}:controlledLabelType)=>{
     const theme = useTheme()
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
 
@@ -24,7 +24,7 @@ interface ControledLabelType {
            sx={
             focused?
                 [ {   
-                 width:labelPositioin==="end"? fullWidth*0.11 : fullWidth,
+                 width:labelPosition==="end"? fullWidth*0.11 : fullWidth,
                  color:error? "red" : color?theme.palette[`${color}`].main : null,
 
                  fontWeight: isLabelBold? "bold": null,
@@ -44,7 +44,7 @@ interface ControledLabelType {
             filled ?
                  [
                  {
-                  width:labelPositioin==="end"? fullWidth*0.11 : fullWidth,
+                  width:labelPosition==="end"? fullWidth*0.11 : fullWidth,
                   color:error? "red":undefined,
                   fontWeight: isLabelBold? "bold": null,
 
@@ -67,7 +67,7 @@ interface ControledLabelType {
                  fontSize:!sm? 14:18,
                  position:"relative",
                  opacity:1,
-                 color:labelTextcolor?? null
+                 color:labelTextColor?? null
                  
                  }
                 }
@@ -79,5 +79,5 @@ interface ControledLabelType {
 
 }
 
-export default ControledLabel
+export default ControlledLabel
 

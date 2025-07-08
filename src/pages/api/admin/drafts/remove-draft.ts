@@ -3,8 +3,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { ObjectId } from "mongodb";
 import { z } from "zod";
-import  {CreateMongooseClient, userDataPrefix } from "@/util/db/mongosee-connect";
-import { DraftModel } from "@/util/db/mongosee-models";
+import  {CreateMongooseClient, userDataPrefix } from "@/util/db/mongoose-connect";
+import { DraftModel } from "@/util/db/mongoose-models";
 
 
 
@@ -46,9 +46,9 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse) 
 }
 
 
-const Modle = DraftModel(connection)
+const model = DraftModel(connection)
 
-      const Drafts  = await Modle.findOneAndDelete({_id:isValidData.data.id})
+      const Drafts  = await model.findOneAndDelete({_id:isValidData.data.id})
 
        if(!Drafts){
 

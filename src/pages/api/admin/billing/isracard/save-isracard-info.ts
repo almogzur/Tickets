@@ -1,13 +1,13 @@
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
-import { IsracardZVS, UserIsracardInfoType } from "@/types/pages-types/admin/user-biling-info-types";
-import { CreateMongooseClient, userDataPrefix } from "@/util/db/mongosee-connect";
+import { IsracardZVS, UserIsracardInfoType } from "@/types/pages-types/admin/user-billing-info-types";
+import { CreateMongooseClient, userDataPrefix } from "@/util/db/mongoose-connect";
 import { rateLimitConfig } from "@/util/fn/api-rate-limit.config";
 import { encryptData } from "@/util/fn/crypto";
 import rateLimit from "express-rate-limit";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { secretKey } from "../paypal/save-paypal-info";
-import { IsracardModel } from "@/util/db/mongosee-models";
+import { IsracardModel } from "@/util/db/mongoose-models";
 
 const apiLimiter = rateLimit(rateLimitConfig);
 
@@ -37,18 +37,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
           const body = req.body
 
-          const isValedData = IsracardZVS.safeParse(body)
+          const isValidData = IsracardZVS.safeParse(body)
 
-          if (!isValedData.success) {
+          if (!isValidData.success) {
                return res.status(405).json({ massage: "Bad Input" })
           }
 
-          const { apiKey , ...rest} = isValedData.data
+          const { apiKey , ...rest} = isValidData.data
 
-          const chiperKey= encryptData(apiKey,secretKey)
+          const chipperKey= encryptData(apiKey,secretKey)
 
           const Data : UserIsracardInfoType  = {
-                apiKey:chiperKey,
+                apiKey:chipperKey,
                ...rest
           }
           
@@ -62,7 +62,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                return res.status(500).json({ massage: 'save errors ' + API_NAME })
           }
 
-          return res.status(200).json({ massage: "save succsess" + API_NAME })
+          return res.status(200).json({ massage: "save success's" + API_NAME })
 
      })
 }

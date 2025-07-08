@@ -6,7 +6,7 @@ import AdminDrawer from '@/components/admin/admin-drawer';
 
 interface AdminWrapperPropsType  {
    children?:ReactNode,
-   noScrool?:boolean,
+   noScroll?:boolean,
    HeaderName?:string
   }
 
@@ -22,7 +22,7 @@ useEffect(()=>{
   }
 },[router, status])
 
-const {children, noScrool, HeaderName} = props
+const {children, noScroll, HeaderName} = props
 
 if(status === 'unauthenticated' ){ 
   return <h4>מאמת...</h4>

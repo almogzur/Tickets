@@ -20,7 +20,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import 'dayjs/locale/he';
 import { heIL as datePikerHeb } from '@mui/x-date-pickers/locales';
 
-// Mui Componet
+// Mui components
 import { heIL as coreHeb } from '@mui/material/locale';
 //Mui LOC
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -39,7 +39,7 @@ export const FullDateOptions :Intl.DateTimeFormatOptions = {
   hour:'2-digit',
   minute:"2-digit",
 };
-export const samiDateOptions :Intl.DateTimeFormatOptions = {
+export const samlDateOptions :Intl.DateTimeFormatOptions = {
         year:'2-digit',
         month: '2-digit',
         day: '2-digit',
@@ -47,8 +47,8 @@ export const samiDateOptions :Intl.DateTimeFormatOptions = {
 
 import { useRouter } from 'next/router';
 
-import ClientWrapper from "@/layouts/client";
-import AdminWrrpaer from '@/layouts/admin';
+import ClientLayout from "@/layouts/client";
+import AdminLayout from '@/layouts/admin';
 
 
 
@@ -185,7 +185,7 @@ const MyApp = ({ Component, pageProps: { nonce, session, ...pageProps } }: AppPr
   
   const router = useRouter();
 
-  // media qurys
+  // media queys
    const xxl = useMediaQuery('(min-width : 1600px)')
    const xl = useMediaQuery('(min-width : 1200px)')
    const lg = useMediaQuery('(min-width: 992px)')
@@ -200,16 +200,16 @@ const MyApp = ({ Component, pageProps: { nonce, session, ...pageProps } }: AppPr
 
 
 
-    // to prevent  /admin/ * exmple : 'admin/dsadsadsa'   
-   // slugs Catches wher is 404 job 
+    // to prevent  /admin/ * example : 'admin/slug'   
+   // slugs Catches where is 404 job 
    // while the if (status === 'unauthenticated' ){  is returning  from admin layout  and the 404 is return too  } 
    const adminPages = [
-     "biling",
+     "billing",
      "clients",
      "drafts",
      "events",
      "new-event",
-     "regester",
+     "register",
      "settings",
      "stats",
      "supervisor",
@@ -226,7 +226,7 @@ const MyApp = ({ Component, pageProps: { nonce, session, ...pageProps } }: AppPr
    
    const path = router.pathname || router.asPath; // Use pathname or fallback to asPath
    const isAdminRoute = path === '/admin' || adminPages.some(page => path.startsWith(`/admin/${page}`));
-   const Wrapper = isAdminRoute ? AdminWrrpaer : ClientWrapper;
+   const Wrapper = isAdminRoute ? AdminLayout : ClientLayout;
    const WrapperProps : WrapperPropsType ={ pageName , noScroll , setPageName , setNoScroll  }
 
 return (

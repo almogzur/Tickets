@@ -4,9 +4,9 @@ import { Session } from "next-auth";
 import useSWR, { Fetcher, Key as SWRKey , KeyedMutator, SWRConfiguration} from "swr";
 
  
-type FeatcherType = UpdateDraftType[] 
+type FeatherType = UpdateDraftType[] 
 
-type ReturendFetcherType<T> = {
+type ReturnedFetcherType<T> = {
   Drafts: T ; // Allow `undefined` for when data is not yet loaded
   isDraftsValidating: boolean;
   isDraftsError: unknown;
@@ -14,7 +14,7 @@ type ReturendFetcherType<T> = {
 };
 
 
-export const useAdminDrafts  = (session:Session|null) : ReturendFetcherType< FeatcherType > => { 
+export const useAdminDrafts  = (session:Session|null) : ReturnedFetcherType< FeatherType > => { 
 
      const fetcherKey : SWRKey = ()=> session?.user?.name? '/api/admin/drafts/get-drafts' : null // will not fetch if no session
 
@@ -25,7 +25,7 @@ export const useAdminDrafts  = (session:Session|null) : ReturendFetcherType< Fea
         }
 
 
-       const FatchConfig : AxiosRequestConfig ={
+       const FetchConfig : AxiosRequestConfig ={
         params:params,
         
         //withCredentials:true,
@@ -33,7 +33,7 @@ export const useAdminDrafts  = (session:Session|null) : ReturendFetcherType< Fea
       }
       try{ 
            
-       const response = await  axios.get<UpdateDraftType>( key , FatchConfig )
+       const response = await  axios.get<UpdateDraftType>( key , FetchConfig )
         if(response.status === 200){
           return response.data
         }

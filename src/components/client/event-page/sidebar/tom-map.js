@@ -43,7 +43,7 @@ const Map = () =>{
               },
             });
             setMap(map);
-            console.log('mapLangage:', map.getLanguage());
+            console.log('mapLanguage:', map.getLanguage());
           };
       
           const initTomTom = async () => {

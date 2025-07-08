@@ -8,7 +8,7 @@ import axios, { AxiosRequestConfig } from 'axios'
 import { ImRedo2 } from "react-icons/im";
 import DataGridWrap from '@/mui-components/data-grid-wrapper/grid-wrapper'
 import LoadingScreen from '@/mui-components/loading'
-import NewEventFormWraper from '@/components/admin/newEvent/from-wrapper'
+import NewEventFormWrap from '@/components/admin/newEvent/from-wrapper'
 
 
 
@@ -33,7 +33,7 @@ const AdminDrafts=()=>{
        cat:string,
        date:Date
        location:string
-       /** thers more just add ...price cat  */
+       /** thar's more just add ...price cat  */
         }
      id:string|number
     }
@@ -78,7 +78,7 @@ const AdminDrafts=()=>{
             date:draft.info.Date ??  Na ,
             hour:draft.info.Hour ?? Na,
             price:draft.tickets?.map((ticket)=> ticket.selectedType ==='normal' ? ticket.price : null ),
-            eventId:draft._id, // this value dose NOT ! have a vlue on Cloumns , its for config the button key 
+            eventId:draft._id, // this value dose NOT ! have a value on columns , its for config the button key 
             location:draft.info.TheaterName?? Na,
             }
           ]
@@ -92,14 +92,14 @@ const Draft = Drafts?.find((draft) => draft._id === draftId);
 
 
 
-// Functons  
+// functions  
 
 const  removeDraft = async (draftId:string)=>{
   setDelActionIsLoading(draftId)
 
   console.log("Remove Draft inv");
 
-  const reqData = { id : draftId } // dont like any but the function  overload allow it 
+  const reqData = { id : draftId } // don't like any but the function  overload allow it 
    const options : AxiosRequestConfig ={ }
   
    try{ 
@@ -134,7 +134,7 @@ return (
      </Button>}
     { !draftId
        ? <DataGridWrap columnsData={ColData} rowsData={Rows} />
-       : <NewEventFormWraper Draft={Draft} DraftId={draftId}  />
+       : <NewEventFormWrap Draft={Draft} DraftId={draftId}  />
     }
   
   </>

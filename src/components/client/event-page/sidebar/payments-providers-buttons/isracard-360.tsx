@@ -2,23 +2,29 @@ import { useState } from "react";
 import { Dialog, DialogTitle, DialogContent, IconButton, CircularProgress, Button } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
-import { IsracardCreateOrderZVS, IsracartCartItemType } from "@/types/pages-types/client/client-event-type";
-import { TheaterType } from "@/types/components-typs/admin/theater/admin-theater-types";
+import { ClientSelectedSeatType, IsracardCreateOrderZVS, IsracardCartItemType } from "@/types/pages-types/client/client-event-type";
+import { TheaterType } from "@/types/components-types/admin/theater/admin-theater-types";
+import { useClientEvent } from "@/hooks/client/use-event";
+import { rollBack } from "@/util/fn/frontend_api-fn";
+import { grey } from "@mui/material/colors";
 
 
 type IsracardBtnPropsType = {
-  cart:IsracartCartItemType[]
+  cart:IsracardCartItemType[]
   total:string
   eventId:string
-  TheaterState:TheaterType|undefined
+  TheaterState:TheaterType
   eventName:string
+  selectedSeats:ClientSelectedSeatType[]
 }
 
 const IsracardBtn = (props: IsracardBtnPropsType) => {
+
   const [open, setOpen] = useState(false);
   const [paymentLink, setPaymentLink] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
+  const { Event, isEventError, updateEventHook } = useClientEvent(props.eventId);
+  
 
   const SaleLinkRequest = async (): Promise<string|undefined> => {
 
@@ -44,30 +50,49 @@ const IsracardBtn = (props: IsracardBtnPropsType) => {
       setLoading(false);
     }
   };
+  const handleClose = async  ( e :React.SyntheticEvent<HTMLButtonElement> ) => {
 
+    await rollBack(
+      props.TheaterState,
+      props.eventId,
+      props.selectedSeats,
+      props.cart
+    );
+    setOpen(false);
+  }
 
-  
   return (
     <>
        <Button variant="contained" color="primary" onClick={SaleLinkRequest}>
        ישראכאט
        </Button>
 
-       <Dialog open={open} onClose={() => setOpen(false)} maxWidth="md" fullWidth>
+       <Dialog 
+           open={open} 
+           onClose={() => setOpen(false)}
+           maxWidth="md" 
+           fullWidth
+           >
         
         <DialogTitle>
-         
           <IconButton
-            aria-label="close"
-            onClick={() => setOpen(false)}
-            sx={{ position: "absolute", right: 8, top: 8 }}
+              onClick={handleClose}
+              sx={{ position: "absolute", right: 8, top: 8 ,background:grey[200]}}
           >
             <CloseIcon />
+
           </IconButton>
 
         </DialogTitle>
 
-        <DialogContent sx={{ height: "80vh", display: "flex", justifyContent: "center", alignItems: "center", p: 0 }}>
+        <DialogContent 
+            sx={{ 
+              height: "80vh",
+               display: "flex",
+                justifyContent: "center",
+                 alignItems: "center",
+                  p: 0 
+                  }}>
           {
           loading ? 
             <CircularProgress  color='primary' />

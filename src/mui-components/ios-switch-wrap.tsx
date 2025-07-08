@@ -10,7 +10,7 @@ export interface SwitchPropsType {
 }
 export interface SwitchWrapPropsType extends SwitchPropsType {
   value: boolean
-  switchOnChangeHendler: (e: SyntheticEvent, checked: boolean) => void
+  switchOnChangeHandler: (e: SyntheticEvent, checked: boolean) => void
 }
 
 
@@ -77,7 +77,7 @@ const IOSSwitch = styled(Switch)(
 
 export interface WithTextSwitchWrapPropsType extends SwitchPropsType {
   switchValue: boolean 
-  switchOnChangeHendler: (e: React.SyntheticEvent, checked: boolean) => void
+  switchOnChangeHandler: (e: React.SyntheticEvent, checked: boolean) => void
   title: string
   labelPlacement: "bottom" | "top" ,
   textColor?: CSSProperties['color'],
@@ -86,7 +86,7 @@ export interface WithTextSwitchWrapPropsType extends SwitchPropsType {
 
 export const IosWithTextSwitchWrap = ({
   switchValue,
-  switchOnChangeHendler,
+  switchOnChangeHandler,
   title,
   labelPlacement,
   textColor
@@ -98,7 +98,7 @@ export const IosWithTextSwitchWrap = ({
    { labelPlacement === 'top' &&   <Typography sx={{ color: textColor ?? "#ddd", fontWeight: "bold", textAlign: "center" }} >{title}</Typography>}
        <IOSSwitch 
         checked={switchValue}
-        onChange={switchOnChangeHendler}
+        onChange={switchOnChangeHandler}
         inputProps={{ 'aria-label': 'controlled', }}
         />
      { labelPlacement === 'bottom' &&  <Typography sx={{ color: textColor ?? "#ddd", fontWeight: "bold", textAlign: "center" }} >{title}</Typography>}   

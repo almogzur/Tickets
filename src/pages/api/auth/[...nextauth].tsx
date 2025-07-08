@@ -5,9 +5,9 @@ import { AuthOptions } from "next-auth"
 import bcrypt from 'bcryptjs'
 
 import jwt from 'jsonwebtoken'
-import {  NewUserValidationShema } from "@/types/pages-types/admin/supervisor-types"
-import  {CreateMongooseClient,  UserPrefix } from "@/util/db/mongosee-connect"
-import { UsersModel } from "@/util/db/mongosee-models"
+import {  NewUserValidationSchema } from "@/types/pages-types/admin/supervisor-types"
+import  {CreateMongooseClient,  UserPrefix } from "@/util/db/mongoose-connect"
+import { UsersModel } from "@/util/db/mongoose-models"
 
 
 /**
@@ -16,12 +16,12 @@ import { UsersModel } from "@/util/db/mongosee-models"
  *   const authKeyBuffer = encoder.encode(user,pass);
      const inputKeyBuffer = encoder.encode(input.pass);
  
-     const isKeyValide = crypto.timingSafeEqual(new Uint8Array(authKeyBuffer), new Uint8Array(inputKeyBuffer))
+     const isKeyValid = crypto.timingSafeEqual(new Uint8Array(authKeyBuffer), new Uint8Array(inputKeyBuffer))
  */
 
 
-// Exdenting the type using -  module Augmentation
-// to enclude extra filde in the session || && the User we need to add the fild to the type struc 
+// extending the type using -  module Augmentation
+// to include extra filed in the session || && the User we need to add the filed to the type struct 
 declare module "next-auth" {
   interface Session {
     key:string
@@ -39,7 +39,7 @@ declare module "next-auth" {
 }
 // validate input  values  at run time 
 
-export type  inferedType  = z.infer<typeof NewUserValidationShema>
+export type  UserType  = z.infer<typeof NewUserValidationSchema>
 
 // check evn
 const NODE_ENV = process.env.NODE_ENV
@@ -72,7 +72,7 @@ export const authOptions: AuthOptions = {
           throw new Error("JWT_SECRET is not defined in environment variables");
         }
 
-         const FormValidation = NewUserValidationShema.safeParse(credential)
+         const FormValidation = NewUserValidationSchema.safeParse(credential)
         
         if(!FormValidation){
           console.log(" Not Pass  FormValidation")
@@ -109,7 +109,7 @@ export const authOptions: AuthOptions = {
 
          if ( isPasswordValid) {
 
-         console.log("Pass Password hasing ");
+         console.log("Pass Password hashing ");
            
             const ReturnUser: User = {
                ...user,
@@ -149,7 +149,7 @@ export const authOptions: AuthOptions = {
     //The redirect callback is called anytime 
     // the user is redirected to a callback URL (e.g. on signin or signout).
     //By default only URLs on the same URL as the site are allowed
-    // , you can use the redirect callback to customise that behaviour.
+    // , you can use the redirect callback to customize that behavior.
     //The default redirect callback looks like this:
 
     async redirect({  baseUrl }) {

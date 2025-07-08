@@ -11,7 +11,7 @@ interface  ClientLayoutPropsType  extends FullHeightPagePropsType  {
 
 const  ClientLayout = (props:ClientLayoutPropsType) => {
     
-   const {children, noScrool, HeaderName} = props
+   const {children, noScroll, HeaderName} = props
 
   return (
     <>
@@ -21,7 +21,7 @@ const  ClientLayout = (props:ClientLayoutPropsType) => {
       </Head>
      {/*  to prevent re fetching in page navigation  ofter the user click the eventState is set in the global context of client layout */}
      <EventsProvider>
-      <FullHeightPage  noScrool={noScrool}  HeaderName={HeaderName} >
+      <FullHeightPage  noScroll={noScroll}  HeaderName={HeaderName} >
           <ClientNavbar />
             { children }
       </FullHeightPage>

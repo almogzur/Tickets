@@ -25,7 +25,7 @@ export const moveToEventNameFolder = async (publicId:string  , eventName :string
           }
             );
             if(data){
-              console.log("cloudinary moveToEventNameFolder ", "succsess" ,data)
+              console.log("cloudinary moveToEventNameFolder ", "success's" ,data)
 
               return true
             }
@@ -91,7 +91,7 @@ export const findSubFolders =  async(Path?:string|null)=>{
      else if(folders && !Array.isArray(folders)) {
         try{ 
          const del_result = await delFolder(folders.path)
-         console.log( " folders singel : del_result ", del_result, "Path " , folders.path  , "folders is not array " , );
+         console.log( " folders single : del_result ", del_result, "Path " , folders.path  , "folders is not array " , );
          if(del_result ){
           return true
          }
@@ -99,7 +99,7 @@ export const findSubFolders =  async(Path?:string|null)=>{
           
         }
         catch (err){
-     //     console.log("delFolders folders singel : Del Error",err , "Path " , folders.path , "folders is not array " );
+     //     console.log("delFolders folders single : Del Error",err , "Path " , folders.path , "folders is not array " );
             return false
          }
      }

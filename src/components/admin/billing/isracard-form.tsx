@@ -1,8 +1,8 @@
-import { IsracardZVS } from "@/types/pages-types/admin/user-biling-info-types"
-import { IsracardPropsType } from "../../../pages/admin/biling"
+import { IsracardZVS } from "@/types/pages-types/admin/user-billing-info-types"
+import { IsracardPropsType } from "../../../pages/admin/billing"
 import { useRouter } from "next/router"
 import axios from "axios"
-import InputWrap from "@/mui-components/TeextFiledWrpa/input-wrap"
+import InputWrap from "@/mui-components/text_filed_wrap/input-wrap"
 import { Typography , Stack as Flex, Button } from "@mui/material"
 
 
@@ -25,15 +25,15 @@ const IsracardForm = ({ isracardBillingInfo, setIsracardBillingInfo }: IsracardP
   
       const ApiUrl = '/api/admin/billing/isracard/save-isracard-info'
   
-      const isValiedData = IsracardZVS.safeParse(isracardBillingInfo)
+      const isValidData = IsracardZVS.safeParse(isracardBillingInfo)
   
-      if (!isValiedData.success) {
-        console.log(isValiedData.error.issues)
+      if (!isValidData.success) {
+        console.log(isValidData.error.issues)
         return
       }
   
       try {
-        const responce = await axios.post(ApiUrl, isValiedData.data)
+        const responce = await axios.post(ApiUrl, isValidData.data)
         if (responce.status === 200) {
           return router.push("/admin")
         }
@@ -73,72 +73,72 @@ const IsracardForm = ({ isracardBillingInfo, setIsracardBillingInfo }: IsracardP
           variant='outlined'
           label={'שם'}
           value={isracardBillingInfo.firstName}
-          onChangeHndler={(e) => { setIsracardBillingInfo(p => ({ ...p, firstName: e.target.value })) }}
+          onChangeHandler={(e) => { setIsracardBillingInfo(p => ({ ...p, firstName: e.target.value })) }}
           helpText={''}
-          labelPositioin={'top'}
+          labelPosition={'top'}
         />
 
         <InputWrap
           variant='outlined'
           label={'שם משפחה'}
           value={isracardBillingInfo.lastName}
-          onChangeHndler={(e) => { setIsracardBillingInfo(p => ({ ...p, lastName: e.target.value })) }}
+          onChangeHandler={(e) => { setIsracardBillingInfo(p => ({ ...p, lastName: e.target.value })) }}
           helpText={''}
-          labelPositioin={'top'}
+          labelPosition={'top'}
         />
 
         <InputWrap
           variant='outlined'
           label={'תז'}
           value={isracardBillingInfo.socialId}
-          onChangeHndler={(e) => { setIsracardBillingInfo(p => ({ ...p, socialId: e.target.value })) }}
+          onChangeHandler={(e) => { setIsracardBillingInfo(p => ({ ...p, socialId: e.target.value })) }}
           helpText={''}
-          labelPositioin={'top'}
+          labelPosition={'top'}
         />
 
         <InputWrap
           variant='outlined'
           label={'טלפון'}
           value={isracardBillingInfo.phone}
-          onChangeHndler={(e) => { setIsracardBillingInfo(p => ({ ...p, phone: e.target.value })) }}
+          onChangeHandler={(e) => { setIsracardBillingInfo(p => ({ ...p, phone: e.target.value })) }}
           helpText={''}
-          labelPositioin={'top'}
+          labelPosition={'top'}
         />
   
         <InputWrap
           variant='outlined'
           label={'מייל'}
           value={isracardBillingInfo.email}
-          onChangeHndler={(e) => { setIsracardBillingInfo(p => ({ ...p, email: e.target.value })) }}
+          onChangeHandler={(e) => { setIsracardBillingInfo(p => ({ ...p, email: e.target.value })) }}
           helpText={''}
-          labelPositioin={'top'}
+          labelPosition={'top'}
         />
   
         <InputWrap
           variant='outlined'
           label={'שם העסק'}
           value={isracardBillingInfo.businessName}
-          onChangeHndler={(e) => { setIsracardBillingInfo(p => ({ ...p, businessName: e.target.value })) }}
+          onChangeHandler={(e) => { setIsracardBillingInfo(p => ({ ...p, businessName: e.target.value })) }}
           helpText={''}
-          labelPositioin={'top'}
+          labelPosition={'top'}
         />
   
         <InputWrap
           variant='outlined'
           label={' מספר ח.פ - ע.מ'}
           value={isracardBillingInfo.businessNumber}
-          onChangeHndler={(e) => { setIsracardBillingInfo(p => ({ ...p, businessNumber: e.target.value })) }}
+          onChangeHandler={(e) => { setIsracardBillingInfo(p => ({ ...p, businessNumber: e.target.value })) }}
           helpText={''}
-          labelPositioin={'top'}
+          labelPosition={'top'}
         />
   
         <InputWrap
           variant='outlined'
           label={'שם החשבון'}
           value={isracardBillingInfo.accountName}
-          onChangeHndler={(e) => { setIsracardBillingInfo(p => ({ ...p, accountName: e.target.value })) }}
+          onChangeHandler={(e) => { setIsracardBillingInfo(p => ({ ...p, accountName: e.target.value })) }}
           helpText={''}
-          labelPositioin={'top'}
+          labelPosition={'top'}
         />
   
   
@@ -146,37 +146,37 @@ const IsracardForm = ({ isracardBillingInfo, setIsracardBillingInfo }: IsracardP
           variant='outlined'
           label={'מספר בנק'}
           value={isracardBillingInfo.bankNumber}
-          onChangeHndler={(e) => { setIsracardBillingInfo(p => ({ ...p, bankNumber: e.target.value })) }}
+          onChangeHandler={(e) => { setIsracardBillingInfo(p => ({ ...p, bankNumber: e.target.value })) }}
           helpText={''}
-          labelPositioin={'top'}
+          labelPosition={'top'}
         />
   
         <InputWrap
           variant='outlined'
           label={'מספר סניף'}
           value={isracardBillingInfo.bankBranch}
-          onChangeHndler={(e) => { setIsracardBillingInfo(p => ({ ...p, bankBranch: e.target.value })) }}
+          onChangeHandler={(e) => { setIsracardBillingInfo(p => ({ ...p, bankBranch: e.target.value })) }}
           helpText={''}
-          labelPositioin={'top'}
+          labelPosition={'top'}
         />
   
         <InputWrap
           variant='outlined'
           label={'מספר חשבון'}
           value={isracardBillingInfo.accountNumber}
-          onChangeHndler={(e) => { setIsracardBillingInfo(p => ({ ...p, accountNumber: e.target.value })) }}
+          onChangeHandler={(e) => { setIsracardBillingInfo(p => ({ ...p, accountNumber: e.target.value })) }}
           helpText={''}
-          labelPositioin={'top'}
+          labelPosition={'top'}
         />
   
         <InputWrap
           variant='outlined'
           label={'סוד'}
           value={isracardBillingInfo.apiKey}
-          onChangeHndler={(e) => { setIsracardBillingInfo(p => ({ ...p, apiKey: e.target.value })) }}
+          onChangeHandler={(e) => { setIsracardBillingInfo(p => ({ ...p, apiKey: e.target.value })) }}
           helpText={''}
           type='password'
-          labelPositioin={'top'}
+          labelPosition={'top'}
         />
   
   

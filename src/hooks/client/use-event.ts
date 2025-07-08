@@ -2,14 +2,14 @@ import axios from "axios";
 import useSWR, { Fetcher, KeyedMutator, SWRConfiguration } from "swr";
 import { ClientEventType } from "@/types/pages-types/admin/admin-event-types";
 
-type ReturendFetcherType<T> = {
+type ReturnedFetcherType<T> = {
   Event: T | undefined;
   isEventValidating: boolean;
   isEventError: unknown;
-  updateEvent: KeyedMutator<T>;
+  updateEventHook: KeyedMutator<T>;
 };
 
-export const useClientEvent = (id: string): ReturendFetcherType<ClientEventType | undefined> => {
+export const useClientEvent = (id: string): ReturnedFetcherType<ClientEventType | undefined> => {
 
   const fetcherKey =  ()=>  id  !== undefined  ?  `/api/client/events/get-event-by-id?event_id=${id}` : null 
 
@@ -37,6 +37,6 @@ export const useClientEvent = (id: string): ReturendFetcherType<ClientEventType 
     Event: data,
     isEventValidating: isValidating,
     isEventError: error,
-    updateEvent: mutate,
+    updateEventHook: mutate,
   };
 };

@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
-import  { userDataPrefix , CreateMongooseClient } from "@/util/db/mongosee-connect";
-import { DraftModel } from "@/util/db/mongosee-models";
+import  { userDataPrefix , CreateMongooseClient } from "@/util/db/mongoose-connect";
+import { DraftModel } from "@/util/db/mongoose-models";
 
  // findOne(filter: Filter<TSchema>, options: FindOptions): Promise<WithId<TSchema> | null>;
 
@@ -32,18 +32,18 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse) 
     return res.status(500).json({err:'No DB Connection'})
    }
 
-      // calling the Molde Only on Api call prevanting un wanted folder saves 
+      // calling the Model Only on Api call preventing un wanted folder saves 
 
    try{ 
-       const  Modle = DraftModel(connection)
+       const  model = DraftModel(connection)
 
-       const Drafts  = await Modle.find({},{},{lean:true})
-       console.log(API_NAME,"Succsess")
+       const Drafts  = await model.find({},{},{lean:true})
+       console.log(API_NAME,"successes")
 
        return   res.send(Drafts)
       }
     catch (err){
-        return    res.status(500).json({massage:`  Faled ${err} ${API_NAME} `})
+        return    res.status(500).json({massage:`  failed ${err} ${API_NAME} `})
        }
      
 }

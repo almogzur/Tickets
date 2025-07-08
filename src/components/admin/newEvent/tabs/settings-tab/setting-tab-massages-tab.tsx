@@ -1,6 +1,6 @@
 
 import WidthContext from "@/context/WidthContext";
-import TextAreaWrap from "@/mui-components/TeextFiledWrpa/text-area-wrap";
+import TextAreaWrap from "@/mui-components/text_filed_wrap/text-area-wrap";
 import { Container, Stack as Flex } from '@mui/material'
 import { useContext, useState } from "react";
 
@@ -25,8 +25,8 @@ return (
            variant='outlined'
            label={"הודעה 1 "}
            value={x}
-           onChangeHndler={(e) => { setX(e.target.value) } }
-           labelPositioin={"top"} 
+           onChangeHandler={(e) => { setX(e.target.value) } }
+           labelPosition={"top"} 
            helpText={""} 
            multiline
            rows={6}
@@ -37,9 +37,9 @@ return (
            variant='outlined'
            label={"הודעה 2 "}
            value={x}
-           onChangeHndler={(e) => { setX(e.target.value) } }
-           labelPositioin={"top"} 
-           helpText={"kjhgkj"} 
+           onChangeHandler={(e) => { setX(e.target.value) } }
+           labelPosition={"top"} 
+           helpText={"abc"} 
            multiline
            rows={6}
            Fgrow={1}
@@ -49,9 +49,9 @@ return (
            variant='outlined'
            label={"הודעה 2 "}
            value={x}
-           onChangeHndler={(e) => { setX(e.target.value) } }
-           labelPositioin={"top"} 
-           helpText={"kjhgkj"} 
+           onChangeHandler={(e) => { setX(e.target.value) } }
+           labelPosition={"top"} 
+           helpText={"abc"} 
            multiline
            rows={6}
            Fgrow={1}
@@ -65,8 +65,8 @@ return (
            variant='outlined'
            label={"הודעה 3 "}
            value={x}
-           onChangeHndler={(e) => { setX(e.target.value) } }
-           labelPositioin={"top"} 
+           onChangeHandler={(e) => { setX(e.target.value) } }
+           labelPosition={"top"} 
            helpText={""} 
            multiline
            rows={6}
@@ -76,8 +76,8 @@ return (
            variant='outlined'
            label={"הודעה 4 "}
            value={x}
-           onChangeHndler={(e) => { setX(e.target.value) } }
-           labelPositioin={"top"} 
+           onChangeHandler={(e) => { setX(e.target.value) } }
+           labelPosition={"top"} 
            helpText={""} 
            multiline
            rows={6}

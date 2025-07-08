@@ -4,8 +4,8 @@ import { getServerSession } from "next-auth";
 import { delEmptyFolders, moveToEventNameFolder } from "../../../../util/fn/cloudinary_helper_functions";
 import { UpdateDraftZVS } from "@/types/pages-types/admin/admin-event-types";
 import { ObjectId } from "mongodb";
-import  {CreateMongooseClient, userDataPrefix } from "@/util/db/mongosee-connect";
-import { DraftModel } from "@/util/db/mongosee-models";
+import  {CreateMongooseClient, userDataPrefix } from "@/util/db/mongoose-connect";
+import { DraftModel } from "@/util/db/mongoose-models";
 
 
 
@@ -63,9 +63,9 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse) 
 
       await moveToEventNameFolder(preview,eventName,session,API_NAME)
 
-     const Modle = DraftModel(connection)
+     const model = DraftModel(connection)
     
-    const updatedDraft  = await Modle.findOneAndReplace({_id:_id},isValidData.data,{new:true,lean:true})
+    const updatedDraft  = await model.findOneAndReplace({_id:_id},isValidData.data,{new:true,lean:true})
 
     if(!updatedDraft){
       console.warn("No Draft Updated")

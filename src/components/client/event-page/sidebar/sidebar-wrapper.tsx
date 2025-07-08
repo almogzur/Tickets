@@ -1,6 +1,3 @@
-import * as React from 'react';
-
-
 
 import WidthContext from '@/context/WidthContext';
 import {      Stack as Flex  , Button, Typography, useTheme, Box,} from '@mui/material';
@@ -11,26 +8,26 @@ import { ClientSelectedSeatType } from '@/types/pages-types/client/client-event-
 
 
 
-interface SideBarWraperPropsTypes {
+interface SideBarWrapPropsTypes {
     children?:React.ReactNode
     ClientSelectedEvent:ClientEventType
-    wighetIsExp:boolean
-    setWighetIsExp:React.Dispatch<SetStateAction<boolean>>
+    weightIsExp:boolean
+    setWeightIsExp:React.Dispatch<SetStateAction<boolean>>
     eventSelectSeats:ClientSelectedSeatType[]
 }
 
 
-export default function SideBarWraper({
+export default function SideBarWrap({
     children,
-    wighetIsExp,
-    setWighetIsExp,
+    weightIsExp,
+    setWeightIsExp,
     eventSelectSeats,
     ClientSelectedEvent
     
     
     
-    }:SideBarWraperPropsTypes) {
-  const {xxl,xl,lg,md,sm,xs,xxs} = React.useContext(WidthContext)
+    }:SideBarWrapPropsTypes) {
+  const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
   const theme = useTheme()
 
       const
@@ -42,7 +39,7 @@ export default function SideBarWraper({
 
 
 
-      if(!md && !wighetIsExp ){
+      if(!md && !weightIsExp ){
         return (
                <FooterFlex
                         width={"100%"}
@@ -81,7 +78,7 @@ export default function SideBarWraper({
                                       color:theme.palette.secondary.main
                                     }
                                 }}
-                                onClick={()=>{setWighetIsExp(!wighetIsExp)}
+                                onClick={()=>{setWeightIsExp(!weightIsExp)}
         
                                 }
                                 >
@@ -93,7 +90,7 @@ export default function SideBarWraper({
                </FooterFlex>
         )
       }
-      else if( !md && wighetIsExp){
+      else if( !md && weightIsExp){
  
            return    <MdContentBox 
                      width={"100%"}
@@ -109,7 +106,7 @@ export default function SideBarWraper({
                       >
                   {children}
                   <Button // toggler 
-                        onClick={()=>{setWighetIsExp(!wighetIsExp)}}
+                        onClick={()=>{setWeightIsExp(!weightIsExp)}}
                         sx={{position:"absolute" , top:80 , left:"5%" ,borderRadius:45 ,   }}
                         color='secondary'
                       
@@ -120,7 +117,7 @@ export default function SideBarWraper({
       }
       else{
         return (
-          <ContentBox  // flex colunm  make the div  none scroll
+          <ContentBox  // flex column  make the div  none scroll
              bgcolor={grey[500]}
               width={"400px"}
                height={"100%"}

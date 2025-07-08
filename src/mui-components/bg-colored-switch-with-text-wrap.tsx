@@ -197,13 +197,13 @@ export const RSwitchTextTrack = styled(Switch)<SwitchPropsType>(
   
 
 
-const SwitchWrap = ({ value, switchOnChangeHendler, switchSize }: SwitchWrapPropsType) => {
+const SwitchWrap = ({ value, switchOnChangeHandler, switchSize }: SwitchWrapPropsType) => {
 
   return <RSwitchTextTrack
     checked={value}
-    onChange={switchOnChangeHendler}
+    onChange={switchOnChangeHandler}
     inputProps={{ 'aria-label': 'controlled', }}
-    switchSize={switchSize ?? "large"} // sise it taken
+    switchSize={switchSize ?? "large"} 
 
   />
 
@@ -225,7 +225,7 @@ const BgColoredSwitchWithTextAndChildren =({
         variant,
         subMainText,
         children,
-        switchOnChangeHendler,
+        switchOnChangeHandler,
         value,
 
         }:BgColoredSwitchWithTextAndChildrenWrapPropsType)=>{
@@ -256,7 +256,7 @@ const BgColoredSwitchWithTextAndChildren =({
                     },
                     }}
                  >
-            <SwitchWrap value={value} switchOnChangeHendler={switchOnChangeHendler }/>
+            <SwitchWrap value={value} switchOnChangeHandler={switchOnChangeHandler }/>
                 <Flex>
                    <Typography  fontWeight={"bold"} fontSize={!sm?13  :18}> {mainText.slice(0,20)}</Typography>
                     {subMainText &&  <Typography  fontWeight={"bold"} fontSize={!sm?13  :18}> {subMainText.slice(0,20)}</Typography>}

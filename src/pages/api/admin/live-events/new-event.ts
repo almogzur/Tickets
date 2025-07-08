@@ -6,8 +6,8 @@ import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession  } from "next-auth";
 import { NewEventZVS } from "@/types/pages-types/admin/admin-event-types";
-import  {CreateMongooseClient, userDataPrefix } from "@/util/db/mongosee-connect";
-import { EventModel } from "@/util/db/mongosee-models";
+import  {CreateMongooseClient, userDataPrefix } from "@/util/db/mongoose-connect";
+import { EventModel } from "@/util/db/mongoose-models";
 
 export default async function handler  ( req: NextApiRequest , res: NextApiResponse ):Promise<any>{
  
@@ -35,7 +35,7 @@ export default async function handler  ( req: NextApiRequest , res: NextApiRespo
    const isValidData = NewEventZVS.safeParse(body)
 
      if(!isValidData.success){
-       return res.status(400).json({massage:'invalide data ' + API_NAME })
+       return res.status(400).json({massage:'invalid data ' + API_NAME })
     }
  
       const Model = EventModel(connection)
@@ -49,6 +49,6 @@ export default async function handler  ( req: NextApiRequest , res: NextApiRespo
        return    res.status(206).json({massage:`${API_NAME}, save err : ${saveResult.errors} `})
       }
       
-    return     res.status(200).json({massage:  API_NAME +"succsess " })
+    return     res.status(200).json({massage:  API_NAME +"success " })
     
 }

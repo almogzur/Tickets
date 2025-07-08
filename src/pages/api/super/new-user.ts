@@ -1,8 +1,8 @@
 // File: pages/api/public.ts
 
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
-import  {CreateMongooseClient,  UserPrefix } from "@/util/db/mongosee-connect";
-import { UsersModel } from "@/util/db/mongosee-models";
+import  {CreateMongooseClient,  UserPrefix } from "@/util/db/mongoose-connect";
+import { UsersModel } from "@/util/db/mongoose-models";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 
@@ -46,10 +46,10 @@ export default async function handler  ( req: NextApiRequest , res: NextApiRespo
    if( !doc || doc.errors){
       console.log(API_NAME,"Err",doc.errors,doc)
 
-      return res.status(500).json({massage:"erros" ,})
+      return res.status(500).json({massage:"error" ,})
    }
 
-    console.log(API_NAME,"Succsess")
+    console.log(API_NAME,"success")
     return res.status(200).json({massage:"new user saved "})
 
 

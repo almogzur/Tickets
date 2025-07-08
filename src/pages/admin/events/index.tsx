@@ -31,7 +31,7 @@ const ManageEventsPage=()=>{
 
   const ColData : GridColDef[] =  [
         { field: 'actions', type:'actions', headerName: 'פעולות',width: 170,
-          getActions: ({ id , row  })=> { // row containe all the fileds in row (event) object
+          getActions: ({ id , row  })=> { // row contain all the fields in row (event) object
                return [
                 <Button  
                   key={row.eventId}
@@ -42,7 +42,7 @@ const ManageEventsPage=()=>{
                   onClick={()=>{}} 
                   >
                                  
-                     <Typography>הפסק</Typography>
+                     <Typography>הוסף</Typography>
                      <Typography>מכירה </Typography>
                 </Button>,
                  <Button
@@ -77,7 +77,7 @@ const ManageEventsPage=()=>{
             date:event.info.Date ??  Na ,
             hour:event.info.Hour ?? Na,
             price:event.tickets?.map((ticket)=> ticket.selectedType ==='normal' ? ticket.price : null ),
-            eventId:event._id, // this value dose NOT ! have a vlue on Cloumns , its for config the button key 
+            eventId:event._id, // this value dose NOT ! have a value on columns , its for config the button key 
             location:event.info.TheaterName?? Na,
             }
           ]

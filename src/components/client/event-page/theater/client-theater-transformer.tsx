@@ -1,6 +1,6 @@
 import { TransformWrapper, TransformComponent, useControls, getTransformStyles } from "react-zoom-pan-pinch";
 import { useState, useEffect, useContext, ReactNode, SetStateAction, } from 'react'
-import ClientPositionContext from '@/context/client/event-page/client-tranform-contenx'
+import ClientPositionContext from '@/context/client/event-page/client-transform-context'
 import { Stack as Flex , Typography as Heading , Button, Avatar , useTheme, Divider, Box} from '@mui/material'
 import { FaPlus } from "react-icons/fa6";
 import { FaMinus } from "react-icons/fa";
@@ -35,7 +35,7 @@ const ClientTheaterRTransform = ({children}:ClientTheaterMapPropsTypes) => {
     return (
        <TransformWrapper 
         
-        initialScale={ClientMapPositions.Scale|| !sm? 0.50 : 1} //only reser on full app reset 
+        initialScale={ClientMapPositions.Scale|| !sm? 0.50 : 1} //only resize on full app reset 
         limitToBounds={!md ? false : true }
         initialPositionX={!sm? 80 : undefined }
         minScale={!sm? 0.45 : !md? 0.8 : 1 }

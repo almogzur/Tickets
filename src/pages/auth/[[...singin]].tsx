@@ -12,7 +12,7 @@ import {
 // was trwoing Prop className did not match  and hydration errors  
 //  
 const Paper = dynamic(() => import("@mui/material/Paper"), { ssr: false });
-const InputWrap = dynamic(() => import("@/mui-components/TeextFiledWrpa/input-wrap"), { ssr: false });
+const InputWrap = dynamic(() => import("@/mui-components/text_filed_wrap/input-wrap"), { ssr: false });
 
 import Image from "next/image";
 import Logo from "../../../public/logo.png";

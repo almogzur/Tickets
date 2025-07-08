@@ -1,6 +1,6 @@
 
 import { PayPalCapturedRequestOrderVS } from "@/types/pages-types/client/client-event-type";
-import {CreateMongooseClient} from "@/util/db/mongosee-connect";
+import {CreateMongooseClient} from "@/util/db/mongoose-connect";
 import { rateLimitConfig } from "@/util/fn/api-rate-limit.config";
 import {  GetPayPalBillingInfoFromEventId } from "@/util/fn/pay-fn";
 import {
@@ -26,16 +26,16 @@ Captures payment for an order. To successfully capture payment for an order,
  be provided in the request.
  A buyer can approve the order upon being redirected to  
  the rel:approve URL that was returned in
- the HATEOAS links in the create order response.
+ the "HATEOAS" links in the create order response.
  */
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<any> {
   return apiLimiter(req, res,
     async () => {
-      const API_NAME = " payment aproved order api  "
+      const API_NAME = " payment approved order api  "
 
       if (req.method !== 'POST') {
-            res.status(405).json({ message: "Not Alowed " + API_NAME });
+            res.status(405).json({ message: "Not allowed " + API_NAME });
       }     
       const connection  = await CreateMongooseClient(null)
       
@@ -46,17 +46,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
    
   
 
-      // add validate soucre 
+      // add validate source 
 
        const body   = req.body 
 
-       const isValiedData = PayPalCapturedRequestOrderVS.safeParse(body)
+       const isValidData = PayPalCapturedRequestOrderVS.safeParse(body)
 
-       if(!isValiedData.success){
-        return res.status(400).json({massage:"bad data fromat "+API_NAME})
+       if(!isValidData.success){
+        return res.status(400).json({massage:"bad data format "+API_NAME})
        }
 
-       const { PaypalData , eventId  } =isValiedData.data // const isValidData = Schema.safeParse()
+       const { PaypalData , eventId  } =isValidData.data // const isValidData = Schema.safeParse()
        const { orderID  } = PaypalData
    
        const userInfo = await GetPayPalBillingInfoFromEventId(eventId, `${process.env.CIPHER_SECRET}`, connection)
@@ -108,7 +108,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const PayPalRes = await captureOrder(orderID)
 
       if(!PayPalRes){
-         res.status(500).json({massage:"no date from Paypal roleback theater...  "  })
+         res.status(500).json({massage:"no date from Paypal rollback theater...  "  })
       }
       
       return res.status(200).json(PayPalRes?.jsonResponse)
@@ -118,6 +118,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 export const config = {
     api: {
-      externalResolver: true,  // resolve by the rate limeter
+      externalResolver: true,  // resolve by the rate limiter
     },
   }

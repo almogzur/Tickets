@@ -1,6 +1,6 @@
 import { SavePayPalInvoceVS } from "@/types/pages-types/client/client-event-type";
-import { CreateMongooseClient } from "@/util/db/mongosee-connect";
-import { EventModel } from "@/util/db/mongosee-models";
+import { CreateMongooseClient } from "@/util/db/mongoose-connect";
+import { EventModel } from "@/util/db/mongoose-models";
 import { rateLimitConfig } from "@/util/fn/api-rate-limit.config";
 import rateLimit from "express-rate-limit";
 import { ObjectId } from "mongodb";
@@ -20,13 +20,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(500).json({ err: 'No DB Connection' });
     }
     const body = req.body;
-    const isValiedData = SavePayPalInvoceVS.safeParse(body);
-    const issue = isValiedData.error?.issues;
-    if (!isValiedData.success) {
+    const isValidData = SavePayPalInvoceVS.safeParse(body);
+    const issue = isValidData.error?.issues;
+    if (!isValidData.success) {
       console.log(issue);
       return res.status(400).json({ err: "bad input " + API_NAME });
     }
-    const { eventId, total, purchase_date } = isValiedData.data;
+    const { eventId, total, purchase_date } = isValidData.data;
    
     try {
 
@@ -44,7 +44,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         const eventUpdate = await Model.findOneAndUpdate(
           { _id: ObjectId.createFromHexString(eventId) },
-          { $push: { invoices: isValiedData.data } },
+          { $push: { invoices: isValidData.data } },
           { new: true }
         ).lean();
 

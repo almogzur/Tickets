@@ -1,11 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from "next-auth/next";
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
-import  {CreateMongooseClient,   userDataPrefix } from "@/util/db/mongosee-connect";
+import  {CreateMongooseClient,   userDataPrefix } from "@/util/db/mongoose-connect";
 import { moveToEventNameFolder } from '@/util/fn/cloudinary_helper_functions';
 
 import { NewDraftZVS } from '@/types/pages-types/admin/admin-event-types';
-import { DraftModel } from '@/util/db/mongosee-models';
+import { DraftModel } from '@/util/db/mongoose-models';
 
 
  
@@ -45,23 +45,23 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse) 
 
      const body = req.body
 
-     const isValideDate = NewDraftZVS.safeParse(body)
+     const isValidDate = NewDraftZVS.safeParse(body)
 
-     if(!isValideDate.success){
+     if(!isValidDate.success){
         res.status(400).json({massage:"not valid data " + API_NAME})
      }
 
-         // calling the Molde Only on Api call prevanting un wanted folder saves 
+         // calling the model Only on Api call preventing un wanted folder saves 
 
-       const Modle = DraftModel(connection)
+       const model = DraftModel(connection)
 
-     const doc = new Modle(isValideDate.data) // Pass body to the model
+     const doc = new model(isValidDate.data) // Pass body to the model
       
      //console.log(body)
      const preview = body.info.preview
      const eventName = body.info.eventName
  
-   // 1  -- move image to folder baced on event name 
+   // 1  -- move image to folder based on event name 
 
    if(preview){
       await moveToEventNameFolder(preview,eventName,session,API_NAME)
@@ -79,7 +79,7 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse) 
    console.log("Saved new Doc",saveResult); 
 
 
-   return res.status(200).json({ massage: "Saved New Modle" });
+   return res.status(200).json({ massage: "Saved New Model" });
      
 
 

@@ -7,27 +7,27 @@ interface TicketContextType {
     setTabValue:Dispatch<SetStateAction<number>>
     isLoading:boolean
     setIsLoading:Dispatch<SetStateAction<boolean>>
-    SaevNewEventReqestStatus: RequestStatusType
-    setSaevNewEventReqestStatus:Dispatch<SetStateAction<RequestStatusType>>
-    loadingScrenText:string|undefined
-    setLoadingScrenText:Dispatch<SetStateAction<string|undefined>>
+    saveNewEventRequestStatus: RequestStatusType
+    setSaveNewEventRequestStatus:Dispatch<SetStateAction<RequestStatusType>>
+    loadingScreenText:string|undefined
+    setLoadingScreenText:Dispatch<SetStateAction<string|undefined>>
 }
 
 export default createContext<TicketContextType>({
     tabValue: 0,
     isLoading: false,
-    SaevNewEventReqestStatus: undefined,
-    loadingScrenText: undefined,
+    saveNewEventRequestStatus: undefined,
+    loadingScreenText: undefined,
     setTabValue: function (value: SetStateAction<number>): void {
         throw new Error("Function not implemented.");
     },
     setIsLoading: function (value: SetStateAction<boolean>): void {
         throw new Error("Function not implemented.");
     },
-    setSaevNewEventReqestStatus: function (value: SetStateAction<RequestStatusType>): void {
+    setSaveNewEventRequestStatus: function (value: SetStateAction<RequestStatusType>): void {
         throw new Error("Function not implemented.");
     },
-    setLoadingScrenText: function (value: SetStateAction<string | undefined>): void {
+    setLoadingScreenText: function (value: SetStateAction<string | undefined>): void {
         throw new Error("Function not implemented.");
     }
 })

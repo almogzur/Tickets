@@ -11,7 +11,7 @@ import AdminNewEventTheatherMap from './new-event-theather-map';
 // Context 
 import WidthContext from '@/context/WidthContext';
 import TabsInfoContest from '@/context/admin/new-event/tabs/tabs-info-context'
-import { TheaterType } from '@/types/components-typs/admin/theater/admin-theater-types';
+import { TheaterType } from '@/types/components-types/admin/theater/admin-theater-types';
 import MuliSelectTip from './multi-select-tip';
  
 const Theater = ({TheaterDate}:{TheaterDate:TheaterType}) => {

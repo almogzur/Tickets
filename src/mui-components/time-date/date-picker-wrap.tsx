@@ -1,22 +1,22 @@
 import { DatePicker, DateTimeValidationError, PickerChangeHandlerContext } from "@mui/x-date-pickers"
 import dayjs from "dayjs"
 import { TextFieldVariants, useTheme , TextFieldProps  } from "@mui/material"
-import ControledHelperText from "../TeextFiledWrpa/controled-helper-text"
-import ControledLabel from "../TeextFiledWrpa/controled-form-label"
+import ControlledHelperText from "../text_filed_wrap/controlled-helper-text"
+import ControlledLabel from "../text_filed_wrap/controlled-form-label"
 
 
 interface DatePickerWrapType  {
     label:string
     value: string|null
     helpText:string,
-    labelPositioin:"top"|"end"
-    onAcceptHendler?: (value: dayjs.Dayjs | null, context: PickerChangeHandlerContext<DateTimeValidationError>) => void
-    onChangeHendler: (value: dayjs.Dayjs | null, context: PickerChangeHandlerContext<DateTimeValidationError>) => void
-    onEroorHndler: (e:DateTimeValidationError, context:dayjs.Dayjs|null )=>void
+    labelPosition:"top"|"end"
+    onAcceptHandler?: (value: dayjs.Dayjs | null, context: PickerChangeHandlerContext<DateTimeValidationError>) => void
+    onChangeHandler: (value: dayjs.Dayjs | null, context: PickerChangeHandlerContext<DateTimeValidationError>) => void
+    onErrorHandler: (e:DateTimeValidationError, context:dayjs.Dayjs|null )=>void
     disablePast?:boolean
     maxDate? :Date
     minDate? : Date 
-    isEroor?:boolean
+    isError?:boolean
     MediaQuery?:string 
     helpTextPotionsEnd?:boolean
     variant?:TextFieldVariants
@@ -25,9 +25,9 @@ interface DatePickerWrapType  {
 
 const DatePickerWrap =({ 
           label,
-          labelPositioin,
+          labelPosition,
           variant,
-          isEroor,
+          isError,
           value,
           maxDate,
           MediaQuery,
@@ -35,9 +35,9 @@ const DatePickerWrap =({
           helpText,
           minDate,
           disablePast,
-          onAcceptHendler  ,
-          onEroorHndler,
-          onChangeHendler,
+          onChangeHandler  ,
+          onErrorHandler,
+          onAcceptHandler,
           helpTextPotionsEnd,
         
          }:DatePickerWrapType)=>{
@@ -52,24 +52,26 @@ const DatePickerWrap =({
             value={ value? dayjs(value) :null }
             closeOnSelect={false}
             disablePast={disablePast??true}
-            // tryed not working curenntly
+
+            // tried not working currently
             // minTime ={}
             // minDateTime={} 
             // maxDate={} 
             // maxTime ={}
+
             maxDate={maxDate?dayjs(maxDate):undefined} //  time select
-            onError={onEroorHndler}
-            label={<ControledLabel labelPositioin={labelPositioin} label={label} />}
+            onError={onErrorHandler}
+            label={<ControlledLabel labelPosition={labelPosition} label={label} />}
             sx={{  m:0.5 }}       
             
             
-            onAccept={onAcceptHendler}
-            onChange={onChangeHendler}
+            onAccept={onAcceptHandler}
+            onChange={onChangeHandler}
             slotProps={{
                 textField:{
                   variant:variant??"outlined" ,
                   color:color,
-                  helperText: helpText?  <ControledHelperText text={helpText} helpTextPotionsEnd={helpTextPotionsEnd??false}/> : undefined
+                  helperText: helpText?  <ControlledHelperText text={helpText} helpTextPotionsEnd={helpTextPotionsEnd??false}/> : undefined
                   },
                   actionBar: {
                     actions: [ "accept"], // Enables Accept & Cancel buttons

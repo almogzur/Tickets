@@ -23,7 +23,7 @@ const EventInfoPage=()=>{
 
 
 
-  const getPaymenys = async ()=>{
+  const getPayments = async ()=>{
 
     const payment = axios.get(
       '/api/admin/live-events/get-event-payments',
@@ -59,10 +59,10 @@ const EventInfoPage=()=>{
 
 return (    <>
                     logs,
-                    paymets,
+                    payments,
                     customers,
                     views,
-                    total ernings,
+                    total earnings,
               </>
 ) 
 }

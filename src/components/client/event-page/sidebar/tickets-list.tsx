@@ -7,40 +7,37 @@ import { IoMdClose } from "react-icons/io";
 import { grey } from '@mui/material/colors';
 import WidthContext from '@/context/WidthContext';
 import { useContext } from 'react';
-import { TheaterType } from '@/types/components-typs/admin/theater/admin-theater-types';
+import { TheaterType } from '@/types/components-types/admin/theater/admin-theater-types';
 
 
 interface ClientTicketListType extends  Omit< DrawerContentType , 'payProviders'   > {}
 
-export default function ClientTikectList({
+export default function ClientTicketList({
     
     eventSelectSeats,
     clientEventTheaterState,
-    hendlerSeatOldValues,
+    handlerSeatOldValues,
 
     setEventSelectedSeats,
     setClientEventTheaterState,
-    setHendlerSeatOldValues,
+    setHandlerSeatOldValues,
 
   }:ClientTicketListType) {
   
-  const theme = useTheme()
-    const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
+   const theme = useTheme()
+   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
 
-  
-
-  const hendler = (
+  const seatHandler = (
     seatValue: number,
-     seatNumber: number,
-      row: string ,
-      theater?:TheaterType,
-       price?:string ,
-        priceInfo?:string 
-      
+    seatNumber: number,
+    row: string ,
+   theater?:TheaterType,
+   price?:string ,
+   priceInfo?:string 
     ) => {
       const inMain = theater?.mainSeats.hasOwnProperty(row);
       const inSide = theater?.sideSeats.hasOwnProperty(row);
-      
+    
       const allowedToChangeSeatValues = [0, 2, 4, 5];
   
       if (!allowedToChangeSeatValues.includes(seatValue)) return;
@@ -65,13 +62,13 @@ export default function ClientTikectList({
           const oldNumber = updatedRow[seatNumber];
   
           // Store the original seat value if not already stored
-          setHendlerSeatOldValues((prev) => ({
+          setHandlerSeatOldValues((prev) => ({
               ...prev,
               [seatKey]: prev[seatKey] ?? oldNumber,
           }));
   
           // Toggle between 2 and the stored original value
-          updatedRow[seatNumber] = oldNumber === 2 ? hendlerSeatOldValues[seatKey] ?? seatValue : 2;
+          updatedRow[seatNumber] = oldNumber === 2 ? handlerSeatOldValues[seatKey] ?? seatValue : 2;
   
           updatedSeats[row] = updatedRow;
           newState[seatCollection] = updatedSeats;
@@ -120,7 +117,7 @@ export default function ClientTikectList({
                <IoMdClose
                      color='red'
                      size={"2em"}
-                     onClick={()=>hendler(value,seatNumber,row,clientEventTheaterState )}
+                     onClick={()=>seatHandler(value,seatNumber,row,clientEventTheaterState )}
                      style={{position:"absolute", right: !md ? "92%" : "89%" , top:0  }}
                   /> 
 
