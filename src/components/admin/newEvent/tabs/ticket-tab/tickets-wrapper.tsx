@@ -2,7 +2,7 @@
 // React
 import { ChangeEventHandler, Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from "react"
 
-//Context Useg
+//Context usage
 import WidthContext from "@/context/WidthContext"
 import TabsTicketContext from "@/context/admin/new-event/tabs/tabs-ticket-context"
 
@@ -10,7 +10,7 @@ import TabsTicketContext from "@/context/admin/new-event/tabs/tabs-ticket-contex
 import { FullDateOptions } from "@/pages/_app"
 
 // Components
-import MakeNewTickit from "./make-new-ticket"
+import MakeNewTicket from "./make-new-ticket"
 import { Button, Container, Divider, Stack as Flex , Typography , useTheme} from "@mui/material"
 
 //Icons 
@@ -24,9 +24,9 @@ import Eilat_2 from "@/constants/theaters/eilat_2";
 
 import TabsInfoContext from "@/context/admin/new-event/tabs/tabs-info-context"
 import { IoTicket } from "react-icons/io5"
-import { infoFiledsType } from "@/types/pages-types/admin/admin-event-types"
+import { infoFieldsType } from "@/types/pages-types/admin/admin-event-types"
 import { SeatsRow, TheaterType } from "@/types/components-types/admin/theater/admin-theater-types"
-import tabsEroorsContext from "@/context/admin/new-event/tabs/tabs-errors-context"
+import tabsErrorsContext from "@/context/admin/new-event/tabs/tabs-errors-context"
 import SelectWrap from "@/mui-components/select-wrap"
 
 
@@ -38,16 +38,16 @@ interface TicketsTabPropsType {  setTabValue : Dispatch<SetStateAction<number>>}
    const theme = useTheme()
    const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
    const {tickets,setTickets}= useContext(TabsTicketContext)
-   const {infoFileds, setInfoFileds} = useContext(TabsInfoContext)
-   const {GetFormErrors} =  useContext(tabsEroorsContext)
+   const {infoFields, setInfoFields} = useContext(TabsInfoContext)
+   const {GetFormErrors} =  useContext(tabsErrorsContext)
    
    useEffect(() => {
-    if (infoFileds.Theater) {
+    if (infoFields.Theater) {
       
-      const totalSeats = countTheaterSeat(infoFileds.Theater);
-      setInfoFileds((prev:infoFiledsType) => ({ ...prev, availableSeatsAmount: totalSeats }));
+      const totalSeats = countTheaterSeat(infoFields.Theater);
+      setInfoFields((prev:infoFieldsType) => ({ ...prev, availableSeatsAmount: totalSeats }));
     }
-  }, [infoFileds.Theater, infoFileds.TheaterName, setInfoFileds]);
+  }, [infoFields.Theater, infoFields.TheaterName, setInfoFields]);
 
 
 
@@ -92,7 +92,7 @@ interface TicketsTabPropsType {  setTabValue : Dispatch<SetStateAction<number>>}
  
   
 
-   const availableSeatsAmount = countTheaterSeat(infoFileds.Theater)
+   const availableSeatsAmount = countTheaterSeat(infoFields.Theater)
 
  
 
@@ -104,19 +104,19 @@ interface TicketsTabPropsType {  setTabValue : Dispatch<SetStateAction<number>>}
         {/* Seats Amount */}
          <Flex>
            <SelectWrap
-             value={infoFileds.TheaterName}
+             value={infoFields.TheaterName}
              label={"אולם"}
-             items={[{ label: Eilat_1.ThaeaterName, value: Eilat_1.ThaeaterName }, { label: Eilat_2.ThaeaterName, value: Eilat_2.ThaeaterName }]}
-             changeHndler={(e)=>{
-              setInfoFileds(p=>({...p,TheaterName:e.target.value , Theater:selectTheater(e.target.value ) }))} }
-             labelPositioin={"top"}
+             items={[{ label: Eilat_1.theaterName, value: Eilat_1.theaterName }, { label: Eilat_2.theaterName, value: Eilat_2.theaterName }]}
+             changeHandler={(e)=>{
+              setInfoFields(p=>({...p,TheaterName:e.target.value , Theater:selectTheater(e.target.value ) }))} }
+             labelPosition={"top"}
              variant='outlined'
              isValueBold              
              helpText={GetFormErrors("TheaterName")??""}
              />
          </Flex>
         { 
-         infoFileds.Theater &&
+         infoFields.Theater &&
          <Flex >
 
               <Flex direction={"row"} p={0.5}  gap={1} alignItems={"center"} >
@@ -131,7 +131,7 @@ interface TicketsTabPropsType {  setTabValue : Dispatch<SetStateAction<number>>}
               
               <Flex p={0.5} gap={1} direction={"row"} alignItems={"center"}   >
 
-                <MakeNewTickit setTabValue={setTabValue} />
+                <MakeNewTicket setTabValue={setTabValue} />
 
                  <Flex direction={"row"} alignItems={"center"} justifyContent={"space-between"} width={"100%"}  gap={2} >
                      <Flex  flexGrow={1}>
@@ -149,7 +149,7 @@ interface TicketsTabPropsType {  setTabValue : Dispatch<SetStateAction<number>>}
           
          </Flex>
          }
-         {/* loop over tickits tikits.map....  */}
+         {/* loop over tickets tickets.map....  */}
          {tickets.map((ticket,i) => 
            <TicketComponent 
               key={"ticket" + i + ticket.selectedType} 
@@ -161,7 +161,7 @@ interface TicketsTabPropsType {  setTabValue : Dispatch<SetStateAction<number>>}
     </Container>
      )
    }
-   // price={ticket.price} eventName={ticket.eventName} location={ticket.location} cat={ticket.cat} Date={ticket.Date} EndSealesDate={ticket.EndSealesDate} selectedType={ticket.selectedType} priceInfo={""}
+   // price={ticket.price} eventName={ticket.eventName} location={ticket.location} cat={ticket.cat} Date={ticket.Date} EndSalesDate={ticket.EndSalesDate} selectedType={ticket.selectedType} priceInfo={""}
 
 
 

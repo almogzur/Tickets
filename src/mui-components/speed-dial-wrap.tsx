@@ -15,7 +15,7 @@ interface ActionType {
     ClickHandler:(e:React.MouseEvent<HTMLDivElement>) => void
 } 
 
-type SpeedDailPositionsType = 
+type SpeedDaliPositionsType = 
   | { top: CSSProperties['top']; bottom?: CSSProperties['bottom']; left: CSSProperties['left']; right?: CSSProperties['right'] }
   | { top: CSSProperties['top']; bottom?: CSSProperties['bottom']; right: CSSProperties['right']; left?: CSSProperties['left'] }
   | { bottom: CSSProperties['bottom']; top?: CSSProperties['top']; left: CSSProperties['left']; right?: CSSProperties['right'] }
@@ -24,7 +24,7 @@ type SpeedDailPositionsType =
 
 interface SpeedDialWrapPropsType {
     actions:ActionType[]
-    positions:SpeedDailPositionsType
+    positions:SpeedDaliPositionsType
     direction?:'down'| 'left'| 'right' | 'up'
     openToolTip?:boolean
     openToolTipPlacement?: TooltipProps['placement'];
@@ -63,7 +63,7 @@ export default function SpeedDialWrap({mainIcon,itemSize,actions,positions,direc
             tooltipPlacement={openToolTipPlacement}
             slotProps={{tooltip:{style:{background:"gray"}}}}
             FabProps={{size:itemSize?? 'large'}}
-            onClick={action.ClickHendler}
+            onClick={action.ClickHandler}
           />
         ))}
       </SpeedDial>

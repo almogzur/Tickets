@@ -6,13 +6,13 @@ import { CSSProperties, Dispatch, MouseEventHandler, SetStateAction, useContext,
 import {  Button, Stack as Flex, Typography, useTheme } from "@mui/material"
 import {  grey, orange, pink } from "@mui/material/colors"
 import { TheaterType } from "@/types/components-types/admin/theater/admin-theater-types"
-import { infoFiledsType } from "@/types/pages-types/admin/admin-event-types"
+import { infoFieldsType } from "@/types/pages-types/admin/admin-event-types"
  
 
 
 interface SingleSelectTipPropsType  { 
   theaterDate:TheaterType ,
-   setTheater:Dispatch<SetStateAction<infoFiledsType>>
+   setTheater:Dispatch<SetStateAction<infoFieldsType>>
   }
 
 const SingleSelectTip= ({theaterDate ,setTheater }:SingleSelectTipPropsType)=>{
@@ -24,7 +24,7 @@ const SingleSelectTip= ({theaterDate ,setTheater }:SingleSelectTipPropsType)=>{
 
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
 
-    const upateSeateValue = (newSeatValueArg: number) => {
+    const updateSeatValue = (newSeatValueArg: number) => {
 
 
               
@@ -101,7 +101,7 @@ const SingleSelectTip= ({theaterDate ,setTheater }:SingleSelectTipPropsType)=>{
          resetSingleTip()
     };
 
-    const comonAtt : CSSProperties = {  padding:0.3, margin:0.2 ,  }
+    const commonAtt : CSSProperties = {  padding:0.3, margin:0.2 ,  }
     
     return  ( < AnimatePresence >
 
@@ -139,16 +139,16 @@ const SingleSelectTip= ({theaterDate ,setTheater }:SingleSelectTipPropsType)=>{
                    {/* normal */}
                          <Button    
                            variant='contained' 
-                            sx={{...comonAtt}} 
-                            onClick={()=>{upateSeateValue(0)}}
+                            sx={{...commonAtt}} 
+                            onClick={()=>{updateSeatValue(0)}}
                             >רגיל 
                          </Button>
 
-                        {/* Bloacked */}
+                        {/* blacked */}
                         <Button
                          variant='contained' 
-                         sx={{...comonAtt  , bgcolor:"black"}}  
-                         onClick={()=>{upateSeateValue(3)}}
+                         sx={{...commonAtt  , bgcolor:"black"}}  
+                         onClick={()=>{updateSeatValue(3)}}
                          >
                          חסום
                         </Button>
@@ -176,7 +176,7 @@ const SingleSelectTip= ({theaterDate ,setTheater }:SingleSelectTipPropsType)=>{
 
 export default SingleSelectTip
 
-/* Movment function 
+/* movement function 
   onDrag={(e:MouseEvent, d) => { 
 
                const movingObjectWidth :number = 50
@@ -185,10 +185,10 @@ export default SingleSelectTip
                
                const CurrentXPos:number = e.x
 
-               // Negative : Total size - pos si not beger the the moving item mens it at the end of the left hand pos
-               // Psoitive Rule :  if Curnt size  is equle to the size innerWidth + moving object we got to the end of screen
+               // Negative : Total size - pos si not bigger the the moving item mens it at the end of the left hand pos
+               // positive Rule :  if current size  is equal to the size innerWidth + moving object we got to the end of screen
 
-               const negRule : boolean = innerWidth - CurrentXPos <= movingObjectWidth  // faceing the screen right hend side hndler
+               const negRule : boolean = innerWidth - CurrentXPos <= movingObjectWidth  // facing the screen right hand side handler
                const posRule : boolean =  (innerWidth - CurrentXPos)  >= (innerWidth-movingObjectWidth) // left hand 
                 
 

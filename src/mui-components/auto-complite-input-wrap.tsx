@@ -1,23 +1,23 @@
 import { Autocomplete, MenuItem, TextField, Typography } from "@mui/material";
 import { ChangeEvent } from "react";
-import ControledLabel from "./text_filed_wrap/controlled-form-label";
-import ControledHelperText from "./text_filed_wrap/controlled-helper-text";
+import ControlledLabel from "./text_filed_wrap/controlled-form-label";
+import ControlledHelperText from "./text_filed_wrap/controlled-helper-text";
 import { InputWrapPropsType } from "./text_filed_wrap/input-wrap";
 
 
-interface AutoCompliteInputWrapPropsType  extends Omit<InputWrapPropsType, 'multiline'>    {
+interface AutoCompleteInputWrapPropsType  extends Omit<InputWrapPropsType, 'multiline'>    {
   
     AutocompleteOptionArray:string[]
     
 }
 
-export default function AutoCompliteInputWrap ({
+export default function AutoCompleteInputWrap ({
        AutocompleteOptionArray , 
        inputType,
        label,
-       labelTextcolor,
+       labelTextColor,
        value, 
-       onChangeHndler,
+       onChangeHandler,
        isRequired,
        stateName,
        variant,
@@ -30,12 +30,12 @@ export default function AutoCompliteInputWrap ({
        isDisabled,
        hoverColor,
        icon,
-       labelPositioin,
+       labelPosition,
        
        
        
        
-         }:AutoCompliteInputWrapPropsType){
+         }:AutoCompleteInputWrapPropsType){
     return(    
     <Autocomplete
         freeSolo
@@ -65,15 +65,15 @@ export default function AutoCompliteInputWrap ({
             },
           }}
             id={label}
-            type={inputType} //defult to text
+            type={inputType} //default to text
             value={value ?? ""}
-            onChange={onChangeHndler}
+            onChange={onChangeHandler}
             required={isRequired}
             disabled={isDisabled}
             name={stateName}
-            helperText={helpText && <ControledHelperText text={helpText} helpTextPotionsEnd={helpTextPotionsEnd??false} />}
+            helperText={helpText && <ControlledHelperText text={helpText} helpTextPotionsEnd={helpTextPotionsEnd??false} />}
             variant={variant ?? 'standard'}
-            label={<ControledLabel labelPositioin={labelPositioin} label={label} />}
+            label={<ControlledLabel labelPosition={labelPosition} label={label} />}
       
            />
          }
@@ -87,5 +87,6 @@ export default function AutoCompliteInputWrap ({
           );
         }}
         />  
+        
         )
 }

@@ -9,7 +9,7 @@ import {
   Alert,
 } from "@mui/material";
 
-// was trwoing Prop className did not match  and hydration errors  
+// was trowing Prop className did not match  and hydration errors  
 //  
 const Paper = dynamic(() => import("@mui/material/Paper"), { ssr: false });
 const InputWrap = dynamic(() => import("@/mui-components/text_filed_wrap/input-wrap"), { ssr: false });
@@ -80,7 +80,7 @@ export default function SignInPage() {
               variant="outlined"
               value={formData.name}
               label={"שם משתמש"}
-              onChangeHndler={(e) =>
+              onChangeHandler={(e) =>
                 setFormData((p) => ({ ...p, name: e.target.value }))
               }
               helpText={""}
@@ -91,13 +91,13 @@ export default function SignInPage() {
                 fontWeight: "bold",
                 opacity: 1,
               }}
-              labelPositioin={"top"}
+              labelPosition={"top"}
               autoComplete="username"
             />
 
             <InputWrap
               value={formData.password}
-              onChangeHndler={(e) =>
+              onChangeHandler={(e) =>
                 setFormData((p) => ({ ...p, password: e.target.value }))
               }
               inputType="password"
@@ -105,7 +105,7 @@ export default function SignInPage() {
               label={"סיסמה"}
               helpText={""}
               isLabelBold
-              labelPositioin={"top"}
+              labelPosition={"top"}
               placeholder={"סיסמה"}
               placeholderStyle={{
                 color: theme.palette.primary.main,

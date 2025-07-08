@@ -4,13 +4,13 @@ import { Button, Typography, Stack as Flex, Container } from '@mui/material';
 import axios from 'axios';
 import { grey } from '@mui/material/colors';
 import { NewUserType } from '@/types/pages-types/admin/supervisor-types';
-import { hashString } from '@/util/fn/hase';
+import { hashString } from '@/util/fn/hash';
 import InputWrap from '@/mui-components/text_filed_wrap/input-wrap';
 
 
 const UserForm = () => {
   const [error, setError] = useState(null);
-  const [newUser, setNewUeer] = useState<NewUserType>({
+  const [newUser, setNewUser] = useState<NewUserType>({
     name: '',
     password: "",
     displayName: ''
@@ -45,9 +45,9 @@ const UserForm = () => {
               <Flex direction={"row"}>
                 <InputWrap label={'שם'}
                   value={newUser.name}
-                  onChangeHndler={(e) => { setNewUeer(p => ({ ...p, name: e.target.value })) }}
+                  onChangeHandler={(e) => { setNewUser(p => ({ ...p, name: e.target.value })) }}
                   helpText={''}
-                  labelPositioin={'top'}
+                  labelPosition={'top'}
                   variant='outlined'
                   styles={{ margin: 3 }}
                   Fgrow={1}
@@ -57,9 +57,9 @@ const UserForm = () => {
                   label={'סיסמה '}
                   variant='outlined'
                   value={newUser.password}
-                  onChangeHndler={(e) => { setNewUeer(p => ({ ...p, password: e.target.value })) }}
+                  onChangeHandler={(e) => { setNewUser(p => ({ ...p, password: e.target.value })) }}
                   helpText={''}
-                  labelPositioin={'top'}
+                  labelPosition={'top'}
                   styles={{ margin: 3 }}
                   Fgrow={1}
                 />
@@ -68,11 +68,11 @@ const UserForm = () => {
                   label={"שם תצוגה "}
                   variant='outlined'
                   value={newUser.displayName}
-                  onChangeHndler={(e) => {
-                    setNewUeer(p => ({ ...p, displayName: e.target.value }))
+                  onChangeHandler={(e) => {
+                    setNewUser(p => ({ ...p, displayName: e.target.value }))
                   }}
                   helpText={''}
-                  labelPositioin={'top'}
+                  labelPosition={'top'}
                   Fgrow={1}
                 />
               </Flex>

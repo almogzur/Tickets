@@ -4,25 +4,25 @@ import { CSSProperties, Dispatch, SetStateAction, useContext } from "react"
 import MultiSelectContext from "@/context/admin/new-event/map/multi-select-context"
 import { grey, orange, pink } from "@mui/material/colors"
 import { TheaterType } from "@/types/components-types/admin/theater/admin-theater-types"
-import { infoFiledsType } from "@/types/pages-types/admin/admin-event-types"
+import { infoFieldsType } from "@/types/pages-types/admin/admin-event-types"
 
 
     interface MultiSelectTipType {
         isMultiSelect: boolean
         theaterDate:TheaterType
-        setTheater:Dispatch<SetStateAction<infoFiledsType>>
+        setTheater:Dispatch<SetStateAction<infoFieldsType>>
     }
 
   const MuliSelectTip =({theaterDate,setTheater}:MultiSelectTipType)=>{
 
     const {multiTipPositions  ,resetMultiTip , multiTipInfo,setMultiTipInfo ,resetErr}= useContext(MultiSelectContext)
 
-    const upateSeateValue  = (newSeatValueArg: number  ) : void =>  {
+    const updateSeatValue  = (newSeatValueArg: number  ) : void =>  {
 
       console.log(multiTipInfo,theaterDate);
       
 
-        const dirArg = multiTipInfo.selectdir
+        const dirArg = multiTipInfo.selectDir
         const row = multiTipInfo.row 
         const first = multiTipInfo.first
         const second = multiTipInfo.second
@@ -128,7 +128,7 @@ import { infoFiledsType } from "@/types/pages-types/admin/admin-event-types"
  };
 
     const theme = useTheme()
-    const comonAtt : CSSProperties = {  padding:0.3, margin:0.2 ,  }
+    const commonAtt : CSSProperties = {  padding:0.3, margin:0.2 ,  }
 
 
     return (
@@ -162,21 +162,21 @@ import { infoFiledsType } from "@/types/pages-types/admin/admin-event-types"
 
                  { multiTipInfo.second != undefined  &&  <Typography variant='inherit' textAlign={'center'}  color='warning'  >  מושב {  multiTipInfo.second+1}</Typography>}
 
-                 { multiTipInfo.totalselected && 
+                 { multiTipInfo.totalSelected && 
                       <>
                        <Divider variant='fullWidth'   sx={{color:theme.palette.error.dark, width:"100%"}} > סה״כ</Divider>
-                       <Typography color="error">{multiTipInfo.totalselected}</Typography> 
+                       <Typography color="error">{multiTipInfo.totalSelected}</Typography> 
                       </>
                 }
         
 
                 <Flex  direction={'row'} flexWrap={'wrap'} justifyContent={'center'}  >
 
-                  {/* Bloacked */}
+                  {/* blacked */}
                   <Button
                          variant='contained' 
-                         sx={{ background:theme.palette.common.black, ...comonAtt}}  
-                         onClick={(e)=>{ upateSeateValue( 3,) }}
+                         sx={{ background:theme.palette.common.black, ...commonAtt}}  
+                         onClick={(e)=>{ updateSeatValue( 3,) }}
 
                          >
                          חסום
@@ -184,8 +184,8 @@ import { infoFiledsType } from "@/types/pages-types/admin/admin-event-types"
                  {/* normal */}
                  <Button    
                   variant='contained' 
-                  sx={comonAtt}    
-                  onClick={(e)=>{ upateSeateValue( 0) }}
+                  sx={commonAtt}    
+                  onClick={(e)=>{ updateSeatValue( 0) }}
 
                 >רגיל 
                 </Button>

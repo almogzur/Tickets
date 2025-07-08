@@ -1,4 +1,4 @@
-//Recte
+//React
 import  {useState,useContext, Dispatch, SetStateAction, ReactElement, CSSProperties, JSXElementConstructor, useEffect, ChangeEvent, SyntheticEvent, ReactNode} from 'react';
 
 // Components 
@@ -14,7 +14,7 @@ import { FcBusinessman, FcPlanner, FcViewDetails } from "react-icons/fc";
 import { IoLocationSharp } from 'react-icons/io5';
 import { IoTicket } from "react-icons/io5";
 
-//Context Usege
+//Context usage
 import WidthContext from '@/context/WidthContext';
 import TabsTicketContext from '@/context/admin/new-event/tabs/tabs-ticket-context';
 import TabsInfoContext from '@/context/admin/new-event/tabs/tabs-info-context';
@@ -49,20 +49,19 @@ export default function MakeNewTicket({setTabValue}:MakeNewTicketType) {
   const theme = useTheme()
   const [open, setOpen] = useState(false);
   const {tickets ,setTickets} =useContext(TabsTicketContext)
-  const {infoFileds,setInfoFileds} = useContext(TabsInfoContext)
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
   const [isClosingDate,setIsClosingDate]=useState(false)
   const [formErrors,setFormErrors ]= useState(false)
 
   const [Ticket, setTicket] = useState<TicketType>({
-      EndSealesHour:"",
-      EndSealesDate :''  ,
+      EndSalesHour:"",
+      EndSalesDate :''  ,
       selectedType:'',
       priceInfo:"",
       price:"", 
   }) 
 
-  const generateTickitOptions = (tickets: TicketType[]): TicketOptionType[] => {
+  const generateTicketOptions = (tickets: TicketType[]): TicketOptionType[] => {
 
   const TicketOptions: TicketOptionType[] = [
     { value: "normal", label: "רגיל" },
@@ -81,8 +80,8 @@ export default function MakeNewTicket({setTabValue}:MakeNewTicketType) {
   };
   const resetTicketPricesForm =( ):void=>{
       setTicket(p=>({
-          EndSealesHour:null,
-           EndSealesDate :null  ,
+          EndSalesDate:null,
+           EndSalesHour :null  ,
            selectedType:"",
            priceInfo:"",
            price:"", 
@@ -98,24 +97,24 @@ export default function MakeNewTicket({setTabValue}:MakeNewTicketType) {
    // resetTicketPricesForm()
   };
   const addTicket = (e:React.MouseEvent<HTMLButtonElement>):void=>{
-    const newTicket =   validateFileds(Ticket).data ?    validateFileds(Ticket).data: undefined
+    const newTicket =   validateFields(Ticket).data ?    validateFields(Ticket).data: undefined
     setTickets(p=>( newTicket? [...p,newTicket]:[...p]))
     resetTicketPricesForm()
     handleClose()
   }
-  const validateFileds = ( State: TicketType ) : { result:boolean,data:TicketType|undefined , errors: ZodError<TicketType> | undefined }=>{
+  const validateFields = ( State: TicketType ) : { result:boolean,data:TicketType|undefined , errors: ZodError<TicketType> | undefined }=>{
     const result =  TicketZVS.safeParse(State)
         return {result:result.success , data:result.data  , errors:result.error}
 
   }
 
- // useEffect(()=>{    console.log(Ticket ,infoFileds)},[Ticket,infoFileds])
+ // useEffect(()=>{    console.log(Ticket ,infoFields)},[Ticket,infoFields])
 
 
  const
-     HaderWrapper = Flex,
-     HaderA = Flex, 
-     HaderB = Flex
+     HadarWrapper = Flex,
+     HadarA = Flex, 
+     HadarB = Flex
 
 
 
@@ -134,24 +133,24 @@ export default function MakeNewTicket({setTabValue}:MakeNewTicketType) {
         <DialogTitle style={{ padding:4, background:"black"}}  >  
         
 
-          <HaderWrapper  direction={"row"} alignItems={"center"}   width={"100%"} mx={-1}>
+          <HadarWrapper  direction={"row"} alignItems={"center"}   width={"100%"} mx={-1}>
             
-             <HaderA  alignItems={"center"}  sx={{scale:!sm?0.9:1}} >
+             <HadarA  alignItems={"center"}  sx={{scale:!sm?0.9:1}} >
               <IoTicket  size={!sm?"1.5em":"1.7em"} color={theme.palette.primary.main}  />        
               <Typography variant='body1' sx={{color:"#fff" ,fontWeight:800}} textAlign={"center"}  >{"כרטיס חדש"} </Typography> 
-             </HaderA>
+             </HadarA>
 
-             <HaderB   direction={"row"} justifyContent={"end"} width={"inherit"}  >
+             <HadarB   direction={"row"} justifyContent={"end"} width={"inherit"}  >
                <IosWithTextSwitchWrap 
                  switchValue={isClosingDate}
-                 switchOnChangeHendler={(e) => setIsClosingDate(!isClosingDate)  }
+                 switchOnChangeHandler={(e) => setIsClosingDate(!isClosingDate)  }
                  switchSize='large'
                  title={'תאריך סגירת מכירות ?'} 
                  labelPlacement='bottom'
                    />
-             </HaderB>
+             </HadarB>
 
-         </HaderWrapper>
+         </HadarWrapper>
  
         </DialogTitle>
 
@@ -160,11 +159,11 @@ export default function MakeNewTicket({setTabValue}:MakeNewTicketType) {
           <Flex p={1} >
            <SelectWrap   
             label='סוג כרטיס'
-              items={generateTickitOptions(tickets)}
+              items={generateTicketOptions(tickets)}
               variant='outlined'
-              labelPositioin='top'
+              labelPosition='top'
               value={Ticket.selectedType}
-              changeHndler={(e) => {
+              changeHandler={(e) => {
                 setTicket(p => ({ ...p, selectedType: e.target.value  as TicketType['selectedType'] }));
                 e.target.value === "citizen" ? setTicket(p => ({ ...p, priceInfo: "הנחת תושב" }))
                   :
@@ -181,9 +180,9 @@ export default function MakeNewTicket({setTabValue}:MakeNewTicketType) {
               <InputWrap 
                 label={'מחיר'}
                 value={Ticket.price}
-                labelPositioin={'top'}
+                labelPosition={'top'}
                 inputType='number'
-                onChangeHndler={(e) => { setTicket(p => ({ ...p, price: e.target.value })); } }
+                onChangeHandler={(e) => { setTicket(p => ({ ...p, price: e.target.value })); } }
                 variant='outlined' helpText={''}
                        />
                       </>
@@ -193,10 +192,10 @@ export default function MakeNewTicket({setTabValue}:MakeNewTicketType) {
             <InputWrap 
                 inputType='number'
                 label={'מחיר ההנחה'}
-                labelPositioin={'top'}
+                labelPosition={'top'}
                 icon={<FcBusinessman />}
                 value={Ticket.price}
-                onChangeHndler={(e) => { setTicket(p => ({ ...p, price: e.target.value })); } }
+                onChangeHandler={(e) => { setTicket(p => ({ ...p, price: e.target.value })); } }
                 variant='outlined' helpText={''}
                />
             <InputWrap
@@ -204,8 +203,8 @@ export default function MakeNewTicket({setTabValue}:MakeNewTicketType) {
                 value={Ticket.priceInfo}
                 label={'תיאור'}
                 variant='outlined'
-                labelPositioin={'top'}
-                onChangeHndler={(e) => { setTicket(p => ({ ...p, priceInfo: e.target.value })); } } 
+                labelPosition={'top'}
+                onChangeHandler={(e) => { setTicket(p => ({ ...p, priceInfo: e.target.value })); } } 
                 helpText={''}
                 />
               </>
@@ -214,26 +213,26 @@ export default function MakeNewTicket({setTabValue}:MakeNewTicketType) {
           {  isClosingDate && 
           <>
             <DatePickerWrap    
-              value={Ticket.EndSealesDate}
+              value={Ticket.EndSalesDate}
               minDate={new Date()}
               variant='outlined'
               label={"בחר תאריך"}
               helpText={""}
          
-              labelPositioin={'top'}
-              onEroorHndler={() => { } } 
-              onChangeHendler={ (e)=>{ e !== null ?
-                setTicket(p => ({ ...p, EndSealesDate: e.toDate().toLocaleDateString() }))
+              labelPosition={'top'}
+              onErrorHandler={() => { } } 
+              onChangeHandler={ (e)=>{ e !== null ?
+                setTicket(p => ({ ...p, EndSalesDate: e.toDate().toLocaleDateString() }))
                 :null
               }} 
               />
               <TimePickerWrap 
                   label={'בחר שעה'} 
-                  value={Ticket.EndSealesHour}
-                   onEroorHndler={()=>{}}
-                   labelPositioin={'top'}
-                   onChangeHendler={ (e)=>{ e !== null ?
-                    setTicket(p => ({ ...p, EndSealesHour: e.toDate().toLocaleDateString() }))
+                  value={Ticket.EndSalesHour}
+                   onErrorHandler={()=>{}}
+                   labelPosition={'top'}
+                   onChangeHandler={ (e)=>{ e !== null ?
+                    setTicket(p => ({ ...p, EndSalesHour: e.toDate().toLocaleDateString() }))
                     :null
                   }} 
                     />
@@ -249,7 +248,7 @@ export default function MakeNewTicket({setTabValue}:MakeNewTicketType) {
             <Flex direction={"row"} width={"100%"} justifyContent={"space-between"} gap={2} mx={1}  >
 
              <Button  
-                 disabled={!validateFileds(Ticket).result} 
+                 disabled={!validateFields(Ticket).result} 
                  onClick={addTicket}
                  sx={{borderRadius:0}}
                >צור</Button>

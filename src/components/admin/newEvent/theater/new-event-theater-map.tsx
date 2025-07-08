@@ -22,7 +22,7 @@ interface AdminTheaterMapPropsTypes {
 
 }
 
-const AdminNewEventTheatherMap = ({children, isMultiSelect,setIsMultiSelect ,multiSelectBadgeInfo  }:AdminTheaterMapPropsTypes) => {
+const AdminNewEventTheaterMap = ({children, isMultiSelect,setIsMultiSelect ,multiSelectBadgeInfo  }:AdminTheaterMapPropsTypes) => {
   
     const {AdminMapPositions,setAdminMapPositions} =useContext(AdminMapPositionsContext)
     const theme = useTheme()
@@ -54,7 +54,7 @@ const AdminNewEventTheatherMap = ({children, isMultiSelect,setIsMultiSelect ,mul
         {({ zoomIn, zoomOut, resetTransform, ...rest }) =>  {
           return   (
             <Flex mb={10}  > 
-              <MovmentControls/>   
+              <MovementControls/>   
             
                   <Flex direction={"row"} justifyContent={"center"} mb={2}  >
               
@@ -71,7 +71,7 @@ const AdminNewEventTheatherMap = ({children, isMultiSelect,setIsMultiSelect ,mul
 
                  </Flex>
     
-              < SeatControls isMuiltiSelct={isMultiSelect} setIsMultiSelect={setIsMultiSelect} multiSelectBadgeInfo={multiSelectBadgeInfo}   />
+              < SeatControls isMultiselect={isMultiSelect} setIsMultiSelect={setIsMultiSelect} multiSelectBadgeInfo={multiSelectBadgeInfo}   />
              
             </Flex>
 
@@ -84,7 +84,7 @@ const AdminNewEventTheatherMap = ({children, isMultiSelect,setIsMultiSelect ,mul
   };
 
 
-  const MovmentControls = () => {
+  const MovementControls = () => {
     const {AdminMapPositions,setAdminMapPositions} =useContext(AdminMapPositionsContext)
     const { resetSingleTip}=useContext(SingleTipContext)
     const {resetMultiTip} = useContext(MutiTipContext)
@@ -134,6 +134,6 @@ const AdminNewEventTheatherMap = ({children, isMultiSelect,setIsMultiSelect ,mul
     );
   };
   
-  export default AdminNewEventTheatherMap
+  export default AdminNewEventTheaterMap
 
 

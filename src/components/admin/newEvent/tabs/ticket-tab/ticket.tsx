@@ -28,13 +28,13 @@ interface TicketComponentPropsType extends TicketType {
 
 
 
-const TicketComponent = ({ EndSealesDate,price,priceInfo,selectedType ,index }:TicketComponentPropsType) => {
+const TicketComponent = ({ EndSalesDate,price,priceInfo,selectedType ,index }:TicketComponentPropsType) => {
 
     const theme = useTheme()
    const {tickets,setTickets}= useContext(tabsTicketContext)
     const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
 
-    const translateCardTypr = (selectedType:string) : string =>{
+    const translateCardType = (selectedType:string) : string =>{
         switch(selectedType){
           case "discount": return  "הנחה"
           break;
@@ -86,16 +86,16 @@ const TicketComponent = ({ EndSealesDate,price,priceInfo,selectedType ,index }:T
 
              <Flex direction={ !xs? "column": "row"} alignContent={"center"} flexWrap={"wrap"} >
                    <MyChip m={0.5} 
-                       text={ "סוג : "  + translateCardTypr(selectedType) } 
+                       text={ "סוג : "  + translateCardType(selectedType) } 
                    />
                      
                      <MyChip text={   "מחיר : "+    price    }  m={0.5} grow={1} />
                       
                       { selectedType === 'discount' &&    <MyChip text={ "תיאור: " + priceInfo}  m={0.5} grow={0}  />  }
                      
-                      { EndSealesDate&&
+                      { EndSalesDate&&
                         <Flex direction={ !xs? "column": "row"}  flexWrap={"wrap"}  alignContent={"center"} >
-                          <MyChip text={ "  סגירת קופות : " +  EndSealesDate}  m={0.5} grow={0}  /> 
+                          <MyChip text={ "  סגירת קופות : " +  EndSalesDate}  m={0.5} grow={0}  /> 
                      </Flex>
                       } 
                     

@@ -2,7 +2,7 @@ import {  CSSProperties, useContext, useEffect, useState } from 'react'
 
 import { useTheme } from '@mui/material';
 import { green, orange, pink, red } from '@mui/material/colors';
-import SingleTipontext from '@/context/admin/new-event/map/single-tip-context'
+import SingleTipText from '@/context/admin/new-event/map/single-tip-context'
 import MultiSelectContext from '@/context/admin/new-event/map/multi-select-context';
 import React from 'react';
 import { Positions } from '@/types/components-types/admin/theater/admin-theater-types';
@@ -11,35 +11,29 @@ import { Positions } from '@/types/components-types/admin/theater/admin-theater-
 /*
 INDEX !!!!!
 0:init : blue
-1:taaken : red
-2:selected :porpole
+1:taken : red
+2:selected :purple
 3:block : black
 4:accessible,
-5:discounte
+5:discount
 
 */
 
 interface AdminSeatBtnProps {
     seatValue:number
-    seatnumber:number
+    seatNumber:number
     row:string
     isMultiSelect?:boolean
 }
 
 
-function TipAlingeSelfPositions (screenW:number,screenH:number,eventY:number,EentX:number  ):Positions{
-        const tipWidth = 150 
-        const tipHeight = 300
-        
-    return { x:0, y:0}
-}
+const AdminSeatBtn = ({ seatValue, seatNumber, row , isMultiSelect }:AdminSeatBtnProps) => {
 
-const AdminSeatBtn = ({ seatValue, seatnumber, row , isMultiSelect }:AdminSeatBtnProps) => {
+     const {singleTipPositions , setSingleTipPositions, setSeatTipInfo  ,resetSingleTip }=useContext(SingleTipText)
 
-     const {singleTipPositions , setSingleTipPositions, setSeatTipInfo  ,resetSingleTip }=useContext(SingleTipontext)
      const {multiTipPositions , setMutiTipPositions ,resetMultiTip  , multiTipInfo ,setMultiTipInfo ,resetErr }= useContext(MultiSelectContext)
      const theme = useTheme()
-     const [errCliks,setErrClicks]= useState(0)
+     const [errClicks,setErrClicks]= useState(0)
 
 
 
@@ -56,7 +50,7 @@ const AdminSeatBtn = ({ seatValue, seatnumber, row , isMultiSelect }:AdminSeatBt
         },
         seatPurchase:{background:red[900],cursor:'not-allowed'},
         seatBlocked: {backgroundColor:"black"},
-        seatAccsesble:{backgroundColor:orange[600]},
+        seatAccessible:{backgroundColor:orange[600]},
  };  
 
 
@@ -65,7 +59,7 @@ const AdminSeatBtn = ({ seatValue, seatnumber, row , isMultiSelect }:AdminSeatBt
  const openTip = (xArg: number,yArg: number ,initValueArg:number, rowArg:string, seatNumberArg:number  )=>{
   resetMultiTip()
   resetSingleTip()   
-  // retriger the animation 
+  // retrigger the animation 
 
   
   setTimeout(()=>{
@@ -78,7 +72,7 @@ const AdminSeatBtn = ({ seatValue, seatnumber, row , isMultiSelect }:AdminSeatBt
 }
 
 
- const multiSelectHndler = (seatNArg:number,rowArg:string, xArg: number, yArg: number)=>{
+ const multiSelectHandler = (seatNArg:number,rowArg:string, xArg: number, yArg: number)=>{
 
           if(  !multiTipInfo.row    ){
          
@@ -94,7 +88,7 @@ const AdminSeatBtn = ({ seatValue, seatnumber, row , isMultiSelect }:AdminSeatBt
               if( SelectingFromRight){
                 //right to left 
                 total = multiTipInfo.first - seatNArg +1
-                setMultiTipInfo(p=>({...p,selectdir:"R"}))
+                setMultiTipInfo(p=>({...p,selectDir:"R"}))
      
                console.log("right");
 
@@ -102,13 +96,13 @@ const AdminSeatBtn = ({ seatValue, seatnumber, row , isMultiSelect }:AdminSeatBt
               }else if(SelectingFromLeft){
                 // left to right
                 total = seatNArg - multiTipInfo.first  +1 
-                setMultiTipInfo(p=>({...p,selectdir:"L"}))
+                setMultiTipInfo(p=>({...p,selectDir:"L"}))
                  console.log("left");
                 
               }
 
             resetErr()
-            setMultiTipInfo(p=>({...p,second:seatNArg, totalselected:total }))     
+            setMultiTipInfo(p=>({...p,second:seatNArg, totalSelected:total }))     
 
          
           }
@@ -117,10 +111,10 @@ const AdminSeatBtn = ({ seatValue, seatnumber, row , isMultiSelect }:AdminSeatBt
         //  console.log("err");      
           // sets err
           setMultiTipInfo(p=>({...p,err:"נא לבחור מושב מאותה שורה"}))
-           // reset secend for tip diveider and data integraty
-          setMultiTipInfo(p=>({...p,second:0 , totalselected:0 }))     
+           // reset second for tip divider and data integrate
+          setMultiTipInfo(p=>({...p,second:0 , totalSelected:0 }))     
           setErrClicks(p=>(p+1))
-          errCliks === 2?  resetMultiTip() : null
+          errClicks === 2?  resetMultiTip() : null
      
     
           
@@ -132,7 +126,7 @@ const AdminSeatBtn = ({ seatValue, seatnumber, row , isMultiSelect }:AdminSeatBt
 
   
 
-  //resetMultiTip() // for retregaring animation and fata inegraty
+  //resetMultiTip() //   animation and data integrity
 
   setTimeout(()=>{},200)
 
@@ -145,9 +139,9 @@ const AdminSeatBtn = ({ seatValue, seatnumber, row , isMultiSelect }:AdminSeatBt
      <button
        onClick={(e)=> { 
          !isMultiSelect?
-           openTip(e.nativeEvent.pageX,e.nativeEvent.pageY , seatValue , row ,seatnumber  ) 
+           openTip(e.nativeEvent.pageX,e.nativeEvent.pageY , seatValue , row ,seatNumber  ) 
            :
-           multiSelectHndler(seatnumber, row , e.nativeEvent.pageX , e.nativeEvent.pageY   )
+           multiSelectHandler(seatNumber, row , e.nativeEvent.pageX , e.nativeEvent.pageY   )
            console.log(
            "in H",  e.nativeEvent.view?.innerHeight,
             "in W", e.nativeEvent.view?.innerWidth ,
@@ -161,7 +155,7 @@ const AdminSeatBtn = ({ seatValue, seatnumber, row , isMultiSelect }:AdminSeatBt
       style={ 
         seatValue === 3? { ...styles.seats, ...styles.seatBlocked } 
         :
-        seatValue === 5? { ...styles.seats, ...styles.seatAccsesble } 
+        seatValue === 5? { ...styles.seats, ...styles.seatAccessible } 
         :
          styles.seats 
         }
@@ -172,7 +166,7 @@ const AdminSeatBtn = ({ seatValue, seatnumber, row , isMultiSelect }:AdminSeatBt
 
 export default AdminSeatBtn
 
-    //Event posions 
+    //Event poisons 
           //   console.log( 
               
           //     "x",e.clientX,

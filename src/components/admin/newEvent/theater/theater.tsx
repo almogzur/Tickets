@@ -1,8 +1,8 @@
 import {  CSSProperties, Dispatch, SetStateAction, useContext, useState } from 'react'
 import {  Stack as Flex ,  Container, Typography, useTheme, Box, Avatar, } from '@mui/material'
-import SingleSelectTip from './singel-select-tip';
+import SingleSelectTip from './single-select-tip';
 import AdminSeatBtn from './adminSeatBtn'
-import AdminNewEventTheatherMap from './new-event-theather-map';
+import AdminNewEventTheaterMap from './new-event-theater-map';
 
 
 
@@ -16,11 +16,11 @@ import MuliSelectTip from './multi-select-tip';
  
 const Theater = ({TheaterDate}:{TheaterDate:TheaterType}) => {
 
-      const {setInfoFileds} = useContext(TabsInfoContest)
+      const {setInfoFields} = useContext(TabsInfoContest)
       const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
       const theme = useTheme()    
        const [isMultiSelect , setIsMultiSelect]=useState<boolean>(false)
-       const [amountOfSeatsSelcted , setAmountOfSeatsSelcted] = useState<number>(0)
+       const [amountOfSeatsSelected , setAmountOfSeatsSelected] = useState<number>(0)
        
        const InnerMap = Flex
 
@@ -33,14 +33,13 @@ const Theater = ({TheaterDate}:{TheaterDate:TheaterType}) => {
       )
        const MainSeatS  =   Object.entries<number[]>(TheaterDate.mainSeats).map(([row, rowContent]) => {
         const colValue  = rowContent.map((seatValue: number, i: number) => {
-          const textset = "מושב";
-          const textrow = "שורה";
+
       
           return (
             <AdminSeatBtn // uses Context
                 key={`${row}.${i}`}
               seatValue={seatValue}
-              seatnumber={i}
+              seatNumber={i}
               row={row}
                 isMultiSelect={isMultiSelect} 
               />
@@ -71,7 +70,7 @@ const Theater = ({TheaterDate}:{TheaterDate:TheaterType}) => {
               <AdminSeatBtn
                 key={`${row}.${i}`}
                 seatValue={seatValue}
-                seatnumber={i}
+                seatNumber={i}
                 row={row}
                 isMultiSelect={isMultiSelect} 
               
@@ -101,20 +100,20 @@ const Theater = ({TheaterDate}:{TheaterDate:TheaterType}) => {
       <>  
           <SingleSelectTip 
               theaterDate={  TheaterDate}
-               setTheater={setInfoFileds}
+               setTheater={setInfoFields}
            /> 
 
          <MuliSelectTip 
             isMultiSelect={isMultiSelect}
             theaterDate={TheaterDate}
-            setTheater={setInfoFileds}
+            setTheater={setInfoFields}
           />
       
             
-         <AdminNewEventTheatherMap // style in children 
+         <AdminNewEventTheaterMap // style in children 
            isMultiSelect={isMultiSelect}  
            setIsMultiSelect={setIsMultiSelect}
-            multiSelectBadgeInfo={amountOfSeatsSelcted}   
+            multiSelectBadgeInfo={amountOfSeatsSelected}   
              >
              <InnerMap direction={"column"}    height={!xs? 320 : !sm? 400 : !md? 500 : 700}      sx={{direction:"ltr"}}  >
                <Stage  />
@@ -124,7 +123,7 @@ const Theater = ({TheaterDate}:{TheaterDate:TheaterType}) => {
    
             </InnerMap> 
      
-         </AdminNewEventTheatherMap>    
+         </AdminNewEventTheaterMap>    
   
  
       </>

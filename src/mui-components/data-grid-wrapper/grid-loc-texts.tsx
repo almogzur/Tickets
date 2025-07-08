@@ -3,7 +3,7 @@ import { GridLocaleText } from "@mui/x-data-grid";
 
 export const GRID_DEFAULT_HEBREW_TEXT: GridLocaleText = {
     // Root
-    noRowsLabel: 'אין שורות',
+    noRowsLabel: 'אין שורה',
     noResultsOverlayLabel: 'לא נמצאו תוצאות.',
     
     toolbarDensity: 'צפיפות',

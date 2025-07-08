@@ -15,21 +15,20 @@ import { MdOutlineDeselect } from "react-icons/md";
 /*
 INDEX !!!!!
 0:init : blue[700] primary
-1:taaken : red
-2:selected :porpole
+1:taken : red
+2:selected :purple
 3:block : black
 4:Discount : green[800]
-5:accsesble:
-6:Dicount_Accsesble
+5:accessible:
 */
 
 interface SeatColorsIndexProps  { 
-    isMuiltiSelct? :boolean ,
+    isMultiselect? :boolean ,
     setIsMultiSelect:Dispatch<SetStateAction<boolean>>
     multiSelectBadgeInfo:number
  }
 
-const SeatControls =({isMuiltiSelct,setIsMultiSelect,multiSelectBadgeInfo}:SeatColorsIndexProps)=> {
+const SeatControls =({isMultiselect,setIsMultiSelect,multiSelectBadgeInfo}:SeatColorsIndexProps)=> {
   const {xxl,xl,lg,md,sm,xs,xxs} = useContext(WidthContext)
 
     const {AdminMapPositions,setAdminMapPositions} =useContext(AdminMapPositionsContext)
@@ -43,9 +42,9 @@ const SeatControls =({isMuiltiSelct,setIsMultiSelect,multiSelectBadgeInfo}:SeatC
           <Flex direction={'row'}    justifyContent={'space-around'} gap={!xs? 0:7}    >
             
            <Badge
-             badgeContent={multiTipInfo.totalselected} 
+             badgeContent={multiTipInfo.totalSelected} 
              color='primary'
-             invisible={!isMuiltiSelct}
+             invisible={!isMultiselect}
              showZero={true}
              anchorOrigin={{
              vertical: 'top',
@@ -54,11 +53,11 @@ const SeatControls =({isMuiltiSelct,setIsMultiSelect,multiSelectBadgeInfo}:SeatC
          
          >
            <Button onClick={(e)=>{
-                        setIsMultiSelect(!isMuiltiSelct);
+                        setIsMultiSelect(!isMultiselect);
                         resetSingleTip();
                         resetMultiTip()
                     } }
-                 sx={{ background:isMuiltiSelct? green['700']: "", }} 
+                 sx={{ background:isMultiselect? green['700']: "", }} 
                 >
                     סמן רצף   
            </Button>

@@ -1,26 +1,26 @@
-import { Positions, TheaterMultiTipeInfoType } from '@/types/components-types/admin/theater/admin-theater-types'
+import { Positions, TheaterMultiTipInfoType } from '@/types/components-types/admin/theater/admin-theater-types'
 import { createContext, Dispatch, SetStateAction } from 'react'
 
 
 
 
-interface MultiTipContenxtType {
+interface MultiTipContextType {
      multiTipPositions:Positions
-     multiTipInfo: TheaterMultiTipeInfoType
+     multiTipInfo: TheaterMultiTipInfoType
      setMutiTipPositions:Dispatch<React.SetStateAction<Positions>>
+     setMultiTipInfo:Dispatch<React.SetStateAction<TheaterMultiTipInfoType>>
      resetMultiTip:()=> void
-     setMultiTipInfo:Dispatch<React.SetStateAction<TheaterMultiTipeInfoType>>
      resetErr: () => void
 }
 
-export default createContext<MultiTipContenxtType>({
+export default createContext<MultiTipContextType>({
      setMutiTipPositions: function (value: SetStateAction<Positions>): void {
           throw new Error('Function not implemented.')
      },
      resetMultiTip: function (): void {
           throw new Error('Function not implemented.')
      },
-     setMultiTipInfo: function (value: SetStateAction<TheaterMultiTipeInfoType>): void {
+     setMultiTipInfo: function (value: SetStateAction<TheaterMultiTipInfoType>): void {
           throw new Error('Function not implemented.')
      },
      resetErr: function (): void {
@@ -35,8 +35,8 @@ export default createContext<MultiTipContenxtType>({
           row: "",
           first: undefined,
           second: undefined,
-          totalselected: 0,
+          totalSelected: 0,
           err: "",
-          selectdir: undefined
+          selectDir: undefined
      }
 })
